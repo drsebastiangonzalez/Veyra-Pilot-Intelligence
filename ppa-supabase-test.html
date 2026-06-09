@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veyra · PPA Supabase Test</title>
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7f1e8;color:#07111f}
+    header{background:#050b14;color:white;padding:28px 34px;border-bottom:1px solid #c69b43}
+    .logo{font-family:Georgia,serif;font-size:44px}
+    .sub{letter-spacing:6px;color:#d4a94f;font-size:13px;margin-top:4px}
+    main{max-width:1000px;margin:30px auto;padding:0 20px}
+    .card{background:#fff;border:1px solid #e2d5bd;border-radius:22px;padding:28px;margin-bottom:20px}
+    button{background:#07111f;color:white;border:1px solid #c69b43;border-radius:12px;padding:14px 20px;font-weight:700;letter-spacing:1px}
+    .ok{color:#08774b;font-weight:700}
+    .bad{color:#b42318;font-weight:700}
+    .q{border-top:1px solid #eadfcb;padding:18px 0}
+    .code{color:#80622a;font-weight:700;font-size:13px;letter-spacing:1px}
+    ul{margin-top:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">Veyra</div>
+  <div class="sub">PILOT INTELLIGENCE</div>
+</header>
+
+<main>
+  <section class="card">
+    <h1>Prueba de conexión PPA · Supabase</h1>
+    <p>Esta página no reemplaza el Training Center. Solo verifica si la tabla <b>training_questions</b> entrega preguntas activas.</p>
+    <button onclick="loadQuestions()">Cargar preguntas PPA</button>
+    <p id="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Preguntas recibidas</h2>
+    <div id="questions">Aún no se ha consultado Supabase.</div>
+  </section>
+</main>
+
+<script>
+const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
+const SUPABASE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+
+async function loadQuestions(){
+  const status = document.getElementById("status");
+  const container = document.getElementById("questions");
+  status.innerHTML = "Consultando Supabase...";
+  container.innerHTML = "";
+
+  const url = SUPABASE_URL + "/rest/v1/training_questions?license=eq.PPA&active=eq.true&select=question_code,license,category,question,option_a,option_b,option_c,option_d,option_e,correct_answer,explanation&order=question_code.asc";
+
+  try{
+    const res = await fetch(url, {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Accept": "application/json"
+      }
+    });
+
+    if(!res.ok){
+      const text = await res.text();
+      throw new Error("HTTP " + res.status + " · " + text);
+    }
+
+    const rows = await res.json();
+
+    if(!rows.length){
+      status.innerHTML = '<span class="bad">Conexión OK, pero no hay preguntas activas.</span>';
+      return;
+    }
+
+    status.innerHTML = '<span class="ok">Conexión OK. Preguntas cargadas: ' + rows.length + '</span>';
+
+    container.innerHTML = rows.map(r => `
+      <div class="q">
+        <div class="code">${r.question_code} · ${r.category}</div>
+        <h3>${r.question}</h3>
+        <ul>
+          ${r.option_a ? `<li>A. ${r.option_a}</li>` : ""}
+          ${r.option_b ? `<li>B. ${r.option_b}</li>` : ""}
+          ${r.option_c ? `<li>C. ${r.option_c}</li>` : ""}
+          ${r.option_d ? `<li>D. ${r.option_d}</li>` : ""}
+          ${r.option_e ? `<li>E. ${r.option_e}</li>` : ""}
+        </ul>
+        <p><b>Correcta:</b> ${r.correct_answer}</p>
+        <p><b>Explicación:</b> ${r.explanation || "Sin explicación"}</p>
+      </div>
+    `).join("");
+
+  }catch(err){
+    status.innerHTML = '<span class="bad">Error al conectar con Supabase.</span>';
+    container.innerHTML = "<pre>" + String(err.message) + "</pre>";
+  }
+}
+</script>
+</body>
+</html>
