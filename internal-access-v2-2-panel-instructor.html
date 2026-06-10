@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veyra | Centro Interno</title>
+  <style>
+    :root{
+      --navy:#07111f;
+      --cream:#f7f1e8;
+      --gold:#d7a63a;
+      --gold-soft:#ead7b5;
+      --text:#07111f;
+      --muted:#667085;
+      --card:#fffdf9;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--cream);
+      color:var(--text);
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    header{
+      background:var(--navy);
+      color:#fff;
+      padding:42px 52px 38px;
+      border-bottom:2px solid var(--gold);
+    }
+    .logo{
+      display:inline-block;
+      text-decoration:none;
+      color:#fff;
+      cursor:pointer;
+    }
+    .brand{
+      font-family:Georgia, 'Times New Roman', serif;
+      font-size:56px;
+      line-height:.9;
+      letter-spacing:-1px;
+    }
+    .subbrand{
+      margin-top:12px;
+      color:#d8b35e;
+      letter-spacing:10px;
+      font-size:14px;
+      font-weight:600;
+    }
+    main{
+      padding:44px 56px 70px;
+    }
+    .panel{
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--gold-soft);
+      border-radius:24px;
+      padding:42px;
+      max-width:1400px;
+      margin:auto;
+      box-shadow:0 18px 45px rgba(7,17,31,.06);
+    }
+    .eyebrow{
+      color:#c89227;
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:11px;
+      text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    h1{
+      font-family:Georgia, 'Times New Roman', serif;
+      font-size:64px;
+      line-height:1;
+      margin:0 0 20px;
+      letter-spacing:-2px;
+    }
+    .lead{
+      font-size:23px;
+      line-height:1.4;
+      max-width:1050px;
+      color:#1d2939;
+      margin:0 0 34px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:22px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--gold-soft);
+      border-radius:22px;
+      padding:30px;
+      min-height:340px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .badge{
+      width:64px;
+      height:64px;
+      border:1.5px solid var(--gold);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#c89227;
+      font-size:26px;
+      font-weight:900;
+      margin-bottom:24px;
+    }
+    h2{
+      font-family:Georgia, 'Times New Roman', serif;
+      font-size:42px;
+      line-height:1.03;
+      margin:0 0 16px;
+      letter-spacing:-1px;
+    }
+    p{
+      font-size:19px;
+      line-height:1.42;
+      color:var(--muted);
+      margin:0;
+    }
+    .actions{
+      margin-top:26px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    a.btn{
+      text-decoration:none;
+      border:1.5px solid var(--gold);
+      border-radius:14px;
+      padding:17px 18px;
+      text-align:center;
+      text-transform:uppercase;
+      letter-spacing:4px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      display:block;
+      width:100%;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    .gold{
+      background:linear-gradient(180deg,#edc65d,#d5a139);
+      color:#07111f;
+    }
+    .dark{
+      background:var(--navy);
+      color:white;
+    }
+    .ghost{
+      background:transparent;
+      color:#07111f;
+    }
+    .note{
+      margin-top:28px;
+      background:var(--navy);
+      color:white;
+      border:1px solid var(--gold);
+      border-radius:18px;
+      padding:24px 28px;
+      font-size:18px;
+      line-height:1.45;
+    }
+    .note b{color:#f0c75b}
+    @media(max-width:1050px){
+      .grid{grid-template-columns:1fr}
+      h1{font-size:52px}
+    }
+    @media(max-width:720px){
+      header{padding:32px 26px}
+      main{padding:28px 20px}
+      .panel{padding:26px}
+      h1{font-size:42px}
+      .lead{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="./index.html" aria-label="Volver a Veyra">
+      <div class="brand">Veyra</div>
+      <div class="subbrand">PILOT INTELLIGENCE</div>
+    </a>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="eyebrow">Internal Access</div>
+      <h1>Centro interno Veyra</h1>
+      <p class="lead">
+        Acceso operativo para seguimiento académico, revisión de intentos, respuestas y módulos de práctica.
+        Esta página funciona como acceso interno controlado.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div>
+            <div class="badge">I</div>
+            <h2>Panel instructor</h2>
+            <p>
+              Revisa intentos guardados, respuestas, preguntas falladas, desempeño por materia y exporta el archivo CSV desde el dashboard.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="btn gold" href="./training-dashboard.html?v=instructor">Abrir panel instructor</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <div class="badge">P</div>
+            <h2>PPA Practice</h2>
+            <p>
+              Acceso directo al simulacro PPA conectado al banco oficial activo SRVSOP/Aerocivil.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="btn dark" href="./ppa-practice.html?v=409">Abrir práctica</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <div class="badge">A</div>
+            <h2>Assessment</h2>
+            <p>
+              Regresa al módulo principal de evaluación académica y seguimiento formal de competencias.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="btn gold" href="./index.html#assessment">Ir a Assessment</a>
+            <a class="btn ghost" href="./index.html">Volver a Veyra</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="note">
+        <b>Nota:</b> la descarga del archivo no se maneja desde esta pantalla. Se hace desde el <b>Panel instructor</b>,
+        donde ya está el botón de exportación y el detalle de respuestas.
+      </div>
+    </section>
+  </main>
+</body>
+</html>
