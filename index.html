@@ -2705,5 +2705,44 @@ document.addEventListener("DOMContentLoaded", function(){
   nav button,nav a{font-size:9px!important;letter-spacing:2.8px!important}
 }
 </style>
+<style>
+@media (max-width:768px){
+  .topbar{
+    transition:transform .28s ease, opacity .28s ease!important;
+    will-change:transform;
+  }
+
+  body.veyraHeaderHidden .topbar{
+    transform:translateY(-105%)!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+}
+</style>
+
+<script>
+(function(){
+  let lastY = window.scrollY || 0;
+
+  function handleVeyraHeaderScroll(){
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+
+    if(window.innerWidth <= 768){
+      if(y > 120 && y > lastY){
+        document.body.classList.add('veyraHeaderHidden');
+      } else if(y < lastY || y < 40){
+        document.body.classList.remove('veyraHeaderHidden');
+      }
+    } else {
+      document.body.classList.remove('veyraHeaderHidden');
+    }
+
+    lastY = y;
+  }
+
+  window.addEventListener('scroll', handleVeyraHeaderScroll, { passive:true });
+  window.addEventListener('resize', handleVeyraHeaderScroll);
+})();
+</script>
  <script src="memory-items-presolo.js?v=1"></script>
 </html>
