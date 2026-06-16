@@ -2744,5 +2744,68 @@ document.addEventListener("DOMContentLoaded", function(){
   window.addEventListener('resize', handleVeyraHeaderScroll);
 })();
 </script>
+ <style>
+@media (max-width:768px){
+  .topbar{
+    position:sticky!important;
+    top:0!important;
+    z-index:9999!important;
+    transition:
+      transform .55s cubic-bezier(.22,.61,.36,1),
+      opacity .45s ease,
+      box-shadow .45s ease!important;
+    will-change:transform,opacity!important;
+    box-shadow:0 12px 34px rgba(0,0,0,.18)!important;
+  }
+
+  body.veyraHeaderHidden .topbar{
+    transform:translateY(-102%)!important;
+    opacity:.98!important;
+    pointer-events:none!important;
+  }
+
+  body:not(.veyraHeaderHidden) .topbar{
+    transform:translateY(0)!important;
+    opacity:1!important;
+  }
+}
+</style>
+
+<script>
+(function(){
+  let lastY = window.scrollY || 0;
+  let ticking = false;
+
+  function updateVeyraSmoothHeader(){
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    const goingDown = y > lastY;
+
+    if(window.innerWidth <= 768){
+      if(y > 160 && goingDown){
+        document.body.classList.add('veyraHeaderHidden');
+      }
+
+      if(!goingDown || y < 70){
+        document.body.classList.remove('veyraHeaderHidden');
+      }
+    } else {
+      document.body.classList.remove('veyraHeaderHidden');
+    }
+
+    lastY = y;
+    ticking = false;
+  }
+
+  function onScroll(){
+    if(!ticking){
+      window.requestAnimationFrame(updateVeyraSmoothHeader);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', updateVeyraSmoothHeader);
+})();
+</script>
  <script src="memory-items-presolo.js?v=1"></script>
 </html>
