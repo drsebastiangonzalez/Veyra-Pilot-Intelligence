@@ -2829,5 +2829,40 @@ document.addEventListener("DOMContentLoaded", function(){
   window.addEventListener('resize', lockVeyraHeaderBehavior);
 })();
 </script>
+ <style>
+@media (max-width:768px){
+  body.veyraHeaderLocked .topbar{
+    transform:translateY(-110%)!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+}
+</style>
+
+<script>
+(function(){
+  function lockHeaderUntilTop(){
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+
+    if(window.innerWidth <= 768){
+      if(y > 120){
+        document.body.classList.add('veyraHeaderLocked');
+      }
+
+      if(y < 50){
+        document.body.classList.remove('veyraHeaderLocked');
+        document.body.classList.remove('veyraHeaderHidden');
+      }
+    } else {
+      document.body.classList.remove('veyraHeaderLocked');
+      document.body.classList.remove('veyraHeaderHidden');
+    }
+  }
+
+  window.addEventListener('scroll', lockHeaderUntilTop, {passive:true});
+  window.addEventListener('resize', lockHeaderUntilTop);
+  lockHeaderUntilTop();
+})();
+</script>
  <script src="memory-items-presolo.js?v=1"></script>
 </html>
