@@ -2807,5 +2807,27 @@ document.addEventListener("DOMContentLoaded", function(){
   window.addEventListener('resize', updateVeyraSmoothHeader);
 })();
 </script>
+<script>
+(function(){
+  function lockVeyraHeaderBehavior(){
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+
+    if(window.innerWidth <= 768){
+      if(y > 120){
+        document.body.classList.add('veyraHeaderHidden');
+      }
+
+      if(y < 45){
+        document.body.classList.remove('veyraHeaderHidden');
+      }
+    } else {
+      document.body.classList.remove('veyraHeaderHidden');
+    }
+  }
+
+  window.addEventListener('scroll', lockVeyraHeaderBehavior, {passive:true});
+  window.addEventListener('resize', lockVeyraHeaderBehavior);
+})();
+</script>
  <script src="memory-items-presolo.js?v=1"></script>
 </html>
