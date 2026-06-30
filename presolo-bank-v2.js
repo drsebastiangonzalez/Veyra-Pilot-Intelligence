@@ -19,8 +19,16 @@
     }
 
     VEYRA_PRESOLO_BANK_V2.forEach(function(q) {
-      QUESTION_BANK.push(q);
-    });
+  if (q.evaluation === 'Pre-Solo' && Number(q.id) >= 1 && Number(q.id) <= 23) {
+    q.category = 'Memory Items / Emergencias';
+    q.subtopic = 'Memory Items / Emergencias';
+    q.critical = true;
+    q.difficulty = 'Alta';
+    q.competency = 'PRO / PSD';
+  }
+
+  QUESTION_BANK.push(q);
+});
 
     window.VEYRA_PRESOLO_BANK_VERSION = 'Pre-Solo SR20 v2 agrupado - 123 preguntas';
     console.log('Veyra: banco Pre-Solo SR20 v2 cargado:', VEYRA_PRESOLO_BANK_V2.length);
