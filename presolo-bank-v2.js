@@ -38,4 +38,25 @@
   if (!applyVeyraPreSoloBankV2()) {
     window.addEventListener('load', applyVeyraPreSoloBankV2);
   }
+  try {
+  if (typeof officialSubject === 'function') {
+    const previousOfficialSubject = officialSubject;
+
+    officialSubject = function(category, question) {
+      const c = String(category || '').toLowerCase();
+
+      if (
+        c.includes('memory') ||
+        c.includes('emergencia') ||
+        c.includes('emergency')
+      ) {
+        return 'Memory Items / Emergencias';
+      }
+
+      return previousOfficialSubject(category, question);
+    };
+  }
+} catch (e) {
+  console.warn('Veyra Pre-Solo v2: no se pudo ajustar officialSubject', e);
+}
 })();
