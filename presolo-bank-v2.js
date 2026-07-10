@@ -17,7 +17,178 @@
         QUESTION_BANK.splice(i, 1);
       }
     }
+const VFR_NAVIGATION_FIXES = {
+  68: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'En vuelo a la estima, ¿qué datos son básicos?',
+    options: [
+      { key: 'A', text: 'QNH, COM y luces' },
+      { key: 'B', text: 'Rumbo, tiempo, distancia y combustible' },
+      { key: 'C', text: 'Solo GPS y destino' },
+      { key: 'D', text: 'Flaps, trim y potencia' },
+      { key: 'E', text: 'Viento, transponder y ELT' }
+    ],
+    correct: 'B',
+    correctText: 'Rumbo, tiempo, distancia y combustible',
+    explanation: 'En vuelo a la estima se requiere controlar rumbo, tiempo, distancia y combustible para mantener navegación y conciencia situacional.'
+  },
 
+  69: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Si no aparece el punto de chequeo en la ETA, ¿qué haces?',
+    options: [
+      { key: 'A', text: 'Continuar igual' },
+      { key: 'B', text: 'Descender de inmediato' },
+      { key: 'C', text: 'Verificar rumbo, tiempo y posición' },
+      { key: 'D', text: 'Apagar el GPS' },
+      { key: 'E', text: 'Cambiar tanque' }
+    ],
+    correct: 'C',
+    correctText: 'Verificar rumbo, tiempo y posición',
+    explanation: 'Si el punto de chequeo no aparece en la ETA, se debe verificar rumbo, tiempo y posición antes de continuar.'
+  },
+
+  70: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Si quedas a la derecha de la ruta, ¿qué hubo?',
+    options: [
+      { key: 'A', text: 'Error de altímetro' },
+      { key: 'B', text: 'Deriva no corregida' },
+      { key: 'C', text: 'Exceso de potencia' },
+      { key: 'D', text: 'Falla de transponder' },
+      { key: 'E', text: 'Pista contaminada' }
+    ],
+    correct: 'B',
+    correctText: 'Deriva no corregida',
+    explanation: 'Una desviación lateral respecto a la ruta normalmente indica deriva no corregida o una corrección de viento insuficiente.'
+  },
+
+  71: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Diferencia entre rumbo y curso:',
+    options: [
+      { key: 'A', text: 'Son iguales' },
+      { key: 'B', text: 'Rumbo es nariz; curso es trayectoria' },
+      { key: 'C', text: 'Curso es altitud' },
+      { key: 'D', text: 'Rumbo es distancia' },
+      { key: 'E', text: 'Solo aplica IFR' }
+    ],
+    correct: 'B',
+    correctText: 'Rumbo es nariz; curso es trayectoria',
+    explanation: 'El rumbo corresponde hacia donde apunta la nariz del avión; el curso corresponde a la trayectoria deseada o seguida sobre el terreno.'
+  },
+
+  72: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Fórmula básica de tiempo en ruta:',
+    options: [
+      { key: 'A', text: 'Tiempo = Distancia / Velocidad' },
+      { key: 'B', text: 'Tiempo = Velocidad / Distancia' },
+      { key: 'C', text: 'Tiempo = Rumbo + Viento' },
+      { key: 'D', text: 'Tiempo = Combustible × TAS' },
+      { key: 'E', text: 'Tiempo = Altitud / QNH' }
+    ],
+    correct: 'A',
+    correctText: 'Tiempo = Distancia / Velocidad',
+    explanation: 'El tiempo estimado en ruta se obtiene dividiendo la distancia entre la velocidad sobre el terreno.'
+  },
+
+  75: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Fórmula básica de combustible:',
+    options: [
+      { key: 'A', text: 'Fuel = TAS / Tiempo' },
+      { key: 'B', text: 'Fuel = GPH × Tiempo' },
+      { key: 'C', text: 'Fuel = Distancia × QNH' },
+      { key: 'D', text: 'Fuel = IAS + Viento' },
+      { key: 'E', text: 'Fuel = Peso / Potencia' }
+    ],
+    correct: 'B',
+    correctText: 'Fuel = GPH × Tiempo',
+    explanation: 'El combustible requerido se calcula multiplicando el consumo horario por el tiempo estimado de vuelo.'
+  },
+
+  76: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Si aumenta el viento en contra, ¿qué pasa?',
+    options: [
+      { key: 'A', text: 'Disminuye el tiempo' },
+      { key: 'B', text: 'Aumenta la GS' },
+      { key: 'C', text: 'Aumenta tiempo y consumo' },
+      { key: 'D', text: 'No cambia nada' },
+      { key: 'E', text: 'Baja la IAS' }
+    ],
+    correct: 'C',
+    correctText: 'Aumenta tiempo y consumo',
+    explanation: 'El viento de frente reduce la velocidad sobre el terreno, aumentando el tiempo en ruta y el combustible requerido.'
+  },
+
+  77: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'En VFR, el GPS debe usarse como:',
+    options: [
+      { key: 'A', text: 'Única referencia' },
+      { key: 'B', text: 'Reemplazo de la carta' },
+      { key: 'C', text: 'Apoyo situacional' },
+      { key: 'D', text: 'Sustituto del instructor' },
+      { key: 'E', text: 'Fuente de QNH' }
+    ],
+    correct: 'C',
+    correctText: 'Apoyo situacional',
+    explanation: 'En VFR el GPS debe apoyar la conciencia situacional, pero no reemplaza la navegación visual, la carta ni la planificación.'
+  },
+
+  78: {
+    category: 'Navegación',
+    subtopic: 'Vuelo a la estima / Navegación VFR',
+    competency: 'KNO / FPM / SAW',
+    difficulty: 'Media',
+    critical: false,
+    question: 'Si el clima se cierra en ruta VFR:',
+    options: [
+      { key: 'A', text: 'Continuar por GPS' },
+      { key: 'B', text: 'Descender sin plan' },
+      { key: 'C', text: 'Retornar o alternar temprano' },
+      { key: 'D', text: 'Aumentar velocidad' },
+      { key: 'E', text: 'Mantener curso' }
+    ],
+    correct: 'C',
+    correctText: 'Retornar o alternar temprano',
+    explanation: 'Si las condiciones VFR se deterioran, la decisión segura es retornar, alternar o desviarse temprano antes de perder márgenes.'
+  }
+};
     VEYRA_PRESOLO_BANK_V2.forEach(function(q) {
   if (q.evaluation === 'Pre-Solo' && Number(q.id) >= 1 && Number(q.id) <= 23) {
     q.category = 'Memory Items / Emergencias';
@@ -26,6 +197,10 @@
     q.difficulty = 'Alta';
     q.competency = 'PRO / PSD';
   }
+  const navFix = VFR_NAVIGATION_FIXES[Number(q.id)];
+if (q.evaluation === 'Pre-Solo' && navFix) {
+  Object.assign(q, navFix);
+}
 
   QUESTION_BANK.push(q);
 });
