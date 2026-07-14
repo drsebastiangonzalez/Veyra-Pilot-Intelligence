@@ -58,7 +58,7 @@
       border-bottom:1px solid var(--line);
       backdrop-filter:blur(16px);
     }
-    .brand{min-width:max-content}
+    .brand{min-width:max-content;color:inherit;text-decoration:none;cursor:pointer}
     .brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
     .brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
     .topbar-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
@@ -215,10 +215,10 @@
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand" aria-label="Veyra Pilot Intelligence">
+    <a class="brand" href="/" target="_top" aria-label="Volver a Veyra Pilot Intelligence">
       <div class="brand-name">Veyra</div>
       <div class="brand-sub">Pilot Intelligence</div>
-    </div>
+    </a>
     <div class="topbar-title">IFR Path · Módulo 01 · El lenguaje del VOR</div>
     <div class="progress-wrap" aria-label="Progreso del módulo">
       <div class="progress-meta"><span>Progreso</span><span id="progressLabel">13%</span></div>
@@ -529,8 +529,19 @@
   }
   prevBtn.addEventListener('click',()=>show(current-1));
   nextBtn.addEventListener('click',()=>{
-    if(current < slides.length-1) show(current+1);
-    else send('veyra:exit',{progress:100});
+    if(current < slides.length-1){
+      show(current+1);
+      return;
+    }
+
+    send('veyra:exit',{progress:100});
+    localStorage.setItem(MODULE_ID + ':finishedAt', new Date().toISOString());
+
+    // Al abrirse directamente o dentro de un iframe, vuelve a la página principal de Veyra.
+    setTimeout(()=>{
+      try { window.top.location.href = '/'; }
+      catch(e) { window.location.href = '/'; }
+    },150);
   });
 
   document.querySelectorAll('.radial-btn').forEach(el=>el.addEventListener('click',()=>{
