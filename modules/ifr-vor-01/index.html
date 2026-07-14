@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 01 · El lenguaje del VOR</title>
+  <style>
+    :root{
+      --bg:#05070b;
+      --bg-2:#0a0e14;
+      --panel:#0d121a;
+      --panel-2:#111824;
+      --line:rgba(217,181,107,.28);
+      --gold:#d9b56b;
+      --gold-2:#f0cf86;
+      --white:#f7f4ee;
+      --muted:#aeb7c4;
+      --green:#59d879;
+      --magenta:#ef60d6;
+      --cyan:#6cd8e8;
+      --danger:#ef6a6a;
+      --shadow:0 22px 60px rgba(0,0,0,.38);
+      --radius:22px;
+      --serif: Georgia, 'Times New Roman', serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      margin:0;
+      color:var(--white);
+      font-family:var(--sans);
+      background:
+        radial-gradient(circle at 85% 12%, rgba(217,181,107,.08), transparent 28rem),
+        linear-gradient(180deg,#05070b 0%,#080c12 55%,#05070b 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:48px 48px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 85%);
+    }
+    button{font:inherit}
+    a{color:var(--gold-2)}
+    .app{min-height:100vh;display:flex;flex-direction:column}
+
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      display:flex;align-items:center;gap:18px;
+      padding:14px clamp(16px,3vw,40px);
+      background:rgba(5,7,11,.88);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(16px);
+    }
+    .brand{min-width:max-content}
+    .brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+    .brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+    .topbar-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+    .progress-wrap{width:min(280px,30vw);min-width:130px}
+    .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+    .progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:12.5%;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .35s ease}
+
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 110px}
+    .slide{display:none;animation:enter .42s ease both}
+    .slide.active{display:block}
+    @keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    .eyebrow{color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+    h1,h2,h3{margin:0}
+    h1{font:500 clamp(44px,7vw,92px)/.95 var(--serif);letter-spacing:-.045em}
+    h2{font:500 clamp(34px,5vw,64px)/1 var(--serif);letter-spacing:-.035em}
+    h3{font:600 21px/1.2 var(--serif)}
+    .lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:820px}
+    .accent-line{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+    .hero{
+      min-height:calc(100vh - 190px);
+      display:grid;grid-template-columns:1.03fr .97fr;gap:42px;align-items:center;
+    }
+    .hero-copy{padding:22px 0}
+    .hero-card{
+      position:relative;min-height:560px;border:1px solid var(--line);border-radius:30px;
+      background:linear-gradient(145deg,rgba(18,25,36,.92),rgba(7,10,15,.92));
+      box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;padding:34px;
+    }
+    .hero-card::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 52%);transform:translate(22%,6%)}
+    .hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:650px;color:#d8dde6;border-radius:0 14px 14px 0}
+    .hero-note b{color:var(--gold-2)}
+
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .card{
+      border:1px solid rgba(217,181,107,.22);border-radius:var(--radius);
+      background:linear-gradient(155deg,rgba(17,24,35,.94),rgba(9,13,20,.96));
+      padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)
+    }
+    .card p{color:#cbd2dd;line-height:1.6;margin:12px 0 0}
+    .card-label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+    .statement{font:500 clamp(27px,4vw,46px)/1.12 var(--serif);max-width:900px}
+    .statement strong{color:var(--gold-2);font-weight:500}
+    .callout{border:1px solid rgba(217,181,107,.35);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}
+    .callout strong{color:var(--gold-2)}
+
+    .objective-list{display:grid;gap:12px;margin-top:24px}
+    .objective{display:flex;gap:14px;align-items:center;padding:15px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .objective:last-child{border-bottom:0}
+    .num{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);font-weight:700;flex:0 0 auto}
+
+    .vor-compass{width:min(100%,540px);aspect-ratio:1;position:relative;z-index:1}
+    .vor-compass svg{width:100%;height:100%;display:block}
+    .radial-btn{cursor:pointer;transition:opacity .2s ease,filter .2s ease}
+    .radial-btn:hover{filter:drop-shadow(0 0 7px rgba(240,207,134,.75))}
+    .radial-output{margin-top:18px;min-height:86px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(4,6,10,.6);color:#dfe4ec;line-height:1.45}
+
+    .type-card{min-height:260px;display:flex;flex-direction:column}
+    .type-symbol{width:74px;height:74px;margin-bottom:18px}
+    .type-card .tag{margin-top:auto;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+
+    .concept-stage{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:stretch}
+    .concept-diagram{min-height:560px;padding:16px;display:grid;place-items:center}
+    .concept-tabs{display:grid;gap:12px}
+    .concept-tab{width:100%;text-align:left;padding:18px;border:1px solid rgba(255,255,255,.10);border-radius:15px;background:#0b111a;color:#d8dee8;cursor:pointer;transition:.2s}
+    .concept-tab:hover,.concept-tab.active{border-color:var(--gold);background:rgba(217,181,107,.075)}
+    .concept-tab b{display:block;color:var(--gold-2);margin-bottom:5px}
+    #conceptText{margin-top:15px;color:#d3d9e3;line-height:1.6}
+
+    .instrument-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+    .instrument-box{min-height:520px}
+    .instrument-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .tab-btn{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}
+    .tab-btn.active{color:#07100a;background:var(--green);border-color:var(--green);font-weight:800}
+    .instrument-view{display:none}
+    .instrument-view.active{display:block}
+    .photo{width:100%;border-radius:15px;border:1px solid rgba(255,255,255,.13);display:block;background:#000;aspect-ratio:1.22/1;object-fit:cover}
+    .photo-caption{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}
+    .fici{display:grid;gap:12px}
+    .fici-item{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;padding:14px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .fici-item:last-child{border-bottom:0}
+    .fici-letter{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(217,181,107,.10);border:1px solid var(--line);color:var(--gold-2);font-weight:900}
+    .tech-green{color:var(--green);font-weight:800}
+    .tech-magenta{color:var(--magenta);font-weight:800}
+
+    .analog{width:min(100%,420px);margin:0 auto;display:block}
+
+    .practice-shell{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;align-items:start}
+    .scenario-card{position:sticky;top:112px}
+    .question-card{padding:22px;margin-bottom:16px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(11,16,24,.86)}
+    .question-card.correct{border-color:rgba(89,216,121,.65)}
+    .question-card.incorrect{border-color:rgba(239,106,106,.65)}
+    .q-title{font-weight:700;line-height:1.45;margin-bottom:14px}
+    .answers{display:grid;gap:9px}
+    .answer{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;cursor:pointer;background:#090e15;transition:.2s;text-align:left;color:#e6e9ef}
+    .answer:hover{border-color:var(--gold)}
+    .answer.selected{border-color:var(--gold);background:rgba(217,181,107,.08)}
+    .feedback{display:none;margin-top:12px;padding:11px 13px;border-radius:10px;line-height:1.45;font-size:14px}
+    .feedback.show{display:block}
+    .feedback.good{background:rgba(89,216,121,.10);color:#baf2c7}
+    .feedback.bad{background:rgba(239,106,106,.10);color:#ffc1c1}
+
+    .quiz-summary{text-align:center;padding:34px}
+    .score-ring{width:170px;height:170px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) 0%,#1b2431 0);position:relative}
+    .score-ring::after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}
+    .score-value{position:relative;z-index:1;font:600 40px var(--serif)}
+
+    .source-list{font-size:13px;color:var(--muted);line-height:1.65}
+    details{border-top:1px solid rgba(255,255,255,.09);padding-top:14px;margin-top:18px}
+    summary{cursor:pointer;color:var(--gold-2);font-weight:700}
+
+    .nav{
+      position:fixed;left:0;right:0;bottom:0;z-index:60;
+      display:flex;align-items:center;justify-content:center;gap:14px;
+      padding:14px max(18px,env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom));
+      background:linear-gradient(180deg,rgba(5,7,11,.10),rgba(5,7,11,.96) 35%);
+      backdrop-filter:blur(12px)
+    }
+    .nav-btn{min-width:130px;border-radius:999px;padding:13px 20px;border:1px solid var(--line);background:#0b1119;color:#fff;cursor:pointer;font-weight:750;letter-spacing:.02em;transition:.2s}
+    .nav-btn:hover{transform:translateY(-1px);border-color:var(--gold)}
+    .nav-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#171005;border-color:transparent}
+    .nav-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+    .nav-step{color:var(--muted);font-size:13px;min-width:68px;text-align:center}
+
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(89,216,121,.35);background:rgba(89,216,121,.06);color:#b9efc5;font-size:12px;font-weight:700}
+    .tiny{font-size:12px;color:var(--muted);line-height:1.45}
+
+    @media (max-width:900px){
+      .topbar-title{display:none}
+      .hero,.concept-stage,.instrument-layout,.practice-shell{grid-template-columns:1fr}
+      .hero{min-height:auto}
+      .hero-card{min-height:430px}
+      .grid-3{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .scenario-card{position:static}
+      .instrument-box{min-height:auto}
+      main{padding-top:22px}
+    }
+    @media (max-width:560px){
+      .brand-name{font-size:25px}.brand-sub{font-size:8px}
+      .progress-wrap{width:120px;min-width:100px}
+      .topbar{gap:10px;padding:11px 14px}
+      main{padding-inline:14px}
+      .card{padding:18px}
+      .hero-card{padding:15px;min-height:360px}
+      h1{font-size:48px}.nav-btn{min-width:106px;padding:12px 14px}.nav-step{display:none}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand" aria-label="Veyra Pilot Intelligence">
+      <div class="brand-name">Veyra</div>
+      <div class="brand-sub">Pilot Intelligence</div>
+    </div>
+    <div class="topbar-title">IFR Path · Módulo 01 · El lenguaje del VOR</div>
+    <div class="progress-wrap" aria-label="Progreso del módulo">
+      <div class="progress-meta"><span>Progreso</span><span id="progressLabel">13%</span></div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1 -->
+    <section class="slide active" data-title="Inicio">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">VEYRA IFR PATH · PAQUETE 1</div>
+          <div class="accent-line"></div>
+          <h1>El lenguaje<br>del VOR</h1>
+          <p class="lede">Fundamentos de navegación convencional para comenzar la fase de vuelo por instrumentos.</p>
+          <div class="hero-note"><span>✦</span><div><b>Duración estimada:</b> 12–15 minutos. Este módulo combina lectura breve, diagramas técnicos, una referencia real de G1000 y práctica inmediata.</div></div>
+        </div>
+        <div class="hero-card" aria-label="Diagrama de radiales VOR">
+          <div class="vor-compass">
+            <svg viewBox="0 0 520 520" role="img" aria-label="Estación VOR con radiales 030, 090, 210 y 330 grados">
+              <defs>
+                <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#d9b56b" stop-opacity=".24"/><stop offset="1" stop-color="#d9b56b" stop-opacity="0"/></radialGradient>
+              </defs>
+              <circle cx="260" cy="260" r="230" fill="url(#glow)"/>
+              <g fill="none" stroke="#d9b56b" stroke-opacity=".24">
+                <circle cx="260" cy="260" r="70"/><circle cx="260" cy="260" r="120"/><circle cx="260" cy="260" r="175"/><circle cx="260" cy="260" r="225"/>
+              </g>
+              <g stroke="#d9b56b" stroke-width="2.4" fill="none">
+                <path d="M260 260 L360 87"/><path d="M260 260 L476 260"/><path d="M260 260 L152 447"/><path d="M260 260 L72 152"/>
+              </g>
+              <g fill="#f0cf86" font-family="system-ui" font-weight="700" font-size="20">
+                <text x="354" y="72">030°</text><text x="440" y="248">090°</text><text x="116" y="475">210°</text><text x="42" y="144">330°</text>
+              </g>
+              <g transform="translate(260 260)">
+                <polygon points="0,-40 34,-20 34,20 0,40 -34,20 -34,-20" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/>
+                <circle r="11" fill="#d9b56b"/>
+                <path d="M0-42V-66M0 42V66" stroke="#f7f4ee" stroke-width="2"/>
+              </g>
+              <g transform="translate(385 121) rotate(30)" fill="#f7f4ee">
+                <path d="M0-25L6-4L27 5L27 10L6 7L4 26L0 31L-4 26L-6 7L-27 10L-27 5L-6-4Z"/>
+              </g>
+              <g transform="translate(130 404) rotate(210)" fill="#f7f4ee">
+                <path d="M0-25L6-4L27 5L27 10L6 7L4 26L0 31L-4 26L-6 7L-27 10L-27 5L-6-4Z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-title="Objetivos">
+      <div class="eyebrow">ANTES DE COMENZAR</div><div class="accent-line"></div>
+      <h2>¿Qué vas a lograr?</h2>
+      <p class="lede">Al terminar, podrás interpretar el lenguaje básico del VOR y comprobar correctamente lo que ves en un instrumento análogo o en el G1000.</p>
+      <div class="grid-2" style="margin-top:30px">
+        <div class="card">
+          <div class="card-label">Objetivos</div>
+          <div class="objective-list">
+            <div class="objective"><span class="num">1</span><span>Explicar qué es un VOR y qué información entrega.</span></div>
+            <div class="objective"><span class="num">2</span><span>Diferenciar VOR, VOR/DME y VORTAC.</span></div>
+            <div class="objective"><span class="num">3</span><span>Separar radial, curso, rumbo, bearing y track.</span></div>
+            <div class="objective"><span class="num">4</span><span>Reconocer <span class="tech-green">VOR1/VOR2 en verde</span> y distinguirlo de <span class="tech-magenta">GPS en magenta</span>.</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Ruta de estudio</div>
+          <p class="statement">Primero entiende la <strong>geometría</strong>. Después interpreta el <strong>instrumento</strong>. Finalmente toma una <strong>decisión</strong>.</p>
+          <div class="chips"><span class="chip">Concepto</span><span class="chip">Posición</span><span class="chip">Cabina</span><span class="chip">Práctica</span></div>
+          <div class="callout"><strong>Regla Veyra:</strong> nunca sigas una aguja sin confirmar primero cuál es su fuente.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-title="Concepto VOR">
+      <div class="eyebrow">CONCEPTO 01</div><div class="accent-line"></div>
+      <h2>¿Qué es un VOR?</h2>
+      <div class="grid-2" style="margin-top:28px;align-items:center">
+        <div>
+          <p class="lede">El VOR es una radioayuda terrestre en VHF que entrega información azimutal: permite determinar la posición angular de la aeronave respecto a la estación.</p>
+          <div class="chips"><span class="chip">360 radiales</span><span class="chip">Línea de vista</span><span class="chip">Información angular</span></div>
+          <div class="callout"><strong>No entrega distancia por sí solo.</strong> Para disponer de distancia debe existir un equipo DME asociado u otra fuente válida.</div>
+          <p class="tiny" style="margin-top:16px">Selecciona uno de los radiales del diagrama para comprobar la posición.</p>
+          <div class="radial-output" id="radialOutput">Toca 000°, 090°, 180° o 270°.</div>
+        </div>
+        <div class="card" style="display:grid;place-items:center">
+          <svg viewBox="0 0 500 500" style="width:min(100%,520px)" role="img" aria-label="Rosa de radiales VOR interactiva">
+            <g fill="none" stroke="#d9b56b" stroke-opacity=".24"><circle cx="250" cy="250" r="72"/><circle cx="250" cy="250" r="138"/><circle cx="250" cy="250" r="205"/></g>
+            <g stroke="#758195" stroke-opacity=".35" stroke-dasharray="5 8"><path d="M250 35V465"/><path d="M35 250H465"/></g>
+            <g class="radial-btn" data-radial="000" data-place="al norte" stroke="#d9b56b" stroke-width="4"><path d="M250 250V55"/><path d="M250 55l-10 18h20z" fill="#d9b56b"/></g>
+            <g class="radial-btn" data-radial="090" data-place="al este" stroke="#d9b56b" stroke-width="4"><path d="M250 250H445"/><path d="M445 250l-18-10v20z" fill="#d9b56b"/></g>
+            <g class="radial-btn" data-radial="180" data-place="al sur" stroke="#d9b56b" stroke-width="4"><path d="M250 250V445"/><path d="M250 445l-10-18h20z" fill="#d9b56b"/></g>
+            <g class="radial-btn" data-radial="270" data-place="al oeste" stroke="#d9b56b" stroke-width="4"><path d="M250 250H55"/><path d="M55 250l18-10v20z" fill="#d9b56b"/></g>
+            <g fill="#f0cf86" font-family="system-ui" font-weight="800" font-size="22"><text x="227" y="34">000°</text><text x="450" y="258">090°</text><text x="224" y="486">180°</text><text x="2" y="258">270°</text></g>
+            <g transform="translate(250 250)"><polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/><circle r="10" fill="#d9b56b"/></g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-title="Tipos">
+      <div class="eyebrow">CONCEPTO 02</div><div class="accent-line"></div>
+      <h2>VOR, VOR/DME y VORTAC</h2>
+      <p class="lede">La información disponible depende del tipo de instalación y del equipo que tenga la aeronave.</p>
+      <div class="grid-3" style="margin-top:30px">
+        <article class="card type-card">
+          <svg class="type-symbol" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#d9b56b"/><path d="M40 9v62M9 40h62" stroke="#d9b56b" stroke-opacity=".45"/><circle cx="40" cy="40" r="8" fill="#d9b56b"/></svg>
+          <h3>VOR</h3><p>Entrega dirección angular respecto a la estación mediante radiales.</p><div class="tag">Dirección · Sin distancia propia</div>
+        </article>
+        <article class="card type-card">
+          <svg class="type-symbol" viewBox="0 0 80 80"><circle cx="34" cy="44" r="27" fill="none" stroke="#d9b56b"/><circle cx="34" cy="44" r="7" fill="#d9b56b"/><path d="M52 18l18-8-8 18-4-6-12 12-4-4 12-12z" fill="#f0cf86"/></svg>
+          <h3>VOR/DME</h3><p>Combina información angular VOR con distancia DME.</p><div class="tag">Dirección + distancia oblicua</div>
+        </article>
+        <article class="card type-card">
+          <svg class="type-symbol" viewBox="0 0 80 80"><circle cx="31" cy="42" r="24" fill="none" stroke="#d9b56b"/><circle cx="31" cy="42" r="6" fill="#d9b56b"/><path d="M52 20h15v15H52zM59.5 35v25M49 60h21" fill="none" stroke="#6cd8e8" stroke-width="3"/></svg>
+          <h3>VORTAC</h3><p>Combina VOR civil con TACAN militar. El usuario civil normalmente obtiene VOR y DME.</p><div class="tag">Uso civil: equivalente funcional VOR/DME</div>
+        </article>
+      </div>
+      <div class="callout" style="margin-top:22px"><strong>Cobertura:</strong> depende de altitud, línea de vista, volumen de servicio publicado y limitaciones de la estación. La carta y la publicación aplicable prevalecen sobre cualquier regla general.</div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-title="Lenguaje">
+      <div class="eyebrow">CONCEPTO 03</div><div class="accent-line"></div>
+      <h2>Habla con precisión</h2>
+      <p class="lede">Selecciona cada concepto para verlo en el diagrama. El objetivo es dejar de usar “dirección” para todo.</p>
+      <div class="concept-stage" style="margin-top:28px">
+        <div class="card concept-diagram">
+          <svg viewBox="0 0 650 560" style="width:100%;max-height:560px" role="img" aria-label="Radial, curso, rumbo, bearing y track">
+            <g fill="none" stroke="#d9b56b" stroke-opacity=".16"><circle cx="140" cy="425" r="55"/><circle cx="140" cy="425" r="105"/><circle cx="140" cy="425" r="160"/></g>
+            <g transform="translate(140 425)"><polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/><circle r="8" fill="#d9b56b"/></g>
+            <text x="72" y="525" fill="#d9b56b" font-size="18" font-family="system-ui">ESTACIÓN VOR</text>
+            <g id="lineRadial" opacity="1"><path d="M140 425L360 250" stroke="#d9b56b" stroke-width="5" stroke-dasharray="12 8"/><text x="190" y="350" fill="#f0cf86" font-size="18" font-family="system-ui">RADIAL</text></g>
+            <g id="lineCourse" opacity=".25"><path d="M336 270L500 90" stroke="#c977db" stroke-width="5"/><path d="M500 90l-22 8 14 13z" fill="#c977db"/><text x="445" y="74" fill="#df9bed" font-size="18" font-family="system-ui">CURSO</text></g>
+            <g id="lineHeading" opacity=".25"><path d="M350 260L455 172" stroke="#f0cf86" stroke-width="5"/><path d="M455 172l-22 7 13 14z" fill="#f0cf86"/><text x="430" y="160" fill="#f0cf86" font-size="18" font-family="system-ui">HEADING</text></g>
+            <g id="lineTrack" opacity=".25"><path d="M350 260L555 235" stroke="#6fd481" stroke-width="5" stroke-dasharray="11 7"/><path d="M555 235l-20-8 3 18z" fill="#6fd481"/><text x="520" y="220" fill="#8ee39b" font-size="18" font-family="system-ui">TRACK</text></g>
+            <g id="lineBearing" opacity=".25"><path d="M350 260L156 410" stroke="#6cbce8" stroke-width="4" stroke-dasharray="7 7"/><path d="M156 410l21-5-12-14z" fill="#6cbce8"/><text x="250" y="365" fill="#8ed3fa" font-size="18" font-family="system-ui">BEARING</text></g>
+            <g transform="translate(350 260) rotate(48)" fill="#f7f4ee"><path d="M0-34L7-5L36 6L36 12L7 9L5 35L0 42L-5 35L-7 9L-36 12L-36 6L-7-5Z"/></g>
+            <g stroke="#6cbce8" stroke-width="4"><path d="M205 140l60 45M216 121l60 45M230 104l60 45"/></g><text x="170" y="104" fill="#8ed3fa" font-size="18" font-family="system-ui">VIENTO</text>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="concept-tabs">
+            <button class="concept-tab active" data-concept="radial"><b>Radial</b>Línea que sale de la estación.</button>
+            <button class="concept-tab" data-concept="course"><b>Curso</b>Trayectoria deseada sobre la carta.</button>
+            <button class="concept-tab" data-concept="heading"><b>Heading / rumbo</b>Dirección hacia donde apunta la nariz.</button>
+            <button class="concept-tab" data-concept="bearing"><b>Bearing</b>Dirección hacia o desde un punto.</button>
+            <button class="concept-tab" data-concept="track"><b>Track</b>Trayectoria real sobre el suelo.</button>
+          </div>
+          <div id="conceptText"><strong style="color:var(--gold-2)">Radial:</strong> siempre se define desde la estación hacia afuera. No cambia porque la aeronave gire.</div>
+          <div class="callout" style="margin-top:22px"><strong>Con viento:</strong> el heading y el track pueden ser diferentes.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-title="Cabina">
+      <div class="eyebrow">CONCEPTO 04</div><div class="accent-line"></div>
+      <h2>Lee la fuente antes que la aguja</h2>
+      <div class="instrument-layout" style="margin-top:28px">
+        <div class="card instrument-box">
+          <div class="instrument-tabs">
+            <button class="tab-btn active" data-view="vor">G1000 · VOR</button>
+            <button class="tab-btn" data-view="gps">G1000 · GPS</button>
+            <button class="tab-btn" data-view="analog">CDI análogo</button>
+          </div>
+          <div class="instrument-view active" id="view-vor">
+            <img class="photo" src="assets/g1000-vor1-green.jpg" alt="Pantalla G1000 con VOR1 y CDI verdes" loading="lazy" />
+            <div class="photo-caption"><span class="tech-green">VOR1 y CDI verdes:</span> la fuente lateral seleccionada es NAV/VOR. Comprueba frecuencia, identificación, curso e indicación TO/FROM.</div>
+          </div>
+          <div class="instrument-view" id="view-gps">
+            <img class="photo" src="assets/g1000-gps-magenta.jpg" alt="Pantalla G1000 con fuente GPS en magenta" loading="lazy" />
+            <div class="photo-caption"><span class="tech-magenta">GPS en magenta:</span> aunque una frecuencia VOR esté sintonizada, el CDI no está utilizando el VOR como fuente lateral.</div>
+          </div>
+          <div class="instrument-view" id="view-analog">
+            <svg class="analog" viewBox="0 0 500 500" role="img" aria-label="CDI análogo con OBS, curso 090 y TO">
+              <circle cx="250" cy="250" r="220" fill="#06080b" stroke="#333b47" stroke-width="14"/>
+              <circle cx="250" cy="250" r="194" fill="#0b0f15" stroke="#929aa5" stroke-width="2"/>
+              <g stroke="#f7f4ee" stroke-width="3">
+                <path d="M250 55v22M445 250h-22M250 445v-22M55 250h22"/>
+                <path d="M112 112l16 16M388 112l-16 16M388 388l-16-16M112 388l16-16"/>
+              </g>
+              <g fill="#fff" font-family="system-ui" font-size="26" font-weight="700"><text x="236" y="105">N</text><text x="393" y="260">E</text><text x="238" y="416">S</text><text x="76" y="260">W</text></g>
+              <path d="M250 86V414" stroke="#d9b56b" stroke-width="5"/><path d="M250 86l-14 26h28z" fill="#d9b56b"/>
+              <path d="M250 132V368" stroke="#59d879" stroke-width="7"/>
+              <g fill="#fff"><circle cx="170" cy="250" r="7"/><circle cx="210" cy="250" r="7"/><circle cx="290" cy="250" r="7"/><circle cx="330" cy="250" r="7"/></g>
+              <rect x="215" y="148" width="70" height="40" rx="8" fill="#17251b" stroke="#59d879"/><text x="229" y="177" fill="#59d879" font-size="24" font-family="system-ui" font-weight="800">TO</text>
+              <text x="195" y="475" fill="#d9b56b" font-size="22" font-family="system-ui">OBS / CRS 090°</text>
+            </svg>
+            <div class="photo-caption">En un CDI análogo debes leer el curso seleccionado, la desviación lateral y TO/FROM. La fuente debe estar sintonizada e identificada.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">SECUENCIA F–I–C–I</div>
+          <div class="fici">
+            <div class="fici-item"><span class="fici-letter">F</span><div><b>Fuente</b><div class="tiny">VOR1/VOR2 en verde o GPS en magenta.</div></div></div>
+            <div class="fici-item"><span class="fici-letter">I</span><div><b>Identificación</b><div class="tiny">Frecuencia correcta, identificador confirmado y señal válida.</div></div></div>
+            <div class="fici-item"><span class="fici-letter">C</span><div><b>Curso</b><div class="tiny">Lee CRS/OBS. No lo confundas con el rumbo actual.</div></div></div>
+            <div class="fici-item"><span class="fici-letter">I</span><div><b>Indicación</b><div class="tiny">CDI, tendencia, TO/FROM y relación con el rumbo.</div></div></div>
+          </div>
+          <div class="callout" style="margin-top:20px"><strong>Call-out propuesto:</strong><br>“VOR1 verde, estación identificada, curso 273°, CDI a la derecha, indicación FROM”.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-title="Práctica">
+      <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent-line"></div>
+      <h2>¿En qué radial estás?</h2>
+      <p class="lede">Responde las tres situaciones. Recuerda: CDI centrado + FROM = radial de posición.</p>
+      <div class="practice-shell" style="margin-top:28px">
+        <div class="card scenario-card">
+          <div class="card-label">MÉTODO</div>
+          <p class="statement" style="font-size:34px">Sintoniza · Identifica · Selecciona <strong>VOR</strong> · Centra con <strong>FROM</strong></p>
+          <div class="callout" style="margin-top:18px"><strong>Con TO:</strong> el radial es el recíproco del curso seleccionado.</div>
+        </div>
+        <div id="practiceQuestions">
+          <div class="question-card" data-correct="060">
+            <div class="q-title">1. VOR1 verde · CRS 060° · CDI centrado · FROM. ¿Radial?</div>
+            <div class="answers"><button class="answer" data-value="060">R-060</button><button class="answer" data-value="240">R-240</button><button class="answer" data-value="120">R-120</button></div>
+            <div class="feedback"></div>
+          </div>
+          <div class="question-card" data-correct="330">
+            <div class="q-title">2. VOR1 verde · CRS 150° · CDI centrado · TO. ¿Radial?</div>
+            <div class="answers"><button class="answer" data-value="150">R-150</button><button class="answer" data-value="330">R-330</button><button class="answer" data-value="030">R-030</button></div>
+            <div class="feedback"></div>
+          </div>
+          <div class="question-card" data-correct="no">
+            <div class="q-title">3. GPS en magenta · NAV1 sintonizado · CDI centrado. ¿Puedes determinar un radial VOR con ese CDI?</div>
+            <div class="answers"><button class="answer" data-value="yes">Sí</button><button class="answer" data-value="no">No</button></div>
+            <div class="feedback"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" data-title="Evaluación">
+      <div class="eyebrow">COMPROBACIÓN FINAL</div><div class="accent-line"></div>
+      <h2>Demuestra que puedes leer antes de maniobrar</h2>
+      <p class="lede">Aprobación propuesta: 80%. Puedes repetir la comprobación.</p>
+      <div class="grid-2" style="margin-top:28px">
+        <div id="finalQuiz">
+          <div class="question-card" data-correct="from"><div class="q-title">1. Para identificar directamente el radial de posición, el CDI debe estar centrado con:</div><div class="answers"><button class="answer" data-value="to">TO</button><button class="answer" data-value="from">FROM</button><button class="answer" data-value="gps">GPS</button></div><div class="feedback"></div></div>
+          <div class="question-card" data-correct="green"><div class="q-title">2. En este módulo, la indicación VOR activa en el G1000 debe reconocerse principalmente por:</div><div class="answers"><button class="answer" data-value="green">VOR1/VOR2 y CDI verdes</button><button class="answer" data-value="magenta">GPS y CDI magenta</button><button class="answer" data-value="white">La línea blanca del horizonte</button></div><div class="feedback"></div></div>
+          <div class="question-card" data-correct="position"><div class="q-title">3. El radial describe principalmente:</div><div class="answers"><button class="answer" data-value="heading">El rumbo de la nariz</button><button class="answer" data-value="position">La posición angular desde la estación</button><button class="answer" data-value="distance">La distancia exacta</button></div><div class="feedback"></div></div>
+          <div class="question-card" data-correct="090"><div class="q-title">4. Estás en R-270 y deseas volar directamente hacia la estación. ¿Curso?</div><div class="answers"><button class="answer" data-value="270">270° FROM</button><button class="answer" data-value="090">090° TO</button><button class="answer" data-value="180">180° TO</button></div><div class="feedback"></div></div>
+          <div class="question-card" data-correct="track"><div class="q-title">5. La trayectoria real sobre el suelo se denomina:</div><div class="answers"><button class="answer" data-value="course">Curso</button><button class="answer" data-value="heading">Heading</button><button class="answer" data-value="track">Track</button></div><div class="feedback"></div></div>
+          <button class="nav-btn primary" id="gradeBtn" style="margin-top:8px">Calificar módulo</button>
+        </div>
+        <div class="card quiz-summary">
+          <div class="score-ring" id="scoreRing"><div class="score-value" id="scoreValue">—</div></div>
+          <h3 id="resultTitle">Completa la evaluación</h3>
+          <p id="resultText" style="color:var(--muted);line-height:1.55">Tu resultado aparecerá aquí y se enviará al sitio padre mediante <code>postMessage</code>.</p>
+          <div id="completionBadge" style="margin-top:18px"></div>
+          <button class="nav-btn" id="resetBtn" style="margin-top:18px">Reiniciar respuestas</button>
+          <details>
+            <summary>Fuentes y derechos</summary>
+            <div class="source-list" style="text-align:left;margin-top:12px">
+              <p>Contenido original Veyra basado en referencias oficiales: <a href="https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf" target="_blank" rel="noopener">FAA Instrument Rating — Airplane ACS (FAA-S-ACS-8C)</a>, <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aviation" target="_blank" rel="noopener">FAA Instrument Flying Handbook (FAA-H-8083-15B)</a>, <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf" target="_blank" rel="noopener">FAA Instrument Procedures Handbook (FAA-H-8083-16B)</a>, <a href="https://www.easa.europa.eu/en/document-library/easy-access-rules/easy-access-rules-aircrew-regulation-eu-no-11782011" target="_blank" rel="noopener">EASA Easy Access Rules for Aircrew</a> y el manual aplicable de Garmin G1000.</p>
+              <p>Las imágenes G1000 de este paquete fueron suministradas por Veyra para uso educativo. Las marcas y diseños de Garmin pertenecen a sus titulares. Verifica permisos antes de una publicación pública.</p>
+              <p>No se reproducen preguntas de ASA Prepware, cartas Jeppesen ni páginas completas de manuales protegidos.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Navegación del módulo">
+    <button class="nav-btn" id="prevBtn">← Anterior</button>
+    <span class="nav-step" id="navStep">1 / 8</span>
+    <button class="nav-btn primary" id="nextBtn">Continuar →</button>
+  </nav>
+</div>
+<script>
+(() => {
+  const MODULE_ID = 'veyra-ifr-vor-01';
+  const slides = [...document.querySelectorAll('.slide')];
+  const progressBar = document.getElementById('progressBar');
+  const progressLabel = document.getElementById('progressLabel');
+  const navStep = document.getElementById('navStep');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let current = Math.min(Number(localStorage.getItem(MODULE_ID + ':step') || 0), slides.length - 1);
+  const startedAt = Number(localStorage.getItem(MODULE_ID + ':startedAt') || Date.now());
+  localStorage.setItem(MODULE_ID + ':startedAt', String(startedAt));
+
+  function send(type, detail={}){
+    const payload = { source:'veyra-module', type, moduleId:MODULE_ID, timestamp:new Date().toISOString(), ...detail };
+    try { window.parent.postMessage(payload, '*'); } catch(e) {}
+    window.dispatchEvent(new CustomEvent(type, {detail:payload}));
+  }
+
+  function show(i){
+    current = Math.max(0, Math.min(i, slides.length - 1));
+    slides.forEach((s,n)=>s.classList.toggle('active',n===current));
+    const pct = Math.round(((current+1)/slides.length)*100);
+    progressBar.style.width = pct + '%'; progressLabel.textContent = pct + '%'; navStep.textContent = `${current+1} / ${slides.length}`;
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === slides.length - 1 ? 'Finalizar' : 'Continuar →';
+    localStorage.setItem(MODULE_ID + ':step', String(current));
+    send('veyra:progress',{progress:pct,currentStep:current+1,totalSteps:slides.length,title:slides[current].dataset.title});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  prevBtn.addEventListener('click',()=>show(current-1));
+  nextBtn.addEventListener('click',()=>{
+    if(current < slides.length-1) show(current+1);
+    else send('veyra:exit',{progress:100});
+  });
+
+  document.querySelectorAll('.radial-btn').forEach(el=>el.addEventListener('click',()=>{
+    const r=el.dataset.radial, p=el.dataset.place;
+    document.getElementById('radialOutput').innerHTML=`La aeronave ubicada <b>${p}</b> de la estación está sobre el <b style="color:var(--gold-2)">radial ${r}°</b>. El radial describe posición, no rumbo.`;
+  }));
+
+  const conceptMap={
+    radial:['lineRadial','<strong style="color:var(--gold-2)">Radial:</strong> siempre se define desde la estación hacia afuera. No cambia porque la aeronave gire.'],
+    course:['lineCourse','<strong style="color:#df9bed">Curso:</strong> trayectoria deseada o seleccionada. Puede volarse en sentido inbound u outbound.'],
+    heading:['lineHeading','<strong style="color:var(--gold-2)">Heading / rumbo:</strong> hacia donde apunta la nariz de la aeronave.'],
+    bearing:['lineBearing','<strong style="color:#8ed3fa">Bearing:</strong> dirección angular hacia o desde una estación o punto.'],
+    track:['lineTrack','<strong style="color:#8ee39b">Track:</strong> trayectoria que la aeronave recorre realmente sobre el suelo.']
+  };
+  document.querySelectorAll('.concept-tab').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.concept-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    Object.values(conceptMap).forEach(([id])=>document.getElementById(id).setAttribute('opacity','.18'));
+    const [id,text]=conceptMap[btn.dataset.concept]; document.getElementById(id).setAttribute('opacity','1'); document.getElementById('conceptText').innerHTML=text;
+  }));
+
+  document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    document.querySelectorAll('.instrument-view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+  }));
+
+  function bindQuestions(root){
+    root.querySelectorAll('.question-card').forEach(card=>{
+      card.querySelectorAll('.answer').forEach(answer=>answer.addEventListener('click',()=>{
+        card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected')); answer.classList.add('selected'); card.dataset.selected=answer.dataset.value;
+        if(root.id==='practiceQuestions'){
+          const ok=answer.dataset.value===card.dataset.correct;
+          card.classList.toggle('correct',ok); card.classList.toggle('incorrect',!ok);
+          const fb=card.querySelector('.feedback'); fb.className='feedback show '+(ok?'good':'bad');
+          fb.textContent=ok ? 'Correcto. La lectura respeta fuente, curso y TO/FROM.' : (card.dataset.correct==='330' ? 'Revisa el recíproco: 150° TO corresponde al radial 330°.' : card.dataset.correct==='no' ? 'La fuente activa es GPS; primero selecciona VOR1/VOR2 en verde.' : 'Con FROM y CDI centrado, el curso seleccionado es el radial.');
+        }
+      }));
+    });
+  }
+  bindQuestions(document.getElementById('practiceQuestions')); bindQuestions(document.getElementById('finalQuiz'));
+
+  const gradeBtn=document.getElementById('gradeBtn'), resetBtn=document.getElementById('resetBtn');
+  gradeBtn.addEventListener('click',()=>{
+    const cards=[...document.querySelectorAll('#finalQuiz .question-card')];
+    let correct=0, answered=0;
+    cards.forEach(card=>{
+      const selected=card.dataset.selected; if(selected) answered++;
+      const ok=selected===card.dataset.correct; if(ok) correct++;
+      card.classList.toggle('correct',ok); card.classList.toggle('incorrect',Boolean(selected)&&!ok);
+      const fb=card.querySelector('.feedback'); fb.className='feedback show '+(ok?'good':'bad');
+      fb.textContent=ok?'Correcto.':'Revisa el concepto antes de continuar.';
+    });
+    if(answered<cards.length){alert('Responde las cinco preguntas antes de calificar.');return;}
+    const score=Math.round((correct/cards.length)*100), passed=score>=80;
+    document.getElementById('scoreValue').textContent=score+'%';
+    document.getElementById('scoreRing').style.background=`conic-gradient(var(--gold) ${score}%, #1b2431 ${score}%)`;
+    document.getElementById('resultTitle').textContent=passed?'Módulo aprobado':'Requiere refuerzo';
+    document.getElementById('resultText').textContent=passed?'Puedes avanzar a interceptación y seguimiento de radiales.':'Repasa la fuente, TO/FROM y la diferencia entre radial, rumbo y track.';
+    document.getElementById('completionBadge').innerHTML=passed?'<span class="badge">✓ Completado</span>':'';
+    const seconds=Math.round((Date.now()-startedAt)/1000);
+    localStorage.setItem(MODULE_ID+':score',String(score)); localStorage.setItem(MODULE_ID+':complete',String(passed));
+    send('veyra:complete',{score,passed,timeSeconds:seconds,attemptedAt:new Date().toISOString()});
+  });
+  resetBtn.addEventListener('click',()=>{
+    document.querySelectorAll('#finalQuiz .question-card').forEach(card=>{delete card.dataset.selected;card.classList.remove('correct','incorrect');card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));card.querySelector('.feedback').className='feedback';});
+    document.getElementById('scoreValue').textContent='—';document.getElementById('scoreRing').style.background='conic-gradient(var(--gold) 0%, #1b2431 0)';document.getElementById('resultTitle').textContent='Completa la evaluación';document.getElementById('resultText').textContent='Tu resultado aparecerá aquí y se enviará al sitio padre mediante postMessage.';document.getElementById('completionBadge').innerHTML='';
+  });
+
+  show(current);
+  send('veyra:ready',{version:'1.0.0',supports:['progress','score','time','completion']});
+})();
+</script>
+</body>
+</html>
