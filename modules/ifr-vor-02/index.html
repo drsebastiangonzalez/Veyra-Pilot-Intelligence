@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 02 · Interceptación y seguimiento de radiales</title>
+  <style>
+    :root{
+      --bg:#05070b;--bg2:#080d14;--panel:#0d131c;--panel2:#111a26;
+      --gold:#d9b56b;--gold2:#f0cf86;--white:#f7f4ee;--muted:#aeb7c4;
+      --green:#59d879;--green2:#8ee39b;--magenta:#ed63d7;--cyan:#6cd8e8;
+      --danger:#ef7272;--line:rgba(217,181,107,.28);--shadow:0 22px 60px rgba(0,0,0,.38);
+      --r:22px;--serif:Georgia,'Times New Roman',serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);background:radial-gradient(circle at 86% 8%,rgba(217,181,107,.08),transparent 28rem),linear-gradient(180deg,#05070b,#080c12 58%,#05070b);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+    button,input{font:inherit}a{color:var(--gold2)}code{color:var(--gold2)}.app{min-height:100vh;display:flex;flex-direction:column}
+    .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+    .brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}.progress-wrap{width:min(280px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}.progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:10%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 110px}.slide{display:none;animation:enter .42s ease both}.slide.active{display:block}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}h1,h2,h3{margin:0}h1{font:500 clamp(44px,7vw,92px)/.95 var(--serif);letter-spacing:-.045em}h2{font:500 clamp(34px,5vw,64px)/1 var(--serif);letter-spacing:-.035em}h3{font:600 22px/1.2 var(--serif)}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:840px}.tiny{font-size:12px;color:var(--muted);line-height:1.5}
+    .hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:1.02fr .98fr;gap:42px;align-items:center}.hero-card{position:relative;min-height:560px;border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.95));box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;padding:28px}.hero-card:before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle,rgba(217,181,107,.13),transparent 52%);transform:translate(22%,6%)}.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:680px;color:#d8dde6;border-radius:0 14px 14px 0}.hero-note b{color:var(--gold2)}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}.callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}.callout strong{color:var(--gold2)}.green{color:var(--green);font-weight:800}.magenta{color:var(--magenta);font-weight:800}.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .objective{display:flex;gap:14px;align-items:center;padding:15px;border-bottom:1px solid rgba(255,255,255,.07)}.objective:last-child{border-bottom:0}.num{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);font-weight:800;flex:0 0 auto}
+    .checklist{display:grid;gap:10px}.check{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;padding:14px;border-bottom:1px solid rgba(255,255,255,.07)}.check:last-child{border-bottom:0}.letter{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(217,181,107,.10);border:1px solid var(--line);color:var(--gold2);font-weight:900}
+    .mode-tabs,.angle-buttons,.wind-buttons{display:flex;gap:9px;flex-wrap:wrap}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}.pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}
+    .geometry{display:grid;grid-template-columns:1.12fr .88fr;gap:22px;align-items:stretch}.diagram{min-height:530px;display:grid;place-items:center;overflow:hidden}.diagram svg{width:100%;max-height:520px}.readout{display:grid;gap:12px}.readout-row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)}.readout-row span:first-child{color:var(--muted)}.readout-row b{color:var(--gold2)}
+    .angle-stage{display:grid;grid-template-columns:1fr .92fr;gap:22px}.angle-meter{display:grid;place-items:center;min-height:470px}.angle-note{margin-top:15px;min-height:72px;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(4,6,10,.55);color:#dfe4ec;line-height:1.5}
+    .photo-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.photo-wrap img{width:100%;display:block}.hotspot{position:absolute;width:34px;height:34px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.82);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(217,181,107,.12)}.hotspot:hover,.hotspot.active{background:var(--gold2);color:#171005}.hotspot-info{min-height:128px;margin-top:14px}.hotspot-info h3{color:var(--gold2);font-size:20px}.hotspot-info p{margin-bottom:0}
+    .sim-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}.hsi-card{min-height:530px;display:grid;place-items:center}.hsi{width:min(100%,490px);aspect-ratio:1;position:relative}.hsi svg{width:100%;height:100%}.sim-controls{display:grid;gap:12px}.sim-status{padding:15px;border:1px solid var(--line);border-radius:14px;background:rgba(4,6,10,.58);line-height:1.5;min-height:88px}.sim-btn{width:100%;text-align:left;padding:15px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:#090e15;color:#e6e9ef;cursor:pointer}.sim-btn:hover{border-color:var(--gold)}.sim-btn b{color:var(--gold2)}
+    .wind-stage{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px}.wind-instrument{display:grid;place-items:center;min-height:470px}.wind-result{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px;min-height:88px;line-height:1.5;background:rgba(4,6,10,.55)}
+    .question{padding:21px;margin-bottom:16px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(11,16,24,.88)}.question.correct{border-color:rgba(89,216,121,.68)}.question.incorrect{border-color:rgba(239,114,114,.68)}.q-title{font-weight:750;line-height:1.45;margin-bottom:14px}.answers{display:grid;gap:9px}.answer{display:flex;gap:10px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;cursor:pointer;background:#090e15;color:#e6e9ef;text-align:left}.answer:hover,.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.08)}.feedback{display:none;margin-top:12px;padding:11px 13px;border-radius:10px;line-height:1.45;font-size:14px}.feedback.show{display:block}.feedback.good{background:rgba(89,216,121,.10);color:#baf2c7}.feedback.bad{background:rgba(239,114,114,.10);color:#ffc7c7}
+    .quiz-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.summary{text-align:center;padding:34px;position:sticky;top:110px}.score-ring{width:170px;height:170px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) 0%,#1b2431 0);position:relative}.score-ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}.score-value{position:relative;z-index:1;font:600 40px var(--serif)}.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(89,216,121,.35);background:rgba(89,216,121,.06);color:#b9efc5;font-size:12px;font-weight:700}.sources{font-size:13px;color:var(--muted);line-height:1.65;text-align:left}details{border-top:1px solid rgba(255,255,255,.09);padding-top:14px;margin-top:18px}summary{cursor:pointer;color:var(--gold2);font-weight:700}
+    .nav{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:14px;padding:14px max(18px,env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(5,7,11,.10),rgba(5,7,11,.96) 35%);backdrop-filter:blur(12px)}.nav-btn{min-width:130px;border-radius:999px;padding:13px 20px;border:1px solid var(--line);background:#0b1119;color:#fff;cursor:pointer;font-weight:750}.nav-btn:hover{border-color:var(--gold);transform:translateY(-1px)}.nav-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#171005;border-color:transparent}.nav-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}.nav-step{color:var(--muted);font-size:13px;min-width:68px;text-align:center}
+    @media(max-width:900px){.top-title{display:none}.hero,.grid2,.grid3,.geometry,.angle-stage,.sim-layout,.wind-stage,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-card{min-height:430px}.summary{position:static}.diagram,.hsi-card,.wind-instrument{min-height:auto}}
+    @media(max-width:560px){.brand-name{font-size:25px}.brand-sub{font-size:8px}.progress-wrap{width:120px;min-width:100px}.topbar{gap:10px;padding:11px 14px}main{padding-inline:14px}.card{padding:18px}.hero-card{padding:14px;min-height:360px}h1{font-size:47px}.nav-btn{min-width:106px;padding:12px 14px}.nav-step{display:none}.hotspot{width:28px;height:28px;font-size:12px}}
+  </style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+  <div class="top-title">IFR Path · Módulo 02 · Interceptación y seguimiento de radiales</div>
+  <div class="progress-wrap"><div class="progress-meta"><span>Progreso</span><span id="progressLabel">10%</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+</header>
+<main>
+  <section class="slide active" data-title="Inicio">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">VEYRA IFR PATH · PAQUETE 2</div><div class="accent"></div>
+        <h1>Interceptación<br>y seguimiento<br>de radiales</h1>
+        <p class="lede">Construye la geometría, confirma <span class="green">VOR en verde</span>, anticipa la captura y estabiliza el curso sin perseguir el CDI.</p>
+        <div class="hero-note"><span>✦</span><div><b>Duración estimada:</b> 15–18 minutos. Incluye geometría interactiva, lectura de una pantalla real, simulación de captura, viento y evaluación.</div></div>
+      </div>
+      <div class="hero-card">
+        <svg viewBox="0 0 560 560" role="img" aria-label="Interceptación del radial 090 outbound">
+          <g fill="none" stroke="#d9b56b" stroke-opacity=".22"><circle cx="250" cy="300" r="70"/><circle cx="250" cy="300" r="130"/><circle cx="250" cy="300" r="200"/></g>
+          <path d="M250 300H520" stroke="#d9b56b" stroke-width="4"/><text x="456" y="284" fill="#f0cf86" font-size="22" font-family="system-ui">R-090</text>
+          <path d="M180 95L385 300" stroke="#59d879" stroke-width="5" stroke-dasharray="12 8"/><path d="M385 300L500 300" stroke="#59d879" stroke-width="5"/>
+          <path d="M385 300l-18-10v20z" fill="#59d879"/><path d="M500 300l-18-10v20z" fill="#59d879"/>
+          <text x="130" y="76" fill="#8ee39b" font-size="18" font-family="system-ui">RUMBO DE INTERCEPTACIÓN 135°</text>
+          <text x="395" y="330" fill="#8ee39b" font-size="18" font-family="system-ui">CAPTURA → CURSO 090°</text>
+          <g transform="translate(250 300)"><polygon points="0,-36 31,-18 31,18 0,36 -31,18 -31,-18" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/><circle r="9" fill="#d9b56b"/></g>
+          <g transform="translate(180 95) rotate(135)" fill="#f7f4ee"><path d="M0-31L7-5L34 5L34 11L7 8L5 32L0 39L-5 32L-7 8L-34 11L-34 5L-7-5Z"/></g>
+          <g transform="translate(455 430)"><circle r="92" fill="#080c12" stroke="#d9b56b" stroke-width="3"/><circle r="70" fill="none" stroke="#526070"/><text x="-24" y="-46" fill="#59d879" font-size="20" font-family="system-ui" font-weight="800">VOR1</text><text x="-28" y="60" fill="#f7f4ee" font-size="16" font-family="system-ui">FROM</text><path d="M0-54V54" stroke="#59d879" stroke-width="5"/><path d="M-50 0H50" stroke="#f7f4ee" stroke-width="3"/><circle r="7" fill="#59d879"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Objetivos">
+    <div class="eyebrow">ANTES DE MANIOBRAR</div><div class="accent"></div><h2>¿Qué vas a lograr?</h2>
+    <p class="lede">Al finalizar, podrás configurar el VOR, construir un rumbo de interceptación, leer la tendencia del CDI y mantener el radial con corrección por viento.</p>
+    <div class="grid2" style="margin-top:28px">
+      <div class="card">
+        <div class="label">Objetivos observables</div>
+        <div class="objective"><span class="num">1</span><span>Diferenciar radial, curso y sentido inbound/outbound.</span></div>
+        <div class="objective"><span class="num">2</span><span>Confirmar <span class="green">VOR1/VOR2 en verde</span>, frecuencia, identificación y TO/FROM.</span></div>
+        <div class="objective"><span class="num">3</span><span>Elegir un rumbo que realmente converja con el curso.</span></div>
+        <div class="objective"><span class="num">4</span><span>Anticipar la captura y establecer corrección por viento.</span></div>
+      </div>
+      <div class="card">
+        <div class="label">Secuencia Veyra</div>
+        <div class="checklist">
+          <div class="check"><span class="letter">F</span><div><b>Fuente</b><br><span class="tiny">VOR1 o VOR2 en verde.</span></div></div>
+          <div class="check"><span class="letter">I</span><div><b>Identificación</b><br><span class="tiny">Frecuencia correcta y estación identificada.</span></div></div>
+          <div class="check"><span class="letter">C</span><div><b>Curso y sentido</b><br><span class="tiny">Mismo valor outbound; recíproco inbound.</span></div></div>
+          <div class="check"><span class="letter">I</span><div><b>Interceptación</b><br><span class="tiny">Rumbo que converja, captura y viento.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Geometría">
+    <div class="eyebrow">PASO 01</div><div class="accent"></div><h2>Primero define la línea y el sentido</h2>
+    <p class="lede">“Interceptar el radial 090” está incompleto. Debes decidir si lo volarás outbound o inbound.</p>
+    <div class="mode-tabs" style="margin:22px 0"><button class="pill active" data-mode="out">R-090 outbound</button><button class="pill" data-mode="in">R-090 inbound</button></div>
+    <div class="geometry">
+      <div class="card diagram">
+        <svg id="geometrySvg" viewBox="0 0 680 520" role="img" aria-label="Geometría inbound y outbound">
+          <g fill="none" stroke="#d9b56b" stroke-opacity=".18"><circle cx="320" cy="280" r="70"/><circle cx="320" cy="280" r="130"/><circle cx="320" cy="280" r="205"/></g>
+          <path d="M320 280H640" stroke="#d9b56b" stroke-width="4"/><text x="568" y="262" fill="#f0cf86" font-size="22" font-family="system-ui">R-090</text>
+          <g transform="translate(320 280)"><polygon points="0,-34 30,-17 30,17 0,34 -30,17 -30,-17" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/><circle r="9" fill="#d9b56b"/></g>
+          <g id="aircraftOut" transform="translate(430 100) rotate(135)" fill="#f7f4ee"><path d="M0-31L7-5L34 5L34 11L7 8L5 32L0 39L-5 32L-7 8L-34 11L-34 5L-7-5Z"/></g>
+          <g id="aircraftIn" transform="translate(500 430) rotate(315)" fill="#f7f4ee" opacity="0"><path d="M0-31L7-5L34 5L34 11L7 8L5 32L0 39L-5 32L-7 8L-34 11L-34 5L-7-5Z"/></g>
+          <path id="pathOut" d="M430 100L600 280L650 280" fill="none" stroke="#59d879" stroke-width="5" stroke-dasharray="12 8"/>
+          <path id="pathIn" d="M500 430L440 280L320 280" fill="none" stroke="#59d879" stroke-width="5" stroke-dasharray="12 8" opacity="0"/>
+          <text id="textOut" x="410" y="74" fill="#8ee39b" font-size="19" font-family="system-ui">CRS 090° · FROM</text>
+          <text id="textIn" x="420" y="468" fill="#8ee39b" font-size="19" font-family="system-ui" opacity="0">CRS 270° · TO</text>
+        </svg>
+      </div>
+      <div class="card readout">
+        <div class="label">Configuración correcta</div>
+        <div class="readout-row"><span>Radial</span><b id="gRadial">090°</b></div>
+        <div class="readout-row"><span>Sentido</span><b id="gSense">Outbound</b></div>
+        <div class="readout-row"><span>Curso seleccionado</span><b id="gCourse">090°</b></div>
+        <div class="readout-row"><span>Indicación</span><b id="gFlag">FROM</b></div>
+        <div class="callout" id="gExplanation"><strong>Outbound:</strong> selecciona el mismo valor del radial y confirma FROM.</div>
+        <p class="tiny">El radial nombra la línea desde la estación. El curso define el sentido en que la volarás.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Ángulo">
+    <div class="eyebrow">PASO 02</div><div class="accent"></div><h2>Elige un ángulo que puedas capturar</h2>
+    <p class="lede">No existe un único ángulo universal. Para entrenamiento inicial Veyra usa 30° como estándar, 45° cuando hay separación clara y 20° cerca de la captura.</p>
+    <div class="angle-stage" style="margin-top:26px">
+      <div class="card angle-meter">
+        <svg viewBox="0 0 560 460" role="img" aria-label="Ángulos de interceptación 20, 30 y 45 grados">
+          <path d="M90 360H520" stroke="#d9b56b" stroke-width="4"/><text x="450" y="342" fill="#f0cf86" font-size="20" font-family="system-ui">CURSO 090°</text>
+          <g transform="translate(110 100) rotate(135)" fill="#f7f4ee"><path d="M0-30L7-5L33 5L33 11L7 8L5 31L0 38L-5 31L-7 8L-33 11L-33 5L-7-5Z"/></g>
+          <path id="anglePath" d="M110 100L410 360" stroke="#59d879" stroke-width="6" stroke-dasharray="13 9" fill="none"/>
+          <path d="M370 360L500 360" stroke="#59d879" stroke-width="6" fill="none"/>
+          <path id="angleArc" d="M410 360 A82 82 0 0 0 339 319" fill="none" stroke="#f0cf86" stroke-width="4"/>
+          <text id="angleLabel" x="330" y="300" fill="#f0cf86" font-size="28" font-family="system-ui" font-weight="800">30°</text>
+          <g transform="translate(90 360)"><polygon points="0,-26 23,-13 23,13 0,26 -23,13 -23,-13" fill="#070a0f" stroke="#d9b56b" stroke-width="3"/><circle r="7" fill="#d9b56b"/></g>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="label">Selecciona una técnica</div>
+        <div class="angle-buttons"><button class="pill" data-angle="20">20°</button><button class="pill active" data-angle="30">30°</button><button class="pill" data-angle="45">45°</button></div>
+        <div class="angle-note" id="angleNote"><b>30°:</b> técnica inicial equilibrada para una interceptación normal.</div>
+        <div class="callout" style="margin-top:18px"><strong>La geometría manda:</strong> confirma que el rumbo elegido realmente lleva la aeronave hacia la línea. No uses “aguja izquierda, giro izquierdo” sin interpretar fuente, curso y sentido.</div>
+        <div class="chips"><span class="chip">Barra lenta: captura más cerca</span><span class="chip">Barra rápida: anticipa</span><span class="chip">Cerca del VOR: menor corrección</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="G1000 real">
+    <div class="eyebrow">PASO 03</div><div class="accent"></div><h2>Lee la fuente antes de seguir el CDI</h2>
+    <p class="lede">Usa la pantalla real suministrada por Veyra. Pulsa los marcadores para identificar los datos que deben verbalizarse antes de interceptar.</p>
+    <div class="grid2" style="margin-top:26px;align-items:start">
+      <div class="photo-wrap">
+        <img src="assets/g1000-vor1-intercept.jpg" alt="Pantalla G1000 real con VOR1 y CDI verdes" />
+        <button class="hotspot active" style="left:45%;top:58%" data-hot="source">1</button>
+        <button class="hotspot" style="left:66%;top:49%" data-hot="course">2</button>
+        <button class="hotspot" style="left:50%;top:71%" data-hot="cdi">3</button>
+        <button class="hotspot" style="left:18%;top:70%" data-hot="nav">4</button>
+        <button class="hotspot" style="left:12%;top:75%" data-hot="dme">5</button>
+      </div>
+      <div class="card">
+        <div class="label">Lectura F-I-C-I</div>
+        <div class="hotspot-info" id="hotInfo"><h3>1. Fuente</h3><p><span class="green">VOR1 en verde</span> confirma que el CDI usa navegación convencional NAV/VOR. Si apareciera GPS en magenta, la barra no estaría siguiendo el VOR.</p></div>
+        <div class="checklist">
+          <div class="check"><span class="letter">F</span><div><b>Fuente:</b> VOR1/VOR2 verde.</div></div>
+          <div class="check"><span class="letter">I</span><div><b>Identificación:</b> frecuencia correcta y estación identificada.</div></div>
+          <div class="check"><span class="letter">C</span><div><b>Curso:</b> CRS y TO/FROM coherentes con la tarea.</div></div>
+          <div class="check"><span class="letter">I</span><div><b>Indicación:</b> posición y tendencia del CDI.</div></div>
+        </div>
+        <p class="tiny">La simbología exacta depende de la instalación y versión del sistema. El manual de la aeronave y del equipo aplicable prevalece.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Captura">
+    <div class="eyebrow">PASO 04</div><div class="accent"></div><h2>Observa la tendencia y captura</h2>
+    <p class="lede">La posición instantánea de la barra no basta. Debes saber si se acerca, permanece o se aleja del centro.</p>
+    <div class="sim-layout" style="margin-top:26px">
+      <div class="card hsi-card">
+        <div class="hsi">
+          <svg viewBox="0 0 500 500" role="img" aria-label="Simulador de CDI VOR verde">
+            <circle cx="250" cy="250" r="205" fill="#080c12" stroke="#d9b56b" stroke-width="4"/>
+            <circle cx="250" cy="250" r="168" fill="none" stroke="#4b5665" stroke-width="2"/>
+            <g fill="#f7f4ee" font-family="system-ui" font-size="22" font-weight="700"><text x="238" y="70">N</text><text x="421" y="258">E</text><text x="240" y="447">S</text><text x="62" y="258">W</text></g>
+            <text x="213" y="118" fill="#59d879" font-size="22" font-family="system-ui" font-weight="800">VOR1</text>
+            <path d="M250 95V405" stroke="#59d879" stroke-width="5"/><path d="M250 95l-11 20h22z" fill="#59d879"/>
+            <g fill="none" stroke="#f7f4ee" stroke-width="3"><path d="M105 250H395"/><circle cx="250" cy="250" r="8"/></g>
+            <g id="cdiGroup" transform="translate(88 0)"><path d="M250 145V355" stroke="#59d879" stroke-width="7"/><circle cx="250" cy="250" r="9" fill="#59d879"/></g>
+            <g fill="#f7f4ee"><circle cx="190" cy="250" r="4"/><circle cx="220" cy="250" r="4"/><circle cx="280" cy="250" r="4"/><circle cx="310" cy="250" r="4"/></g>
+            <text x="222" y="392" fill="#f0cf86" font-size="18" font-family="system-ui">FROM</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card sim-controls">
+        <div class="label">Simulación</div>
+        <button class="sim-btn" id="startIntercept"><b>1. Comenzar interceptación</b><br><span class="tiny">La barra se moverá hacia el centro.</span></button>
+        <button class="sim-btn" id="captureNow"><b>2. Capturar ahora</b><br><span class="tiny">Reduce el ángulo y establece el curso.</span></button>
+        <button class="sim-btn" id="resetSim"><b>Reiniciar</b></button>
+        <div class="sim-status" id="simStatus">CDI a la derecha: el curso seleccionado está a la derecha de la aeronave. Inicia una trayectoria que converja con la línea.</div>
+        <div class="callout"><strong>Regla Veyra:</strong> barra lenta, captura más cerca del centro; barra rápida, anticipa más. Si esperas demasiado, atravesarás el curso.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Viento">
+    <div class="eyebrow">PASO 05</div><div class="accent"></div><h2>Interceptar no es lo mismo que mantener</h2>
+    <p class="lede">El rumbo de interceptación es temporal. Después de capturar, conserva únicamente la corrección por viento necesaria.</p>
+    <div class="wind-stage" style="margin-top:26px">
+      <div class="card wind-instrument">
+        <svg viewBox="0 0 500 450" style="width:min(100%,500px)" role="img" aria-label="Bracketing con curso 090 y corrección de viento">
+          <circle cx="250" cy="230" r="175" fill="#080c12" stroke="#d9b56b" stroke-width="4"/>
+          <text x="210" y="92" fill="#59d879" font-size="21" font-family="system-ui" font-weight="800">VOR1</text>
+          <path d="M80 230H420" stroke="#59d879" stroke-width="5"/><path d="M420 230l-20-11v22z" fill="#59d879"/>
+          <g id="windCdi" transform="translate(-58 0)"><path d="M250 135V325" stroke="#59d879" stroke-width="7"/><circle cx="250" cy="230" r="9" fill="#59d879"/></g>
+          <g fill="#f7f4ee"><circle cx="190" cy="230" r="4"/><circle cx="220" cy="230" r="4"/><circle cx="280" cy="230" r="4"/><circle cx="310" cy="230" r="4"/></g>
+          <g transform="translate(250 230)" fill="#f7f4ee"><path d="M0-38L8-6L40 6L40 13L8 9L6 39L0 48L-6 39L-8 9L-40 13L-40 6L-8-6Z"/></g>
+          <path d="M120 50l90 65" stroke="#6cd8e8" stroke-width="6"/><path d="M210 115l-24-3 13-19z" fill="#6cd8e8"/><text x="74" y="46" fill="#8edff0" font-size="18" font-family="system-ui">VIENTO DESDE EL NORTE</text>
+          <text id="windHeading" x="205" y="420" fill="#f0cf86" font-size="25" font-family="system-ui" font-weight="800">HDG 090°</text>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="label">Encuentra la corrección</div>
+        <p>Curso deseado: <b style="color:var(--gold2)">090°</b>. Con viento desde el norte, la aeronave deriva hacia el sur y el curso queda a la izquierda.</p>
+        <div class="wind-buttons"><button class="pill active" data-hdg="090">HDG 090°</button><button class="pill" data-hdg="085">HDG 085°</button><button class="pill" data-hdg="080">HDG 080°</button></div>
+        <div class="wind-result" id="windResult"><b>090°:</b> sin corrección. El CDI se desplaza a la izquierda; la aeronave deriva a la derecha del curso.</div>
+        <div class="callout" style="margin-top:18px"><strong>Bracketing:</strong> corrige, espera, evalúa y reduce. Con rumbo 085° el CDI queda centrado en este ejemplo; 080° representa sobrecorrección.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Práctica">
+    <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent"></div><h2>Resuelve antes de avanzar</h2>
+    <p class="lede">Cada respuesta muestra retroalimentación inmediata.</p>
+    <div id="practice" class="grid2" style="margin-top:26px;align-items:start">
+      <div>
+        <div class="question" data-correct="150"><div class="q-title">1. Debes interceptar el radial 150° outbound. ¿Qué seleccionas?</div><div class="answers"><button class="answer" data-value="150">CRS 150° · FROM</button><button class="answer" data-value="330">CRS 330° · TO</button><button class="answer" data-value="gps">GPS en magenta</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="330"><div class="q-title">2. Debes volar inbound por el radial 150°. ¿Qué seleccionas?</div><div class="answers"><button class="answer" data-value="150">CRS 150° · TO</button><button class="answer" data-value="330">CRS 330° · TO</button><button class="answer" data-value="from">CRS 330° · FROM</button></div><div class="feedback"></div></div>
+      </div>
+      <div>
+        <div class="question" data-correct="capture"><div class="q-title">3. La barra se mueve rápidamente hacia el centro. ¿Qué acción corresponde?</div><div class="answers"><button class="answer" data-value="wait">Esperar hasta cruzar el curso</button><button class="answer" data-value="capture">Anticipar la captura y reducir el ángulo</button><button class="answer" data-value="reverse">Cambiar la fuente a GPS</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="verify"><div class="q-title">4. El CDI está a escala completa y no conoces tu posición. ¿Qué haces?</div><div class="answers"><button class="answer" data-value="small">Aplicar 2° de corrección</button><button class="answer" data-value="verify">Verificar configuración y reconstruir la interceptación</button><button class="answer" data-value="ignore">Ignorar el CDI</button></div><div class="feedback"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Evaluación">
+    <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div><h2>Demuestra que puedes construir y mantener el radial</h2>
+    <p class="lede">Aprobación: 80 %. El resultado se guarda localmente y se envía a Veyra mediante <code>postMessage</code>.</p>
+    <div class="quiz-layout" style="margin-top:26px">
+      <div id="finalQuiz">
+        <div class="question" data-correct="green"><div class="q-title">1. Para interceptar un VOR en el G1000, ¿qué fuente debe estar activa?</div><div class="answers"><button class="answer" data-value="green">VOR1/VOR2 en verde</button><button class="answer" data-value="magenta">GPS en magenta</button><button class="answer" data-value="none">No importa la fuente</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="090from"><div class="q-title">2. Radial 090° outbound:</div><div class="answers"><button class="answer" data-value="090from">CRS 090° · FROM</button><button class="answer" data-value="270to">CRS 270° · TO</button><button class="answer" data-value="090to">CRS 090° · TO</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="270to"><div class="q-title">3. Radial 090° inbound:</div><div class="answers"><button class="answer" data-value="090from">CRS 090° · FROM</button><button class="answer" data-value="270to">CRS 270° · TO</button><button class="answer" data-value="270from">CRS 270° · FROM</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="anticipate"><div class="q-title">4. CDI acercándose rápido al centro:</div><div class="answers"><button class="answer" data-value="anticipate">Anticipar la captura</button><button class="answer" data-value="increase">Aumentar el ángulo hasta 90°</button><button class="answer" data-value="ignore">No observar la tendencia</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="left"><div class="q-title">5. Curso 090°, viento desde el norte y CDI desplazándose a la izquierda. ¿Dónde corriges?</div><div class="answers"><button class="answer" data-value="left">Hacia la izquierda, dentro del viento</button><button class="answer" data-value="right">Hacia la derecha</button><button class="answer" data-value="none">No corriges</button></div><div class="feedback"></div></div>
+        <div class="question" data-correct="rebuild"><div class="q-title">6. CDI a escala completa sin posición clara:</div><div class="answers"><button class="answer" data-value="rebuild">Verificar y reconstruir la interceptación</button><button class="answer" data-value="chase">Perseguir la aguja con correcciones grandes</button><button class="answer" data-value="center">Declarar que estás establecido</button></div><div class="feedback"></div></div>
+        <button class="nav-btn primary" id="gradeBtn">Calificar módulo</button>
+      </div>
+      <div class="card summary">
+        <div class="score-ring" id="scoreRing"><div class="score-value" id="scoreValue">—</div></div>
+        <h3 id="resultTitle">Completa la evaluación</h3>
+        <p id="resultText" style="color:var(--muted);line-height:1.55">El resultado aparecerá aquí.</p>
+        <div id="completionBadge" style="margin-top:18px"></div>
+        <button class="nav-btn" id="resetBtn" style="margin-top:18px">Reiniciar respuestas</button>
+        <details>
+          <summary>Fuentes y derechos</summary>
+          <div class="sources" style="margin-top:12px">
+            <p>Contenido original Veyra basado en referencias oficiales: FAA Instrument Procedures Handbook, FAA Aeronautical Information Manual, FAA Instrument Rating — Airplane ACS, EASA Easy Access Rules for Aircrew y el Pilot’s Guide aplicable del sistema Garmin instalado.</p>
+            <p>La fotografía G1000 fue suministrada por Veyra para uso educativo. Las marcas y diseños del equipo pertenecen a sus titulares. No se reproducen preguntas de ASA Prepware ni cartas Jeppesen.</p>
+            <p><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf" target="_blank" rel="noopener">FAA Instrument Procedures Handbook</a><br><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html" target="_blank" rel="noopener">FAA AIM · Air Navigation</a><br><a href="https://www.easa.europa.eu/en/document-library/easy-access-rules/easy-access-rules-aircrew-regulation-eu-no-11782011" target="_blank" rel="noopener">EASA Easy Access Rules for Aircrew</a></p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Cierre">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">CIERRE DEL MÓDULO</div><div class="accent"></div><h2>Intercepta, captura y estabiliza</h2>
+        <p class="lede">La técnica correcta comienza antes del giro: fuente, identificación, curso, sentido y geometría.</p>
+        <div class="card" style="margin-top:24px">
+          <div class="objective"><span class="num">1</span><span>Confirma <span class="green">VOR en verde</span>.</span></div>
+          <div class="objective"><span class="num">2</span><span>Selecciona el curso correcto y verifica TO/FROM.</span></div>
+          <div class="objective"><span class="num">3</span><span>Elige un rumbo que converja con la línea.</span></div>
+          <div class="objective"><span class="num">4</span><span>Lee la tendencia y anticipa la captura.</span></div>
+          <div class="objective"><span class="num">5</span><span>Establece una corrección por viento estable.</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div style="position:relative;z-index:1;text-align:center;max-width:520px"><div style="font:500 clamp(34px,5vw,64px)/1.05 var(--serif)">“No sigas una aguja.<br><span style="color:var(--gold2)">Interpreta una trayectoria.</span>”</div><p class="lede" style="margin:24px auto 0">Siguiente módulo recomendado: DME, fixes y arcos DME.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<nav class="nav"><button class="nav-btn" id="prevBtn">← Anterior</button><span class="nav-step" id="navStep">1 / 10</span><button class="nav-btn primary" id="nextBtn">Continuar →</button></nav>
+</div>
+<script>
+(()=>{
+  const MODULE_ID='veyra-ifr-vor-02';
+  const slides=[...document.querySelectorAll('.slide')];let current=Math.min(Number(localStorage.getItem(MODULE_ID+':step')||0),slides.length-1);
+  const startedAt=Number(localStorage.getItem(MODULE_ID+':startedAt')||Date.now());localStorage.setItem(MODULE_ID+':startedAt',String(startedAt));
+  const progressBar=document.getElementById('progressBar'),progressLabel=document.getElementById('progressLabel'),navStep=document.getElementById('navStep'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
+  function send(type,detail={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...detail};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+  function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);progressBar.style.width=pct+'%';progressLabel.textContent=pct+'%';navStep.textContent=`${current+1} / ${slides.length}`;prevBtn.disabled=current===0;nextBtn.textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':step',String(current));send('veyra:progress',{progress:pct,currentStep:current+1,totalSteps:slides.length,title:slides[current].dataset.title});window.scrollTo({top:0,behavior:'smooth'})}
+  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/';},150);};
+
+  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const inbound=b.dataset.mode==='in';document.getElementById('aircraftOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('aircraftIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('pathOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('pathIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('textOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('textIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('gSense').textContent=inbound?'Inbound':'Outbound';document.getElementById('gCourse').textContent=inbound?'270°':'090°';document.getElementById('gFlag').textContent=inbound?'TO':'FROM';document.getElementById('gExplanation').innerHTML=inbound?'<strong>Inbound:</strong> selecciona el recíproco del radial y confirma TO.':'<strong>Outbound:</strong> selecciona el mismo valor del radial y confirma FROM.'});
+
+  const angleData={20:{path:'M110 100L455 360',arc:'M455 360 A82 82 0 0 0 378 332',x:365,y:315,text:'20°',note:'<b>20°:</b> útil cerca de la captura o cuando la barra se mueve rápido.'},30:{path:'M110 100L410 360',arc:'M410 360 A82 82 0 0 0 339 319',x:330,y:300,text:'30°',note:'<b>30°:</b> técnica inicial equilibrada para una interceptación normal.'},45:{path:'M110 100L370 360',arc:'M370 360 A82 82 0 0 0 312 302',x:290,y:280,text:'45°',note:'<b>45°:</b> útil cuando existe separación clara, pero exige mayor anticipación.'}};
+  document.querySelectorAll('[data-angle]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-angle]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=angleData[b.dataset.angle];document.getElementById('anglePath').setAttribute('d',d.path);document.getElementById('angleArc').setAttribute('d',d.arc);const l=document.getElementById('angleLabel');l.setAttribute('x',d.x);l.setAttribute('y',d.y);l.textContent=d.text;document.getElementById('angleNote').innerHTML=d.note});
+
+  const hotData={source:['1. Fuente','<span class="green">VOR1 en verde</span> confirma que el CDI utiliza NAV/VOR. GPS en magenta sería una fuente diferente.'],course:['2. Curso','El valor <b>CRS 273°</b> es el curso seleccionado. Debe ser coherente con el radial y el sentido solicitado.'],cdi:['3. CDI','La barra verde muestra la desviación respecto al curso VOR seleccionado. Lee también su tendencia.'],nav:['4. Frecuencia NAV','NAV1 muestra la frecuencia activa. Debe sintonizarse e identificarse antes de usarla.'],dme:['5. DME','El DME muestra distancia oblicua al equipo asociado. No reemplaza la información radial.']};
+  document.querySelectorAll('.hotspot').forEach(b=>b.onclick=()=>{document.querySelectorAll('.hotspot').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=hotData[b.dataset.hot];document.getElementById('hotInfo').innerHTML=`<h3>${d[0]}</h3><p>${d[1]}</p>`});
+
+  let simX=88,simTimer=null,simRunning=false;const cdi=document.getElementById('cdiGroup'),simStatus=document.getElementById('simStatus');
+  function setSim(x){simX=x;cdi.setAttribute('transform',`translate(${x} 0)`) }function stop(){if(simTimer){clearInterval(simTimer);simTimer=null}simRunning=false}
+  document.getElementById('startIntercept').onclick=()=>{stop();simRunning=true;simStatus.textContent='Interceptación efectiva: la barra se mueve hacia el centro. Observa la velocidad y prepárate para capturar.';simTimer=setInterval(()=>{simX-=4;setSim(simX);if(simX<=-35){stop();simStatus.textContent='Sobrepasaste el curso. La captura fue tardía; ahora la barra está al lado contrario.'}},120)};
+  document.getElementById('captureNow').onclick=()=>{if(!simRunning&&Math.abs(simX)>25){simStatus.textContent='Primero inicia una interceptación que haga converger el CDI.';return}stop();const start=simX,steps=18;let n=0;simTimer=setInterval(()=>{n++;setSim(start+(0-start)*(n/steps));if(n>=steps){stop();setSim(0);simStatus.textContent='Curso capturado: reduce el ángulo, establece el curso seleccionado y evalúa el viento.'}},45)};
+  document.getElementById('resetSim').onclick=()=>{stop();setSim(88);simStatus.textContent='CDI a la derecha: el curso seleccionado está a la derecha de la aeronave. Inicia una trayectoria que converja con la línea.'};
+
+  const windData={090:{x:-58,text:'<b>090°:</b> sin corrección. El CDI se desplaza a la izquierda; la aeronave deriva a la derecha del curso.'},085:{x:0,text:'<b>085°:</b> corrección adecuada en este ejemplo. El CDI queda centrado y estable.'},080:{x:58,text:'<b>080°:</b> sobrecorrección. El curso queda a la derecha; reduce parte del ángulo.'}};
+  document.querySelectorAll('[data-hdg]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-hdg]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=windData[b.dataset.hdg];document.getElementById('windCdi').setAttribute('transform',`translate(${d.x} 0)`);document.getElementById('windHeading').textContent='HDG '+b.dataset.hdg+'°';document.getElementById('windResult').innerHTML=d.text});
+
+  function bindQuestions(root,instant){root.querySelectorAll('.question').forEach(card=>card.querySelectorAll('.answer').forEach(ans=>ans.onclick=()=>{card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));ans.classList.add('selected');card.dataset.selected=ans.dataset.value;if(instant){const ok=ans.dataset.value===card.dataset.correct;card.classList.toggle('correct',ok);card.classList.toggle('incorrect',!ok);const fb=card.querySelector('.feedback');fb.className='feedback show '+(ok?'good':'bad');const texts={150:'Outbound: mismo valor del radial y FROM.',330:'Inbound: utiliza el recíproco 330° y TO.',capture:'Correcto: una barra rápida exige anticipar la captura.',verify:'Correcto: a escala completa debes verificar y reconstruir la geometría.'};fb.textContent=ok?texts[card.dataset.correct]:'Revisa radial, sentido, tendencia y fuente antes de decidir.'}}))}
+  bindQuestions(document.getElementById('practice'),true);bindQuestions(document.getElementById('finalQuiz'),false);
+  document.getElementById('gradeBtn').onclick=()=>{const cards=[...document.querySelectorAll('#finalQuiz .question')];let correct=0,answered=0;cards.forEach(card=>{const sel=card.dataset.selected;if(sel)answered++;const ok=sel===card.dataset.correct;if(ok)correct++;card.classList.toggle('correct',ok);card.classList.toggle('incorrect',Boolean(sel)&&!ok);const fb=card.querySelector('.feedback');fb.className='feedback show '+(ok?'good':'bad');fb.textContent=ok?'Correcto.':'Revisa el concepto y vuelve a intentarlo.'});if(answered<cards.length){alert('Responde las seis preguntas antes de calificar.');return}const score=Math.round(correct/cards.length*100),passed=score>=80;document.getElementById('scoreValue').textContent=score+'%';document.getElementById('scoreRing').style.background=`conic-gradient(var(--gold) ${score}%,#1b2431 ${score}%)`;document.getElementById('resultTitle').textContent=passed?'Módulo aprobado':'Requiere refuerzo';document.getElementById('resultText').textContent=passed?'Puedes avanzar al siguiente paquete.':'Repasa fuente, inbound/outbound, captura y viento.';document.getElementById('completionBadge').innerHTML=passed?'<span class="badge">✓ Completado</span>':'';const seconds=Math.round((Date.now()-startedAt)/1000);localStorage.setItem(MODULE_ID+':score',String(score));localStorage.setItem(MODULE_ID+':complete',String(passed));send('veyra:complete',{score,passed,timeSeconds:seconds,attemptedAt:new Date().toISOString()})};
+  document.getElementById('resetBtn').onclick=()=>{document.querySelectorAll('#finalQuiz .question').forEach(card=>{delete card.dataset.selected;card.classList.remove('correct','incorrect');card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));card.querySelector('.feedback').className='feedback'});document.getElementById('scoreValue').textContent='—';document.getElementById('scoreRing').style.background='conic-gradient(var(--gold) 0%,#1b2431 0)';document.getElementById('resultTitle').textContent='Completa la evaluación';document.getElementById('resultText').textContent='El resultado aparecerá aquí.';document.getElementById('completionBadge').innerHTML=''};
+  show(current);send('veyra:ready',{version:'1.0.0',supports:['progress','score','time','completion']});
+})();
+</script>
+</body>
+</html>
