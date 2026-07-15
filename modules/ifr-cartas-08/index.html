@@ -3,394 +3,804 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VEYRA IFR PATH · Módulo 08 · Lectura de cartas IFR</title>
 <style>
 :root{
- --bg:#06080c; --panel:#101723; --panel2:#131d2b; --line:rgba(217,181,107,.28);
- --gold:#d9b56b; --gold2:#f0cf86; --txt:#f7f3ed; --muted:#b8c2cf; --good:#6ee08c; --bad:#ff9b9b;
- --serif:Georgia,'Times New Roman',serif; --sans:Inter,system-ui,sans-serif;
+  --bg:#06080d; --bg2:#0b111a; --panel:#111b28; --panel2:#0d141e;
+  --gold:#d6b56c; --gold2:#f0cf87; --text:#f5f1ea; --muted:#b9c3d0;
+  --line:rgba(214,181,108,.28); --line2:rgba(255,255,255,.09);
+  --ok:#8fe3a3; --bad:#ffabab;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:linear-gradient(180deg,#06080c,#0b1018 58%,#06080c);color:var(--txt);font-family:var(--sans)}
-.top{position:sticky;top:0;z-index:10;display:flex;gap:16px;align-items:center;padding:14px 18px;background:rgba(6,8,12,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-.brand{font:600 30px/1 var(--serif);text-decoration:none;color:inherit;cursor:pointer} .sub{font-size:10px;color:var(--gold);letter-spacing:.25em;text-transform:uppercase}
-.topmid{flex:1;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.prog{min-width:180px}.track{height:5px;background:#202939;border-radius:999px;overflow:hidden}.bar{height:5px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:10%}
-.pm{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
-main{max-width:1200px;margin:0 auto;padding:26px 20px 110px}
-.slide{display:none}.slide.active{display:block}
-.eyebrow{color:var(--gold);font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
-.accent{width:100px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:18px 0}
-h1,h2,h3{margin:0} h1{font:500 clamp(42px,6vw,82px)/.96 var(--serif)} h2{font:500 clamp(32px,4vw,52px)/1 var(--serif)} h3{font:600 24px/1.2 var(--serif)}
-p{color:#d0d7e1;line-height:1.6} .lede{font-size:clamp(17px,2vw,22px);max-width:920px}
-.hero{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;align-items:center;min-height:calc(100vh - 180px)}
-.panel{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 18px 48px rgba(0,0,0,.3)}
-.hero .panel{min-height:500px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);font-family:var(--sans);
+  background:
+    radial-gradient(circle at 86% 10%, rgba(214,181,108,.09), transparent 24rem),
+    linear-gradient(180deg, var(--bg), var(--bg2) 55%, var(--bg));
+}
+.top{
+  position:sticky;top:0;z-index:20;display:flex;gap:16px;align-items:center;
+  padding:14px 22px;background:rgba(6,8,13,.93);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)
+}
+.brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}
+.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+.brand-sub{color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase;margin-top:4px}
+.top-title{flex:1;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.11em;text-transform:uppercase}
+.progress{min-width:220px}
+.progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:6px}
+.track{height:7px;background:#233042;border-radius:999px;overflow:hidden}
+.bar{height:100%;width:10%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+main{max-width:1280px;margin:0 auto;padding:28px 22px 112px}
+.slide{display:none}
+.slide.active{display:block;animation:enter .25s ease}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+.accent{width:112px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:18px 0}
+h1,h2,h3,h4{margin:0}
+h1{font:500 clamp(40px,6.5vw,78px)/.96 var(--serif);letter-spacing:-.04em}
+h2{font:500 clamp(30px,4.8vw,56px)/1 var(--serif);letter-spacing:-.03em}
+h3{font:600 24px/1.2 var(--serif)}
+p{color:#d1d8e2;line-height:1.62}
+.lede{font-size:clamp(17px,2vw,22px);max-width:1000px}
+.hero{min-height:calc(100vh - 180px);display:grid;grid-template-columns:.94fr 1.06fr;gap:28px;align-items:center}
+.card,.panel{
+  border:1px solid var(--line);border-radius:22px;
+  background:linear-gradient(155deg,var(--panel),var(--panel2));box-shadow:0 18px 42px rgba(0,0,0,.28)
+}
+.card{padding:22px}
+.panel{padding:18px}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.card{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:20px}
-.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.chip{border:1px solid var(--line);padding:8px 11px;border-radius:999px;font-size:12px;color:#dae0e8}
-.callout{padding:16px 18px;border:1px solid rgba(217,181,107,.35);border-radius:16px;background:rgba(217,181,107,.06);line-height:1.55}
-.danger{border-color:rgba(255,155,155,.35);background:rgba(255,155,155,.07)}
-.list{display:grid;gap:10px}.item{padding:13px 14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0b1018}
-.btns{display:flex;flex-wrap:wrap;gap:9px}.btn,.btn2,.ans,.pbtn{cursor:pointer}
-.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#c7953d);color:#171005;font-weight:800}
-.btn2{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:#0b1018;color:#eef2f6;font-weight:700}
-.diagram{display:grid;place-items:center;min-height:320px;background:#0b1018;border:1px solid var(--line);border-radius:20px;padding:16px}
-svg{max-width:100%;height:auto}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.tab{padding:10px 14px;border:1px solid var(--line);background:#0b1018;color:#e8edf2;border-radius:999px;cursor:pointer}.tab.active{border-color:var(--gold);background:rgba(217,181,107,.12);color:var(--gold2)}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0b1018}.metric b{display:block;font:600 28px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{font-size:12px;color:var(--muted)}
-.ctrl{padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0b1018}.ctrl label{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px}.ctrl input{width:100%;accent-color:var(--gold)}
-.checks{display:grid;gap:10px}.check{display:flex;gap:11px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0b1018}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:rgba(217,181,107,.12);color:var(--gold2);font-weight:900;flex:0 0 28px}
-.practice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.pcard{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(155deg,var(--panel2),var(--panel))}
-.pbtn,.ans{display:block;width:100%;margin-top:8px;padding:11px 12px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#0b1018;color:#eef2f6;text-align:left}
-.pbtn:hover,.ans:hover,.pbtn.sel,.ans.sel{border-color:var(--gold)}
-.fb{min-height:48px;margin-top:10px}
-.quiz{display:grid;grid-template-columns:1.15fr .85fr;gap:20px}.q{padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}
-.side{position:sticky;top:88px}.score{font:600 68px/1 var(--serif);color:var(--gold2)}
-.complete{display:none;margin-top:14px}.complete.show{display:block}
-.nav{position:fixed;left:0;right:0;bottom:0;padding:12px 18px;background:rgba(6,8,12,.94);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
-.mid{color:var(--muted);font-size:12px;text-align:center}.hotrow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-.hot{padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:#0b1018;cursor:pointer;color:#e8edf2}.hot.active{border-color:var(--gold);background:rgba(217,181,107,.12);color:var(--gold2)}
-@media(max-width:980px){.hero,.grid4,.quiz{grid-template-columns:1fr}.side{position:static}.metrics{grid-template-columns:1fr}}
-@media(max-width:820px){.grid2,.grid3,.practice{grid-template-columns:1fr}.hero .panel{min-height:auto}.topmid{display:none}}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:12px;color:#dde3eb;background:rgba(214,181,108,.04)}
+.callout{padding:16px 18px;border:1px solid rgba(214,181,108,.34);border-radius:16px;background:rgba(214,181,108,.06);line-height:1.58}
+.note{padding:16px 18px;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(255,255,255,.03);line-height:1.58}
+.list{display:grid;gap:10px}
+.item{padding:14px 15px;border:1px solid var(--line2);border-radius:14px;background:#0b1119}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn,.btn-secondary,.quiz-btn,.practice-btn,.tab{font:inherit}
+.btn{
+  padding:12px 18px;border-radius:14px;border:1px solid var(--gold2);
+  background:linear-gradient(135deg,var(--gold2),#c9963a);color:#161005;font-weight:800;cursor:pointer
+}
+.btn-secondary{
+  padding:12px 18px;border-radius:14px;border:1px solid var(--line);background:#0c1118;color:#eef2f6;font-weight:700;cursor:pointer
+}
+.figure{display:block;width:100%;border-radius:18px;border:1px solid var(--line2);background:#fff}
+figcaption{color:var(--muted);font-size:12px;line-height:1.5;margin-top:10px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}
+.tab{
+  border:1px solid var(--line);background:#0c1118;color:#eef2f6;border-radius:999px;padding:10px 14px;cursor:pointer
+}
+.tab.active{border-color:var(--gold);background:rgba(214,181,108,.12);color:var(--gold2)}
+.tab-panels .tab-panel{display:none}
+.tab-panels .tab-panel.active{display:block}
+.step-list{display:grid;gap:12px}
+.step{display:flex;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:14px;background:#0b1119}
+.step-num{flex:0 0 30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(214,181,108,.13);color:var(--gold2);font-weight:900}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#0b1119}
+.metric b{display:block;font:600 28px/1 var(--serif);color:var(--gold2);margin-bottom:6px}
+.metric span{font-size:12px;color:var(--muted)}
+.control{padding:16px;border:1px solid var(--line2);border-radius:14px;background:#0b1119}
+.control label{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px}
+.control input{width:100%;accent-color:var(--gold)}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.practice-card{padding:18px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(155deg,var(--panel),var(--panel2))}
+.practice-btn,.quiz-answer{
+  display:block;width:100%;text-align:left;margin-top:8px;padding:11px 12px;
+  border:1px solid var(--line2);border-radius:12px;background:#0c1118;color:#eef2f6;cursor:pointer
+}
+.practice-btn:hover,.quiz-answer:hover,.practice-btn.selected,.quiz-answer.selected{border-color:var(--gold)}
+.feedback{min-height:44px;margin-top:10px}
+.quiz-layout{display:grid;grid-template-columns:1.16fr .84fr;gap:20px}
+.question{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}
+.side{position:sticky;top:90px}
+.score{font:600 68px/1 var(--serif);color:var(--gold2)}
+.complete{display:none;margin-top:14px}
+.complete.show{display:block}
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:12px 22px;background:rgba(6,8,13,.94);border-top:1px solid var(--line);backdrop-filter:blur(12px)
+}
+.mid{color:var(--muted);font-size:12px;text-align:center}
+.small{font-size:12px;color:var(--muted)}
+.inline-key{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:11px;color:var(--gold2);margin:2px 4px 2px 0}
+.highlight{color:var(--gold2)}
+@media(max-width:1040px){
+  .hero,.grid4,.quiz-layout{grid-template-columns:1fr}
+  .side{position:static}
+  .metric-grid{grid-template-columns:1fr}
+}
+@media(max-width:860px){
+  .grid2,.grid3,.practice-grid{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .top-title{display:none}
+}
 </style>
 </head>
 <body>
-<div class="top">
-  <a href="/" aria-label="Volver a la página principal de Veyra"><div class="brand">Veyra</div><div class="sub">Pilot Intelligence</div></a>
-  <div class="topmid">IFR PATH · Módulo 08 · Lectura de cartas IFR</div>
-  <div class="prog"><div class="pm"><span id="pt">Pantalla 1 de 10</span><span id="pp">10%</span></div><div class="track"><div class="bar" id="bar"></div></div></div>
-</div>
+<header class="top">
+  <a class="brand" href="/" aria-label="Volver a la página principal de Veyra">
+    <div class="brand-name">Veyra</div>
+    <div class="brand-sub">Pilot Intelligence</div>
+  </a>
+  <div class="top-title">IFR PATH · Módulo 08 · Lectura de cartas IFR</div>
+  <div class="progress">
+    <div class="progress-meta"><span id="progressText">Pantalla 1 de 10</span><span id="progressPct">10%</span></div>
+    <div class="track"><div class="bar" id="progressBar"></div></div>
+  </div>
+</header>
 
 <main>
 <section class="slide active" data-title="Inicio">
   <div class="hero">
     <div>
-      <div class="eyebrow">MÓDULO 08 · LECTURA DE CARTAS IFR</div><div class="accent"></div>
-      <h1>Leer la carta es parte de <span style="color:var(--gold2)">volar</span></h1>
-      <p class="lede">Este módulo enseña cómo interpretar cartas IFR con lógica operacional: validar la carta correcta, reconocer el tipo, extraer restricciones y construir un briefing consistente.</p>
+      <div class="eyebrow">MÓDULO 08 · LECTURA DE CARTAS IFR</div>
+      <div class="accent"></div>
+      <h1>Las cartas IFR son parte del <span class="highlight">pensamiento</span> del piloto</h1>
+      <p class="lede">Este módulo enseña a leer cartas Jeppesen con criterio operacional: cómo validar la carta correcta, extraer restricciones, identificar amenazas y transformar la información en un briefing útil para la cabina.</p>
       <div class="chips">
-        <span class="chip">Jeppesen</span><span class="chip">Airport Diagram</span><span class="chip">SID</span><span class="chip">STAR</span><span class="chip">ILS / LOC</span><span class="chip">RNAV / LPV</span><span class="chip">RNP AR</span>
+        <span class="chip">Airport Diagram</span>
+        <span class="chip">SID</span>
+        <span class="chip">STAR</span>
+        <span class="chip">ILS / LOC</span>
+        <span class="chip">RNAV / GPS</span>
+        <span class="chip">LPV</span>
+        <span class="chip">RNP AR</span>
       </div>
-      <div class="callout"><strong>Objetivo final:</strong> que el estudiante transforme información gráfica en decisiones: frecuencias, altitudes, velocidades, amenazas, mínimos y frustrada.</div>
+      <div class="callout"><strong>Meta del módulo:</strong> que el estudiante deje de “ver una carta” y aprenda a <strong>leerla en orden</strong>, explicarla, volarla y usarla como herramienta de gestión de amenaza y error.</div>
       <div class="btns" style="margin-top:16px"><button class="btn" data-go="1">Comenzar módulo</button></div>
     </div>
-    <div class="panel diagram">
-      <svg viewBox="0 0 760 560" aria-label="Mockup de carta IFR">
-        <rect x="40" y="30" width="680" height="500" rx="18" fill="#f5f2eb"/>
-        <rect x="40" y="30" width="680" height="96" fill="#fff"/>
-        <rect x="40" y="126" width="680" height="230" fill="#f1efe8"/>
-        <rect x="40" y="356" width="680" height="78" fill="#eceae4"/>
-        <rect x="40" y="434" width="680" height="96" fill="#f6f4ef"/>
-        <rect x="58" y="48" width="150" height="24" rx="5" fill="#111"/>
-        <rect x="58" y="84" width="92" height="24" rx="5" fill="#d9b56b"/>
-        <rect x="166" y="84" width="100" height="24" rx="5" fill="#65d8e8"/>
-        <rect x="282" y="84" width="104" height="24" rx="5" fill="#58db78"/>
-        <circle cx="640" cy="76" r="40" fill="#f8f7f3" stroke="#222" stroke-width="2"/>
-        <path d="M126 300L286 210L440 246L548 184" stroke="#111" stroke-width="7" fill="none"/>
-        <path d="M548 184L604 150" stroke="#111" stroke-width="5" stroke-dasharray="8 6"/>
-        <path d="M126 300L84 326" stroke="#111" stroke-width="5" stroke-dasharray="8 6"/>
-        <rect x="84" y="452" width="570" height="56" rx="8" fill="#fff" stroke="#999"/>
-        <line x1="84" y1="480" x2="654" y2="480" stroke="#999"/>
-        <line x1="290" y1="452" x2="290" y2="508" stroke="#999"/>
-        <line x1="470" y1="452" x2="470" y2="508" stroke="#999"/>
-      </svg>
+    <div class="panel">
+      <figure>
+        <img class="figure" src="assets/skbo_ils14l.jpg" alt="Carta Jeppesen ILS Z o LOC Z RWY 14L de Bogotá">
+        <figcaption><strong>Ejemplo real de referencia:</strong> aproximación ILS / LOC de Bogotá. En este módulo usaremos cartas reales Jeppesen para explicar estructura, lectura y briefing.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
 <section class="slide" data-title="Por qué Jeppesen">
-  <div class="eyebrow">¿POR QUÉ UTILIZAMOS JEPPESEN?</div><div class="accent"></div>
-  <h2>Porque reduce carga mental mediante un formato consistente</h2>
-  <p class="lede">Jeppesen organiza datos aeronáuticos oficiales en un formato uniforme. Eso ayuda a que el piloto lea más rápido, compare mejor y construya un briefing estable en aeropuertos y países distintos.</p>
+  <div class="eyebrow">¿POR QUÉ SE ACONSEJA USAR JEPPESEN?</div>
+  <div class="accent"></div>
+  <h2>Porque es el <span class="highlight">estándar global</span> más usado para leer, briefear y comparar procedimientos</h2>
+  <p class="lede">Jeppesen es ampliamente utilizado en entrenamiento y operación porque ofrece un lenguaje visual consistente entre aeropuertos, países y tipos de procedimiento. Ese estándar global reduce la variabilidad de interpretación y mejora la disciplina de briefing.</p>
+
   <div class="grid4" style="margin-top:22px">
-    <div class="card"><div class="label">1</div><h3>Estandarización</h3><p>Encabezado, plan view, profile view, mínimos, notas y frustrada suelen aparecer con una lógica repetitiva.</p></div>
-    <div class="card"><div class="label">2</div><h3>Consistencia internacional</h3><p>Permite pasar de Bogotá a JFK, Barcelona o Miami manteniendo un patrón de lectura familiar.</p></div>
-    <div class="card"><div class="label">3</div><h3>Enfoque operacional</h3><p>Resalta lo que cambia la operación: altitudes, restricciones, mínimos, equipo y notas críticas.</p></div>
-    <div class="card"><div class="label">4</div><h3>Disciplina de briefing</h3><p>Ayuda a que el alumno no lea “cajas sueltas”, sino que siga un orden mental repetible.</p></div>
+    <div class="card">
+      <div class="label">1</div>
+      <h3>Estándar global</h3>
+      <p>Su formato es reconocido y utilizado internacionalmente. El alumno aprende una estructura que le sirve en múltiples entornos operacionales.</p>
+    </div>
+    <div class="card">
+      <div class="label">2</div>
+      <h3>Lectura uniforme</h3>
+      <p>Encabezado, plan view, profile view, mínimos, notas y frustrada se encuentran con una lógica muy estable de una carta a otra.</p>
+    </div>
+    <div class="card">
+      <div class="label">3</div>
+      <h3>Briefing estandarizado</h3>
+      <p>Facilita que dos pilotos o un instructor y un estudiante hablen el mismo idioma visual y sigan un mismo orden de análisis.</p>
+    </div>
+    <div class="card">
+      <div class="label">4</div>
+      <h3>Transición más simple</h3>
+      <p>Al cambiar de aeropuerto o país, la familiaridad del formato permite concentrarse en el contenido crítico y no en “descifrar” la carta.</p>
+    </div>
   </div>
+
   <div class="grid2" style="margin-top:18px">
-    <div class="callout"><strong>Importante:</strong> Jeppesen es una forma de presentar información. La vigencia real sigue dependiendo del ciclo AIRAC, NOTAM, autorización operacional y procedimientos aplicables.</div>
-    <div class="callout danger"><strong>Derechos de autor:</strong> este módulo usa diagramas originales estilo VEYRA. Las cartas reales que enviaste se tomaron como referencia pedagógica, no se replican dentro del paquete publicable.</div>
+    <div class="callout"><strong>Consejo práctico:</strong> en formación IFR se recomienda usar Jeppesen porque no solo muestra información; también ayuda a construir un método de lectura repetible, más rápido y con menos ambigüedad.</div>
+    <div class="note"><strong>Uso académico:</strong> este módulo emplea cartas reales Jeppesen como material de estudio y discusión técnica para entrenamiento interno, briefing, interpretación y estandarización operativa.</div>
   </div>
 </section>
 
-<section class="slide" data-title="Antes de abrir una carta">
-  <div class="eyebrow">ANTES DE LEER EL CONTENIDO</div><div class="accent"></div>
-  <h2>Primero confirma que la carta es la correcta</h2>
-  <div class="grid2" style="margin-top:22px">
-    <div class="panel">
-      <div class="hotrow">
-        <button class="hot active" data-pre="tipo">Tipo / pista</button>
-        <button class="hot" data-pre="vigencia">Vigencia</button>
-        <button class="hot" data-pre="freq">Frecuencias</button>
-        <button class="hot" data-pre="nav">Identificación</button>
-        <button class="hot" data-pre="msa">MSA</button>
-      </div>
-      <div class="diagram">
-        <svg viewBox="0 0 700 340">
-          <rect x="20" y="20" width="660" height="300" rx="16" fill="#f5f2eb"/>
-          <rect x="20" y="20" width="660" height="84" fill="#fff"/>
-          <rect x="20" y="104" width="660" height="70" fill="#f0ede7"/>
-          <rect x="20" y="174" width="660" height="146" fill="#f5f5f1"/>
-          <rect x="44" y="42" width="136" height="24" rx="4" fill="#111"/>
-          <rect x="44" y="76" width="88" height="20" rx="4" fill="#d9b56b"/>
-          <rect x="148" y="76" width="122" height="20" rx="4" fill="#65d8e8"/>
-          <rect x="500" y="40" width="148" height="48" rx="6" fill="#f2f2ed" stroke="#222"/>
-          <circle cx="610" cy="140" r="36" fill="#f8f7f3" stroke="#222" stroke-width="2"/>
-          <g fill="#111" font-family="system-ui" font-size="16">
-            <text x="54" y="58">TIPO DE CARTA</text>
-            <text x="54" y="92">AEROPUERTO / PISTA</text>
-            <text x="510" y="64">FECHA / CICLO</text>
-            <text x="58" y="146">FRECUENCIAS</text>
-            <text x="252" y="146">CURSO / DA / MDA</text>
-            <text x="552" y="146">MSA</text>
-          </g>
-        </svg>
+<section class="slide" data-title="Verificación inicial">
+  <div class="eyebrow">ANTES DE LEER EL CONTENIDO</div>
+  <div class="accent"></div>
+  <h2>La primera pregunta no es “qué dice”, sino <span class="highlight">“si es la carta correcta”</span></h2>
+  <div class="grid2" style="margin-top:20px">
+    <div class="card">
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div><strong>Identifica el tipo de carta.</strong><br>Airport diagram, SID, STAR, IAP, minima only, briefing strip, etc.</div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Verifica aeropuerto, pista y nombre del procedimiento.</strong><br>No basta con que “se parezca”.</div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Comprueba vigencia / ciclo.</strong><br>Fecha efectiva, AIRAC y cualquier cambio relevante.</div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Revisa equipo requerido.</strong><br>VOR/DME, ILS, RNAV 1, RNP Apch, autorización AR, RF, etc.</div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Ubica las notas críticas.</strong><br>Temperatura, velocidad, terreno, uso de radar, restricciones especiales.</div></div>
       </div>
     </div>
-    <div class="card">
-      <div class="label">VERIFICACIÓN RÁPIDA</div>
-      <h3 id="preT">Tipo / pista</h3>
-      <p id="preB">Confirma que corresponde exactamente al aeropuerto, pista y procedimiento que vas a usar.</p>
-      <div class="checks" style="margin-top:16px">
-        <div class="check"><div class="num">A</div><div>Ciclo o fecha efectiva vigente.</div></div>
-        <div class="check"><div class="num">B</div><div>Tipo de carta correcto para la fase de vuelo.</div></div>
-        <div class="check"><div class="num">C</div><div>Pista, procedimiento y fuente de navegación correctos.</div></div>
-      </div>
+    <div class="panel">
+      <figure>
+        <img class="figure" src="assets/skbo_rnpar32l.jpg" alt="Carta Jeppesen RNP W RWY 32L AR de Bogotá">
+        <figcaption><strong>Ejemplo de validación:</strong> en una RNP AR como la de Bogotá RWY 32L, desde el encabezado ya deben saltar a la vista elementos como <span class="inline-key">RNP AR</span> <span class="inline-key">RNP 0.30</span> <span class="inline-key">Autorización requerida</span> y restricciones del procedimiento.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
 <section class="slide" data-title="Airport Diagram">
-  <div class="eyebrow">CARTA DE AEROPUERTO</div><div class="accent"></div>
-  <h2>Qué debe extraer el alumno del airport diagram</h2>
-  <div class="grid3" style="margin-top:22px">
-    <div class="card"><div class="label">UBICACIÓN</div><h3>Pistas y calles</h3><p>Geometría, orientación de pistas, intersecciones y nomenclatura de taxiways.</p></div>
-    <div class="card"><div class="label">SEGURIDAD</div><h3>Hot spots y restricciones</h3><p>Busca zonas con historial de incursión, puntos de espera y restricciones de taxi.</p></div>
-    <div class="card"><div class="label">COMUNICACIÓN</div><h3>Frecuencias</h3><p>ATIS, clearance, ground, tower y notas operacionales del aeropuerto.</p></div>
+  <div class="eyebrow">CARTA DE AEROPUERTO</div>
+  <div class="accent"></div>
+  <h2>El airport diagram prepara el taxi, la orientación y la seguridad en superficie</h2>
+
+  <div class="tabs" data-tabs="airport">
+    <button class="tab active" data-target="ad-skbo">SKBO</button>
+    <button class="tab" data-target="ad-kjfk">KJFK</button>
   </div>
-  <div class="grid2" style="margin-top:18px">
-    <div class="callout"><strong>Ejemplos de referencia:</strong> SKBO y JFK son excelentes para enseñar cómo leer hot spots, puntos de espera y complejidad de superficie.</div>
-    <div class="callout"><strong>Pregunta obligatoria:</strong> “¿Cuál es la ruta de taxi esperada, qué punto puede generar confusión y cuál es el hot spot relevante?”</div>
+  <div class="tab-panels">
+    <div class="tab-panel active" id="ad-skbo">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/skbo_airport.jpg" alt="Airport diagram de Bogotá">
+            <figcaption>SKBO muestra un entorno excelente para estudiar <strong>frecuencias de superficie</strong>, <strong>hot spots</strong>, intersecciones complejas y notas operacionales.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">QUÉ DEBE SACAR EL ESTUDIANTE</div>
+          <div class="list">
+            <div class="item">Configuración de pistas y calles de rodaje.</div>
+            <div class="item">Hot spots y áreas con potencial de confusión.</div>
+            <div class="item">Frecuencias: ATIS, clearance, ground y tower.</div>
+            <div class="item">Rutas probables de taxi, puntos de espera y restricciones.</div>
+            <div class="item">Notas especiales del aeropuerto.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-panel" id="ad-kjfk">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/kjfk_airport.jpg" alt="Airport diagram de JFK">
+            <figcaption>JFK es ideal para mostrar cómo una carta de aeropuerto ayuda a anticipar complejidad de superficie, cruces, rutas largas y zonas de alta carga operacional.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">PREGUNTAS QUE DEBE PODER RESPONDER</div>
+          <div class="list">
+            <div class="item">¿Dónde están los hot spots y por qué son críticos?</div>
+            <div class="item">¿Qué pista, taxiway o holding point puedo confundir?</div>
+            <div class="item">¿Cuál es mi ruta de taxi esperada y cuál es el punto de mayor amenaza?</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="slide" data-title="SID y STAR">
-  <div class="eyebrow">SALIDAS Y LLEGADAS</div><div class="accent"></div>
-  <h2>SID y STAR se leen parecido, pero se brieféan diferente</h2>
-  <div class="tabs">
-    <button class="tab active" data-proc="sid">SID</button>
-    <button class="tab" data-proc="star">STAR</button>
+  <div class="eyebrow">SID Y STAR</div>
+  <div class="accent"></div>
+  <h2>Se leen con estructura similar, pero se brieféan con diferente intención</h2>
+
+  <div class="tabs" data-tabs="proc">
+    <button class="tab active" data-target="proc-sid">SID de SKBO</button>
+    <button class="tab" data-target="proc-star">STAR de SKBO</button>
   </div>
-  <div class="grid2">
-    <div class="diagram">
-      <svg viewBox="0 0 700 420" id="procSvg">
-        <rect x="20" y="20" width="660" height="380" rx="16" fill="#f5f2eb"/>
-        <rect x="20" y="20" width="660" height="74" fill="#fff"/>
-        <rect x="20" y="94" width="660" height="306" fill="#f0eee8"/>
-        <circle cx="350" cy="210" r="15" fill="#fff" stroke="#111" stroke-width="2"/>
-        <path id="procPath" d="M350 210 L285 170 L215 120" stroke="#111" stroke-width="7" fill="none"/>
-        <path d="M350 210 L430 175 L530 120" stroke="#8c4c1d" stroke-width="5" fill="none"/>
-        <text x="52" y="64" font-family="system-ui" font-size="18" id="procTitle">SID</text>
-        <text x="210" y="114" font-family="system-ui" font-size="17" fill="#9d2a7a" id="pspeed">MAX 230 KT</text>
-        <text x="245" y="150" font-family="system-ui" font-size="18" fill="#49a7c8" id="palt1">12000</text>
-        <text x="490" y="152" font-family="system-ui" font-size="18" fill="#49a7c8" id="palt2">16000</text>
-      </svg>
+  <div class="tab-panels">
+    <div class="tab-panel active" id="proc-sid">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/skbo_sid.jpg" alt="SID Jeppesen de Bogotá">
+            <figcaption>Salida de Bogotá: excelente ejemplo para estudiar gradientes, restricciones iniciales, limitaciones de velocidad y transición desde el entorno de terreno.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">EN UNA SID EL ALUMNO DEBE ENCONTRAR</div>
+          <div class="list">
+            <div class="item"><strong>Navegación requerida:</strong> VOR, RNAV, etc.</div>
+            <div class="item"><strong>Gradiente de ascenso:</strong> normal y especial si aplica.</div>
+            <div class="item"><strong>Velocidades máximas:</strong> hasta completar viraje o hasta cierto fix.</div>
+            <div class="item"><strong>Altitudes / restricciones:</strong> initial climb y restricciones posteriores.</div>
+            <div class="item"><strong>Amenazas:</strong> terreno, cobertura de ayudas, notas operacionales.</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <div class="label" id="plabel">BRIEFING DE SID</div>
-      <h3 id="phead">Qué no puede faltar</h3>
-      <div class="list" id="plist"></div>
+    <div class="tab-panel" id="proc-star">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/skbo_star.jpg" alt="STAR Jeppesen de Bogotá">
+            <figcaption>La STAR permite enseñar secuencia de restricciones, manejo de energía y conexión ordenada hacia la aproximación.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">EN UNA STAR EL ALUMNO DEBE ENCONTRAR</div>
+          <div class="list">
+            <div class="item"><strong>Transiciones y puntos de entrada.</strong></div>
+            <div class="item"><strong>Restricciones de velocidad y altitud.</strong></div>
+            <div class="item"><strong>Punto de enlace hacia la IAP.</strong></div>
+            <div class="item"><strong>Gestión de energía:</strong> dónde empezar a “llegar listo” para la aproximación.</div>
+            <div class="item"><strong>MSA / amenazas:</strong> como referencia contextual, no como sustituto de las restricciones publicadas.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-title="Carta de aproximación">
-  <div class="eyebrow">APROXIMACIÓN</div><div class="accent"></div>
-  <h2>Anatomía de una carta de aproximación</h2>
-  <div class="grid2" style="margin-top:22px">
-    <div class="panel">
-      <div class="hotrow">
-        <button class="hot active" data-app="header">Encabezado</button>
-        <button class="hot" data-app="plan">Plan view</button>
-        <button class="hot" data-app="profile">Profile view</button>
-        <button class="hot" data-app="min">Mínimos</button>
-        <button class="hot" data-app="miss">Frustrada</button>
-      </div>
-      <div class="diagram">
-        <svg viewBox="0 0 700 430">
-          <rect x="20" y="20" width="660" height="390" rx="16" fill="#f5f2eb"/>
-          <rect x="20" y="20" width="660" height="88" fill="#fff"/>
-          <rect x="20" y="108" width="660" height="180" fill="#f1efe8"/>
-          <rect x="20" y="288" width="660" height="64" fill="#eceae4"/>
-          <rect x="20" y="352" width="660" height="58" fill="#f6f4ef"/>
-          <path d="M120 236L255 160L380 194L490 150" stroke="#111" stroke-width="7" fill="none"/>
-          <path d="M120 236L82 258" stroke="#111" stroke-width="5" stroke-dasharray="8 6"/>
-          <path d="M490 150L548 116" stroke="#111" stroke-width="5" stroke-dasharray="8 6"/>
-          <line x1="84" y1="382" x2="626" y2="382" stroke="#111" stroke-width="4"/>
-        </svg>
+<section class="slide" data-title="Aproximaciones">
+  <div class="eyebrow">APROXIMACIONES JEPPESEN</div>
+  <div class="accent"></div>
+  <h2>Usa cartas reales para aprender a distinguir estructura, guiado y mínimos</h2>
+
+  <div class="tabs" data-tabs="app">
+    <button class="tab active" data-target="app-ils">ILS / LOC</button>
+    <button class="tab" data-target="app-vor">VOR</button>
+    <button class="tab" data-target="app-rnav">RNAV / GPS</button>
+    <button class="tab" data-target="app-lpv">RNP / LPV</button>
+    <button class="tab" data-target="app-ar">RNP AR</button>
+  </div>
+
+  <div class="tab-panels">
+    <div class="tab-panel active" id="app-ils">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/skbo_ils14l.jpg" alt="ILS Z o LOC Z RWY 14L Bogotá">
+            <figcaption><strong>ILS / LOC:</strong> el alumno debe ubicar localizador, glideslope, FAF/FAP, frustrada, profile view y mínimos.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">QUÉ LEER PRIMERO</div>
+          <div class="list">
+            <div class="item">Frecuencias y curso final.</div>
+            <div class="item">Altitudes publicadas y perfil vertical.</div>
+            <div class="item">Missed approach completo.</div>
+            <div class="item">Mínimos ILS versus LOC (si ambos aparecen).</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="card">
-      <div class="label">LECTURA GUIADA</div>
-      <h3 id="appT">Encabezado</h3>
-      <p id="appB">Aquí se concentran identificación del procedimiento, frecuencias, curso final, tipo de mínimo y datos críticos.</p>
-      <div class="callout" style="margin-top:16px"><strong>Secuencia sugerida:</strong> identificación → equipo requerido → frustrada → frecuencias → restricciones → perfil → mínimos.</div>
+
+    <div class="tab-panel" id="app-vor">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/mmmx_vor05r.jpg" alt="VOR RWY 05R de Ciudad de México">
+            <figcaption><strong>VOR:</strong> gran ejemplo para reforzar curso final, DME, fixes, MDA y relación entre plan view y profile view.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">ENFOQUE DIDÁCTICO</div>
+          <div class="list">
+            <div class="item">Diferenciar no precisión vs precisión / APV.</div>
+            <div class="item">Leer altitudes recomendadas y restricciones por distancia.</div>
+            <div class="item">Entender la MDA y el MAP.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="app-rnav">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/kjfk_rnav22l.jpg" alt="RNAV GPS Y RWY 22L de JFK">
+            <figcaption><strong>RNAV / GPS:</strong> permite enseñar fuentes de guiado, tipos de mínimos y lógica de aproximaciones satelitales.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">PUNTOS CLAVE</div>
+          <div class="list">
+            <div class="item">Tipo de mínimos disponibles: LPV, LNAV/VNAV, LNAV, según la carta.</div>
+            <div class="item">Equipo y fuente de navegación correcta.</div>
+            <div class="item">Transiciones, IAF, IF y MAP.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="app-lpv">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/lebl_rnp_lpv06l.jpg" alt="RNP Z RWY 06L LPV only Barcelona">
+            <figcaption><strong>LPV:</strong> útil para comparar guiado satelital de tipo APV con la lógica de una ILS, sin señal de localizador / glideslope terrestre.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">QUÉ DEBE ENTENDER EL ESTUDIANTE</div>
+          <div class="list">
+            <div class="item">Qué significa <strong>LPV only</strong>.</div>
+            <div class="item">Cómo leer el final approach course, vertical guidance y mínimos.</div>
+            <div class="item">Por qué el procedimiento puede exigir configuración RNAV específica.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="app-ar">
+      <div class="grid2">
+        <div class="panel">
+          <figure>
+            <img class="figure" src="assets/skbo_rnpar32l.jpg" alt="RNP W RWY 32L AR Bogotá">
+            <figcaption><strong>RNP AR:</strong> material ideal para mostrar procedimientos especiales, RF legs, autorización requerida y alta disciplina de briefing.</figcaption>
+          </figure>
+        </div>
+        <div class="card">
+          <div class="label">QUÉ CAMBIA EN RNP AR</div>
+          <div class="list">
+            <div class="item">Autorización / capacidad específica del operador y la aeronave.</div>
+            <div class="item">Notas operacionales críticas.</div>
+            <div class="item">Restricciones de velocidad y trayectoria mucho más sensibles.</div>
+            <div class="item">Mayor rigor en briefing de frustrada y amenazas de terreno.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-title="Mínimos">
-  <div class="eyebrow">MÍNIMOS Y CATEGORÍAS</div><div class="accent"></div>
-  <h2>DA, DH, MDA y categorías deben leerse sin error</h2>
-  <div class="grid2" style="margin-top:22px">
+<section class="slide" data-title="Mínimos y categorías">
+  <div class="eyebrow">MÍNIMOS OPERACIONALES</div>
+  <div class="accent"></div>
+  <h2>DA, DH, MDA y categorías deben leerse sin ambigüedad</h2>
+
+  <div class="grid2" style="margin-top:20px">
     <div class="card">
       <div class="label">CONCEPTOS CLAVE</div>
       <div class="list">
-        <div class="item"><strong>DA / DH:</strong> típicas de precisión o APV; la decisión ocurre en descenso continuo.</div>
-        <div class="item"><strong>MDA:</strong> típica de no precisión; no se desciende por debajo sin referencias requeridas.</div>
-        <div class="item"><strong>Categorías:</strong> se leen según la categoría aplicable a la aeronave / velocidad de aproximación.</div>
-        <div class="item"><strong>RVR / VIS:</strong> deben leerse exactamente como están publicadas.</div>
+        <div class="item"><strong>DA / DH:</strong> se usan típicamente en aproximaciones de precisión o APV; la decisión se toma en descenso continuo.</div>
+        <div class="item"><strong>MDA:</strong> típica de aproximaciones no precisión; no se desciende por debajo sin referencias requeridas.</div>
+        <div class="item"><strong>RVR / VIS:</strong> deben leerse exactamente como están publicados para la categoría aplicable.</div>
+        <div class="item"><strong>Categorías:</strong> el alumno debe saber cuál fila le corresponde antes de briefear mínimos.</div>
       </div>
     </div>
     <div class="card">
-      <div class="ctrl">
-        <label>Categoría didáctica <span id="catV">B</span></label>
-        <input type="range" min="0" max="3" step="1" value="1" id="catR">
+      <div class="control">
+        <label>Categoría didáctica <span id="catValue">B</span></label>
+        <input type="range" min="0" max="3" step="1" value="1" id="catSlider">
       </div>
-      <div class="metrics" style="margin-top:14px">
-        <div class="metric"><b id="catS">91–120</b><span>Velocidad típica</span></div>
-        <div class="metric"><b id="catF">Fila B</b><span>Fila a leer</span></div>
-        <div class="metric"><b id="catE">Error</b><span>Leer fila equivocada</span></div>
+      <div class="metric-grid" style="margin-top:14px">
+        <div class="metric"><b id="catSpeed">91–120</b><span>Velocidad de referencia típica</span></div>
+        <div class="metric"><b id="catRow">Fila B</b><span>Fila a consultar</span></div>
+        <div class="metric"><b id="catRisk">Error</b><span>Leer la categoría equivocada</span></div>
       </div>
-      <div class="callout" style="margin-top:16px"><strong>Disciplina:</strong> el piloto debe saber su categoría antes de briefear mínimos.</div>
+      <div class="callout" style="margin-top:16px"><strong>Disciplina de cabina:</strong> antes del briefing de mínimos, se debe definir la categoría y verbalizar claramente qué línea se está usando.</div>
     </div>
   </div>
 </section>
 
-<section class="slide" data-title="RNAV / RNP / ILS">
-  <div class="eyebrow">TIPOS DE APROXIMACIÓN</div><div class="accent"></div>
-  <h2>No todas las cartas se brieféan igual</h2>
-  <div class="grid3" style="margin-top:22px">
-    <div class="card"><div class="label">ILS / LOC</div><h3>Señales terrestres</h3><p>Busca localizador, glideslope si aplica, curso final, FAF, frustrada, mínimos y restricciones de energía.</p></div>
-    <div class="card"><div class="label">RNAV / GPS / LPV</div><h3>Guiado satelital</h3><p>Confirma tipo de mínimo disponible, fuente activa, sensibilidad y equipo requerido.</p></div>
-    <div class="card"><div class="label">RNP AR</div><h3>Procedimiento especial</h3><p>Requiere autorización específica, a veces RF, y máxima atención a notas, temperatura y terreno.</p></div>
-  </div>
-  <div class="grid2" style="margin-top:18px">
-    <div class="callout"><strong>Frustrada:</strong> estudíala como procedimiento independiente. Rumbo/track, altitud, virajes, fix y restricciones no pueden improvisarse.</div>
-    <div class="callout danger"><strong>Ejemplos de referencia:</strong> Bogotá 14L y 32L, Barcelona LPV, JFK RNAV/ILS, Miami ILS y aproximaciones VOR/RNAV muestran diferencias reales de notas, mínimos y frustradas.</div>
-  </div>
-</section>
+<section class="slide" data-title="Método de briefing">
+  <div class="eyebrow">MÉTODO DE BRIEFING</div>
+  <div class="accent"></div>
+  <h2>Orden sugerido para que el alumno no deje huecos</h2>
 
-<section class="slide" data-title="Briefing">
-  <div class="eyebrow">MÉTODO DE BRIEFING</div><div class="accent"></div>
-  <h2>Orden sugerido para el alumno</h2>
-  <div class="grid2" style="margin-top:22px">
+  <div class="grid2" style="margin-top:20px">
     <div class="card">
       <div class="label">SECUENCIA VEYRA</div>
-      <div class="checks">
-        <div class="check"><div class="num">1</div><div>Identificación: tipo de aproximación, pista y carta vigente.</div></div>
-        <div class="check"><div class="num">2</div><div>Navegación/equipos: frecuencias, curso, fuente activa, tipo de guiado.</div></div>
-        <div class="check"><div class="num">3</div><div>Plan lateral: IAF, IF, FAF/FAP, MAP, transiciones e intercepciones.</div></div>
-        <div class="check"><div class="num">4</div><div>Plan vertical: altitudes, pendiente, restricciones y DA/MDA.</div></div>
-        <div class="check"><div class="num">5</div><div>Mínimos y referencias visuales requeridas.</div></div>
-        <div class="check"><div class="num">6</div><div>Frustrada, amenazas, mitigaciones y plan posterior.</div></div>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div><strong>Identificación:</strong> carta, pista, tipo de aproximación y vigencia.</div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Navegación / equipo:</strong> frecuencias, curso, fuente y equipo requerido.</div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Plan lateral:</strong> IAF, IF, FAF/FAP, MAP, transiciones e intercepciones.</div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Plan vertical:</strong> altitudes, perfil, restricciones y pendiente.</div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Mínimos:</strong> categoría aplicable, DA/MDA, RVR/VIS y referencias visuales.</div></div>
+        <div class="step"><div class="step-num">6</div><div><strong>Frustrada y amenazas:</strong> track, altitud, virajes, hold, terreno y mitigaciones.</div></div>
       </div>
     </div>
     <div class="card">
-      <div class="label">PRÁCTICA RÁPIDA</div>
-      <div class="practice">
-        <div class="pcard"><h3>Airport diagram</h3><p>¿Qué buscas primero en un taxi complejo?</p><button class="pbtn" data-p="1a">Taxiways, puntos de espera y hot spots</button><button class="pbtn" data-p="1b">Solo longitud de pista</button><div class="fb" id="pf1">Selecciona una respuesta.</div></div>
-        <div class="pcard"><h3>STAR</h3><p>¿Qué debes anticipar?</p><button class="pbtn" data-p="2a">Restricciones y enlace hacia la aproximación</button><button class="pbtn" data-p="2b">Solo elevación del aeropuerto</button><div class="fb" id="pf2">Selecciona una respuesta.</div></div>
-        <div class="pcard"><h3>Mínimos</h3><p>¿Riesgo de leer categoría equivocada?</p><button class="pbtn" data-p="3a">Aplicar mínimos no autorizados</button><button class="pbtn" data-p="3b">Ninguno</button><div class="fb" id="pf3">Selecciona una respuesta.</div></div>
-        <div class="pcard"><h3>Frustrada</h3><p>¿Cuándo se brieféa?</p><button class="pbtn" data-p="4a">Antes de iniciar la aproximación</button><button class="pbtn" data-p="4b">Solo si se pierde la pista</button><div class="fb" id="pf4">Selecciona una respuesta.</div></div>
+      <div class="label">ERRORES COMUNES</div>
+      <div class="list">
+        <div class="item">Leer la carta “por cajas” sin un orden mental.</div>
+        <div class="item">Decir frecuencias sin confirmar la fuente de navegación real.</div>
+        <div class="item">No verbalizar restricciones críticas de velocidad o altitud.</div>
+        <div class="item">Mencionar mínimos sin definir categoría.</div>
+        <div class="item">No briefear la aproximación frustrada completa.</div>
       </div>
+      <div class="note" style="margin-top:16px"><strong>Regla práctica:</strong> si el estudiante no puede explicar la frustrada y los mínimos con claridad, todavía no terminó de estudiar la carta.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Práctica">
+  <div class="eyebrow">PRÁCTICA GUIADA</div>
+  <div class="accent"></div>
+  <h2>Convierte la teoría en lectura operacional</h2>
+
+  <div class="practice-grid" style="margin-top:20px">
+    <div class="practice-card">
+      <div class="label">CASO 1</div>
+      <h3>Airport diagram</h3>
+      <p>En un taxi complejo, ¿qué debe buscar primero el alumno?</p>
+      <button class="practice-btn" data-p="1a">Taxiways, puntos de espera y hot spots</button>
+      <button class="practice-btn" data-p="1b">Solo la longitud de pista</button>
+      <div class="feedback" id="pf1">Selecciona una respuesta.</div>
+    </div>
+    <div class="practice-card">
+      <div class="label">CASO 2</div>
+      <h3>SID</h3>
+      <p>¿Qué dato cambia de forma inmediata la gestión de energía tras el despegue?</p>
+      <button class="practice-btn" data-p="2a">Velocidades máximas, gradiente y restricciones</button>
+      <button class="practice-btn" data-p="2b">Solo el nombre de la salida</button>
+      <div class="feedback" id="pf2">Selecciona una respuesta.</div>
+    </div>
+    <div class="practice-card">
+      <div class="label">CASO 3</div>
+      <h3>Aproximación</h3>
+      <p>¿Qué parte representa la trayectoria lateral del procedimiento?</p>
+      <button class="practice-btn" data-p="3a">Plan view</button>
+      <button class="practice-btn" data-p="3b">Tabla de mínimos</button>
+      <div class="feedback" id="pf3">Selecciona una respuesta.</div>
+    </div>
+    <div class="practice-card">
+      <div class="label">CASO 4</div>
+      <h3>Frustrada</h3>
+      <p>¿Cuándo debe briefearse?</p>
+      <button class="practice-btn" data-p="4a">Antes de iniciar la aproximación</button>
+      <button class="practice-btn" data-p="4b">Solo si se pierde la pista</button>
+      <div class="feedback" id="pf4">Selecciona una respuesta.</div>
     </div>
   </div>
 </section>
 
 <section class="slide" data-title="Evaluación">
-  <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div>
+  <div class="eyebrow">EVALUACIÓN FINAL</div>
+  <div class="accent"></div>
   <h2>Comprueba que ya sabes leer la carta completa</h2>
-  <p class="lede">Aprobación: 80 % y responder bien las preguntas críticas.</p>
-  <div class="quiz" style="margin-top:22px">
+  <p class="lede">Aprobación: 80 % y preguntas críticas correctas.</p>
+
+  <div class="quiz-layout" style="margin-top:20px">
     <div>
-      <div class="q" data-q="0" data-c="b" data-k="1"><h3>1. ¿Por qué se usa Jeppesen con tanta frecuencia?</h3><button class="ans" data-a="a">Porque reemplaza toda la información oficial</button><button class="ans" data-a="b">Porque estandariza la presentación y facilita la lectura operacional</button><button class="ans" data-a="c">Porque elimina la necesidad de NOTAM</button></div>
-      <div class="q" data-q="1" data-c="a"><h3>2. Antes de briefear, ¿qué debes comprobar?</h3><button class="ans" data-a="a">Tipo de carta, pista/procedimiento y vigencia</button><button class="ans" data-a="b">Solo la elevación</button><button class="ans" data-a="c">Únicamente el nombre del fix final</button></div>
-      <div class="q" data-q="2" data-c="c"><h3>3. En un airport diagram, ¿qué ayuda a prevenir incursiones?</h3><button class="ans" data-a="a">Solo el ATIS</button><button class="ans" data-a="b">Solo los stands</button><button class="ans" data-a="c">Hot spots, puntos de espera y geometría de taxi</button></div>
-      <div class="q" data-q="3" data-c="b"><h3>4. ¿Qué elemento de una SID afecta directamente la performance inicial?</h3><button class="ans" data-a="a">Solo el nombre</button><button class="ans" data-a="b">Gradiente y restricciones</button><button class="ans" data-a="c">La MSA</button></div>
-      <div class="q" data-q="4" data-c="c" data-k="1"><h3>5. ¿Qué parte muestra la trayectoria lateral de una aproximación?</h3><button class="ans" data-a="a">Mínimos</button><button class="ans" data-a="b">Profile view</button><button class="ans" data-a="c">Plan view</button></div>
-      <div class="q" data-q="5" data-c="b"><h3>6. ¿Qué describe mejor la diferencia entre DA y MDA?</h3><button class="ans" data-a="a">No hay diferencia operacional</button><button class="ans" data-a="b">DA/DH suele ser de precisión/APV; MDA de no precisión</button><button class="ans" data-a="c">MDA siempre es menor</button></div>
-      <div class="q" data-q="6" data-c="a"><h3>7. ¿Qué pasa si lees la fila de mínimos de otra categoría?</h3><button class="ans" data-a="a">Puedes usar mínimos que no te corresponden</button><button class="ans" data-a="b">No pasa nada</button><button class="ans" data-a="c">Solo cambia la frecuencia</button></div>
-      <div class="q" data-q="7" data-c="c"><h3>8. ¿Qué debe incluir sí o sí la frustrada?</h3><button class="ans" data-a="a">Solo el nombre del hold</button><button class="ans" data-a="b">Solo el rumbo inicial</button><button class="ans" data-a="c">Rumbo/track, altitud, virajes, fix y restricciones</button></div>
-      <div class="q" data-q="8" data-c="b"><h3>9. En una RNAV/LPV, ¿qué debes confirmar?</h3><button class="ans" data-a="a">Solo que exista una línea en el mapa</button><button class="ans" data-a="b">Tipo de mínimo y fuente/aviónica correcta</button><button class="ans" data-a="c">Que exista VOR en el aeropuerto</button></div>
-      <div class="q" data-q="9" data-c="a"><h3>10. ¿Qué hace especial una RNP AR?</h3><button class="ans" data-a="a">Requiere autorización/capacidad específica y notas particulares</button><button class="ans" data-a="b">Siempre tiene ILS</button><button class="ans" data-a="c">No necesita frustrada</button></div>
+      <div class="question" data-q="0" data-c="b" data-critical="1">
+        <h3>1. ¿Por qué se aconseja usar Jeppesen en formación IFR?</h3>
+        <button class="quiz-answer" data-a="a">Porque elimina la necesidad de NOTAM</button>
+        <button class="quiz-answer" data-a="b">Porque es un estándar global que favorece lectura y briefing uniformes</button>
+        <button class="quiz-answer" data-a="c">Porque todas las cartas del mundo son idénticas</button>
+      </div>
+      <div class="question" data-q="1" data-c="a">
+        <h3>2. Antes de briefear una carta, ¿qué debes comprobar?</h3>
+        <button class="quiz-answer" data-a="a">Tipo de carta, pista/procedimiento, vigencia y notas críticas</button>
+        <button class="quiz-answer" data-a="b">Solo la elevación del aeropuerto</button>
+        <button class="quiz-answer" data-a="c">Únicamente la frecuencia de torre</button>
+      </div>
+      <div class="question" data-q="2" data-c="c">
+        <h3>3. ¿Qué debe sacar el alumno de un airport diagram?</h3>
+        <button class="quiz-answer" data-a="a">Solo la longitud de pista</button>
+        <button class="quiz-answer" data-a="b">Solo el nombre de las calles de rodaje</button>
+        <button class="quiz-answer" data-a="c">Geometría, hot spots, frecuencias y rutas probables de taxi</button>
+      </div>
+      <div class="question" data-q="3" data-c="b">
+        <h3>4. En una SID, ¿qué afecta directamente la performance inicial?</h3>
+        <button class="quiz-answer" data-a="a">El color del terreno en la carta</button>
+        <button class="quiz-answer" data-a="b">Gradiente, velocidades máximas y restricciones</button>
+        <button class="quiz-answer" data-a="c">La MSA únicamente</button>
+      </div>
+      <div class="question" data-q="4" data-c="a" data-critical="1">
+        <h3>5. ¿Qué parte de una aproximación muestra la estructura lateral?</h3>
+        <button class="quiz-answer" data-a="a">Plan view</button>
+        <button class="quiz-answer" data-a="b">Tabla de mínimos</button>
+        <button class="quiz-answer" data-a="c">Profile view solamente</button>
+      </div>
+      <div class="question" data-q="5" data-c="c">
+        <h3>6. ¿Qué diferencia principal debe entender el alumno entre una ILS y una RNAV LPV?</h3>
+        <button class="quiz-answer" data-a="a">Que son exactamente lo mismo</button>
+        <button class="quiz-answer" data-a="b">Que la LPV no tiene mínimos</button>
+        <button class="quiz-answer" data-a="c">Que la ILS usa guiado terrestre y la LPV guiado satelital con lógica APV</button>
+      </div>
+      <div class="question" data-q="6" data-c="a">
+        <h3>7. ¿Qué riesgo existe si se lee la fila de mínimos de otra categoría?</h3>
+        <button class="quiz-answer" data-a="a">Aplicar mínimos no autorizados para la aeronave/categoría</button>
+        <button class="quiz-answer" data-a="b">Ninguno</button>
+        <button class="quiz-answer" data-a="c">Solo cambia el heading</button>
+      </div>
+      <div class="question" data-q="7" data-c="b">
+        <h3>8. ¿Qué hace especial una RNP AR?</h3>
+        <button class="quiz-answer" data-a="a">Que siempre tiene ILS</button>
+        <button class="quiz-answer" data-a="b">Que requiere autorización/capacidad específica y notas operacionales más sensibles</button>
+        <button class="quiz-answer" data-a="c">Que nunca tiene frustrada publicada</button>
+      </div>
+      <div class="question" data-q="8" data-c="c">
+        <h3>9. En el método VEYRA de briefing, ¿cuándo se brieféan los mínimos?</h3>
+        <button class="quiz-answer" data-a="a">Antes de identificar la carta</button>
+        <button class="quiz-answer" data-a="b">Después de apagar el avión</button>
+        <button class="quiz-answer" data-a="c">Después del plan vertical y antes de la frustrada/amenazas</button>
+      </div>
+      <div class="question" data-q="9" data-c="a">
+        <h3>10. ¿Cuál es el objetivo final del estudio de cartas IFR?</h3>
+        <button class="quiz-answer" data-a="a">Transformar información gráfica en decisiones operacionales</button>
+        <button class="quiz-answer" data-a="b">Memorizar nombres sin contexto</button>
+        <button class="quiz-answer" data-a="c">Leer únicamente las frecuencias</button>
+      </div>
     </div>
+
     <div class="card side">
       <div class="label">RESULTADO</div>
       <div class="score" id="score">—</div>
-      <p id="st">Responde las 10 preguntas y selecciona “Calificar”.</p>
-      <p style="color:var(--bad);font-size:12px">Críticas: preguntas 1 y 5.</p>
-      <div class="btns"><button class="btn" id="grade">Calificar</button><button class="btn2" id="reset">Reiniciar</button></div>
-      <div class="complete" id="done"><div class="callout"><strong>Módulo completado.</strong> El resultado quedó guardado localmente y enviado al contenedor de VEYRA.</div><div class="btns"><button class="btn" id="finish">Finalizar módulo</button></div></div>
+      <p id="scoreText">Responde las diez preguntas y luego selecciona “Calificar”.</p>
+      <p class="small">Preguntas críticas: 1 y 5.</p>
+      <div class="btns">
+        <button class="btn" id="gradeBtn">Calificar</button>
+        <button class="btn-secondary" id="resetBtn">Reiniciar</button>
+      </div>
+      <div class="complete" id="completeBox">
+        <div class="callout"><strong>Módulo completado.</strong><br>El resultado fue guardado localmente y enviado al contenedor de VEYRA.</div>
+        <div class="btns" style="margin-top:12px"><button class="btn" id="finishBtn">Finalizar módulo</button></div>
+      </div>
     </div>
   </div>
 </section>
 </main>
 
-<div class="nav">
-  <button class="btn2" id="prev">← Anterior</button>
-  <div class="mid"><span id="title">Inicio</span><br>Progreso guardado localmente</div>
-  <button class="btn" id="next">Siguiente →</button>
-</div>
+<nav class="nav">
+  <button class="btn-secondary" id="prevBtn">← Anterior</button>
+  <div class="mid"><span id="slideTitle">Inicio</span><br>Progreso guardado localmente</div>
+  <button class="btn" id="nextBtn">Siguiente →</button>
+</nav>
 
 <script>
 (()=>{
-const slides=[...document.querySelectorAll('.slide')], bar=document.getElementById('bar'), pt=document.getElementById('pt'), pp=document.getElementById('pp'), title=document.getElementById('title');
-const prev=document.getElementById('prev'), next=document.getElementById('next');
-const key='veyra_ifr_chart_module_08', t0=Date.now();
-let i=0,best=null; const saved=JSON.parse(localStorage.getItem(key)||'{}');
-if(Number.isInteger(saved.i)&&saved.i>=0&&saved.i<slides.length)i=saved.i; if(typeof saved.best==='number')best=saved.best;
-function emit(type,data={}){const payload={source:'veyra-module',type,moduleId:'veyra-ifr-chart-08',timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
-function save(extra={}){localStorage.setItem(key,JSON.stringify({i,best,updatedAt:new Date().toISOString(),...extra}))}
-function show(n){i=Math.max(0,Math.min(n,slides.length-1));slides.forEach((s,k)=>s.classList.toggle('active',k===i));let pct=Math.round((i+1)/slides.length*100); bar.style.width=pct+'%'; pt.textContent=`Pantalla ${i+1} de ${slides.length}`; pp.textContent=pct+'%'; title.textContent=slides[i].dataset.title||''; prev.disabled=i===0; next.textContent=i===slides.length-1?'Finalizar':'Siguiente →'; save(); emit('veyra:progress',{progress:pct,screen:i+1,total:slides.length});}
-prev.onclick=()=>show(i-1); next.onclick=()=>{if(i<slides.length-1){show(i+1);return;}emit('veyra:exit',{completed:Boolean(localStorage.getItem(key)),score:best,progress:100,timeSeconds:Math.round((Date.now()-t0)/1000)});setTimeout(()=>{window.location.href='/';},150);}; document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(Number(b.dataset.go)));
-const pre={
- tipo:['Tipo / pista','Confirma que corresponde exactamente al aeropuerto, pista y procedimiento que vas a usar.'],
- vigencia:['Vigencia','Una carta puede verse correcta y aun así estar fuera de ciclo. AIRAC y NOTAM importan.'],
- freq:['Frecuencias','ATIS, APP, Tower, Ground y ayudas de navegación deben quedar claras antes del briefing.'],
- nav:['Identificación','Curso, localizador, canal o tipo de guiado ayudan a evitar confusión entre procedimientos parecidos.'],
- msa:['MSA','Entrega contexto de seguridad, pero no sustituye las altitudes específicas del procedimiento.']
-};
-document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pre]').forEach(x=>x.classList.remove('active'));b.classList.add('active');let d=pre[b.dataset.pre];document.getElementById('preT').textContent=d[0];document.getElementById('preB').textContent=d[1];});
-const proc={
- sid:{title:'SID',label:'BRIEFING DE SID',head:'Qué no puede faltar',items:['Tipo de navegación requerida (VOR, RNAV, RNP).','Gradiente de ascenso y restricciones iniciales.','Velocidades máximas y altitudes publicadas.','Primer giro, amenaza de terreno y plan si hay falla.'],path:'M350 210 L285 170 L215 120',speed:'MAX 230 KT',a1:'12000',a2:'16000'},
- star:{title:'STAR',label:'BRIEFING DE STAR',head:'Qué no puede faltar',items:['Secuencia de restricciones de altitud y velocidad.','Punto de enlace hacia la aproximación.','Posible requerimiento de radar vectors o expectativa ATC.','Configuración y energía para llegar estabilizado a la IAP.'],path:'M215 120 L280 170 L350 210',speed:'AT 250 KT',a1:'12000',a2:'9000'}
-};
-function renderProc(k){let d=proc[k]; document.getElementById('procTitle').textContent=d.title; document.getElementById('plabel').textContent=d.label; document.getElementById('phead').textContent=d.head; document.getElementById('plist').innerHTML=d.items.map(x=>`<div class="item">${x}</div>`).join(''); document.getElementById('procPath').setAttribute('d',d.path); document.getElementById('pspeed').textContent=d.speed; document.getElementById('palt1').textContent=d.a1; document.getElementById('palt2').textContent=d.a2; }
-document.querySelectorAll('[data-proc]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-proc]').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderProc(b.dataset.proc)}); renderProc('sid');
-const app={
- header:['Encabezado','Aquí están identificación, frecuencias, curso final, tipo de mínimo y datos críticos.'],
- plan:['Plan view','Muestra la estructura lateral: IAF, IF, FAF/FAP, MAP, transiciones y frustrada.'],
- profile:['Profile view','Resume secuencia vertical: distancias, altitudes, pendiente y relación hacia la pista.'],
- min:['Mínimos','Se leen por tipo de aproximación y categoría. Aquí están DA/DH, MDA/H y RVR/VIS.'],
- miss:['Frustrada','Debe estudiarse como procedimiento independiente: rumbo/track, altitud, virajes, fix y restricciones.']
-};
-document.querySelectorAll('[data-app]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-app]').forEach(x=>x.classList.remove('active'));b.classList.add('active');let d=app[b.dataset.app];document.getElementById('appT').textContent=d[0];document.getElementById('appB').textContent=d[1];});
-const cats=[['A','<91','Fila A','Confundir A con B'],['B','91–120','Fila B','Leer otra categoría'],['C','121–140','Fila C','No ajustar la fila'],['D','141–165','Fila D','Aplicar mínimos no autorizados']];
-const cr=document.getElementById('catR'); function cat(){let d=cats[Number(cr.value)];document.getElementById('catV').textContent=d[0];document.getElementById('catS').textContent=d[1];document.getElementById('catF').textContent=d[2];document.getElementById('catE').textContent=d[3];} cr.oninput=cat; cat();
-const pAns={}, pGood={'1a':1,'1b':0,'2a':1,'2b':0,'3a':1,'3b':0,'4a':1,'4b':0};
-const pMsg={'1a':'Correcto. La prioridad es evitar desorientación e incursiones en superficie.','1b':'No. La longitud de pista no es la primera prioridad en taxi complejo.','2a':'Correcto. La STAR debe conectarse con la aproximación respetando restricciones.','2b':'No. La elevación no es el dato dominante aquí.','3a':'Correcto. Podrías usar mínimos que no te corresponden.','3b':'No. Sí existe un riesgo operacional serio.','4a':'Correcto. La frustrada se brieféa antes.','4b':'No. Si esperas a ese momento, ya vas tarde.'};
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{let id=b.dataset.p, box=document.getElementById('pf'+id[0]); box.style.color=pGood[id]?'var(--good)':'var(--bad)'; box.textContent=pMsg[id];});
-const ans={}; document.querySelectorAll('.ans').forEach(b=>b.onclick=()=>{let q=b.closest('.q'); q.querySelectorAll('.ans').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); ans[q.dataset.q]=b.dataset.a;});
-document.getElementById('grade').onclick=()=>{let qs=[...document.querySelectorAll('.q')], ok=0, crit=true; qs.forEach(q=>{let good=ans[q.dataset.q]===q.dataset.c; if(good)ok++; if(q.dataset.k==='1'&&!good)crit=false;}); let score=Math.round(ok/qs.length*100), pass=score>=80&&crit; best=best===null?score:Math.max(best,score); document.getElementById('score').textContent=score+'%'; document.getElementById('st').textContent=pass?'Aprobado. Ya puedes pasar al siguiente paquete.':'Aún no apruebas. Revisa los conceptos y vuelve a intentar.'; document.getElementById('st').style.color=pass?'var(--good)':'var(--bad)'; save({best}); emit('veyra:complete',{score,passed:pass,completed:pass,timeSeconds:Math.round((Date.now()-t0)/1000)}); if(pass) document.getElementById('done').classList.add('show');};
-document.getElementById('reset').onclick=()=>{Object.keys(ans).forEach(k=>delete ans[k]); document.querySelectorAll('.ans').forEach(x=>x.classList.remove('sel')); document.getElementById('score').textContent='—'; document.getElementById('st').textContent='Responde las 10 preguntas y selecciona “Calificar”.'; document.getElementById('st').style.color=''; document.getElementById('done').classList.remove('show');};
-document.getElementById('finish').onclick=()=>{emit('veyra:exit',{completed:true,score:best,progress:100,timeSeconds:Math.round((Date.now()-t0)/1000)});setTimeout(()=>{window.location.href='/';},150);};
-emit('veyra:ready',{progress:Math.round((i+1)/slides.length*100),bestScore:best}); show(i);
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('progressBar');
+  const progressText=document.getElementById('progressText');
+  const progressPct=document.getElementById('progressPct');
+  const slideTitle=document.getElementById('slideTitle');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+  const key='veyra_ifr_chart_module_08_v2';
+  const t0=Date.now();
+  let current=0, bestScore=null;
+  const saved=JSON.parse(localStorage.getItem(key)||'{}');
+  if(Number.isInteger(saved.current)&&saved.current>=0&&saved.current<slides.length) current=saved.current;
+  if(typeof saved.bestScore==='number') bestScore=saved.bestScore;
+
+  function emit(type,data={}){
+    const payload={source:'veyra-module',type,moduleId:'veyra-ifr-chart-08',timestamp:new Date().toISOString(),...data};
+    try{window.parent.postMessage(payload,'*')}catch(e){}
+    window.dispatchEvent(new CustomEvent(type,{detail:payload}));
+  }
+  function save(extra={}){
+    localStorage.setItem(key, JSON.stringify({current,bestScore,updatedAt:new Date().toISOString(),...extra}));
+  }
+  function showSlide(n){
+    current=Math.max(0, Math.min(n, slides.length-1));
+    slides.forEach((s,i)=>s.classList.toggle('active', i===current));
+    const pct=Math.round((current+1)/slides.length*100);
+    bar.style.width=pct+'%';
+    progressText.textContent=`Pantalla ${current+1} de ${slides.length}`;
+    progressPct.textContent=pct+'%';
+    slideTitle.textContent=slides[current].dataset.title || '';
+    prevBtn.disabled=current===0;
+    nextBtn.textContent=current===slides.length-1?'Finalizar':'Siguiente →';
+    save();
+    emit('veyra:progress',{progress:pct,screen:current+1,total:slides.length});
+  }
+
+  prevBtn.onclick=()=>showSlide(current-1);
+  nextBtn.onclick=()=>{
+    if(current<slides.length-1){showSlide(current+1);return;}
+    emit('veyra:exit',{
+      completed:Boolean(localStorage.getItem(key)),
+      score:bestScore,
+      progress:100,
+      timeSeconds:Math.round((Date.now()-t0)/1000)
+    });
+    setTimeout(()=>{window.location.href='/';},150);
+  };
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showSlide(Number(b.dataset.go)));
+
+  // Tabs
+  document.querySelectorAll('[data-tabs]').forEach(group=>{
+    const tabs=[...group.querySelectorAll('.tab')];
+    tabs.forEach(tab=>{
+      tab.onclick=()=>{
+        const wrapper=group.nextElementSibling;
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        wrapper.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+        const target=document.getElementById(tab.dataset.target);
+        if(target) target.classList.add('active');
+      };
+    });
+  });
+
+  // Category slider
+  const catData=[
+    ['A','<91','Fila A','Confundir A con B'],
+    ['B','91–120','Fila B','Leer otra categoría'],
+    ['C','121–140','Fila C','No ajustar la fila'],
+    ['D','141–165','Fila D','Aplicar mínimos no autorizados']
+  ];
+  const catSlider=document.getElementById('catSlider');
+  function updateCat(){
+    const d=catData[Number(catSlider.value)];
+    document.getElementById('catValue').textContent=d[0];
+    document.getElementById('catSpeed').textContent=d[1];
+    document.getElementById('catRow').textContent=d[2];
+    document.getElementById('catRisk').textContent=d[3];
+  }
+  catSlider.oninput=updateCat; updateCat();
+
+  // Practice
+  const pCorrect={ '1a':1,'1b':0,'2a':1,'2b':0,'3a':1,'3b':0,'4a':1,'4b':0 };
+  const pText={
+    '1a':'Correcto. En superficie, la prioridad es anticipar la ruta, los puntos de espera y las zonas de mayor amenaza.',
+    '1b':'No. La longitud de pista no es lo primero que debes extraer de un airport diagram para taxi.',
+    '2a':'Correcto. Esos elementos cambian performance, energía y carga mental inmediatamente después del despegue.',
+    '2b':'No. El nombre de la salida por sí solo no prepara la operación.',
+    '3a':'Correcto. La plan view contiene la estructura lateral del procedimiento.',
+    '3b':'No. La tabla de mínimos no muestra la trayectoria lateral.',
+    '4a':'Correcto. La frustrada se estudia y se brieféa antes de comenzar la aproximación.',
+    '4b':'No. Si esperas a ese momento, ya vas tarde.'
+  };
+  document.querySelectorAll('.practice-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      const id=btn.dataset.p;
+      const box=document.getElementById('pf'+id[0]);
+      box.style.color=pCorrect[id] ? 'var(--ok)' : 'var(--bad)';
+      box.textContent=pText[id];
+    }
+  });
+
+  // Quiz
+  const answers={};
+  document.querySelectorAll('.quiz-answer').forEach(btn=>{
+    btn.onclick=()=>{
+      const q=btn.closest('.question');
+      q.querySelectorAll('.quiz-answer').forEach(x=>x.classList.remove('selected'));
+      btn.classList.add('selected');
+      answers[q.dataset.q]=btn.dataset.a;
+    }
+  });
+
+  document.getElementById('gradeBtn').onclick=()=>{
+    const questions=[...document.querySelectorAll('.question')];
+    let correct=0, criticalOk=true;
+    questions.forEach(q=>{
+      const ok=answers[q.dataset.q]===q.dataset.c;
+      if(ok) correct++;
+      if(q.dataset.critical==='1' && !ok) criticalOk=false;
+    });
+    const score=Math.round(correct/questions.length*100);
+    const passed=score>=80 && criticalOk;
+    bestScore = bestScore===null ? score : Math.max(bestScore, score);
+    document.getElementById('score').textContent=score+'%';
+    const msg=passed
+      ? 'Aprobado. Ya puedes continuar con el siguiente paquete.'
+      : (criticalOk
+         ? 'Aún no apruebas. Revisa el módulo y vuelve a intentarlo.'
+         : 'Debes corregir también las preguntas críticas.');
+    const st=document.getElementById('scoreText');
+    st.textContent=msg;
+    st.style.color=passed ? 'var(--ok)' : 'var(--bad)';
+    if(passed) document.getElementById('completeBox').classList.add('show');
+    else document.getElementById('completeBox').classList.remove('show');
+    save({bestScore});
+    emit('veyra:complete',{score,passed,criticalOk,timeSeconds:Math.round((Date.now()-t0)/1000)});
+  };
+
+  document.getElementById('resetBtn').onclick=()=>{
+    Object.keys(answers).forEach(k=>delete answers[k]);
+    document.querySelectorAll('.quiz-answer').forEach(x=>x.classList.remove('selected'));
+    document.getElementById('score').textContent='—';
+    const st=document.getElementById('scoreText');
+    st.textContent='Responde las diez preguntas y luego selecciona “Calificar”.';
+    st.style.color='';
+    document.getElementById('completeBox').classList.remove('show');
+  };
+
+  document.getElementById('finishBtn').onclick=()=>{
+    emit('veyra:exit',{
+      completed:true,
+      score:bestScore,
+      progress:100,
+      timeSeconds:Math.round((Date.now()-t0)/1000)
+    });
+    setTimeout(()=>{window.location.href='/';},150);
+  };
+
+  emit('veyra:ready',{progress:Math.round((current+1)/slides.length*100),bestScore});
+  showSlide(current);
 })();
 </script>
 </body>

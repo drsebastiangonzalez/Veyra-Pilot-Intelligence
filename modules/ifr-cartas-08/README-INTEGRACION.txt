@@ -4,7 +4,14 @@ Lectura de cartas IFR
 
 ARCHIVOS
 - index.html
+- assets/ (cartas reales usadas en el módulo)
 - README-INTEGRACION.txt
+
+OBJETIVO DEL AJUSTE
+Esta versión corrige tres puntos clave:
+1. El módulo ahora sí utiliza cartas reales Jeppesen dentro del contenido.
+2. La explicación de Jeppesen se enfoca en que es un estándar global de lectura y briefing.
+3. Se reemplazó la nota previa por una nota académica adecuada para el estudiante final.
 
 INSTALACIÓN
 1. Publique la carpeta completa en el hosting de VEYRA.
@@ -28,18 +35,16 @@ IDENTIFICADOR
 VEYRA_IFR_CHART_08
 
 CONTENIDO
-- Por qué se usa Jeppesen
+- Por qué se aconseja usar Jeppesen
 - Verificación inicial de la carta
-- Airport diagram
-- SID y STAR
-- Carta de aproximación
+- Airport diagram con casos reales
+- SID y STAR con casos reales
+- Aproximaciones ILS/LOC, VOR, RNAV/GPS, LPV y RNP AR
 - Mínimos y categorías
-- ILS / RNAV / LPV / RNP / RNP AR
 - Método de briefing
 - Práctica y evaluación
 
 NOTAS
-- Este módulo usa diagramas originales estilo VEYRA.
-- Las cartas enviadas por el usuario se usaron como referencia pedagógica, no se replican dentro del paquete publicable.
+- Diseñado como material académico interno.
 - Guardado de progreso en localStorage.
 - Aprobación: 80 % y preguntas críticas correctas.
