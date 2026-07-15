@@ -304,7 +304,7 @@
   const progressBar=document.getElementById('progressBar'),progressLabel=document.getElementById('progressLabel'),navStep=document.getElementById('navStep'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
   function send(type,detail={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...detail};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
   function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);progressBar.style.width=pct+'%';progressLabel.textContent=pct+'%';navStep.textContent=`${current+1} / ${slides.length}`;prevBtn.disabled=current===0;nextBtn.textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':step',String(current));send('veyra:progress',{progress:pct,currentStep:current+1,totalSteps:slides.length,title:slides[current].dataset.title});window.scrollTo({top:0,behavior:'smooth'})}
-  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/';},150);};
+  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/modules/ifr-cdi-03/index.html';},150);};
 
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const inbound=b.dataset.mode==='in';document.getElementById('aircraftOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('aircraftIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('pathOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('pathIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('textOut').setAttribute('opacity',inbound?'0':'1');document.getElementById('textIn').setAttribute('opacity',inbound?'1':'0');document.getElementById('gSense').textContent=inbound?'Inbound':'Outbound';document.getElementById('gCourse').textContent=inbound?'270°':'090°';document.getElementById('gFlag').textContent=inbound?'TO':'FROM';document.getElementById('gExplanation').innerHTML=inbound?'<strong>Inbound:</strong> selecciona el recíproco del radial y confirma TO.':'<strong>Outbound:</strong> selecciona el mismo valor del radial y confirma FROM.'});
 
@@ -332,3 +332,4 @@
 </script>
 </body>
 </html>
+
