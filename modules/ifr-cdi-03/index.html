@@ -261,7 +261,7 @@
   const progressBar=document.getElementById('progressBar'),progressLabel=document.getElementById('progressLabel'),navStep=document.getElementById('navStep'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
   function send(type,detail={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...detail};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
   function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);progressBar.style.width=pct+'%';progressLabel.textContent=pct+'%';navStep.textContent=`${current+1} / ${slides.length}`;prevBtn.disabled=current===0;nextBtn.textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':step',String(current));send('veyra:progress',{progress:pct,currentStep:current+1,totalSteps:slides.length,title:slides[current].dataset.title});window.scrollTo({top:0,behavior:'smooth'})}
-  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/';},150);};
+  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/modules/ifr-vor-04/index.html';},150);};
 
   const modal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage');
   document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{modalImage.src=b.dataset.zoom;modal.classList.add('open')});
@@ -294,3 +294,4 @@
 </script>
 </body>
 </html>
+
