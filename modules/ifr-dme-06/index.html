@@ -474,7 +474,7 @@
   nextBtn.addEventListener('click',()=>{
     if(current < slides.length-1){ show(current+1); return; }
     emit('veyra:exit',{score:bestScore,completed:Boolean(localStorage.getItem(storageKey)),progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});
-    setTimeout(()=>{window.location.href='/';},150);
+    setTimeout(()=>{window.location.href='/modules/ifr-hold-07/index.html';},150);
   });
   document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.go))));
 
@@ -596,7 +596,7 @@
   });
   document.getElementById('finishModule').addEventListener('click',()=>{
     emit('veyra:exit',{score:bestScore,completed:true,progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});
-    setTimeout(()=>{window.location.href='/';},150);
+    setTimeout(()=>{window.location.href='/modules/ifr-hold-07/index.html';},150);
   });
   emit('veyra:ready',{progress:Math.round(((current+1)/slides.length)*100),bestScore});
   show(current);
