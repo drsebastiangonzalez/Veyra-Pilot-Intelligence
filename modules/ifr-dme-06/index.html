@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 06 · Arcos DME</title>
+  <style>
+    :root{
+      --bg:#05070b; --bg2:#080d14; --panel:#0d131c; --panel2:#111a26;
+      --gold:#d9b56b; --gold2:#f0cf86; --white:#f7f4ee; --muted:#aeb7c4;
+      --green:#58db78; --cyan:#65d8e8; --magenta:#ee58d6; --danger:#ef7272;
+      --line:rgba(217,181,107,.28); --line2:rgba(255,255,255,.09);
+      --shadow:0 22px 60px rgba(0,0,0,.38); --r:22px;
+      --serif:Georgia,'Times New Roman',serif;
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth}
+    body{
+      margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);
+      background:
+        radial-gradient(circle at 86% 8%,rgba(217,181,107,.08),transparent 28rem),
+        linear-gradient(180deg,#05070b,#080c12 58%,#05070b);
+      overflow-x:hidden
+    }
+    body:before{
+      content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)
+    }
+    button,input{font:inherit}
+    .app{min-height:100vh;display:flex;flex-direction:column}
+    .topbar{
+      position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;
+      padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.92);
+      border-bottom:1px solid var(--line);backdrop-filter:blur(16px)
+    }
+    .brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+    .brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+    .top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+    .progress-wrap{width:min(280px,30vw);min-width:130px}
+    .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+    .progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:10%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 112px}
+    .slide{display:none;animation:enter .38s ease both}.slide.active{display:block}
+    @keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+    .accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+    h1,h2,h3{margin:0}h1{font:500 clamp(44px,7vw,88px)/.96 var(--serif);letter-spacing:-.045em}
+    h2{font:500 clamp(34px,5vw,60px)/1 var(--serif);letter-spacing:-.035em}
+    h3{font:600 22px/1.2 var(--serif)}
+    .lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:930px}
+    .tiny{font-size:12px;color:var(--muted);line-height:1.5}
+    .green{color:var(--green);font-weight:850}.gold{color:var(--gold2);font-weight:850}
+    .cyan{color:var(--cyan);font-weight:850}.danger-text{color:#ffaaaa;font-weight:850}
+    .hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.95fr 1.05fr;gap:38px;align-items:center}
+    .hero-visual{
+      position:relative;min-height:590px;border:1px solid var(--line);border-radius:30px;
+      background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.97));
+      box-shadow:var(--shadow);overflow:hidden;padding:24px;display:grid;place-items:center
+    }
+    .hero-visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 50%);transform:translate(18%,4%)}
+    .hero-visual svg{position:relative;width:min(100%,700px);height:auto}
+    .hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:680px;color:#d8dde6;border-radius:0 14px 14px 0}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}
+    .card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+    .callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}
+    .callout strong{color:var(--gold2)}.danger{border-color:rgba(239,114,114,.35);background:rgba(239,114,114,.065)}.danger strong{color:#ffaaaa}
+    .chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .route{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}
+    .route-step{border:1px solid var(--line);border-radius:18px;padding:18px 14px;text-align:center;background:rgba(217,181,107,.035)}
+    .route-step b{display:block;color:var(--gold2);margin-bottom:7px}
+    .concept{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:start}
+    .diagram{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));padding:18px;min-height:500px;box-shadow:var(--shadow);display:grid;place-items:center}
+    .diagram svg{width:min(100%,720px);height:auto}
+    .photo-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:start}
+    .photo-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}
+    .photo-wrap img{width:100%;display:block}.hotspot{position:absolute;width:35px;height:35px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.84);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(217,181,107,.12)}
+    .hotspot:hover,.hotspot.active{background:var(--gold2);color:#171005}.hotspot-info{min-height:220px}.hotspot-info h3{color:var(--gold2);font-size:21px}
+    .lab{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:start}
+    .control-group{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}
+    .control-group label{display:flex;justify-content:space-between;gap:12px;color:var(--gold2);font-weight:800;margin-bottom:10px}
+    .control-group input[type=range]{width:100%;accent-color:var(--gold)}
+    .seg{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}
+    .pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}
+    .result-box{min-height:145px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.55}
+    .status-big{font:600 34px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+    .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15}
+    .metric b{display:block;font:600 28px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{color:var(--muted);font-size:12px}
+    .formula{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:16px;border-radius:16px;background:rgba(217,181,107,.055);border:1px solid var(--line);font:600 clamp(20px,3vw,34px)/1.25 var(--serif);color:var(--gold2)}
+    .choice-list{display:grid;gap:10px}.choice{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}
+    .choice:hover,.choice.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}.feedback{min-height:70px;color:#cbd2dd;line-height:1.5}.feedback.ok{color:#9ee8b0}.feedback.bad{color:#ffaaaa}
+    .practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.practice-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:20px}
+    .practice-btn{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e9edf3;text-align:left;cursor:pointer}.practice-btn:hover{border-color:var(--gold)}
+    .practice-feedback{min-height:48px;margin-top:12px;color:var(--muted)}
+    .quiz-layout{display:grid;grid-template-columns:1.18fr .82fr;gap:24px}.question{padding:20px;border:1px solid var(--line2);border-radius:17px;background:rgba(255,255,255,.018);margin-bottom:15px}
+    .question h3{font-family:var(--sans);font-size:17px;line-height:1.45}.answer{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e9edf3;text-align:left;cursor:pointer}
+    .answer:hover{border-color:var(--gold)}.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.09)}
+    .quiz-summary{position:sticky;top:95px}.score{font:600 70px/1 var(--serif);color:var(--gold2)}.critical{color:#ffaaaa;font-size:12px;margin-top:7px}
+    .primary,.secondary{border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:850;letter-spacing:.035em}
+    .primary{border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#c7953d);color:#171005}
+    .secondary{border:1px solid var(--line);background:#0a0f17;color:#e8ebf0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .references{display:grid;gap:10px}.references a{color:var(--gold2)}
+    .nav{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px clamp(16px,3vw,40px) calc(13px + env(safe-area-inset-bottom));background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px)}
+    .nav-center{color:var(--muted);font-size:12px;text-align:center}.nav button:disabled{opacity:.35;cursor:not-allowed}
+    .completion{display:none;margin-top:18px}.completion.show{display:block}
+    @media(max-width:900px){
+      .top-title{display:none}.progress-wrap{margin-left:auto}.hero,.concept,.photo-layout,.lab,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:470px}
+      .grid3{grid-template-columns:1fr}.route{grid-template-columns:1fr 1fr}.photo-wrap{order:1}.quiz-summary{position:static}.metric-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:620px){
+      main{padding-top:20px}.brand-name{font-size:25px}.progress-wrap{width:130px}.grid2,.practice-grid{grid-template-columns:1fr}.route{grid-template-columns:1fr}
+      .topbar{gap:10px}.topbar .brand-sub{display:none}.nav-center{display:none}.hero-visual{min-height:380px;padding:12px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+    <div class="top-title">IFR PATH · Módulo 06 · Arcos DME</div>
+    <div class="progress-wrap">
+      <div class="progress-meta"><span id="progressText">Pantalla 1 de 10</span><span id="progressPercent">10%</span></div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="slide active" data-title="Inicio">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">MÓDULO 06 · NAVEGACIÓN CONVENCIONAL</div><div class="accent"></div>
+          <h1>Entrada, mantenimiento y salida de <span class="gold">arcos DME</span></h1>
+          <p class="lede">Aprende a convertir una distancia DME constante en una trayectoria controlada alrededor de una estación, sin perseguir el número ni perder la conciencia situacional.</p>
+          <div class="chips"><span class="chip">Entrada al arco</span><span class="chip">Tendencia DME</span><span class="chip">Corrección por viento</span><span class="chip">Radial de salida</span><span class="chip">G1000 + técnica convencional</span></div>
+          <div class="hero-note"><span>◉</span><div><strong>Objetivo operacional:</strong> mantener la distancia publicada, anticipar la salida y verbalizar fuente, DME, dirección y radial de salida.</div></div>
+          <div class="actions"><button class="primary" data-go="1">Comenzar módulo</button></div>
+        </div>
+        <div class="hero-visual">
+          <svg viewBox="0 0 760 650" role="img" aria-label="Arco DME alrededor de una estación">
+            <defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <g transform="translate(380 330)">
+              <circle r="245" fill="none" stroke="#273241" stroke-width="2"/>
+              <circle r="180" fill="none" stroke="#65d8e8" stroke-width="5" stroke-dasharray="12 9"/>
+              <circle r="40" fill="#080d14" stroke="#f0cf86" stroke-width="4"/>
+              <circle r="8" fill="#f0cf86"/>
+              <text x="0" y="70" text-anchor="middle" fill="#f0cf86" font-size="22" font-family="system-ui">VOR/DME</text>
+              <path d="M-175 -42 A180 180 0 0 1 162 78" fill="none" stroke="#58db78" stroke-width="10" filter="url(#glow)"/>
+              <path d="M157 62l15 27 20-24" fill="none" stroke="#58db78" stroke-width="7"/>
+              <line x1="-335" y1="-70" x2="-177" y2="-44" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 8"/>
+              <line x1="165" y1="76" x2="325" y2="150" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 8"/>
+              <g transform="translate(-181 -48) rotate(100)"><path d="M0-25l9 18 29 7-29 7L0 25-8 7-34 0l26-7z" fill="#f7f4ee"/></g>
+              <text x="-280" y="-104" fill="#f0cf86" font-size="24" font-family="Georgia">ENTRADA</text>
+              <text x="108" y="-175" fill="#58db78" font-size="26" font-family="Georgia">12 DME ARC</text>
+              <text x="235" y="115" fill="#f0cf86" font-size="24" font-family="Georgia">SALIDA</text>
+              <line x1="0" y1="-180" x2="0" y2="-40" stroke="#34404e" stroke-width="2"/>
+              <line x1="180" y1="0" x2="40" y2="0" stroke="#34404e" stroke-width="2"/>
+              <line x1="0" y1="180" x2="0" y2="40" stroke="#34404e" stroke-width="2"/>
+              <line x1="-180" y1="0" x2="-40" y2="0" stroke="#34404e" stroke-width="2"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Ruta">
+      <div class="eyebrow">QUÉ DEBES LOGRAR</div><div class="accent"></div>
+      <h2>El arco se vuela como una secuencia</h2>
+      <p class="lede">Cada fase requiere una decisión diferente. El estudiante debe dejar de mirar el DME como un número aislado y empezar a leer posición, tendencia y geometría.</p>
+      <div class="route">
+        <div class="route-step"><b>1. Preparar</b>Fuente, distancia, sentido y salida.</div>
+        <div class="route-step"><b>2. Entrar</b>Anticipar el viraje hacia la tangente.</div>
+        <div class="route-step"><b>3. Mantener</b>Controlar tendencia DME con ajustes pequeños.</div>
+        <div class="route-step"><b>4. Compensar</b>Usar bracketing para el viento.</div>
+        <div class="route-step"><b>5. Salir</b>Anticipar el radial y establecer el nuevo curso.</div>
+      </div>
+      <div class="grid2" style="margin-top:24px">
+        <div class="card"><div class="label">ANTES DEL ARCO</div><h3>Briefing mínimo</h3><p>Estación y fuente DME, distancia publicada, dirección del arco, altitud, radial de entrada, radial de salida y curso posterior.</p></div>
+        <div class="card"><div class="label">DURANTE EL ARCO</div><h3>Call-out propuesto</h3><p>“VOR1 identificado, DME 12.0, arco a la derecha, distancia estable, salida por radial 210, curso posterior 165.”</p></div>
+      </div>
+      <div class="callout danger" style="margin-top:22px"><strong>Importante:</strong> cualquier técnica de anticipación debe adaptarse a velocidad, viento, banco, distancia del arco y procedimiento publicado. Este módulo no sustituye el SOP ni la carta vigente.</div>
+    </section>
+
+    <section class="slide" data-title="Preparación en cabina">
+      <div class="eyebrow">PANTALLA REAL · G1000</div><div class="accent"></div>
+      <h2>Antes de entrar, confirma qué información estás usando</h2>
+      <p class="lede">Selecciona los marcadores sobre la imagen. La lectura correcta empieza por la fuente y termina con una imagen mental del arco.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000_vor_dme.jpeg" alt="Pantalla G1000 con fuente VOR1 y lectura DME" />
+          <button class="hotspot" style="left:46%;top:60%" data-hotspot="source">1</button>
+          <button class="hotspot" style="left:27%;top:70%" data-hotspot="dme">2</button>
+          <button class="hotspot" style="left:57%;top:50%" data-hotspot="course">3</button>
+          <button class="hotspot" style="left:32%;top:3%" data-hotspot="nav">4</button>
+        </div>
+        <div class="card hotspot-info">
+          <div class="label">LECTURA GUIADA</div>
+          <h3 id="hotspotTitle">Selecciona un marcador</h3>
+          <p id="hotspotBody">Verifica fuente, distancia, curso y frecuencia antes de usar el DME como referencia de procedimiento.</p>
+          <div class="callout" style="margin-top:16px"><strong>Color:</strong> VOR/LOC se presenta normalmente en verde. GPS aparece en magenta.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Entrada">
+      <div class="eyebrow">LABORATORIO 1</div><div class="accent"></div>
+      <h2>Anticipa la entrada al arco</h2>
+      <p class="lede">En este escenario de entrenamiento, la aeronave se aproxima al arco de 12 DME. Mueve la distancia y decide cuándo iniciar el viraje.</p>
+      <div class="lab" style="margin-top:26px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 610" role="img" aria-label="Simulador de entrada a un arco DME">
+            <g transform="translate(420 310)">
+              <circle r="175" fill="none" stroke="#65d8e8" stroke-width="6" stroke-dasharray="12 9"/>
+              <circle r="38" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="8" fill="#f0cf86"/>
+              <text x="0" y="64" text-anchor="middle" fill="#f0cf86" font-size="20" font-family="system-ui">VOR/DME</text>
+              <path d="M-330 0H-175" stroke="#d9b56b" stroke-width="6" stroke-dasharray="11 8"/>
+              <path d="M-175 0A175 175 0 0 1 -122 -125" fill="none" stroke="#58db78" stroke-width="10"/>
+              <g id="entryAircraft" transform="translate(-245 0) rotate(90)"><path d="M0-24l8 17 28 7-28 7L0 24-7 7-32 0l25-7z" fill="#f7f4ee"/></g>
+              <line id="entryRangeLine" x1="-245" y1="0" x2="0" y2="0" stroke="#f0cf86" stroke-width="3"/>
+              <text id="entryRangeText" x="-120" y="-16" text-anchor="middle" fill="#f0cf86" font-size="24" font-family="Georgia">14.0 DME</text>
+              <text x="-245" y="60" text-anchor="middle" fill="#aeb7c4" font-size="18" font-family="system-ui">APROXIMACIÓN</text>
+              <text x="-45" y="-155" fill="#58db78" font-size="22" font-family="Georgia">ARCO A LA DERECHA</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="control-group">
+            <label>Lectura actual <span id="entryValue">14.0 DME</span></label>
+            <input id="entrySlider" type="range" min="10.8" max="15.0" step="0.1" value="14.0" />
+          </div>
+          <div class="control-group"><label>Decisión</label><div class="seg"><button class="pill" data-entry-action="continue">Continuar recto</button><button class="pill" data-entry-action="turn">Iniciar viraje</button></div></div>
+          <div class="result-box" id="entryFeedback"><div class="status-big">Analiza la tendencia</div>El inicio exacto no es universal. En este escenario, debes anticipar el viraje para no cruzar al interior del arco.</div>
+          <div class="callout" style="margin-top:14px"><strong>Idea:</strong> cuanto mayor sea la velocidad o el radio de viraje, mayor anticipación necesitarás.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Mantenimiento">
+      <div class="eyebrow">LABORATORIO 2</div><div class="accent"></div>
+      <h2>Mantén el arco leyendo tendencia, no solo distancia</h2>
+      <p class="lede">Selecciona una lectura DME y decide la corrección. El objetivo es regresar progresivamente a 12.0 NM sin oscilaciones.</p>
+      <div class="concept" style="margin-top:26px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 610" role="img" aria-label="Mantenimiento de un arco DME">
+            <g transform="translate(380 300)">
+              <circle r="180" fill="none" stroke="#65d8e8" stroke-width="6" stroke-dasharray="12 9"/>
+              <circle r="38" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="8" fill="#f0cf86"/>
+              <path d="M-180 0A180 180 0 0 1 0 -180" fill="none" stroke="#58db78" stroke-width="9"/>
+              <g id="maintAircraft" transform="translate(-126 -126) rotate(45)"><path d="M0-24l8 17 28 7-28 7L0 24-7 7-32 0l25-7z" fill="#f7f4ee"/></g>
+              <line id="maintRangeLine" x1="-126" y1="-126" x2="0" y2="0" stroke="#f0cf86" stroke-width="3"/>
+              <text id="maintDmeText" x="-70" y="-80" fill="#f0cf86" font-size="25" font-family="Georgia">12.0 DME</text>
+              <path d="M-126 -126l-75 4" stroke="#d9b56b" stroke-width="4" stroke-dasharray="8 7"/>
+              <text x="-255" y="-112" fill="#aeb7c4" font-size="17" font-family="system-ui">TANGENTE</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="control-group">
+            <label>Lectura simulada <span id="maintValue">12.0 NM</span></label>
+            <input id="maintSlider" type="range" min="11.2" max="12.8" step="0.1" value="12.0" />
+          </div>
+          <div class="choice-list">
+            <button class="choice" data-maint="inward">Corregir hacia la estación</button>
+            <button class="choice" data-maint="outward">Corregir alejándome de la estación</button>
+            <button class="choice" data-maint="hold">Mantener tendencia actual</button>
+          </div>
+          <div class="feedback" id="maintFeedback">Selecciona una acción.</div>
+          <div class="formula"><span>DME aumenta</span><span>→</span><span>corrige hacia dentro</span></div>
+          <div class="formula" style="margin-top:10px"><span>DME disminuye</span><span>→</span><span>corrige hacia fuera</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Viento">
+      <div class="eyebrow">LABORATORIO 3</div><div class="accent"></div>
+      <h2>Encuentra la corrección por viento con bracketing</h2>
+      <p class="lede">No existe un único rumbo para todo el arco. La dirección relativa del viento cambia a medida que avanzas alrededor de la estación.</p>
+      <div class="grid2" style="margin-top:26px">
+        <div class="card">
+          <div class="label">CASO A</div><h3>El DME pasa de 12.0 a 12.4</h3><p>La aeronave se está alejando del arco publicado.</p>
+          <div class="choice-list"><button class="choice wind-choice" data-wind="a-in">Aplicar pequeña corrección hacia la estación</button><button class="choice wind-choice" data-wind="a-out">Aplicar corrección alejándome</button></div>
+          <div class="feedback" id="windFeedbackA">Selecciona una respuesta.</div>
+        </div>
+        <div class="card">
+          <div class="label">CASO B</div><h3>El DME pasa de 12.0 a 11.6</h3><p>La aeronave está entrando al interior del arco.</p>
+          <div class="choice-list"><button class="choice wind-choice" data-wind="b-in">Aplicar pequeña corrección hacia la estación</button><button class="choice wind-choice" data-wind="b-out">Aplicar corrección alejándome</button></div>
+          <div class="feedback" id="windFeedbackB">Selecciona una respuesta.</div>
+        </div>
+      </div>
+      <div class="grid3" style="margin-top:20px">
+        <div class="card"><div class="label">1</div><h3>Corrige</h3><p>Haz un cambio pequeño de rumbo para detener la tendencia.</p></div>
+        <div class="card"><div class="label">2</div><h3>Espera</h3><p>Observa si la distancia estabiliza o regresa.</p></div>
+        <div class="card"><div class="label">3</div><h3>Reduce</h3><p>Disminuye parte de la corrección antes de cruzar el valor deseado.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Dirección">
+      <div class="eyebrow">GEOMETRÍA DEL ARCO</div><div class="accent"></div>
+      <h2>La estación debe permanecer al costado correcto</h2>
+      <p class="lede">En un arco a la derecha, la estación permanece aproximadamente al lado derecho. En un arco a la izquierda, permanece al lado izquierdo.</p>
+      <div class="grid2" style="margin-top:26px">
+        <div class="card">
+          <div class="label">ARCO A LA DERECHA</div>
+          <svg viewBox="0 0 520 360" style="width:100%;height:auto">
+            <g transform="translate(260 185)"><circle r="130" fill="none" stroke="#65d8e8" stroke-width="5" stroke-dasharray="10 8"/><circle r="28" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="6" fill="#f0cf86"/>
+              <path d="M-130 0A130 130 0 0 1 0 -130" fill="none" stroke="#58db78" stroke-width="8"/>
+              <g transform="translate(-92 -92) rotate(45)"><path d="M0-20l7 14 23 6-23 6L0 20-6 6-26 0l20-6z" fill="#f7f4ee"/></g>
+              <line x1="-92" y1="-92" x2="0" y2="0" stroke="#f0cf86" stroke-width="3"/>
+              <text x="-15" y="-52" fill="#f0cf86" font-size="18" font-family="system-ui">ESTACIÓN A LA DERECHA</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="label">ARCO A LA IZQUIERDA</div>
+          <svg viewBox="0 0 520 360" style="width:100%;height:auto">
+            <g transform="translate(260 185)"><circle r="130" fill="none" stroke="#65d8e8" stroke-width="5" stroke-dasharray="10 8"/><circle r="28" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="6" fill="#f0cf86"/>
+              <path d="M130 0A130 130 0 0 0 0 -130" fill="none" stroke="#58db78" stroke-width="8"/>
+              <g transform="translate(92 -92) rotate(-45)"><path d="M0-20l7 14 23 6-23 6L0 20-6 6-26 0l20-6z" fill="#f7f4ee"/></g>
+              <line x1="92" y1="-92" x2="0" y2="0" stroke="#f0cf86" stroke-width="3"/>
+              <text x="-185" y="-52" fill="#f0cf86" font-size="18" font-family="system-ui">ESTACIÓN A LA IZQUIERDA</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:20px"><strong>Apoyo situacional:</strong> si el equipo permite mostrar un bearing pointer hacia la estación, puede ayudarte a confirmar que el centro del arco permanece aproximadamente al través del ala correspondiente. La técnica exacta depende de la instalación.</div>
+    </section>
+
+    <section class="slide" data-title="Salida">
+      <div class="eyebrow">LABORATORIO 4</div><div class="accent"></div>
+      <h2>Anticipa la salida del arco</h2>
+      <p class="lede">El viraje debe comenzar antes del radial de salida para quedar establecido sobre el nuevo curso, no después de atravesarlo.</p>
+      <div class="lab" style="margin-top:26px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 620" role="img" aria-label="Salida de arco DME">
+            <g transform="translate(365 310)">
+              <circle r="180" fill="none" stroke="#65d8e8" stroke-width="6" stroke-dasharray="12 9"/><circle r="38" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="8" fill="#f0cf86"/>
+              <path d="M-180 0A180 180 0 0 1 127 127" fill="none" stroke="#58db78" stroke-width="9"/>
+              <line x1="0" y1="0" x2="127" y2="127" stroke="#d9b56b" stroke-width="5"/><text x="92" y="82" fill="#f0cf86" font-size="22" font-family="Georgia">R-135</text>
+              <line x1="127" y1="127" x2="300" y2="45" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 8"/>
+              <g id="exitAircraft" transform="translate(98 151) rotate(25)"><path d="M0-24l8 17 28 7-28 7L0 24-7 7-32 0l25-7z" fill="#f7f4ee"/></g>
+              <circle id="exitLeadDot" cx="98" cy="151" r="12" fill="#f0cf86"/>
+              <text id="exitLeadText" x="170" y="180" fill="#f0cf86" font-size="22" font-family="Georgia">10° antes</text>
+              <text x="210" y="22" fill="#aeb7c4" font-size="18" font-family="system-ui">CURSO POSTERIOR</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="control-group">
+            <label>Anticipación seleccionada <span id="leadValue">10°</span></label>
+            <input id="leadSlider" type="range" min="0" max="25" step="5" value="10" />
+          </div>
+          <div class="control-group"><label>Velocidad del escenario</label><div class="seg"><button class="pill speed-pill active" data-speed="slow">Baja</button><button class="pill speed-pill" data-speed="medium">Media</button><button class="pill speed-pill" data-speed="high">Alta</button></div></div>
+          <div class="result-box" id="exitFeedback"><div class="status-big">Ajusta la anticipación</div>En general, mayor velocidad y mayor radio de viraje requieren iniciar antes. No uses un valor fijo sin considerar la geometría.</div>
+          <div class="callout" style="margin-top:14px"><strong>Preparación:</strong> antes de la salida debes tener seleccionado o mentalmente confirmado el curso posterior, la dirección del giro y las restricciones de altitud.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Errores y práctica">
+      <div class="eyebrow">APLICACIÓN OPERACIONAL</div><div class="accent"></div>
+      <h2>Evita los errores que destruyen la geometría del arco</h2>
+      <div class="grid2" style="margin-top:26px">
+        <div class="card"><div class="label">ERROR 1</div><h3>Perseguir décimas</h3><p>Corregir cada variación instantánea produce oscilaciones. Observa tendencia y espera el efecto.</p></div>
+        <div class="card"><div class="label">ERROR 2</div><h3>No preparar la salida</h3><p>Llegar al radial sin curso posterior preparado genera sobrepaso y alta carga de trabajo.</p></div>
+        <div class="card"><div class="label">ERROR 3</div><h3>Fuente DME equivocada</h3><p>Una distancia válida visualmente puede pertenecer a otra estación. Verifica identificación y asociación.</p></div>
+        <div class="card"><div class="label">ERROR 4</div><h3>Confundir radial con rumbo</h3><p>El radial define posición desde la estación. El rumbo de la aeronave cambia continuamente durante el arco.</p></div>
+      </div>
+      <div class="practice-grid" style="margin-top:22px">
+        <div class="practice-card">
+          <div class="label">CASO 1</div><h3>Arco 15 DME, lectura 15.6 y aumentando</h3>
+          <button class="practice-btn" data-practice="1a">Corregir hacia la estación</button><button class="practice-btn" data-practice="1b">Corregir alejándome</button>
+          <div class="practice-feedback" id="practice1">Selecciona una respuesta.</div>
+        </div>
+        <div class="practice-card">
+          <div class="label">CASO 2</div><h3>Faltan pocos grados para el radial de salida</h3>
+          <button class="practice-btn" data-practice="2a">Preparar y anticipar el viraje</button><button class="practice-btn" data-practice="2b">Esperar a cruzar el radial</button>
+          <div class="practice-feedback" id="practice2">Selecciona una respuesta.</div>
+        </div>
+        <div class="practice-card">
+          <div class="label">CASO 3</div><h3>El DME pasa de 12.0 a 11.5</h3>
+          <button class="practice-btn" data-practice="3a">Corregir hacia fuera</button><button class="practice-btn" data-practice="3b">Corregir hacia dentro</button>
+          <div class="practice-feedback" id="practice3">Selecciona una respuesta.</div>
+        </div>
+        <div class="practice-card">
+          <div class="label">CASO 4</div><h3>El G1000 muestra GPS magenta y deseas volar con VOR/DME</h3>
+          <button class="practice-btn" data-practice="4a">Continuar porque el DME se ve</button><button class="practice-btn" data-practice="4b">Verificar y seleccionar la fuente requerida</button>
+          <div class="practice-feedback" id="practice4">Selecciona una respuesta.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Evaluación">
+      <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div>
+      <h2>Demuestra que puedes construir el arco completo</h2>
+      <p class="lede">Se requiere 80 % y responder correctamente las preguntas críticas de fuente y corrección DME.</p>
+      <div class="quiz-layout" style="margin-top:26px">
+        <div id="quizQuestions">
+          <div class="question" data-q="0" data-correct="b" data-critical="true"><h3>1. Antes de usar una lectura DME para un procedimiento, ¿qué debes confirmar?</h3><button class="answer" data-a="a">Solo que aparezca un número</button><button class="answer" data-a="b">Fuente, identificación y asociación con la estación requerida</button><button class="answer" data-a="c">Únicamente el rumbo</button></div>
+          <div class="question" data-q="1" data-correct="a"><h3>2. En un arco de 12 DME, la lectura aumenta progresivamente a 12.5. ¿Qué tendencia existe?</h3><button class="answer" data-a="a">La aeronave se aleja del arco y debe corregir hacia la estación</button><button class="answer" data-a="b">La aeronave está demasiado cerca y debe alejarse</button><button class="answer" data-a="c">La lectura no aporta información</button></div>
+          <div class="question" data-q="2" data-correct="c" data-critical="true"><h3>3. En un arco de 12 DME, la lectura baja a 11.6. ¿Qué corrección inicial corresponde?</h3><button class="answer" data-a="a">Hacia la estación</button><button class="answer" data-a="b">Ninguna, aunque continúe disminuyendo</button><button class="answer" data-a="c">Alejándose de la estación</button></div>
+          <div class="question" data-q="3" data-correct="b"><h3>4. ¿Por qué no debe usarse siempre el mismo punto de anticipación para entrar o salir?</h3><button class="answer" data-a="a">Porque el DME cambia de color</button><button class="answer" data-a="b">Porque velocidad, banco, viento y geometría cambian el radio de viraje</button><button class="answer" data-a="c">Porque el radial cambia de nombre</button></div>
+          <div class="question" data-q="4" data-correct="a"><h3>5. En un arco a la derecha, ¿en qué lado permanece aproximadamente la estación?</h3><button class="answer" data-a="a">A la derecha</button><button class="answer" data-a="b">A la izquierda</button><button class="answer" data-a="c">Siempre detrás</button></div>
+          <div class="question" data-q="5" data-correct="c"><h3>6. ¿Qué técnica ayuda a encontrar la corrección por viento?</h3><button class="answer" data-a="a">Perseguir cada décima de DME</button><button class="answer" data-a="b">Mantener siempre el mismo rumbo</button><button class="answer" data-a="c">Corregir, esperar, evaluar y reducir</button></div>
+          <div class="question" data-q="6" data-correct="b"><h3>7. ¿Cuándo debe prepararse el curso posterior al arco?</h3><button class="answer" data-a="a">Después de cruzar el radial de salida</button><button class="answer" data-a="b">Antes de llegar al radial de salida</button><button class="answer" data-a="c">Solo cuando ATC lo recuerde</button></div>
+          <div class="question" data-q="7" data-correct="a"><h3>8. ¿Qué describe mejor un arco DME?</h3><button class="answer" data-a="a">Una trayectoria que mantiene aproximadamente constante la distancia DME publicada</button><button class="answer" data-a="b">Un rumbo constante alrededor de la estación</button><button class="answer" data-a="c">Un radial fijo inbound</button></div>
+        </div>
+        <aside class="card quiz-summary">
+          <div class="label">RESULTADO</div><div class="score" id="score">—</div><p id="scoreText">Responde las ocho preguntas y selecciona “Calificar”.</p>
+          <div class="critical">Críticas: preguntas 1 y 3.</div>
+          <div class="actions"><button class="primary" id="gradeQuiz">Calificar</button><button class="secondary" id="resetQuiz">Reiniciar</button></div>
+          <div class="completion" id="completionBox"><div class="callout"><strong>Módulo completado.</strong><br/>Tu resultado fue registrado localmente y enviado al contenedor de Veyra mediante postMessage.</div><div class="actions"><button class="primary" id="finishModule">Finalizar módulo</button></div></div>
+        </aside>
+      </div>
+      <div class="card references" style="margin-top:24px">
+        <div class="label">REFERENCIAS DE ESTUDIO</div>
+        <span>FAA Aeronautical Information Manual, Chapter 1: VOR y DME.</span>
+        <span>FAA Instrument Procedures Handbook: segmentos iniciales y procedimientos con arco DME.</span>
+        <span>Manual de vuelo, suplemento Garmin y SOP aplicables a la aeronave de entrenamiento.</span>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <button class="secondary" id="prevBtn">← Anterior</button>
+    <div class="nav-center"><span id="slideTitle">Inicio</span><br><span id="savedText">Progreso guardado localmente</span></div>
+    <button class="primary" id="nextBtn">Siguiente →</button>
+  </nav>
+</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const progressPercent = document.getElementById('progressPercent');
+  const slideTitle = document.getElementById('slideTitle');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const storageKey = 'veyra_ifr_dme_module_06';
+  const startedAt = Date.now();
+  let current = 0;
+  let bestScore = null;
+
+  const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  if (Number.isInteger(saved.current) && saved.current >= 0 && saved.current < slides.length) current = saved.current;
+  if (typeof saved.bestScore === 'number') bestScore = saved.bestScore;
+
+  function emit(type, data={}) {
+    const payload = { source:'veyra-module', type, moduleId:'veyra-ifr-dme-06', timestamp:new Date().toISOString(), ...data };
+    try { window.parent.postMessage(payload, '*'); } catch(e) {}
+    window.dispatchEvent(new CustomEvent(type, {detail:payload}));
+  }
+  function save(extra={}) {
+    const data = { current, bestScore, updatedAt:new Date().toISOString(), ...extra };
+    localStorage.setItem(storageKey, JSON.stringify(data));
+  }
+  function show(index) {
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===current));
+    const pct = Math.round(((current+1)/slides.length)*100);
+    progressBar.style.width = pct+'%'; progressText.textContent = `Pantalla ${current+1} de ${slides.length}`;
+    progressPercent.textContent = pct+'%'; slideTitle.textContent = slides[current].dataset.title || '';
+    prevBtn.disabled = current===0; nextBtn.textContent = current===slides.length-1 ? 'Finalizar' : 'Siguiente →';
+    save(); emit('veyra:progress',{progress:pct,screen:current+1,totalScreens:slides.length});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  prevBtn.addEventListener('click',()=>show(current-1));
+  nextBtn.addEventListener('click',()=>{
+    if(current < slides.length-1){ show(current+1); return; }
+    emit('veyra:exit',{score:bestScore,completed:Boolean(localStorage.getItem(storageKey)),progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});
+    setTimeout(()=>{window.location.href='/';},150);
+  });
+  document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.go))));
+
+  // Hotspots
+  const hotspotData = {
+    source:['Fuente activa: VOR1','La fuente aparece en verde. Para un procedimiento convencional, confirma que la indicación proviene de la radioayuda requerida.'],
+    dme:['Distancia DME','La lectura 3.9 NM corresponde a distancia oblicua hacia el equipo DME asociado. Para un arco debes controlar su tendencia.'],
+    course:['Curso seleccionado','El CRS sirve para trabajar radiales de entrada o salida. No representa por sí solo la distancia ni el arco.'],
+    nav:['Frecuencia e identificación','Verifica la frecuencia activa y la identificación de la estación. Una lectura visible no basta si proviene de la fuente equivocada.']
+  };
+  document.querySelectorAll('.hotspot').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.hotspot').forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+      const [t,b]=hotspotData[btn.dataset.hotspot]; document.getElementById('hotspotTitle').textContent=t; document.getElementById('hotspotBody').textContent=b;
+    });
+  });
+
+  // Entry lab
+  const entrySlider=document.getElementById('entrySlider'), entryValue=document.getElementById('entryValue'), entryAircraft=document.getElementById('entryAircraft'),
+        entryRangeLine=document.getElementById('entryRangeLine'), entryRangeText=document.getElementById('entryRangeText'), entryFeedback=document.getElementById('entryFeedback');
+  let entryDme=14;
+  function updateEntry(){
+    entryDme=Number(entrySlider.value); entryValue.textContent=entryDme.toFixed(1)+' DME'; entryRangeText.textContent=entryDme.toFixed(1)+' DME';
+    const x=-175-(entryDme-12)*35; entryAircraft.setAttribute('transform',`translate(${x} 0) rotate(90)`); entryRangeLine.setAttribute('x1',x); entryRangeText.setAttribute('x',(x/2));
+  }
+  entrySlider.addEventListener('input',updateEntry); updateEntry();
+  document.querySelectorAll('[data-entry-action]').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-entry-action]').forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+    const action=btn.dataset.entryAction;
+    let ok=false,msg='';
+    if(entryDme>13.0){ok=action==='continue';msg=ok?'Correcto: todavía existe margen para continuar y mantener la preparación.':'Demasiado temprano para este escenario: iniciar ahora produciría un arco exterior.'}
+    else if(entryDme>=12.4){ok=action==='turn';msg=ok?'Buena anticipación para este escenario de velocidad moderada.':'Vas a llegar tarde si continúas recto; empieza a construir la tangente.'}
+    else{ok=action==='turn';msg=ok?'Debes iniciar ya, aunque la entrada será tardía y requerirá control fino.':'Incorrecto: continuar recto te llevaría dentro del arco.'}
+    entryFeedback.innerHTML=`<div class="status-big">${ok?'Decisión adecuada':'Revisa la geometría'}</div>${msg}<br><span class="tiny">Este valor pertenece al escenario interactivo; no es una regla universal.</span>`;
+  }));
+
+  // Maintenance lab
+  const maintSlider=document.getElementById('maintSlider'),maintValue=document.getElementById('maintValue'),maintDmeText=document.getElementById('maintDmeText'),
+        maintFeedback=document.getElementById('maintFeedback'),maintAircraft=document.getElementById('maintAircraft'),maintRangeLine=document.getElementById('maintRangeLine');
+  function updateMaint(){
+    const d=Number(maintSlider.value);maintValue.textContent=d.toFixed(1)+' NM';maintDmeText.textContent=d.toFixed(1)+' DME';
+    const radius=180*(d/12); const a=-135*Math.PI/180; const x=Math.cos(a)*radius,y=Math.sin(a)*radius;
+    maintAircraft.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(45)`);
+    maintRangeLine.setAttribute('x1',x);maintRangeLine.setAttribute('y1',y);
+  }
+  maintSlider.addEventListener('input',updateMaint);updateMaint();
+  document.querySelectorAll('[data-maint]').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-maint]').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');
+    const d=Number(maintSlider.value),act=btn.dataset.maint;let correct;
+    if(d>12.1) correct='inward'; else if(d<11.9) correct='outward'; else correct='hold';
+    const ok=act===correct;
+    const msg=d>12.1?'La distancia es mayor que la publicada: corrige hacia la estación y luego reduce al estabilizar.'
+      :d<11.9?'La distancia es menor: estás dentro del arco; corrige alejándote y vigila la tendencia.'
+      :'La distancia está prácticamente estabilizada; evita crear una oscilación innecesaria.';
+    maintFeedback.className='feedback '+(ok?'ok':'bad');maintFeedback.textContent=(ok?'Correcto. ':'No. ')+msg;
+  }));
+
+  // Wind lab
+  document.querySelectorAll('.wind-choice').forEach(btn=>btn.addEventListener('click',()=>{
+    const code=btn.dataset.wind,caseId=code[0],ok=(code==='a-in'||code==='b-out');
+    const fb=document.getElementById(caseId==='a'?'windFeedbackA':'windFeedbackB');
+    fb.className='feedback '+(ok?'ok':'bad');
+    fb.textContent=ok?(caseId==='a'?'Correcto: el DME aumenta, por tanto debes corregir hacia el centro del arco.':'Correcto: el DME disminuye, por tanto debes corregir hacia fuera.')
+      :(caseId==='a'?'No: esa corrección aumentaría aún más la distancia.':'No: esa corrección te acercaría más a la estación.');
+  }));
+
+  // Exit lab
+  const leadSlider=document.getElementById('leadSlider'),leadValue=document.getElementById('leadValue'),exitLeadText=document.getElementById('exitLeadText'),exitLeadDot=document.getElementById('exitLeadDot'),
+        exitAircraft=document.getElementById('exitAircraft'),exitFeedback=document.getElementById('exitFeedback');
+  let speed='slow';
+  function updateExit(){
+    const lead=Number(leadSlider.value); leadValue.textContent=lead+'°';exitLeadText.textContent=lead+'° antes';
+    const angle=(135-lead)*Math.PI/180; const x=Math.cos(angle)*180,y=Math.sin(angle)*180;
+    exitLeadDot.setAttribute('cx',x);exitLeadDot.setAttribute('cy',y);exitAircraft.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${angle*180/Math.PI-90})`);
+    const ideal={slow:[5,10],medium:[10,15],high:[15,25]}[speed];const ok=lead>=ideal[0]&&lead<=ideal[1];
+    exitFeedback.innerHTML=`<div class="status-big">${ok?'Anticipación razonable':'Ajusta el punto'}</div>${ok?'Para este escenario, el valor elegido permite iniciar el giro antes del radial y buscar el curso posterior.':lead<ideal[0]?'Para esta velocidad la anticipación es escasa; existe riesgo de sobrepasar el radial.':'La anticipación es excesiva para este escenario y puede sacarte del arco demasiado pronto.'}<br><span class="tiny">Rango didáctico del simulador, no valor universal.</span>`;
+  }
+  leadSlider.addEventListener('input',updateExit);
+  document.querySelectorAll('.speed-pill').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.speed-pill').forEach(x=>x.classList.remove('active'));btn.classList.add('active');speed=btn.dataset.speed;updateExit();}));
+  updateExit();
+
+  // Practice
+  const practiceCorrect={ '1a':true,'1b':false,'2a':true,'2b':false,'3a':true,'3b':false,'4a':false,'4b':true };
+  document.querySelectorAll('[data-practice]').forEach(btn=>btn.addEventListener('click',()=>{
+    const key=btn.dataset.practice,n=key[0],ok=practiceCorrect[key],fb=document.getElementById('practice'+n);
+    fb.style.color=ok?'#9ee8b0':'#ffaaaa';
+    const explanations={
+      '1a':'Correcto. La distancia aumenta: aplica una corrección hacia la estación y reduce al estabilizar.',
+      '1b':'No. Alejarte incrementaría todavía más el DME.',
+      '2a':'Correcto. El curso y el giro deben prepararse antes de cruzar el radial.',
+      '2b':'No. Esperar hasta después provoca un sobrepaso innecesario.',
+      '3a':'Correcto. Estás dentro del arco; corrige hacia fuera.',
+      '3b':'No. Ir hacia dentro disminuye aún más la distancia.',
+      '4a':'No. Debes confirmar que la fuente y la estación corresponden al procedimiento.',
+      '4b':'Correcto. Primero verifica fuente, identificación y DME asociado.'
+    };
+    fb.textContent=explanations[key];
+  }));
+
+  // Quiz
+  const answers={};
+  document.querySelectorAll('.answer').forEach(btn=>btn.addEventListener('click',()=>{
+    const q=btn.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');answers[q.dataset.q]=btn.dataset.a;
+  }));
+  document.getElementById('gradeQuiz').addEventListener('click',()=>{
+    const questions=[...document.querySelectorAll('.question')];let correct=0,criticalOk=true;
+    questions.forEach(q=>{const ok=answers[q.dataset.q]===q.dataset.correct;if(ok)correct++;if(q.dataset.critical==='true'&&!ok)criticalOk=false;});
+    const score=Math.round(correct/questions.length*100);bestScore=bestScore===null?score:Math.max(bestScore,score);
+    const passed=score>=80&&criticalOk;
+    document.getElementById('score').textContent=score+'%';
+    document.getElementById('scoreText').textContent=passed?'Aprobado. Dominas la secuencia básica de entrada, mantenimiento y salida.':!criticalOk?'No aprobado: revisa las preguntas críticas de fuente y corrección DME.':'Aún no alcanzas 80 %. Revisa los laboratorios y vuelve a intentarlo.';
+    document.getElementById('completionBox').classList.toggle('show',passed);
+    save({bestScore,completed:passed,score});
+    emit('veyra:complete',{score,passed,criticalOk,timeSeconds:Math.round((Date.now()-startedAt)/1000)});
+  });
+  document.getElementById('resetQuiz').addEventListener('click',()=>{
+    Object.keys(answers).forEach(k=>delete answers[k]);document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));
+    document.getElementById('score').textContent='—';document.getElementById('scoreText').textContent='Responde las ocho preguntas y selecciona “Calificar”.';document.getElementById('completionBox').classList.remove('show');
+  });
+  document.getElementById('finishModule').addEventListener('click',()=>{
+    emit('veyra:exit',{score:bestScore,completed:true,progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});
+    setTimeout(()=>{window.location.href='/';},150);
+  });
+  emit('veyra:ready',{progress:Math.round(((current+1)/slides.length)*100),bestScore});
+  show(current);
+})();
+</script>
+</body>
+</html>
