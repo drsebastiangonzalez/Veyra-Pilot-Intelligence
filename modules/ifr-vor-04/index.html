@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 04 · TO/FROM, reverse sensing y paso sobre la estación</title>
+  <style>
+    :root{
+      --bg:#05070b;--bg2:#080d14;--panel:#0d131c;--panel2:#111a26;
+      --gold:#d9b56b;--gold2:#f0cf86;--white:#f7f4ee;--muted:#aeb7c4;
+      --green:#58db78;--magenta:#ee58d6;--cyan:#65d8e8;--danger:#ef7272;
+      --line:rgba(217,181,107,.28);--line2:rgba(255,255,255,.09);
+      --shadow:0 22px 60px rgba(0,0,0,.38);--r:22px;
+      --serif:Georgia,'Times New Roman',serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);background:radial-gradient(circle at 86% 8%,rgba(217,181,107,.08),transparent 28rem),linear-gradient(180deg,#05070b,#080c12 58%,#05070b);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+    button,select,input{font:inherit}.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.91);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+    .brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}.progress-wrap{width:min(280px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}.progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:10%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 112px}.slide{display:none;animation:enter .4s ease both}.slide.active{display:block}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}h1,h2,h3{margin:0}h1{font:500 clamp(44px,7vw,88px)/.96 var(--serif);letter-spacing:-.045em}h2{font:500 clamp(34px,5vw,60px)/1 var(--serif);letter-spacing:-.035em}h3{font:600 22px/1.2 var(--serif)}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:900px}.tiny{font-size:12px;color:var(--muted);line-height:1.5}.green{color:var(--green);font-weight:850}.magenta{color:var(--magenta);font-weight:850}.gold{color:var(--gold2);font-weight:850}.danger-text{color:#ffaaaa;font-weight:800}
+    .hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.92fr 1.08fr;gap:38px;align-items:center}.hero-visual{position:relative;min-height:590px;border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.97));box-shadow:var(--shadow);overflow:hidden;padding:24px;display:grid;place-items:center}.hero-visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 50%);transform:translate(18%,4%)}
+    .hero-copy .chips{margin-top:22px}.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:680px;color:#d8dde6;border-radius:0 14px 14px 0}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}.callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}.callout strong{color:var(--gold2)}.danger{border-color:rgba(239,114,114,.35);background:rgba(239,114,114,.065)}.danger strong{color:#ffaaaa}.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .objective{display:flex;gap:14px;align-items:center;padding:15px;border-bottom:1px solid var(--line2)}.objective:last-child{border-bottom:0}.num{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);font-weight:800;flex:0 0 auto}.route{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}.route-step{border:1px solid var(--line);border-radius:18px;padding:18px 14px;text-align:center;background:rgba(217,181,107,.035)}.route-step b{display:block;color:var(--gold2);margin-bottom:7px}
+    .explorer{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}.diagram{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));padding:18px;min-height:540px;box-shadow:var(--shadow);display:grid;place-items:center}.diagram svg{width:min(100%,620px);height:auto}.controls{display:grid;gap:15px}.control-group{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02)}.control-group label{display:block;color:var(--gold2);font-weight:800;margin-bottom:10px}.seg{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}.pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}.result-box{min-height:132px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.55}.status-big{font:600 34px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+    .reciprocal-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:22px}.reciprocal-display{display:grid;place-items:center;min-height:360px}.dial{width:min(100%,360px);aspect-ratio:1;border-radius:50%;border:2px solid var(--gold);position:relative;background:radial-gradient(circle,#111925 0 48%,#080c12 49% 100%);box-shadow:inset 0 0 60px rgba(0,0,0,.55)}.dial:before,.dial:after{content:"";position:absolute;left:50%;top:8%;bottom:8%;width:1px;background:rgba(255,255,255,.15)}.dial:after{transform:rotate(90deg)}.dial-value{position:absolute;inset:0;display:grid;place-items:center;text-align:center}.dial-value strong{font:600 64px/1 var(--serif);color:var(--white)}.dial-value span{display:block;color:var(--gold);margin-top:8px}.needle{position:absolute;left:50%;top:50%;width:4px;height:42%;background:linear-gradient(var(--gold2),var(--gold));transform-origin:50% 100%;border-radius:999px;transform:translate(-50%,-100%) rotate(0deg)}.needle:after{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:18px solid var(--gold2)}
+    .answer-pad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.answer-btn{padding:14px 16px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer}.answer-btn:hover,.answer-btn.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}.feedback{min-height:70px;color:#cbd2dd;line-height:1.5}.feedback.ok{color:#9ee8b0}.feedback.bad{color:#ffaaaa}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:22px}.instrument-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:20px}.instrument-stage{display:grid;place-items:center;min-height:390px}.instrument-stage svg{width:min(100%,430px)}.switches{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);color:var(--gold2);background:rgba(217,181,107,.05);font-size:12px}
+    .photo-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:start}.photo-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.photo-wrap img{width:100%;display:block}.hotspot{position:absolute;width:35px;height:35px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.84);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(217,181,107,.12)}.hotspot:hover,.hotspot.active{background:var(--gold2);color:#171005}.hotspot-info{min-height:150px}.hotspot-info h3{color:var(--gold2);font-size:21px}.checklist{display:grid;gap:10px}.check{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;padding:14px;border-bottom:1px solid var(--line2)}.check:last-child{border-bottom:0}.letter{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(217,181,107,.10);border:1px solid var(--line);color:var(--gold2);font-weight:900}
+    .passage{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}.passage-stage{min-height:520px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));display:grid;place-items:center;padding:18px;box-shadow:var(--shadow)}.passage-stage svg{width:min(100%,680px)}.timeline{display:grid;gap:10px}.timeline-step{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15;cursor:pointer}.timeline-step.active{border-color:var(--gold);background:rgba(217,181,107,.07)}.timeline-step b{color:var(--gold2)}
+    .diagnostic{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px}.scenario-list{display:grid;gap:11px}.scenario-btn{padding:15px 17px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.scenario-btn:hover,.scenario-btn.active{border-color:var(--gold);background:rgba(217,181,107,.07)}.diagnostic-result{min-height:280px}.diagnostic-result h3{color:var(--gold2);margin-bottom:14px}.diagnostic-result ul{padding-left:20px;line-height:1.7;color:#cbd2dd}.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.practice-card{padding:20px;border:1px solid var(--line2);border-radius:18px;background:rgba(11,16,24,.88)}.practice-card h3{font-size:20px;margin-bottom:10px}.practice-options{display:grid;gap:9px}.practice-btn{padding:12px 14px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.practice-btn:hover{border-color:var(--gold)}.practice-feedback{min-height:48px;margin-top:10px;font-size:13px;line-height:1.45;color:var(--muted)}
+    .question{padding:21px;margin-bottom:16px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(11,16,24,.88)}.question.correct{border-color:rgba(88,219,120,.68)}.question.incorrect{border-color:rgba(239,114,114,.68)}.q-title{font-weight:750;line-height:1.45;margin-bottom:14px}.answers{display:grid;gap:9px}.answer{padding:13px 15px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.answer:hover,.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}.question .feedback{margin-top:10px;min-height:20px;font-size:13px}.quiz-layout{display:grid;grid-template-columns:1.35fr .65fr;gap:22px}.summary{position:sticky;top:102px;height:max-content;text-align:center}.score-ring{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;background:conic-gradient(var(--gold) 0deg,#1b2431 0deg);position:relative}.score-ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}.score-value{position:relative;z-index:1;font:600 36px/1 var(--serif)}details{margin-top:18px;text-align:left;border-top:1px solid var(--line2);padding-top:14px}summary{cursor:pointer;color:var(--gold2)}.sources{font-size:12px;line-height:1.55;color:var(--muted)}
+    .nav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px);padding:12px clamp(16px,3vw,40px) calc(12px + env(safe-area-inset-bottom))}.nav-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.nav-btn{border:1px solid var(--line);background:#090e15;color:#e8ebf0;border-radius:999px;padding:11px 16px;cursor:pointer}.nav-btn:hover{border-color:var(--gold);color:var(--gold2)}.nav-btn.primary{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#171005;border-color:transparent;font-weight:850}.nav-step{color:var(--muted);font-size:12px;letter-spacing:.08em}
+    code{color:var(--cyan)}
+    @media(max-width:980px){.hero,.explorer,.reciprocal-grid,.compare,.photo-layout,.passage,.diagnostic,.quiz-layout{grid-template-columns:1fr}.route{grid-template-columns:repeat(2,1fr)}.hero-visual{min-height:480px}.summary{position:static}.top-title{display:none}.progress-wrap{width:36vw}.practice-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){.brand-name{font-size:24px}.brand-sub{font-size:8px}.topbar{gap:10px}.progress-wrap{min-width:100px}.grid2,.grid3{grid-template-columns:1fr}.route{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:400px;padding:12px}.card{padding:18px}.diagram,.passage-stage{min-height:400px}.answer-pad{grid-template-columns:1fr}.nav-btn{padding:10px 13px}.nav-step{font-size:11px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+    <div class="top-title">IFR Path · Módulo 04 · Interpretación avanzada VOR/LOC</div>
+    <div class="progress-wrap"><div class="progress-meta"><span id="progressLabel">Inicio</span><span id="progressPercent">10 %</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+  </header>
+
+  <main>
+    <section class="slide active" data-title="Inicio">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">VEYRA IFR PATH · MÓDULO 04</div><div class="accent"></div>
+          <h1>TO/FROM, reverse sensing y paso sobre la estación</h1>
+          <p class="lede">Interpreta correctamente la relación entre curso y estación, evita indicaciones invertidas y reconoce cuándo la señal deja de ser confiable.</p>
+          <div class="chips"><span class="chip">VOR en verde</span><span class="chip">CDI y HSI</span><span class="chip">LOC front/back course</span><span class="chip">Station passage</span></div>
+          <div class="hero-note"><span class="gold">Regla de entrada:</span><span>Antes de seguir cualquier aguja, confirma <b>fuente, curso, TO/FROM y validez de señal</b>.</span></div>
+        </div>
+        <div class="hero-visual">
+          <svg viewBox="0 0 700 700" role="img" aria-label="Diagrama VOR con indicaciones TO y FROM">
+            <defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <circle cx="350" cy="350" r="248" fill="none" stroke="#273344" stroke-width="2"/><circle cx="350" cy="350" r="190" fill="none" stroke="#1d2734" stroke-width="2"/><circle cx="350" cy="350" r="130" fill="none" stroke="#1d2734" stroke-width="2"/>
+            <g stroke="#d9b56b" stroke-width="2" opacity=".7"><line x1="350" y1="70" x2="350" y2="630"/><line x1="70" y1="350" x2="630" y2="350"/><line x1="152" y1="152" x2="548" y2="548"/><line x1="548" y1="152" x2="152" y2="548"/></g>
+            <g fill="#f7f4ee" font-size="22" font-family="system-ui" font-weight="800"><text x="338" y="54">000°</text><text x="638" y="358">090°</text><text x="332" y="680">180°</text><text x="8" y="358">270°</text></g>
+            <g filter="url(#glow)"><circle cx="350" cy="350" r="38" fill="#080c12" stroke="#f0cf86" stroke-width="4"/><circle cx="350" cy="350" r="9" fill="#f0cf86"/></g>
+            <g transform="translate(535 220) rotate(135)"><path d="M0-34l11 24 34 9-34 9L0 34-10 8-43 0l33-8z" fill="#f7f4ee"/><path d="M0-16V18" stroke="#d9b56b" stroke-width="4"/></g>
+            <path d="M350 350L535 220" stroke="#58db78" stroke-width="6" stroke-dasharray="12 10"/><path d="M535 220l-27 4 14 20z" fill="#58db78"/>
+            <text x="500" y="180" fill="#58db78" font-size="30" font-family="system-ui" font-weight="900">TO</text>
+            <path d="M350 350L165 480" stroke="#d9b56b" stroke-width="6" stroke-dasharray="12 10"/><path d="M165 480l27-4-14-20z" fill="#d9b56b"/>
+            <text x="118" y="530" fill="#f0cf86" font-size="30" font-family="system-ui" font-weight="900">FROM</text>
+            <text x="275" y="414" fill="#f7f4ee" font-size="22" font-family="system-ui">Estación VOR</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Ruta del módulo">
+      <div class="eyebrow">QUÉ VAS A DOMINAR</div><div class="accent"></div><h2>Una secuencia corta, aplicada y verificable</h2>
+      <p class="lede">El módulo no se limita a definiciones: cada concepto termina en una decisión de cabina.</p>
+      <div class="grid2" style="margin-top:26px">
+        <div class="card">
+          <div class="objective"><div class="num">1</div><div><b>Leer TO/FROM</b><div class="tiny">Entender qué expresa y qué no expresa.</div></div></div>
+          <div class="objective"><div class="num">2</div><div><b>Calcular recíprocos</b><div class="tiny">Radial y curso inbound/outbound.</div></div></div>
+          <div class="objective"><div class="num">3</div><div><b>Evitar reverse sensing</b><div class="tiny">CDI análogo, HSI y selección correcta.</div></div></div>
+          <div class="objective"><div class="num">4</div><div><b>Diferenciar VOR y LOC</b><div class="tiny">Color similar, lógica y sensibilidad distintas.</div></div></div>
+          <div class="objective"><div class="num">5</div><div><b>Reconocer station passage</b><div class="tiny">TO/OFF/FROM sin perseguir la aguja.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="label">Ruta del módulo</div>
+          <div class="route">
+            <div class="route-step"><b>01</b>TO/FROM</div><div class="route-step"><b>02</b>Recíprocos</div><div class="route-step"><b>03</b>Reverse sensing</div><div class="route-step"><b>04</b>LOC</div><div class="route-step"><b>05</b>Station passage</div>
+          </div>
+          <div class="callout" style="margin-top:20px"><strong>Criterio de avance:</strong> 80 % en la evaluación final y todas las preguntas críticas de fuente/validez correctas.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="TO/FROM">
+      <div class="eyebrow">LABORATORIO 1</div><div class="accent"></div><h2>TO/FROM describe la relación del curso con la estación</h2>
+      <p class="lede">Selecciona una posición y un curso. El instrumento te mostrará si ese curso, una vez centrado, lleva hacia la estación o se aleja de ella.</p>
+      <div class="explorer" style="margin-top:26px">
+        <div class="diagram">
+          <svg id="toFromSvg" viewBox="0 0 700 620" role="img" aria-label="Explorador interactivo TO FROM">
+            <circle cx="350" cy="310" r="235" fill="none" stroke="#273344" stroke-width="2"/><circle cx="350" cy="310" r="170" fill="none" stroke="#1d2734" stroke-width="2"/>
+            <g stroke="#d9b56b" stroke-width="2" opacity=".65"><line x1="350" y1="50" x2="350" y2="570"/><line x1="90" y1="310" x2="610" y2="310"/><line x1="166" y1="126" x2="534" y2="494"/><line x1="534" y1="126" x2="166" y2="494"/></g>
+            <g fill="#f7f4ee" font-size="20" font-family="system-ui" font-weight="800"><text x="335" y="37">000°</text><text x="618" y="317">090°</text><text x="334" y="600">180°</text><text x="24" y="317">270°</text></g>
+            <circle cx="350" cy="310" r="34" fill="#080c12" stroke="#f0cf86" stroke-width="4"/><circle cx="350" cy="310" r="8" fill="#f0cf86"/>
+            <line id="radialLine" x1="350" y1="310" x2="350" y2="75" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 9"/>
+            <g id="aircraftGroup" transform="translate(350 75) rotate(180)"><path d="M0-31l10 22 31 8-31 8L0 31-9 7-39 0l30-7z" fill="#f7f4ee"/><path d="M0-14V16" stroke="#58db78" stroke-width="4"/></g>
+            <g id="courseGroup" transform="translate(350 310) rotate(0)"><line x1="0" y1="160" x2="0" y2="-210" stroke="#58db78" stroke-width="7"/><path d="M0-220l-13 25h26z" fill="#58db78"/></g>
+            <g transform="translate(350 310)"><circle r="83" fill="#080c12" stroke="#f7f4ee" stroke-width="3"/><line x1="0" y1="-65" x2="0" y2="65" stroke="#58db78" stroke-width="7"/><line x1="-62" y1="0" x2="62" y2="0" stroke="#f7f4ee" stroke-width="2"/><circle r="7" fill="#f0cf86"/><text id="toFromText" x="-26" y="115" fill="#58db78" font-size="28" font-family="system-ui" font-weight="900">FROM</text></g>
+            <text id="radialText" x="30" y="575" fill="#f0cf86" font-size="24" font-family="system-ui" font-weight="800">Posición: radial 000°</text>
+            <text id="courseText" x="430" y="575" fill="#58db78" font-size="24" font-family="system-ui" font-weight="800">CRS 000°</text>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="control-group"><label>Posición de la aeronave</label><div class="seg" id="radialButtons"><button class="pill active" data-radial="0">R-000</button><button class="pill" data-radial="45">R-045</button><button class="pill" data-radial="90">R-090</button><button class="pill" data-radial="225">R-225</button><button class="pill" data-radial="270">R-270</button></div></div>
+          <div class="control-group"><label>Curso seleccionado</label><div class="seg" id="courseButtons"><button class="pill active" data-course="0">000°</button><button class="pill" data-course="45">045°</button><button class="pill" data-course="90">090°</button><button class="pill" data-course="180">180°</button><button class="pill" data-course="225">225°</button><button class="pill" data-course="270">270°</button></div></div>
+          <div class="result-box" id="toFromResult"><div class="status-big">FROM</div><b>Lectura:</b> la aeronave está en el radial 000° y tiene seleccionado el curso 000°. Con el CDI centrado, ese curso se aleja de la estación.</div>
+          <div class="callout"><strong>Clave:</strong> TO/FROM no ordena un giro y no indica dónde apunta la nariz. Describe la relación entre el curso seleccionado y la estación.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Recíprocos">
+      <div class="eyebrow">LABORATORIO 2</div><div class="accent"></div><h2>Radial y curso inbound no son lo mismo</h2>
+      <p class="lede">El radial identifica la línea desde la estación. Para volarla inbound debes seleccionar su recíproco.</p>
+      <div class="reciprocal-grid" style="margin-top:26px">
+        <div class="card reciprocal-display">
+          <div class="dial"><div class="needle" id="reciprocalNeedle"></div><div class="dial-value"><div><strong id="radialValue">070°</strong><span>RADIAL</span></div></div></div>
+        </div>
+        <div class="card">
+          <div class="label">Ejercicio interactivo</div>
+          <h3>¿Qué curso seleccionarías para volar inbound?</h3>
+          <p class="tiny">Usa +180° cuando el radial es menor de 180° y −180° cuando es igual o mayor de 180°.</p>
+          <div class="answer-pad" id="reciprocalAnswers" style="margin-top:18px"></div>
+          <div class="feedback" id="reciprocalFeedback">Selecciona una respuesta.</div>
+          <button class="nav-btn" id="newReciprocal">Nuevo radial</button>
+          <div class="callout" style="margin-top:18px"><strong>Ejemplo:</strong> R-270 inbound = CRS 090° TO. R-270 outbound = CRS 270° FROM.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Reverse sensing">
+      <div class="eyebrow">LABORATORIO 3</div><div class="accent"></div><h2>Reverse sensing aparece cuando la selección no coincide con el sentido de vuelo</h2>
+      <p class="lede">En un CDI convencional, volar el recíproco del curso seleccionado hace que la aguja parezca pedir la corrección contraria.</p>
+      <div class="compare" style="margin-top:26px">
+        <div class="instrument-card">
+          <div class="label">CDI convencional</div><h3 id="cdiStateTitle">Sensing normal</h3>
+          <div class="instrument-stage">
+            <svg viewBox="0 0 500 500" role="img" aria-label="CDI convencional interactivo">
+              <circle cx="250" cy="250" r="205" fill="#080c12" stroke="#d9b56b" stroke-width="4"/><circle cx="250" cy="250" r="170" fill="none" stroke="#4b5665" stroke-width="2"/>
+              <g fill="#f7f4ee" font-family="system-ui" font-size="23" font-weight="700"><text x="238" y="68">N</text><text x="420" y="258">E</text><text x="240" y="448">S</text><text x="63" y="258">W</text></g>
+              <text id="cdiObsText" x="211" y="118" fill="#f0cf86" font-size="25" font-family="system-ui" font-weight="850">090°</text>
+              <line x1="250" y1="112" x2="250" y2="388" stroke="#f7f4ee" stroke-width="3"/><path d="M250 96l-13 25h26z" fill="#f7f4ee"/>
+              <g fill="#f7f4ee"><circle cx="178" cy="250" r="5"/><circle cx="214" cy="250" r="5"/><circle cx="286" cy="250" r="5"/><circle cx="322" cy="250" r="5"/></g>
+              <line id="cdiNeedle" x1="286" y1="145" x2="286" y2="355" stroke="#58db78" stroke-width="9"/><circle id="cdiNeedleDot" cx="286" cy="250" r="10" fill="#58db78"/>
+              <text id="cdiFlag" x="205" y="395" fill="#58db78" font-size="24" font-family="system-ui" font-weight="850">FROM</text>
+            </svg>
+          </div>
+          <div class="switches"><button class="pill active" data-sense-course="90">OBS 090°</button><button class="pill" data-sense-course="270">OBS 270°</button><button class="pill active" data-sense-heading="90">HDG 090°</button><button class="pill" data-sense-heading="270">HDG 270°</button></div>
+          <div class="callout" id="cdiSenseResult" style="margin-top:15px"><strong>Normal:</strong> rumbo y curso seleccionado tienen el mismo sentido. La aguja puede interpretarse normalmente.</div>
+        </div>
+        <div class="instrument-card">
+          <div class="label">HSI</div><h3>La orientación reduce la ambigüedad</h3>
+          <div class="instrument-stage">
+            <svg viewBox="0 0 500 500" role="img" aria-label="HSI comparativo">
+              <circle cx="250" cy="250" r="205" fill="#080c12" stroke="#d9b56b" stroke-width="4"/><circle cx="250" cy="250" r="170" fill="none" stroke="#4b5665" stroke-width="2"/>
+              <g id="hsiCard" transform="rotate(0 250 250)"><g fill="#f7f4ee" font-family="system-ui" font-size="23" font-weight="700"><text x="238" y="68">N</text><text x="420" y="258">E</text><text x="240" y="448">S</text><text x="63" y="258">W</text></g></g>
+              <g id="hsiCourseGroup" transform="rotate(90 250 250)"><line x1="250" y1="92" x2="250" y2="408" stroke="#58db78" stroke-width="7"/><path d="M250 82l-13 25h26z" fill="#58db78"/><line x1="286" y1="145" x2="286" y2="355" stroke="#58db78" stroke-width="9"/></g>
+              <path d="M250 215l18 42h-36z" fill="#f7f4ee"/><path d="M250 257v78" stroke="#f7f4ee" stroke-width="6"/>
+              <text id="hsiLegend" x="182" y="470" fill="#f0cf86" font-size="20" font-family="system-ui">CRS 090° / HDG 090°</text>
+            </svg>
+          </div>
+          <div class="callout"><strong>Ventaja:</strong> el HSI coloca el curso sobre una rosa orientada con el rumbo, por lo que resulta más fácil detectar que se está volando en sentido contrario. Aun así, una fuente o curso mal seleccionado continúa siendo un error.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="VOR en G1000">
+      <div class="eyebrow">APLICACIÓN EN CABINA</div><div class="accent"></div><h2>Antes de interpretar TO/FROM en G1000</h2>
+      <p class="lede">La fuente debe ser VOR1 o VOR2 en verde y la señal debe estar identificada y válida.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000-cdi-vor.jpg" alt="G1000 con fuente VOR1 en verde" />
+          <button class="hotspot" style="left:38%;top:55%" data-hotspot="source">1</button>
+          <button class="hotspot" style="left:62%;top:49%" data-hotspot="course">2</button>
+          <button class="hotspot" style="left:50%;top:64%" data-hotspot="cdi">3</button>
+          <button class="hotspot" style="left:23%;top:4%" data-hotspot="freq">4</button>
+          <button class="hotspot" style="left:24%;top:73%" data-hotspot="dme">5</button>
+        </div>
+        <div class="card hotspot-info" id="hotspotInfo">
+          <div class="label">Punto 1</div><h3>Fuente activa</h3><p><span class="green">VOR1</span> confirma que el HSI está recibiendo guiado VOR. El color ayuda, pero la etiqueta es la verificación principal.</p>
+          <div class="checklist" style="margin-top:16px">
+            <div class="check"><div class="letter">F</div><div><b>Fuente</b><div class="tiny">VOR1/VOR2 en verde.</div></div></div>
+            <div class="check"><div class="letter">I</div><div><b>Identificación</b><div class="tiny">Frecuencia y código correctos.</div></div></div>
+            <div class="check"><div class="letter">C</div><div><b>Curso</b><div class="tiny">CRS coherente con la línea deseada.</div></div></div>
+            <div class="check"><div class="letter">V</div><div><b>Validez</b><div class="tiny">Sin bandera ni indicación inválida.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Localizador">
+      <div class="eyebrow">VOR NO ES LOC</div><div class="accent"></div><h2>LOC utiliza el mismo color, pero una lógica distinta</h2>
+      <p class="lede">El localizador entrega guiado lateral de aproximación, no radiales. No uses TO/FROM para interpretarlo.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap"><img src="assets/g1000-cdi-loc.jpg" alt="G1000 con fuente LOC1 en verde" /></div>
+        <div class="card">
+          <div class="label">Lectura correcta</div>
+          <div class="objective"><div class="num">1</div><div><b><span class="green">LOC1</span></b><div class="tiny">Fuente lateral de aproximación.</div></div></div>
+          <div class="objective"><div class="num">2</div><div><b>Mayor sensibilidad</b><div class="tiny">No se trata como CDI VOR de ±10°.</div></div></div>
+          <div class="objective"><div class="num">3</div><div><b>Sin radiales</b><div class="tiny">Se habla de front course o back course.</div></div></div>
+          <div class="objective"><div class="num">4</div><div><b>Back course</b><div class="tiny">Puede producir reverse sensing si el equipo no ofrece corrección/BC.</div></div></div>
+          <div class="callout danger" style="margin-top:16px"><strong>Operacional:</strong> no utilices la señal back course para una aproximación salvo que exista un procedimiento publicado y autorización aplicable.</div>
+        </div>
+      </div>
+      <div class="compare" style="margin-top:22px">
+        <div class="card"><div class="label">Front course</div><h3>Sensing normal</h3><p>Intercepta y sigue el localizador en el sentido publicado hacia la pista. La corrección normal se realiza hacia la indicación.</p><span class="badge">LOC1 verde</span></div>
+        <div class="card"><div class="label">Back course</div><h3>Verifica el modo del equipo</h3><p>Con equipo convencional sin corrección BC, la aguja puede sentirse invertida. Confirma AFMS/POH y el procedimiento publicado.</p><span class="badge">No asumir TO/FROM</span></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Paso sobre la estación">
+      <div class="eyebrow">LABORATORIO 4</div><div class="accent"></div><h2>Station passage: TO → zona inestable → FROM</h2>
+      <p class="lede">Al pasar sobre el VOR, la información azimutal puede volverse momentáneamente ambigua. Mantén el rumbo y confirma la reversión completa.</p>
+      <div class="passage" style="margin-top:26px">
+        <div class="passage-stage">
+          <svg id="passageSvg" viewBox="0 0 760 560" role="img" aria-label="Animación del paso sobre una estación VOR">
+            <defs><filter id="stationGlow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <path d="M70 280H690" stroke="#d9b56b" stroke-width="5" stroke-dasharray="14 12"/>
+            <circle cx="380" cy="280" r="46" fill="#080c12" stroke="#f0cf86" stroke-width="4" filter="url(#stationGlow)"/><circle cx="380" cy="280" r="10" fill="#f0cf86"/>
+            <path d="M325 80Q380 20 435 80L406 240H354z" fill="rgba(217,181,107,.08)" stroke="#d9b56b" stroke-dasharray="10 8"/><text x="298" y="52" fill="#f0cf86" font-size="20" font-family="system-ui">Cone of confusion</text>
+            <g id="passageAircraft" transform="translate(90 280) rotate(90)"><path d="M0-30l10 22 31 8-31 8L0 30-9 7-39 0l30-7z" fill="#f7f4ee"/><path d="M0-14V16" stroke="#58db78" stroke-width="4"/></g>
+            <g transform="translate(380 425)"><circle r="82" fill="#080c12" stroke="#f7f4ee" stroke-width="3"/><line id="passageNeedle" x1="0" y1="-62" x2="0" y2="62" stroke="#58db78" stroke-width="8"/><line x1="-62" y1="0" x2="62" y2="0" stroke="#f7f4ee" stroke-width="2"/><circle r="7" fill="#f0cf86"/><text id="passageFlag" x="-30" y="112" fill="#58db78" font-size="27" font-family="system-ui" font-weight="900">TO</text></g>
+            <text id="passageCaption" x="70" y="525" fill="#f7f4ee" font-size="23" font-family="system-ui">Aproximándose: CDI estable y TO.</text>
+          </svg>
+        </div>
+        <div class="card timeline">
+          <div class="label">Selecciona una fase</div>
+          <button class="timeline-step active" data-passage="0"><div class="num">1</div><div><b>Aproximación</b><div class="tiny">CDI estable · TO.</div></div></button>
+          <button class="timeline-step" data-passage="1"><div class="num">2</div><div><b>Cerca de la estación</b><div class="tiny">Movimiento más rápido.</div></div></button>
+          <button class="timeline-step" data-passage="2"><div class="num">3</div><div><b>Sobre la estación</b><div class="tiny">Indicación ambigua/OFF.</div></div></button>
+          <button class="timeline-step" data-passage="3"><div class="num">4</div><div><b>Reversión</b><div class="tiny">Primera inversión completa TO/FROM.</div></div></button>
+          <button class="timeline-step" data-passage="4"><div class="num">5</div><div><b>Salida</b><div class="tiny">CDI estabilizado · FROM.</div></div></button>
+          <div class="callout"><strong>Conducta:</strong> mantén el rumbo calculado, evita perseguir oscilaciones y confirma la indicación cuando se estabilice.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Diagnóstico">
+      <div class="eyebrow">DIAGNÓSTICO DE CONFIGURACIÓN</div><div class="accent"></div><h2>Cuando la indicación no tiene sentido, detén la maniobra y verifica</h2>
+      <p class="lede">El error más peligroso no es una aguja desviada; es interpretar una aguja que proviene de una fuente o selección equivocada.</p>
+      <div class="diagnostic" style="margin-top:26px">
+        <div class="scenario-list">
+          <button class="scenario-btn active" data-scenario="gps">NAV sintonizado, pero CDI magenta</button>
+          <button class="scenario-btn" data-scenario="reciprocal">Curso recíproco seleccionado</button>
+          <button class="scenario-btn" data-scenario="flag">Bandera/indicación inválida</button>
+          <button class="scenario-btn" data-scenario="station">CDI oscila sobre la estación</button>
+          <button class="scenario-btn" data-scenario="loc">LOC tratado como radial</button>
+        </div>
+        <div class="card diagnostic-result" id="diagnosticResult">
+          <div class="label">Caso 1</div><h3>La fuente activa sigue siendo GPS</h3><ul><li>No interpretes el CDI como VOR.</li><li>Selecciona VLOC hasta visualizar VOR1/VOR2 en verde.</li><li>Confirma frecuencia, identificación, curso y validez.</li></ul>
+        </div>
+      </div>
+      <div class="practice-grid" style="margin-top:22px">
+        <div class="practice-card" data-correct="to"><h3>1. CRS 090°, CDI centrado, TO</h3><p class="tiny">¿En qué radial está la aeronave?</p><div class="practice-options"><button class="practice-btn" data-value="from">R-090</button><button class="practice-btn" data-value="to">R-270</button></div><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="from"><h3>2. CRS 225°, CDI centrado, FROM</h3><p class="tiny">¿En qué radial está la aeronave?</p><div class="practice-options"><button class="practice-btn" data-value="from">R-225</button><button class="practice-btn" data-value="to">R-045</button></div><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="maintain"><h3>3. CDI oscila al pasar el VOR</h3><p class="tiny">¿Cuál es la acción correcta?</p><div class="practice-options"><button class="practice-btn" data-value="chase">Perseguir la aguja</button><button class="practice-btn" data-value="maintain">Mantener rumbo y confirmar reversión</button></div><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="loc"><h3>4. Fuente LOC1 verde</h3><p class="tiny">¿Qué representa?</p><div class="practice-options"><button class="practice-btn" data-value="vor">Un radial VOR</button><button class="practice-btn" data-value="loc">Guiado lateral de localizador</button></div><div class="practice-feedback"></div></div>
+      </div>
+      <details class="card" style="margin-top:22px"><summary>Guía rápida para el instructor</summary><div class="sources"><p><b>Verificar:</b> verbalización de fuente, curso, TO/FROM y validez antes de maniobrar.</p><p><b>Errores observables:</b> gira sin confirmar fuente; confunde radial con curso; persigue el CDI sobre la estación; trata LOC como VOR; no identifica la radioayuda.</p><p><b>Call-out esperado:</b> “VOR1 verde, estación identificada, CRS ___, TO/FROM ___, CDI ___, señal válida”.</p></div></details>
+    </section>
+
+    <section class="slide" data-title="Evaluación">
+      <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div><h2>Demuestra una lectura completa y segura</h2>
+      <p class="lede">Aprobación: 80 %. Las preguntas de fuente y validez son críticas.</p>
+      <div class="quiz-layout" style="margin-top:26px">
+        <div id="finalQuiz">
+          <div class="question" data-correct="relation"><div class="q-title">1. ¿Qué expresa principalmente TO/FROM?</div><div class="answers"><button class="answer" data-value="turn">La dirección inmediata del giro</button><button class="answer" data-value="relation">La relación entre el curso seleccionado y la estación</button><button class="answer" data-value="heading">El rumbo de la aeronave</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="270"><div class="q-title">2. CRS 090°, CDI centrado y TO. ¿En qué radial está la aeronave?</div><div class="answers"><button class="answer" data-value="090">R-090</button><button class="answer" data-value="270">R-270</button><button class="answer" data-value="180">R-180</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="070"><div class="q-title">3. Para volar inbound por el radial 250°, el curso correcto es:</div><div class="answers"><button class="answer" data-value="250">250° FROM</button><button class="answer" data-value="070">070° TO</button><button class="answer" data-value="160">160° TO</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="opposite"><div class="q-title">4. ¿Cuándo puede aparecer reverse sensing en un CDI convencional?</div><div class="answers"><button class="answer" data-value="opposite">Cuando se vuela en sentido opuesto al curso seleccionado</button><button class="answer" data-value="centered">Siempre que el CDI esté centrado</button><button class="answer" data-value="dme">Cuando no hay DME</button></div><div class="feedback"></div></div>
+          <div class="question critical" data-correct="source"><div class="q-title">5. NAV1 está sintonizado en un VOR, pero el HSI muestra GPS magenta. ¿Qué debes hacer?</div><div class="answers"><button class="answer" data-value="follow">Seguir el CDI porque NAV1 está sintonizado</button><button class="answer" data-value="source">Seleccionar VLOC/VOR y verificar VOR1/VOR2 en verde</button><button class="answer" data-value="loc">Tratarlo como LOC</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="lateral"><div class="q-title">6. LOC1 en verde representa:</div><div class="answers"><button class="answer" data-value="radial">Un radial VOR</button><button class="answer" data-value="lateral">Guiado lateral de localizador</button><button class="answer" data-value="gps">Navegación GPS</button></div><div class="feedback"></div></div>
+          <div class="question critical" data-correct="maintain"><div class="q-title">7. Durante el paso sobre la estación el CDI oscila rápidamente. La acción correcta es:</div><div class="answers"><button class="answer" data-value="chase">Realizar giros grandes siguiendo la aguja</button><button class="answer" data-value="maintain">Mantener el rumbo previsto y confirmar la reversión TO/FROM</button><button class="answer" data-value="gps">Cambiar automáticamente a GPS</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="published"><div class="q-title">8. El back course del localizador debe utilizarse para aproximación:</div><div class="answers"><button class="answer" data-value="always">Siempre que se reciba la señal</button><button class="answer" data-value="published">Solo con procedimiento publicado y operación autorizada/aplicable</button><button class="answer" data-value="vor">Como si fuera un radial VOR</button></div><div class="feedback"></div></div>
+          <button class="nav-btn primary" id="gradeBtn">Calificar módulo</button>
+        </div>
+        <div class="card summary">
+          <div class="score-ring" id="scoreRing"><div class="score-value" id="scoreValue">—</div></div>
+          <h3 id="resultTitle">Completa la evaluación</h3><p id="resultText">El resultado aparecerá aquí.</p><div id="completionBadge"></div>
+          <button class="nav-btn" id="resetBtn" style="margin-top:18px">Reintentar</button>
+          <details><summary>Fuentes técnicas</summary><div class="sources"><p>FAA Pilot’s Handbook of Aeronautical Knowledge, capítulo de navegación.</p><p>FAA Aeronautical Information Manual, VOR y station passage.</p><p>FAA Instrument Procedures Handbook, localizer back course y reverse sensing.</p><p>Garmin G1000 Pilot’s Guide/Cockpit Reference Guide. La instalación, AFMS y POH aplicables prevalecen.</p><p>Las capturas de G1000 fueron suministradas para este proyecto de entrenamiento.</p></div></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav"><div class="nav-inner"><button class="nav-btn" id="prevBtn">← Anterior</button><span class="nav-step" id="navStep">1 / 10</span><button class="nav-btn primary" id="nextBtn">Continuar →</button></div></nav>
+</div>
+
+<script>
+(()=>{
+  const MODULE_ID='veyra-ifr-vor-module-04',slides=[...document.querySelectorAll('.slide')];
+  let current=Math.min(Number(localStorage.getItem(MODULE_ID+':step')||0),slides.length-1);
+  const startedAt=Number(localStorage.getItem(MODULE_ID+':startedAt')||Date.now());localStorage.setItem(MODULE_ID+':startedAt',String(startedAt));
+  const post=(type,extra={})=>{try{window.parent.postMessage({source:'veyra-module',moduleId:MODULE_ID,type,...extra},'*')}catch(e){}};
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const normalize=a=>((a%360)+360)%360;
+  const shortest=(a,b)=>{let d=normalize(a-b);if(d>180)d-=360;return d};
+  function showSlide(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));localStorage.setItem(MODULE_ID+':step',String(current));const pct=Math.round(((current+1)/slides.length)*100);$('#progressBar').style.width=pct+'%';$('#progressPercent').textContent=pct+' %';$('#progressLabel').textContent=slides[current].dataset.title;$('#navStep').textContent=(current+1)+' / '+slides.length;$('#prevBtn').disabled=current===0;$('#nextBtn').textContent=current===slides.length-1?'Finalizar':'Continuar →';window.scrollTo({top:0,behavior:'smooth'});post('veyra:progress',{step:current+1,totalSteps:slides.length,progress:pct});}
+  $('#prevBtn').addEventListener('click',()=>showSlide(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{completed:!!localStorage.getItem(MODULE_ID+':complete')});setTimeout(()=>{window.location.href='/';},150);return}showSlide(current+1)});showSlide(current);post('veyra:ready',{totalSteps:slides.length});
+
+  // TO/FROM explorer
+  let radial=0,course=0;
+  function pointOnCircle(angle,r=235){const a=(angle-90)*Math.PI/180;return{x:350+r*Math.cos(a),y:310+r*Math.sin(a)}}
+  function updateToFrom(){const p=pointOnCircle(radial);$('#radialLine').setAttribute('x2',p.x);$('#radialLine').setAttribute('y2',p.y);$('#aircraftGroup').setAttribute('transform',`translate(${p.x} ${p.y}) rotate(${course+90})`);$('#courseGroup').setAttribute('transform',`translate(350 310) rotate(${course})`);$('#radialText').textContent=`Posición: radial ${String(radial).padStart(3,'0')}°`;$('#courseText').textContent=`CRS ${String(course).padStart(3,'0')}°`;
+    const diff=Math.abs(shortest(course,radial));let state=diff<89.5?'FROM':diff>90.5?'TO':'OFF';$('#toFromText').textContent=state;$('#toFromText').setAttribute('fill',state==='TO'?'#58db78':state==='FROM'?'#f0cf86':'#ef7272');
+    const desc=state==='FROM'?`la aeronave está en el radial ${String(radial).padStart(3,'0')}° y el curso ${String(course).padStart(3,'0')}°, una vez centrado, se aleja de la estación.`:state==='TO'?`la aeronave está en el radial ${String(radial).padStart(3,'0')}° y el curso ${String(course).padStart(3,'0')}°, una vez centrado, conduce hacia la estación.`:`la selección está aproximadamente 90° respecto a la posición; TO/FROM puede no ser una referencia útil.`;
+    $('#toFromResult').innerHTML=`<div class="status-big">${state}</div><b>Lectura:</b> ${desc}`;
+  }
+  $$('#radialButtons .pill').forEach(b=>b.addEventListener('click',()=>{$$('#radialButtons .pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');radial=Number(b.dataset.radial);updateToFrom()}));
+  $$('#courseButtons .pill').forEach(b=>b.addEventListener('click',()=>{$$('#courseButtons .pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');course=Number(b.dataset.course);updateToFrom()}));updateToFrom();
+
+  // reciprocal trainer
+  const radialSet=[20,45,70,110,150,200,250,300,315,340];let currentRadial=70;
+  function reciprocalOf(v){return normalize(v+180)}
+  function newReciprocal(){currentRadial=radialSet[Math.floor(Math.random()*radialSet.length)];$('#radialValue').textContent=String(currentRadial).padStart(3,'0')+'°';$('#reciprocalNeedle').style.transform=`translate(-50%,-100%) rotate(${currentRadial}deg)`;const correct=reciprocalOf(currentRadial);let opts=[correct,normalize(correct+30),normalize(correct-40),currentRadial];opts=[...new Set(opts)].slice(0,4).sort(()=>Math.random()-.5);$('#reciprocalAnswers').innerHTML=opts.map(v=>`<button class="answer-btn" data-answer="${v}">${String(v).padStart(3,'0')}° TO</button>`).join('');$('#reciprocalFeedback').textContent='Selecciona una respuesta.';$('#reciprocalFeedback').className='feedback';$$('#reciprocalAnswers .answer-btn').forEach(b=>b.addEventListener('click',()=>{$$('#reciprocalAnswers .answer-btn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const chosen=Number(b.dataset.answer);if(chosen===correct){$('#reciprocalFeedback').textContent=`Correcto. R-${String(currentRadial).padStart(3,'0')} inbound = CRS ${String(correct).padStart(3,'0')}° TO.`;$('#reciprocalFeedback').className='feedback ok'}else{$('#reciprocalFeedback').textContent=`Revisa el recíproco: ${String(currentRadial).padStart(3,'0')}° ± 180° = ${String(correct).padStart(3,'0')}°.`;$('#reciprocalFeedback').className='feedback bad'}}));}
+  $('#newReciprocal').addEventListener('click',newReciprocal);newReciprocal();
+
+  // sensing lab
+  let senseCourse=90,senseHeading=90;
+  function updateSense(){const reverse=Math.abs(shortest(senseCourse,senseHeading))>135;$('#cdiObsText').textContent=String(senseCourse).padStart(3,'0')+'°';$('#cdiFlag').textContent=senseCourse===90?'FROM':'TO';$('#cdiNeedle').setAttribute('x1',reverse?214:286);$('#cdiNeedle').setAttribute('x2',reverse?214:286);$('#cdiNeedleDot').setAttribute('cx',reverse?214:286);$('#cdiStateTitle').textContent=reverse?'Reverse sensing':'Sensing normal';$('#cdiSenseResult').innerHTML=reverse?'<strong>Reverse sensing:</strong> el rumbo está aproximadamente opuesto al curso seleccionado. Una corrección intuitiva hacia la aguja puede llevarte al lado incorrecto.':'<strong>Normal:</strong> rumbo y curso seleccionado tienen el mismo sentido. La aguja puede interpretarse normalmente.';$('#hsiCourseGroup').setAttribute('transform',`rotate(${senseCourse} 250 250)`);$('#hsiCard').setAttribute('transform',`rotate(${-senseHeading} 250 250)`);$('#hsiLegend').textContent=`CRS ${String(senseCourse).padStart(3,'0')}° / HDG ${String(senseHeading).padStart(3,'0')}°`;}
+  $$('[data-sense-course]').forEach(b=>b.addEventListener('click',()=>{$$('[data-sense-course]').forEach(x=>x.classList.remove('active'));b.classList.add('active');senseCourse=Number(b.dataset.senseCourse);updateSense()}));
+  $$('[data-sense-heading]').forEach(b=>b.addEventListener('click',()=>{$$('[data-sense-heading]').forEach(x=>x.classList.remove('active'));b.classList.add('active');senseHeading=Number(b.dataset.senseHeading);updateSense()}));updateSense();
+
+  // hotspots
+  const hotspotData={source:['Fuente activa','<span class="green">VOR1</span> confirma que el HSI está usando navegación convencional.'],course:['Curso seleccionado','CRS 229° define la línea/sentido que se está intentando volar.'],cdi:['CDI','La barra verde muestra desviación lateral respecto al curso seleccionado.'],freq:['Frecuencia e identificación','NAV1 debe contener la frecuencia correcta y la estación debe estar identificada.'],dme:['DME','La distancia complementa la posición, pero no sustituye la lectura del radial.']};
+  $$('.hotspot').forEach(b=>b.addEventListener('click',()=>{$$('.hotspot').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=hotspotData[b.dataset.hotspot];$('#hotspotInfo').innerHTML=`<div class="label">${d[0]}</div><h3>${d[0]}</h3><p>${d[1]}</p><div class="callout" style="margin-top:16px"><strong>Secuencia:</strong> Fuente → Identificación → Curso → Validez.</div>`}));
+
+  // station passage
+  const passageStates=[
+    {x:90,flag:'TO',color:'#58db78',needle:0,caption:'Aproximándose: CDI estable y TO.'},
+    {x:255,flag:'TO',color:'#58db78',needle:10,caption:'Cerca de la estación: la indicación se mueve más rápido.'},
+    {x:380,flag:'OFF',color:'#ef7272',needle:38,caption:'Sobre la estación: información momentáneamente ambigua.'},
+    {x:455,flag:'FROM',color:'#f0cf86',needle:-20,caption:'Primera reversión completa: confirma station passage.'},
+    {x:670,flag:'FROM',color:'#f0cf86',needle:0,caption:'Alejándose: CDI vuelve a estabilizarse con FROM.'}
+  ];
+  function setPassage(i){const s=passageStates[i];$('#passageAircraft').setAttribute('transform',`translate(${s.x} 280) rotate(90)`);$('#passageFlag').textContent=s.flag;$('#passageFlag').setAttribute('fill',s.color);$('#passageNeedle').setAttribute('transform',`rotate(${s.needle} 0 0)`);$('#passageNeedle').setAttribute('stroke',s.color);$('#passageCaption').textContent=s.caption;$$('.timeline-step').forEach((b,n)=>b.classList.toggle('active',n===i));}
+  $$('.timeline-step').forEach((b,i)=>b.addEventListener('click',()=>setPassage(i)));setPassage(0);
+
+  // diagnostics
+  const scenarios={gps:['La fuente activa sigue siendo GPS',['No interpretes el CDI como VOR.','Selecciona VLOC hasta visualizar VOR1/VOR2 en verde.','Confirma frecuencia, identificación, curso y validez.']],reciprocal:['El curso seleccionado está invertido',['Compara rumbo y curso seleccionado.','Determina si deseas inbound u outbound.','Selecciona el recíproco correcto y confirma TO/FROM.']],flag:['La señal no es válida',['No uses la indicación para maniobrar.','Comprueba recepción, identificación y estado de la radioayuda.','Usa la fuente alternativa/autorizada según el procedimiento y documentación aplicable.']],station:['Posible station passage',['Mantén el rumbo previsto.','Espera la reversión completa TO/FROM.','No persigas oscilaciones momentáneas.']],loc:['LOC no es un radial',['Interpreta guiado lateral de aproximación.','No uses TO/FROM ni nombres de radial.','Confirma front course/back course y modo del equipo.']]};
+  $$('.scenario-btn').forEach((b,i)=>b.addEventListener('click',()=>{$$('.scenario-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');const s=scenarios[b.dataset.scenario];$('#diagnosticResult').innerHTML=`<div class="label">Caso ${i+1}</div><h3>${s[0]}</h3><ul>${s[1].map(x=>`<li>${x}</li>`).join('')}</ul>`}));
+
+  // practice
+  $$('.practice-card').forEach(card=>card.querySelectorAll('.practice-btn').forEach(btn=>btn.addEventListener('click',()=>{const ok=btn.dataset.value===card.dataset.correct;card.querySelector('.practice-feedback').textContent=ok?'Correcto.':'Revisa la relación entre fuente, curso e indicación.';card.querySelector('.practice-feedback').style.color=ok?'#9ee8b0':'#ffaaaa'})));
+
+  // quiz
+  $$('.answer').forEach(a=>a.addEventListener('click',()=>{const q=a.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));a.classList.add('selected');q.dataset.answer=a.dataset.value}));
+  $('#gradeBtn').addEventListener('click',()=>{let correct=0,criticalFail=false;const questions=$$('.question');questions.forEach(q=>{q.classList.remove('correct','incorrect');const ok=q.dataset.answer===q.dataset.correct;if(ok){correct++;q.classList.add('correct');q.querySelector('.feedback').textContent='Correcto.'}else{q.classList.add('incorrect');q.querySelector('.feedback').textContent='Respuesta incorrecta. Revisa el concepto antes de continuar.';if(q.classList.contains('critical'))criticalFail=true}});const score=Math.round((correct/questions.length)*100),passed=score>=80&&!criticalFail;$('#scoreValue').textContent=score+'%';$('#scoreRing').style.background=`conic-gradient(${passed?'#58db78':'#d9b56b'} ${score*3.6}deg,#1b2431 0deg)`;$('#resultTitle').textContent=passed?'Módulo aprobado':'Requiere refuerzo';$('#resultText').textContent=passed?'Demostraste lectura segura de TO/FROM, reverse sensing, LOC y station passage.':criticalFail?'Fallaste una pregunta crítica de fuente o validez. Revisa el módulo y repite la evaluación.':'Necesitas 80 % para aprobar.';$('#completionBadge').innerHTML=passed?'<span class="badge" style="color:#9ee8b0;border-color:rgba(88,219,120,.5)">Completado</span>':'';const payload={score,passed,timeSeconds:Math.round((Date.now()-startedAt)/1000),attemptedAt:new Date().toISOString()};localStorage.setItem(MODULE_ID+':result',JSON.stringify(payload));if(passed)localStorage.setItem(MODULE_ID+':complete','1');post('veyra:complete',payload)});
+  $('#resetBtn').addEventListener('click',()=>{$$('.question').forEach(q=>{delete q.dataset.answer;q.classList.remove('correct','incorrect');q.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));q.querySelector('.feedback').textContent=''});$('#scoreValue').textContent='—';$('#scoreRing').style.background='conic-gradient(#d9b56b 0deg,#1b2431 0deg)';$('#resultTitle').textContent='Completa la evaluación';$('#resultText').textContent='El resultado aparecerá aquí.';$('#completionBadge').innerHTML=''});
+})();
+</script>
+</body>
+</html>
