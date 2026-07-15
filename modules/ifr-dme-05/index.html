@@ -301,7 +301,7 @@
   const startedAt=Date.now();
   function post(type,data={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
   function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);$('#stepText').textContent=`${current+1} / ${slides.length}`;$('#pctText').textContent=pct+'%';$('#progressBar').style.width=pct+'%';$('#slideTitle').textContent=slides[current].dataset.title||'';$('#prevBtn').disabled=current===0;$('#nextBtn').textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':slide',current);post('veyra:progress',{slide:current+1,totalSlides:slides.length,progress:pct});window.scrollTo({top:0,behavior:'smooth'})}
-  $('#prevBtn').addEventListener('click',()=>show(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{slide:current+1,progress:100});setTimeout(()=>{window.location.href='/';},150);return}show(current+1)});document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(current+1);if(e.key==='ArrowLeft')show(current-1)});show(current);post('veyra:ready',{totalSlides:slides.length});
+  $('#prevBtn').addEventListener('click',()=>show(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{slide:current+1,progress:100});setTimeout(()=>{window.location.href='/modules/ifr-dme-06/index.html';},150);return}show(current+1)});document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(current+1);if(e.key==='ArrowLeft')show(current-1)});show(current);post('veyra:ready',{totalSlides:slides.length});
 
   // hotspots
   const hotspotData={
@@ -340,3 +340,4 @@
 </script>
 </body>
 </html>
+
