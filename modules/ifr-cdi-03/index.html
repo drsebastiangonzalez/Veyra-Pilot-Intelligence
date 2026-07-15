@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 03 · Fuentes del CDI en G1000</title>
+  <style>
+    :root{
+      --bg:#05070b;--bg2:#080d14;--panel:#0d131c;--panel2:#111a26;
+      --gold:#d9b56b;--gold2:#f0cf86;--white:#f7f4ee;--muted:#aeb7c4;
+      --green:#58db78;--magenta:#ee58d6;--cyan:#65d8e8;--danger:#ef7272;
+      --line:rgba(217,181,107,.28);--line2:rgba(255,255,255,.09);--shadow:0 22px 60px rgba(0,0,0,.38);
+      --r:22px;--serif:Georgia,'Times New Roman',serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);background:radial-gradient(circle at 86% 8%,rgba(217,181,107,.08),transparent 28rem),linear-gradient(180deg,#05070b,#080c12 58%,#05070b);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+    button{font:inherit}.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.91);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+    .brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}.progress-wrap{width:min(280px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}.progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:11%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 112px}.slide{display:none;animation:enter .4s ease both}.slide.active{display:block}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}h1,h2,h3{margin:0}h1{font:500 clamp(44px,7vw,90px)/.95 var(--serif);letter-spacing:-.045em}h2{font:500 clamp(34px,5vw,62px)/1 var(--serif);letter-spacing:-.035em}h3{font:600 22px/1.2 var(--serif)}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:860px}.tiny{font-size:12px;color:var(--muted);line-height:1.5}.green{color:var(--green);font-weight:850}.magenta{color:var(--magenta);font-weight:850}.gold{color:var(--gold2);font-weight:850}
+    .hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:center}.hero-visual{position:relative;min-height:590px;border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.97));box-shadow:var(--shadow);overflow:hidden;padding:24px}.hero-visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 50%);transform:translate(18%,4%)}
+    .triptych{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;height:100%;align-content:center}.mini-shot{border:1px solid rgba(217,181,107,.42);border-radius:18px;overflow:hidden;background:#000;box-shadow:0 16px 35px rgba(0,0,0,.3)}.mini-shot img{width:100%;height:290px;display:block;object-fit:cover;object-position:center}.mini-label{padding:14px 12px;text-align:center;background:linear-gradient(180deg,rgba(13,19,28,.98),rgba(7,10,15,.98));font-weight:800;letter-spacing:.05em}.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:680px;color:#d8dde6;border-radius:0 14px 14px 0}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}.callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}.callout strong{color:var(--gold2)}.danger{border-color:rgba(239,114,114,.35);background:rgba(239,114,114,.065)}.danger strong{color:#ffaaaa}.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .objective{display:flex;gap:14px;align-items:center;padding:15px;border-bottom:1px solid var(--line2)}.objective:last-child{border-bottom:0}.num{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);font-weight:800;flex:0 0 auto}.source-card{position:relative;overflow:hidden}.source-card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--accent,var(--gold))}.source-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.source-icon{width:48px;height:48px;border-radius:14px;border:1px solid var(--accent,var(--gold));display:grid;place-items:center;color:var(--accent,var(--gold));font-weight:900}.source-list{display:grid;gap:10px;margin-top:18px}.source-row{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line2)}.source-row:last-child{border-bottom:0}.source-row span:first-child{color:var(--muted)}
+    .photo-layout{display:grid;grid-template-columns:1.18fr .82fr;gap:22px;align-items:start}.photo-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.photo-wrap img{width:100%;display:block}.zoom-btn{position:absolute;right:12px;bottom:12px;border:1px solid var(--gold);background:rgba(5,7,11,.88);color:var(--gold2);border-radius:999px;padding:9px 13px;cursor:pointer}.hotspot{position:absolute;width:35px;height:35px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.84);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(217,181,107,.12)}.hotspot:hover,.hotspot.active{background:var(--gold2);color:#171005}.hotspot-info{min-height:142px}.hotspot-info h3{color:var(--gold2);font-size:21px}.hotspot-info p{margin-bottom:0}.checklist{display:grid;gap:10px}.check{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;padding:14px;border-bottom:1px solid var(--line2)}.check:last-child{border-bottom:0}.letter{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(217,181,107,.10);border:1px solid var(--line);color:var(--gold2);font-weight:900}
+    .compare-table{display:grid;grid-template-columns:1.2fr repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}.cell{padding:15px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);background:rgba(11,16,24,.85);line-height:1.45}.cell:nth-child(4n){border-right:0}.cell.head{background:rgba(217,181,107,.09);font-weight:800;color:var(--gold2)}.cell.side{font-weight:750;color:#e7e9ed}.compare-table .cell:nth-last-child(-n+4){border-bottom:0}
+    .mode-tabs,.mission-options{display:flex;gap:9px;flex-wrap:wrap}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}.pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}
+    .mission{display:grid;grid-template-columns:.88fr 1.12fr;gap:22px}.mission-screen{display:grid;place-items:center;min-height:510px}.mock-hsi{width:min(100%,470px);aspect-ratio:1;position:relative}.mock-hsi svg{width:100%;height:100%}.mission-result{min-height:115px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(4,6,10,.55);line-height:1.55}.source-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.source-btn:hover,.source-btn.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}
+    .identify-stage{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start}.identify-photo{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.identify-photo img{width:100%;display:block}.identify-controls{display:grid;gap:12px}.identify-feedback{padding:15px;border:1px solid var(--line);border-radius:14px;min-height:120px;line-height:1.55;background:rgba(4,6,10,.55)}
+    .question{padding:21px;margin-bottom:16px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(11,16,24,.88)}.question.correct{border-color:rgba(88,219,120,.68)}.question.incorrect{border-color:rgba(239,114,114,.68)}.q-title{font-weight:750;line-height:1.45;margin-bottom:14px}.answers{display:grid;gap:9px}.answer{display:flex;gap:10px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;cursor:pointer;background:#090e15;color:#e6e9ef;text-align:left}.answer:hover,.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.08)}.feedback{display:none;margin-top:12px;padding:11px 13px;border-radius:10px;line-height:1.45;font-size:14px}.feedback.show{display:block}.feedback.good{background:rgba(88,219,120,.10);color:#baf2c7}.feedback.bad{background:rgba(239,114,114,.10);color:#ffc7c7}
+    .quiz-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.summary{text-align:center;padding:34px;position:sticky;top:110px}.score-ring{width:170px;height:170px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) 0%,#1b2431 0);position:relative}.score-ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}.score-value{position:relative;z-index:1;font:600 40px var(--serif)}.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(88,219,120,.35);background:rgba(88,219,120,.06);color:#b9efc5;font-size:12px;font-weight:700}.sources{font-size:13px;color:var(--muted);line-height:1.65;text-align:left}details{border-top:1px solid var(--line2);padding-top:14px;margin-top:18px}summary{cursor:pointer;color:var(--gold2);font-weight:750}
+    .nav{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:12px max(16px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,rgba(5,7,11,.97) 26%);display:flex;justify-content:center}.nav-inner{width:min(1180px,100%);display:flex;align-items:center;justify-content:space-between;gap:14px}.nav-btn{border:1px solid var(--line);background:rgba(9,14,21,.95);color:var(--white);padding:12px 17px;border-radius:13px;cursor:pointer}.nav-btn:hover{border-color:var(--gold)}.nav-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#161006;border:0;font-weight:850}.nav-btn:disabled{opacity:.35;cursor:not-allowed}.nav-step{color:var(--muted);font-size:13px}
+    .modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:20px;background:rgba(0,0,0,.86);backdrop-filter:blur(8px)}.modal.open{display:grid}.modal img{max-width:min(1300px,96vw);max-height:90vh;border-radius:16px;box-shadow:0 30px 100px rgba(0,0,0,.65)}.modal-close{position:absolute;right:24px;top:22px;border:1px solid var(--gold);background:#080c12;color:var(--gold2);width:46px;height:46px;border-radius:50%;font-size:22px;cursor:pointer}
+    @media(max-width:900px){.top-title{display:none}.hero,.photo-layout,.mission,.identify-stage,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:auto}.triptych{grid-template-columns:1fr}.mini-shot img{height:auto}.grid3,.grid2{grid-template-columns:1fr}.compare-table{grid-template-columns:1.05fr repeat(3,.9fr);font-size:13px;overflow-x:auto}.summary{position:static}.progress-wrap{width:170px}.topbar{gap:10px}.brand-name{font-size:25px}.photo-wrap{max-width:720px;margin:auto}.mission-screen{min-height:auto}}
+    @media(max-width:600px){main{padding-top:20px}.progress-wrap{min-width:110px;width:120px}.brand-sub{display:none}.topbar{padding:12px}.triptych{gap:9px}.card{padding:18px}.cell{padding:11px;font-size:12px}.compare-table{min-width:640px}.table-scroll{overflow:auto;border-radius:18px}.nav-btn{padding:11px 13px}.hotspot{width:31px;height:31px;box-shadow:0 0 0 5px rgba(217,181,107,.12)}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+    <div class="top-title">IFR PATH · Módulo 03 · Fuentes del CDI</div>
+    <div class="progress-wrap"><div class="progress-meta"><span id="progressLabel">11%</span><span>Progreso</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+  </header>
+
+  <main>
+    <section class="slide active" data-title="Portada">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">VEYRA IFR PATH · MÓDULO 03</div><div class="accent"></div>
+          <h1>Fuentes del CDI<br>en G1000</h1>
+          <p class="lede">Reconoce cuándo el HSI está controlado por <span class="green">VOR</span>, <span class="magenta">GPS</span> o <span class="green">localizador</span> antes de seguir cualquier indicación.</p>
+          <div class="hero-note"><span>◆</span><div><b>Regla central:</b> el color orienta, pero la lectura correcta comienza por la etiqueta de la fuente activa.</div></div>
+          <div class="chips"><span class="chip">Imágenes reales del simulador</span><span class="chip">Comparación interactiva</span><span class="chip">Evaluación 80 %</span></div>
+        </div>
+        <div class="hero-visual">
+          <div class="triptych">
+            <div class="mini-shot"><img src="assets/g1000-cdi-vor.jpg" alt="G1000 con fuente VOR1 y CDI verde"><div class="mini-label"><span class="green">VOR1</span></div></div>
+            <div class="mini-shot"><img src="assets/g1000-cdi-gps.jpg" alt="G1000 con fuente GPS y CDI magenta"><div class="mini-label"><span class="magenta">GPS · ENR</span></div></div>
+            <div class="mini-shot"><img src="assets/g1000-cdi-loc.jpg" alt="G1000 con fuente LOC1 y CDI verde"><div class="mini-label"><span class="green">LOC1</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Objetivos">
+      <div class="eyebrow">RUTA DE APRENDIZAJE</div><div class="accent"></div><h2>Qué debes poder hacer</h2>
+      <p class="lede">Este módulo es corto y operacional: observa, identifica la fuente y selecciona el guiado adecuado para cada tarea.</p>
+      <div class="grid2" style="margin-top:28px;align-items:start">
+        <div class="card">
+          <div class="objective"><span class="num">1</span><div>Leer la etiqueta activa: <span class="green">VOR1/VOR2</span>, <span class="magenta">GPS</span> o <span class="green">LOC1/LOC2</span>.</div></div>
+          <div class="objective"><span class="num">2</span><div>Usar el color como confirmación, no como única evidencia.</div></div>
+          <div class="objective"><span class="num">3</span><div>Diferenciar navegación convencional, RNAV y guiado lateral de aproximación.</div></div>
+          <div class="objective"><span class="num">4</span><div>Elegir la fuente correcta antes de interceptar o seguir el CDI.</div></div>
+        </div>
+        <div class="card">
+          <div class="label">Secuencia Veyra</div>
+          <div class="checklist">
+            <div class="check"><span class="letter">F</span><div><b>Fuente:</b> lee VOR, GPS o LOC en el HSI.</div></div>
+            <div class="check"><span class="letter">C</span><div><b>Color:</b> verde para VLOC; magenta para GPS.</div></div>
+            <div class="check"><span class="letter">M</span><div><b>Modo:</b> confirma ENR/TERM/APR o la radioayuda sintonizada.</div></div>
+            <div class="check"><span class="letter">U</span><div><b>Uso:</b> decide si esa fuente sirve para la tarea asignada.</div></div>
+          </div>
+          <div class="callout" style="margin-top:16px"><strong>F-C-M-U:</strong> Fuente, Color, Modo y Uso.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Comparación">
+      <div class="eyebrow">LECTURA RÁPIDA</div><div class="accent"></div><h2>VOR, GPS y LOC no significan lo mismo</h2>
+      <p class="lede">VOR y LOC comparten el color verde porque utilizan el receptor VLOC. La etiqueta activa es la que evita la confusión.</p>
+      <div class="grid3" style="margin-top:26px">
+        <article class="card source-card" style="--accent:var(--green)">
+          <div class="source-title"><div><div class="label">Navegación convencional</div><h3 class="green">VOR1 / VOR2</h3></div><div class="source-icon">V</div></div>
+          <div class="source-list"><div class="source-row"><span>Color</span><b class="green">Verde</b></div><div class="source-row"><span>Referencia</span><b>Radiales y cursos</b></div><div class="source-row"><span>Requiere</span><b>Frecuencia e identificación</b></div><div class="source-row"><span>TO/FROM</span><b>Sí aplica</b></div></div>
+        </article>
+        <article class="card source-card" style="--accent:var(--magenta)">
+          <div class="source-title"><div><div class="label">Navegación RNAV</div><h3 class="magenta">GPS</h3></div><div class="source-icon">G</div></div>
+          <div class="source-list"><div class="source-row"><span>Color</span><b class="magenta">Magenta</b></div><div class="source-row"><span>Referencia</span><b>Tramo GPS activo</b></div><div class="source-row"><span>Modo</span><b>ENR / TERM / APR</b></div><div class="source-row"><span>Radial VOR</span><b>No</b></div></div>
+        </article>
+        <article class="card source-card" style="--accent:var(--green)">
+          <div class="source-title"><div><div class="label">Aproximación lateral</div><h3 class="green">LOC1 / LOC2</h3></div><div class="source-icon">L</div></div>
+          <div class="source-list"><div class="source-row"><span>Color</span><b class="green">Verde</b></div><div class="source-row"><span>Referencia</span><b>Eje del localizador</b></div><div class="source-row"><span>Uso</span><b>ILS o LOC</b></div><div class="source-row"><span>Radial / TO-FROM</span><b>No se interpreta así</b></div></div>
+        </article>
+      </div>
+      <div class="callout" style="margin-top:22px"><strong>Trampa frecuente:</strong> verde no significa automáticamente VOR. También puede indicar LOC. Lee siempre la etiqueta <span class="green">VOR1</span> o <span class="green">LOC1</span>.</div>
+    </section>
+
+    <section class="slide" data-title="VOR real">
+      <div class="eyebrow">FUENTE 01</div><div class="accent"></div><h2>CDI VOR: busca <span class="green">VOR1</span> en verde</h2>
+      <p class="lede">Explora la pantalla real. Pulsa los marcadores para identificar los datos necesarios antes de utilizar un radial.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000-cdi-vor.jpg" alt="G1000 con VOR1 activo y CDI verde">
+          <button class="hotspot active" style="left:35%;top:57%" data-vorhot="source">1</button>
+          <button class="hotspot" style="left:69%;top:48%" data-vorhot="course">2</button>
+          <button class="hotspot" style="left:47%;top:69%" data-vorhot="cdi">3</button>
+          <button class="hotspot" style="left:9%;top:72%" data-vorhot="nav">4</button>
+          <button class="hotspot" style="left:14%;top:82%" data-vorhot="dme">5</button>
+          <button class="zoom-btn" data-zoom="assets/g1000-cdi-vor.jpg">Ampliar</button>
+        </div>
+        <div class="card">
+          <div class="label">Lectura guiada</div>
+          <div class="hotspot-info" id="vorHotInfo"><h3>1. Fuente activa</h3><p><span class="green">VOR1</span> confirma que el CDI está controlado por NAV1 y no por GPS.</p></div>
+          <div class="callout"><strong>Uso correcto:</strong> radiales, cursos VOR e interceptaciones convencionales.</div>
+          <div class="callout danger" style="margin-top:14px"><strong>No basta:</strong> tener 116.80 sintonizado. También debes seleccionar VOR1 como fuente activa e identificar la estación.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="GPS real">
+      <div class="eyebrow">FUENTE 02</div><div class="accent"></div><h2>CDI GPS: busca <span class="magenta">GPS</span> y su modo</h2>
+      <p class="lede">La línea magenta representa el tramo GPS activo. En la imagen aparece el modo <span class="magenta">ENR</span>.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000-cdi-gps.jpg" alt="G1000 con GPS activo y CDI magenta">
+          <button class="hotspot active" style="left:39%;top:56%" data-gpshot="source">1</button>
+          <button class="hotspot" style="left:55%;top:56%" data-gpshot="mode">2</button>
+          <button class="hotspot" style="left:50%;top:72%" data-gpshot="cdi">3</button>
+          <button class="hotspot" style="left:75%;top:45%" data-gpshot="course">4</button>
+          <button class="zoom-btn" data-zoom="assets/g1000-cdi-gps.jpg">Ampliar</button>
+        </div>
+        <div class="card">
+          <div class="label">Lectura guiada</div>
+          <div class="hotspot-info" id="gpsHotInfo"><h3>1. Fuente activa</h3><p><span class="magenta">GPS</span> confirma que el CDI sigue el tramo satelital activo, no una radial VOR.</p></div>
+          <div class="callout"><strong>Modo:</strong> ENR, TERM o APR informa la fase de sensibilidad GPS. La instalación y el AFMS aplicable determinan el comportamiento exacto.</div>
+          <div class="callout danger" style="margin-top:14px"><strong>Error crítico:</strong> una frecuencia NAV puede estar sintonizada mientras el CDI continúa en GPS magenta.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="LOC real">
+      <div class="eyebrow">FUENTE 03</div><div class="accent"></div><h2>CDI LOC: verde, pero no es un VOR</h2>
+      <p class="lede">El localizador utiliza el receptor VLOC y por eso se presenta en verde. La etiqueta <span class="green">LOC1</span> identifica el guiado lateral de aproximación.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000-cdi-loc.jpg" alt="G1000 con LOC1 activo y CDI verde">
+          <button class="hotspot active" style="left:36%;top:58%" data-lochot="source">1</button>
+          <button class="hotspot" style="left:71%;top:49%" data-lochot="course">2</button>
+          <button class="hotspot" style="left:48%;top:70%" data-lochot="cdi">3</button>
+          <button class="hotspot" style="left:10%;top:77%" data-lochot="ident">4</button>
+          <button class="zoom-btn" data-zoom="assets/g1000-cdi-loc.jpg">Ampliar</button>
+        </div>
+        <div class="card">
+          <div class="label">Lectura guiada</div>
+          <div class="hotspot-info" id="locHotInfo"><h3>1. Fuente activa</h3><p><span class="green">LOC1</span> confirma que NAV1 está recibiendo y presentando un localizador.</p></div>
+          <div class="callout"><strong>Uso correcto:</strong> alineación lateral para una aproximación ILS o LOC.</div>
+          <div class="callout danger" style="margin-top:14px"><strong>No interpretar:</strong> el localizador no se lee como radial VOR y no utiliza TO/FROM del mismo modo.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Selección de fuente">
+      <div class="eyebrow">DECISIÓN OPERACIONAL</div><div class="accent"></div><h2>Selecciona la fuente según la tarea</h2>
+      <p class="lede">El botón CDI alterna normalmente entre GPS y VLOC. Dentro de VLOC, la frecuencia sintonizada determina si la presentación es VOR o LOC.</p>
+      <div class="mission" style="margin-top:26px">
+        <div class="card">
+          <div class="label">Elige una misión</div>
+          <div class="mode-tabs">
+            <button class="pill active" data-mission="radial">Interceptar radial 229°</button>
+            <button class="pill" data-mission="rnav">Seguir tramo RNAV</button>
+            <button class="pill" data-mission="loc">Interceptar localizador</button>
+          </div>
+          <div class="mission-result" id="missionText"><b>Misión:</b> interceptar y seguir una radial VOR. Debes usar una fuente VLOC identificada como VOR1 o VOR2.</div>
+          <div class="identify-controls" style="margin-top:16px">
+            <button class="source-btn" data-source-choice="vor"><span><b class="green">VOR1</b><br><span class="tiny">VLOC · navegación convencional</span></span><span>→</span></button>
+            <button class="source-btn" data-source-choice="gps"><span><b class="magenta">GPS</b><br><span class="tiny">RNAV · tramo satelital</span></span><span>→</span></button>
+            <button class="source-btn" data-source-choice="loc"><span><b class="green">LOC1</b><br><span class="tiny">VLOC · aproximación lateral</span></span><span>→</span></button>
+          </div>
+          <div class="mission-result" id="choiceResult" style="margin-top:14px">Selecciona una fuente.</div>
+        </div>
+        <div class="card mission-screen">
+          <div class="mock-hsi">
+            <svg viewBox="0 0 500 500" role="img" aria-label="HSI interactivo de selección de fuente">
+              <circle cx="250" cy="250" r="205" fill="#080c12" stroke="#d9b56b" stroke-width="4"/><circle cx="250" cy="250" r="166" fill="none" stroke="#4b5665" stroke-width="2"/>
+              <g fill="#f7f4ee" font-family="system-ui" font-size="23" font-weight="700"><text x="238" y="70">N</text><text x="421" y="258">E</text><text x="240" y="447">S</text><text x="62" y="258">W</text></g>
+              <text id="mockSource" x="210" y="120" fill="#58db78" font-size="24" font-family="system-ui" font-weight="850">VOR1</text>
+              <path id="mockCourse" d="M250 95V405" stroke="#58db78" stroke-width="6"/><path id="mockArrow" d="M250 95l-12 22h24z" fill="#58db78"/>
+              <g fill="none" stroke="#f7f4ee" stroke-width="3"><path d="M105 250H395"/><circle cx="250" cy="250" r="8"/></g>
+              <path id="mockCdi" d="M282 145V355" stroke="#58db78" stroke-width="8"/><circle id="mockDot" cx="282" cy="250" r="9" fill="#58db78"/>
+              <g fill="#f7f4ee"><circle cx="190" cy="250" r="4"/><circle cx="220" cy="250" r="4"/><circle cx="280" cy="250" r="4"/><circle cx="310" cy="250" r="4"/></g>
+              <text id="mockMode" x="218" y="392" fill="#f0cf86" font-size="18" font-family="system-ui">FROM</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Práctica">
+      <div class="eyebrow">PRÁCTICA VISUAL</div><div class="accent"></div><h2>Identifica la fuente sin adivinar</h2>
+      <p class="lede">Observa la imagen y responde leyendo la etiqueta, el color y el uso.</p>
+      <div class="identify-stage" style="margin-top:26px">
+        <div class="identify-photo"><img id="identifyImage" src="assets/g1000-cdi-vor.jpg" alt="Pantalla G1000 para identificar la fuente"></div>
+        <div class="card identify-controls">
+          <div class="label">Ronda <span id="roundNum">1</span> de 3</div>
+          <button class="source-btn" data-identify="vor"><span><b class="green">VOR</b><br><span class="tiny">Radiales y cursos</span></span><span>Elegir</span></button>
+          <button class="source-btn" data-identify="gps"><span><b class="magenta">GPS</b><br><span class="tiny">Navegación RNAV</span></span><span>Elegir</span></button>
+          <button class="source-btn" data-identify="loc"><span><b class="green">LOC</b><br><span class="tiny">Guiado lateral de aproximación</span></span><span>Elegir</span></button>
+          <div class="identify-feedback" id="identifyFeedback">Lee primero la etiqueta activa del HSI.</div>
+          <button class="nav-btn primary" id="nextIdentify" disabled>Siguiente imagen</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Evaluación">
+      <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div><h2>Demuestra que sabes elegir la fuente</h2>
+      <p class="lede">Aprobación: 80 %. El resultado se guarda localmente y se envía a Veyra mediante <code>postMessage</code>.</p>
+      <div class="quiz-layout" style="margin-top:26px">
+        <div id="finalQuiz">
+          <div class="question" data-correct="label"><div class="q-title">1. ¿Cuál es la verificación más confiable para saber qué controla el CDI?</div><div class="answers"><button class="answer" data-value="color">Mirar únicamente el color</button><button class="answer" data-value="label">Leer la etiqueta de la fuente activa</button><button class="answer" data-value="freq">Mirar solo la frecuencia NAV</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="vor"><div class="q-title">2. Para interceptar un radial VOR, la fuente correcta es:</div><div class="answers"><button class="answer" data-value="vor">VOR1/VOR2 en verde</button><button class="answer" data-value="gps">GPS en magenta</button><button class="answer" data-value="loc">LOC1 en verde</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="gps"><div class="q-title">3. El HSI muestra GPS y ENR en magenta. ¿Qué guiado está activo?</div><div class="answers"><button class="answer" data-value="vor">Radial VOR</button><button class="answer" data-value="gps">Navegación GPS en ruta</button><button class="answer" data-value="loc">Localizador</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="loc"><div class="q-title">4. El HSI muestra LOC1 en verde. ¿Qué significa?</div><div class="answers"><button class="answer" data-value="vor">Radial VOR1</button><button class="answer" data-value="gps">Tramo GPS</button><button class="answer" data-value="loc">Guiado lateral de localizador</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="both"><div class="q-title">5. ¿Qué fuentes pueden aparecer en verde?</div><div class="answers"><button class="answer" data-value="voronly">Solo VOR</button><button class="answer" data-value="both">VOR y LOC</button><button class="answer" data-value="gps">Solo GPS</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="notenough"><div class="q-title">6. NAV1 está sintonizado en un VOR, pero el HSI muestra GPS magenta. ¿Estás siguiendo el VOR?</div><div class="answers"><button class="answer" data-value="yes">Sí, porque la frecuencia está sintonizada</button><button class="answer" data-value="notenough">No; el CDI sigue controlado por GPS</button><button class="answer" data-value="loc">Sí, pero como localizador</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="vloc"><div class="q-title">7. Normalmente, el botón CDI permite alternar entre:</div><div class="answers"><button class="answer" data-value="vloc">GPS y VLOC</button><button class="answer" data-value="vorloc">VOR y LOC solamente</button><button class="answer" data-value="com">COM1 y COM2</button></div><div class="feedback"></div></div>
+          <div class="question" data-correct="noradial"><div class="q-title">8. ¿Cómo debe interpretarse LOC1?</div><div class="answers"><button class="answer" data-value="radial">Como radial con TO/FROM</button><button class="answer" data-value="noradial">Como guiado lateral de aproximación, no como radial VOR</button><button class="answer" data-value="gps">Como navegación GPS</button></div><div class="feedback"></div></div>
+          <button class="nav-btn primary" id="gradeBtn">Calificar módulo</button>
+        </div>
+        <div class="card summary">
+          <div class="score-ring" id="scoreRing"><div class="score-value" id="scoreValue">—</div></div>
+          <h3 id="resultTitle">Completa la evaluación</h3><p id="resultText">El resultado aparecerá aquí.</p><div id="completionBadge"></div>
+          <button class="nav-btn" id="resetBtn" style="margin-top:18px">Reintentar</button>
+          <details><summary>Resumen operativo</summary><div class="sources"><p><span class="green">VOR1/VOR2:</span> radiales y navegación convencional.</p><p><span class="magenta">GPS:</span> tramo RNAV activo; verifica ENR/TERM/APR.</p><p><span class="green">LOC1/LOC2:</span> guiado lateral de aproximación.</p><p>El manual de vuelo, AFMS y documentación de la instalación aplicable prevalecen.</p></div></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav"><div class="nav-inner"><button class="nav-btn" id="prevBtn">← Anterior</button><span class="nav-step" id="navStep">1 / 9</span><button class="nav-btn primary" id="nextBtn">Continuar →</button></div></nav>
+</div>
+
+<div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Imagen ampliada"><button class="modal-close" id="modalClose">×</button><img id="modalImage" alt="Imagen G1000 ampliada"></div>
+
+<script>
+(()=>{
+  const MODULE_ID='veyra-ifr-cdi-module-03',slides=[...document.querySelectorAll('.slide')];
+  let current=Math.min(Number(localStorage.getItem(MODULE_ID+':step')||0),slides.length-1);
+  const startedAt=Number(localStorage.getItem(MODULE_ID+':startedAt')||Date.now());localStorage.setItem(MODULE_ID+':startedAt',String(startedAt));
+  const progressBar=document.getElementById('progressBar'),progressLabel=document.getElementById('progressLabel'),navStep=document.getElementById('navStep'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
+  function send(type,detail={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...detail};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+  function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);progressBar.style.width=pct+'%';progressLabel.textContent=pct+'%';navStep.textContent=`${current+1} / ${slides.length}`;prevBtn.disabled=current===0;nextBtn.textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':step',String(current));send('veyra:progress',{progress:pct,currentStep:current+1,totalSteps:slides.length,title:slides[current].dataset.title});window.scrollTo({top:0,behavior:'smooth'})}
+  prevBtn.onclick=()=>show(current-1);nextBtn.onclick=()=>{if(current<slides.length-1){show(current+1);return;}send('veyra:exit',{progress:100});setTimeout(()=>{window.location.href='/';},150);};
+
+  const modal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage');
+  document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{modalImage.src=b.dataset.zoom;modal.classList.add('open')});
+  document.getElementById('modalClose').onclick=()=>modal.classList.remove('open');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('open')});
+
+  const vorData={source:['1. Fuente activa','<span class="green">VOR1</span> confirma que NAV1 controla el CDI.'],course:['2. Curso seleccionado','<b>CRS 229°</b> es el curso seleccionado; debe ser coherente con el radial y el sentido de vuelo.'],cdi:['3. CDI verde','La barra verde muestra desviación lateral respecto al curso VOR seleccionado.'],nav:['4. NAV1','La frecuencia activa debe estar correctamente sintonizada e identificada.'],dme:['5. DME','Muestra distancia oblicua al equipo asociado; no determina por sí solo la radial.']};
+  const gpsData={source:['1. Fuente activa','<span class="magenta">GPS</span> confirma que el CDI sigue el tramo satelital.'],mode:['2. Modo GPS','<span class="magenta">ENR</span> indica sensibilidad de navegación en ruta. Otros modos pueden ser TERM o APR.'],cdi:['3. CDI magenta','La barra magenta representa desviación respecto al tramo GPS activo.'],course:['4. Curso','El curso magenta corresponde al guiado GPS activo o a una selección OBS, según la configuración.']};
+  const locData={source:['1. Fuente activa','<span class="green">LOC1</span> confirma guiado lateral de localizador desde NAV1.'],course:['2. Curso de aproximación','El CRS debe corresponder al curso frontal publicado del localizador.'],cdi:['3. CDI verde','La barra muestra desviación respecto al eje del localizador y es más sensible que un VOR.'],ident:['4. Identificación','Confirma frecuencia e identificación del localizador antes de utilizarlo.']};
+  function bindHot(selector,data,target){document.querySelectorAll(selector).forEach(b=>b.onclick=()=>{document.querySelectorAll(selector).forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=data[b.dataset.vorhot||b.dataset.gpshot||b.dataset.lochot];document.getElementById(target).innerHTML=`<h3>${d[0]}</h3><p>${d[1]}</p>`})}
+  bindHot('[data-vorhot]',vorData,'vorHotInfo');bindHot('[data-gpshot]',gpsData,'gpsHotInfo');bindHot('[data-lochot]',locData,'locHotInfo');
+
+  const missions={radial:{text:'<b>Misión:</b> interceptar y seguir una radial VOR. Debes usar una fuente VLOC identificada como VOR1 o VOR2.',correct:'vor'},rnav:{text:'<b>Misión:</b> seguir el tramo activo de un procedimiento RNAV. Debes utilizar GPS en magenta y verificar su modo.',correct:'gps'},loc:{text:'<b>Misión:</b> interceptar el eje lateral de una aproximación ILS/LOC. Debes utilizar LOC1 o LOC2 en verde.',correct:'loc'}};
+  let mission='radial';
+  function renderMock(src){const s=document.getElementById('mockSource'),course=document.getElementById('mockCourse'),arrow=document.getElementById('mockArrow'),cdi=document.getElementById('mockCdi'),dot=document.getElementById('mockDot'),mode=document.getElementById('mockMode');const mag=src==='gps',loc=src==='loc';const color=mag?'#ee58d6':'#58db78';s.textContent=mag?'GPS':loc?'LOC1':'VOR1';s.setAttribute('fill',color);[course,cdi].forEach(el=>el.setAttribute('stroke',color));[arrow,dot].forEach(el=>el.setAttribute('fill',color));mode.textContent=mag?'ENR':loc?'LOC':'FROM';mode.setAttribute('fill',mag?'#ee58d6':'#f0cf86')}
+  document.querySelectorAll('[data-mission]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mission]').forEach(x=>x.classList.remove('active'));b.classList.add('active');mission=b.dataset.mission;document.getElementById('missionText').innerHTML=missions[mission].text;document.getElementById('choiceResult').textContent='Selecciona una fuente.';document.querySelectorAll('[data-source-choice]').forEach(x=>x.classList.remove('selected'))});
+  document.querySelectorAll('[data-source-choice]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-source-choice]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const choice=b.dataset.sourceChoice,ok=choice===missions[mission].correct;renderMock(choice);document.getElementById('choiceResult').innerHTML=ok?'<span class="green">Correcto.</span> La fuente coincide con la tarea.':'<span style="color:#ffaaaa;font-weight:800">Revisa.</span> La fuente no corresponde a la tarea seleccionada.'});
+
+  const identifyRounds=[{src:'assets/g1000-cdi-vor.jpg',answer:'vor',explain:'VOR1 en verde: navegación convencional para radiales y cursos.'},{src:'assets/g1000-cdi-gps.jpg',answer:'gps',explain:'GPS y ENR en magenta: navegación RNAV en ruta.'},{src:'assets/g1000-cdi-loc.jpg',answer:'loc',explain:'LOC1 en verde: guiado lateral de localizador.'}];let round=0,locked=false;
+  function loadRound(){const r=identifyRounds[round];document.getElementById('identifyImage').src=r.src;document.getElementById('roundNum').textContent=round+1;document.getElementById('identifyFeedback').textContent='Lee primero la etiqueta activa del HSI.';document.getElementById('nextIdentify').disabled=true;document.querySelectorAll('[data-identify]').forEach(x=>x.classList.remove('selected'));locked=false}
+  document.querySelectorAll('[data-identify]').forEach(b=>b.onclick=()=>{if(locked)return;locked=true;document.querySelectorAll('[data-identify]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const ok=b.dataset.identify===identifyRounds[round].answer;document.getElementById('identifyFeedback').innerHTML=(ok?'<span class="green">Correcto.</span> ':'<span style="color:#ffaaaa;font-weight:800">Incorrecto.</span> ')+identifyRounds[round].explain;document.getElementById('nextIdentify').disabled=false});
+  document.getElementById('nextIdentify').onclick=()=>{if(round<identifyRounds.length-1){round++;loadRound()}else{round=0;loadRound();document.getElementById('identifyFeedback').innerHTML='<span class="green">Práctica completada.</span> Puedes repetirla o continuar a la evaluación.'}};loadRound();
+
+  function bindQuestions(root){root.querySelectorAll('.question').forEach(card=>card.querySelectorAll('.answer').forEach(ans=>ans.onclick=()=>{card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));ans.classList.add('selected');card.dataset.selected=ans.dataset.value}))}
+  bindQuestions(document.getElementById('finalQuiz'));
+  document.getElementById('gradeBtn').onclick=()=>{const cards=[...document.querySelectorAll('#finalQuiz .question')];let correct=0,answered=0;cards.forEach(card=>{const sel=card.dataset.selected;if(sel)answered++;const ok=sel===card.dataset.correct;if(ok)correct++;card.classList.toggle('correct',ok);card.classList.toggle('incorrect',Boolean(sel)&&!ok);const fb=card.querySelector('.feedback');fb.className='feedback show '+(ok?'good':'bad');fb.textContent=ok?'Correcto.':'Revisa la fuente, el color y el uso operacional.'});if(answered<cards.length){alert('Responde las ocho preguntas antes de calificar.');return}const score=Math.round(correct/cards.length*100),passed=score>=80;document.getElementById('scoreValue').textContent=score+'%';document.getElementById('scoreRing').style.background=`conic-gradient(var(--gold) ${score}%,#1b2431 ${score}%)`;document.getElementById('resultTitle').textContent=passed?'Módulo aprobado':'Requiere refuerzo';document.getElementById('resultText').textContent=passed?'Puedes avanzar al siguiente módulo.':'Repasa la diferencia entre VOR, GPS y LOC.';document.getElementById('completionBadge').innerHTML=passed?'<span class="badge">✓ Completado</span>':'';const seconds=Math.round((Date.now()-startedAt)/1000);localStorage.setItem(MODULE_ID+':score',String(score));localStorage.setItem(MODULE_ID+':complete',String(passed));send('veyra:complete',{score,passed,timeSeconds:seconds,attemptedAt:new Date().toISOString()})};
+  document.getElementById('resetBtn').onclick=()=>{document.querySelectorAll('#finalQuiz .question').forEach(card=>{delete card.dataset.selected;card.classList.remove('correct','incorrect');card.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));card.querySelector('.feedback').className='feedback'});document.getElementById('scoreValue').textContent='—';document.getElementById('scoreRing').style.background='conic-gradient(var(--gold) 0%,#1b2431 0)';document.getElementById('resultTitle').textContent='Completa la evaluación';document.getElementById('resultText').textContent='El resultado aparecerá aquí.';document.getElementById('completionBadge').innerHTML=''};
+
+  show(current);send('veyra:ready',{version:'1.0.0',supports:['progress','score','time','completion']});
+})();
+</script>
+</body>
+</html>
