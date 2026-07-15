@@ -310,7 +310,7 @@
   const normalize=a=>((a%360)+360)%360;
   const shortest=(a,b)=>{let d=normalize(a-b);if(d>180)d-=360;return d};
   function showSlide(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));localStorage.setItem(MODULE_ID+':step',String(current));const pct=Math.round(((current+1)/slides.length)*100);$('#progressBar').style.width=pct+'%';$('#progressPercent').textContent=pct+' %';$('#progressLabel').textContent=slides[current].dataset.title;$('#navStep').textContent=(current+1)+' / '+slides.length;$('#prevBtn').disabled=current===0;$('#nextBtn').textContent=current===slides.length-1?'Finalizar':'Continuar →';window.scrollTo({top:0,behavior:'smooth'});post('veyra:progress',{step:current+1,totalSteps:slides.length,progress:pct});}
-  $('#prevBtn').addEventListener('click',()=>showSlide(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{completed:!!localStorage.getItem(MODULE_ID+':complete')});setTimeout(()=>{window.location.href='/';},150);return}showSlide(current+1)});showSlide(current);post('veyra:ready',{totalSteps:slides.length});
+  $('#prevBtn').addEventListener('click',()=>showSlide(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{completed:!!localStorage.getItem(MODULE_ID+':complete')});setTimeout(()=>{window.location.href='/modules/ifr-dme-05/index.html';},150);return}showSlide(current+1)});showSlide(current);post('veyra:ready',{totalSteps:slides.length});
 
   // TO/FROM explorer
   let radial=0,course=0;
@@ -365,3 +365,4 @@
 </script>
 </body>
 </html>
+
