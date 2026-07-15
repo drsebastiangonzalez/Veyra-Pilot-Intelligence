@@ -1,0 +1,501 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070b">
+<title>VEYRA IFR PATH · Módulo 09 · Aproximaciones VOR y LOC</title>
+<style>
+:root{
+  --bg:#05070b;--bg2:#09101a;--panel:#0d151f;--panel2:#111c2a;
+  --gold:#d8b66d;--gold2:#f1d08a;--white:#f7f3ec;--muted:#adb8c7;
+  --green:#61db7a;--cyan:#65d8e8;--magenta:#eb5ad5;--danger:#ef7b7b;
+  --line:rgba(216,182,109,.28);--line2:rgba(255,255,255,.09);
+  --shadow:0 24px 65px rgba(0,0,0,.42);--r:22px;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);
+  background:
+    radial-gradient(circle at 86% 8%,rgba(216,182,109,.09),transparent 28rem),
+    linear-gradient(180deg,#05070b,#0a1018 58%,#05070b);
+  overflow-x:hidden
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;
+  background-image:linear-gradient(rgba(255,255,255,.026) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.026) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 90%)
+}
+button,input{font:inherit}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;
+  padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.93);
+  border-bottom:1px solid var(--line);backdrop-filter:blur(16px)
+}
+.brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.progress-wrap{width:min(290px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:5px;background:#1a2432;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:8%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+main{flex:1;width:100%;max-width:1260px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 116px}
+.slide{display:none;animation:enter .35s ease both}.slide.active{display:block}
+@keyframes enter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+h1,h2,h3{margin:0}h1{font:500 clamp(43px,7vw,86px)/.96 var(--serif);letter-spacing:-.045em}
+h2{font:500 clamp(34px,5vw,58px)/1 var(--serif);letter-spacing:-.035em}
+h3{font:600 22px/1.2 var(--serif)}
+p{color:#ccd4df;line-height:1.62}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dee7;max-width:980px}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+.gold{color:var(--gold2);font-weight:850}.green{color:var(--green);font-weight:850}.cyan{color:var(--cyan);font-weight:850}.magenta{color:var(--magenta);font-weight:850}
+.hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.94fr 1.06fr;gap:34px;align-items:center}
+.hero-visual{
+  position:relative;min-height:580px;border:1px solid var(--line);border-radius:30px;
+  background:linear-gradient(145deg,rgba(18,26,38,.96),rgba(7,10,15,.98));box-shadow:var(--shadow);overflow:hidden;padding:22px;display:grid;place-items:center
+}
+.hero-visual:before{content:"";position:absolute;inset:-45%;background:radial-gradient(circle,rgba(216,182,109,.13),transparent 52%);transform:translate(17%,3%)}
+.hero-visual svg{position:relative;width:min(100%,750px);height:auto}
+.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:26px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(216,182,109,.055);max-width:720px;color:#d8dee7;border-radius:0 14px 14px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{border:1px solid rgba(216,182,109,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,26,39,.96),rgba(9,14,21,.98));padding:23px;box-shadow:0 18px 42px rgba(0,0,0,.22)}
+.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.callout{border:1px solid rgba(216,182,109,.36);background:rgba(216,182,109,.055);padding:17px 19px;border-radius:16px;color:#e4dfd5;line-height:1.58}.callout strong{color:var(--gold2)}
+.danger{border-color:rgba(239,123,123,.35);background:rgba(239,123,123,.065)}.danger strong{color:#ffaaaa}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dee8;font-size:12px;background:rgba(216,182,109,.035)}
+.route{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px}.route-step{border:1px solid var(--line);border-radius:17px;padding:16px 12px;text-align:center;background:rgba(216,182,109,.035);font-size:13px;color:#cad2dd}.route-step b{display:block;color:var(--gold2);margin-bottom:7px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.list{display:grid;gap:10px}.item{padding:14px 15px;border:1px solid var(--line2);border-radius:14px;background:#0a1018}
+.figure{display:block;width:100%;max-height:710px;object-fit:contain;border-radius:16px;border:1px solid var(--line2);background:#fff;cursor:zoom-in}
+figcaption{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
+.chart-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:start}
+.source-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.source-img{width:100%;display:block;border-radius:16px;border:1px solid var(--line2);background:#000}
+.hotspot-wrap{position:relative}
+.hot{position:absolute;width:36px;height:36px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.86);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(216,182,109,.11)}
+.hot:hover,.hot.active{background:var(--gold2);color:#161005}
+.info-box{min-height:230px}
+.timeline{position:relative;padding:36px 10px 16px;margin-top:16px}
+.timeline-line{height:6px;background:#263243;border-radius:999px;position:relative}
+.timeline-fill{height:6px;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:999px;width:0;transition:.3s}
+.timeline-points{display:grid;grid-template-columns:repeat(4,1fr);margin-top:-15px;position:relative}
+.tp{text-align:center;color:var(--muted);font-size:12px}.dot{margin:0 auto 12px;width:24px;height:24px;border-radius:50%;background:#0b1119;border:2px solid var(--gold);display:grid;place-items:center;font-size:10px;color:var(--gold2)}.tp.active .dot{background:var(--gold2);color:#161005}.tp.active{color:var(--gold2)}
+.control-group{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}.control-group label{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px}.control-group input[type=range]{width:100%;accent-color:var(--gold)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid rgba(255,255,255,.14);background:#0a1018;color:#d8dfe8;border-radius:999px;padding:10px 14px;cursor:pointer}.pill.active,.pill:hover{border-color:var(--gold);background:rgba(216,182,109,.1);color:var(--gold2)}
+.result-box{min-height:145px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.56}
+.status-big{font:600 33px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#0a1018}.metric b{display:block;font:600 27px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{font-size:12px;color:var(--muted)}
+.steps{counter-reset:s;display:grid;gap:11px}.step{position:relative;padding:14px 14px 14px 50px;border:1px solid var(--line2);border-radius:14px;background:#0a1018;color:#d6dde7;line-height:1.52}.step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:13px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:rgba(216,182,109,.13);color:var(--gold2);font-weight:900}
+.choice-list{display:grid;gap:10px}.choice{display:block;width:100%;padding:13px 14px;border:1px solid var(--line2);border-radius:13px;background:#0a1018;color:#eef2f6;text-align:left;cursor:pointer}.choice:hover,.choice.selected{border-color:var(--gold);background:rgba(216,182,109,.07)}
+.feedback{min-height:65px;color:#cdd5df;line-height:1.52}.feedback.ok{color:#9fe8b0}.feedback.bad{color:#ffaaaa}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.practice-card{border:1px solid var(--line);border-radius:19px;background:linear-gradient(155deg,rgba(17,26,39,.96),rgba(9,14,21,.98));padding:19px}.practice-btn{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#0a1018;color:#eef2f6;text-align:left;cursor:pointer}.practice-btn:hover{border-color:var(--gold)}.practice-feedback{min-height:48px;margin-top:11px;color:var(--muted)}
+.quiz-layout{display:grid;grid-template-columns:1.18fr .82fr;gap:22px}.question{padding:19px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.018);margin-bottom:14px}.question h3{font-family:var(--sans);font-size:17px;line-height:1.45}.answer{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#0a1018;color:#eef2f6;text-align:left;cursor:pointer}.answer:hover,.answer.selected{border-color:var(--gold)}.answer.selected{background:rgba(216,182,109,.08)}
+.quiz-summary{position:sticky;top:95px}.score{font:600 70px/1 var(--serif);color:var(--gold2)}.critical{color:#ffaaaa;font-size:12px;margin-top:7px}
+.primary,.secondary{border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:850;letter-spacing:.03em}.primary{border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#c6943a);color:#171005}.secondary{border:1px solid var(--line);background:#0a1018;color:#eef2f6}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.nav{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px clamp(16px,3vw,40px) calc(13px + env(safe-area-inset-bottom));background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px)}.nav-center{color:var(--muted);font-size:12px;text-align:center}.nav button:disabled{opacity:.35;cursor:not-allowed}
+.completion{display:none;margin-top:18px}.completion.show{display:block}
+.modal{display:none;position:fixed;z-index:200;inset:0;background:rgba(0,0,0,.92);padding:28px;align-items:center;justify-content:center}.modal.show{display:flex}.modal img{max-width:96vw;max-height:92vh;object-fit:contain;background:#fff;border-radius:12px}.modal-close{position:fixed;top:18px;right:22px;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);background:#0a1018;color:var(--gold2);font-size:25px;cursor:pointer}
+@media(max-width:980px){.top-title{display:none}.progress-wrap{margin-left:auto}.hero,.chart-layout,.source-layout,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:450px}.route{grid-template-columns:repeat(2,1fr)}.metric-grid{grid-template-columns:1fr}.quiz-summary{position:static}}
+@media(max-width:760px){.grid2,.grid3,.practice-grid,.compare{grid-template-columns:1fr}.hero-visual{min-height:370px}.route{grid-template-columns:1fr}.nav-center{display:none}.brand-sub{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+  <div class="top-title">IFR PATH · Módulo 09 · Aproximaciones VOR y LOC</div>
+  <div class="progress-wrap"><div class="progress-meta"><span id="progressText">Pantalla 1 de 12</span><span id="progressPercent">8%</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+</header>
+
+<main>
+<section class="slide active" data-title="Inicio">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">MÓDULO 09 · APROXIMACIONES CONVENCIONALES</div><div class="accent"></div>
+      <h1>De la carta a la ejecución: <span class="gold">VOR y LOC</span></h1>
+      <p class="lede">Aprende a preparar, interceptar, descender, estabilizar y frustrar una aproximación convencional utilizando la carta Jeppesen y la presentación real del G1000.</p>
+      <div class="chips"><span class="chip">VOR</span><span class="chip">LOC</span><span class="chip">IAF / IF / FAF / MAP</span><span class="chip">MDA</span><span class="chip">CDFA</span><span class="chip">Missed Approach</span></div>
+      <div class="hero-note"><span>◉</span><div><strong>Alcance:</strong> este módulo utiliza el localizador como aproximación lateral sin glideslope. El ILS completo y su guiado vertical se estudiarán en el Módulo 10.</div></div>
+      <div class="actions"><button class="primary" data-go="1">Comenzar módulo</button></div>
+    </div>
+    <div class="hero-visual">
+      <svg viewBox="0 0 760 640" role="img" aria-label="VOR y localizador convergiendo hacia una pista">
+        <defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <g transform="translate(380 330)">
+          <path d="M-320 145L-70 0" stroke="#58db78" stroke-width="10" filter="url(#glow)"/>
+          <path d="M-310-135L-70 0" stroke="#d9b56b" stroke-width="8" stroke-dasharray="12 9"/>
+          <path d="M-70 0L290 0" stroke="#f7f4ee" stroke-width="18"/>
+          <rect x="150" y="-42" width="120" height="84" rx="4" fill="#202938" stroke="#f7f4ee" stroke-width="4"/>
+          <line x1="170" y1="-42" x2="170" y2="42" stroke="#f7f4ee" stroke-width="4"/><line x1="250" y1="-42" x2="250" y2="42" stroke="#f7f4ee" stroke-width="4"/>
+          <circle cx="-310" cy="-135" r="36" fill="#08101a" stroke="#f0cf86" stroke-width="4"/><circle cx="-310" cy="-135" r="7" fill="#f0cf86"/>
+          <text x="-315" y="-185" text-anchor="middle" fill="#f0cf86" font-size="26" font-family="Georgia">VOR</text>
+          <text x="-300" y="195" fill="#58db78" font-size="26" font-family="Georgia">LOCALIZER</text>
+          <text x="125" y="-70" fill="#f7f4ee" font-size="23" font-family="Georgia">FINAL APPROACH COURSE</text>
+          <circle cx="-135" cy="36" r="12" fill="#65d8e8"/><text x="-155" y="82" fill="#65d8e8" font-size="20" font-family="system-ui">FAF</text>
+          <circle cx="-70" cy="0" r="12" fill="#d9b56b"/><text x="-84" y="-24" fill="#d9b56b" font-size="20" font-family="system-ui">MAP</text>
+          <g transform="translate(-190 69) rotate(60)"><path d="M0-24l8 17 29 7-29 7L0 24-8 7-33 0l25-7z" fill="#f7f4ee"/></g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Ruta">
+  <div class="eyebrow">RUTA DEL MÓDULO</div><div class="accent"></div>
+  <h2>Una aproximación se construye en seis fases</h2>
+  <div class="route">
+    <div class="route-step"><b>1. Preparar</b>Carta, fuente, mínimos y frustrada.</div>
+    <div class="route-step"><b>2. Ingresar</b>IAF, transición o vectores.</div>
+    <div class="route-step"><b>3. Interceptar</b>Curso final y configuración.</div>
+    <div class="route-step"><b>4. Descender</b>FAF, altitudes y técnica vertical.</div>
+    <div class="route-step"><b>5. Decidir</b>MDA, referencias y MAP.</div>
+    <div class="route-step"><b>6. Frustrar</b>Rumbo, altitud, fix y espera.</div>
+  </div>
+  <div class="grid2" style="margin-top:24px">
+    <div class="card"><div class="label">VOR</div><h3>Navegación angular</h3><p>Utiliza radiales y normalmente termina en mínimos MDA. La fuente se presenta como <span class="green">VOR1/VOR2</span>.</p></div>
+    <div class="card"><div class="label">LOC</div><h3>Guiado lateral de alta sensibilidad</h3><p>Utiliza el front course del localizador. La fuente se presenta como <span class="green">LOC1/LOC2</span> y no utiliza TO/FROM.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-title="VOR vs LOC">
+  <div class="eyebrow">COMPARACIÓN OPERACIONAL</div><div class="accent"></div>
+  <h2>VOR y LOC no se interpretan de la misma forma</h2>
+  <div class="compare" style="margin-top:24px">
+    <div class="card">
+      <div class="label">APROXIMACIÓN VOR</div>
+      <div class="list">
+        <div class="item">Fuente: <strong class="green">VOR1/VOR2</strong>.</div>
+        <div class="item">Puede utilizar indicación TO/FROM.</div>
+        <div class="item">El curso final puede depender de un radial inbound u outbound.</div>
+        <div class="item">La desviación es angular y suele ser menos sensible que un LOC.</div>
+        <div class="item">Normalmente se vuela a una <strong>MDA</strong>.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">APROXIMACIÓN LOC</div>
+      <div class="list">
+        <div class="item">Fuente: <strong class="green">LOC1/LOC2</strong>.</div>
+        <div class="item">No existe indicación TO/FROM válida para interpretar el localizador.</div>
+        <div class="item">Debe seleccionarse el <strong>front course</strong> publicado.</div>
+        <div class="item">La sensibilidad aumenta al aproximarse a la pista.</div>
+        <div class="item">Cuando se vuela LOC sin GS se usan los mínimos <strong>LOC (GS out)</strong>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="callout danger" style="margin-top:18px"><strong>Error crítico:</strong> seguir la aguja sin verificar la fuente. Una frecuencia sintonizada no significa que el CDI esté usando VOR o LOC.</div>
+</section>
+
+<section class="slide" data-title="Estructura">
+  <div class="eyebrow">SEGMENTOS DE LA APROXIMACIÓN</div><div class="accent"></div>
+  <h2>IAF, IF, FAF y MAP organizan la carga de trabajo</h2>
+  <div class="card" style="margin-top:22px">
+    <div class="timeline">
+      <div class="timeline-line"><div class="timeline-fill" id="timelineFill"></div></div>
+      <div class="timeline-points">
+        <div class="tp active" data-tp="0"><div class="dot">1</div><strong>IAF</strong><br>Ingreso</div>
+        <div class="tp" data-tp="1"><div class="dot">2</div><strong>IF</strong><br>Alineación</div>
+        <div class="tp" data-tp="2"><div class="dot">3</div><strong>FAF</strong><br>Descenso final</div>
+        <div class="tp" data-tp="3"><div class="dot">4</div><strong>MAP</strong><br>Decisión / frustrada</div>
+      </div>
+    </div>
+    <div class="control-group" style="margin-top:26px">
+      <label>Fase de la aproximación <span id="phaseValue">IAF</span></label>
+      <input type="range" min="0" max="3" step="1" value="0" id="phaseSlider">
+    </div>
+    <div class="result-box" id="phaseFeedback"><div class="status-big">IAF — Initial Approach Fix</div>Confirma la transición, el curso, la altitud, la velocidad y la secuencia hacia el segmento intermedio.</div>
+  </div>
+</section>
+
+<section class="slide" data-title="Caso VOR">
+  <div class="eyebrow">CASO REAL · VOR RWY 05R</div><div class="accent"></div>
+  <h2>Lee la carta VOR como un plan de acción</h2>
+  <div class="chart-layout" style="margin-top:22px">
+    <div class="card">
+      <figure>
+        <img class="figure zoomable" src="assets/mmmx_vor05r.jpeg" alt="Carta Jeppesen VOR RWY 05R de Ciudad de México">
+        <figcaption>Selecciona la carta para ampliarla. Este caso permite estudiar curso final, DME, altitudes, MDA, MAP y aproximación frustrada.</figcaption>
+      </figure>
+    </div>
+    <div class="card">
+      <div class="label">BRIEFING GUIADO</div>
+      <div class="steps">
+        <div class="step"><strong>Identificación:</strong> VOR RWY 05R, aeropuerto y carta vigente.</div>
+        <div class="step"><strong>Ayuda y fuente:</strong> VOR MEX 115.9; seleccionar VOR1/VOR2 en verde.</div>
+        <div class="step"><strong>Curso final:</strong> 055°.</div>
+        <div class="step"><strong>Fixes y distancias:</strong> D8.0, D5.6 y MAP publicado.</div>
+        <div class="step"><strong>Vertical:</strong> altitudes publicadas, perfil y MDA.</div>
+        <div class="step"><strong>Frustrada:</strong> seguir MEX R-055 hasta D9.0 y continuar según la carta.</div>
+      </div>
+      <div class="callout" style="margin-top:15px"><strong>Pregunta del instructor:</strong> “¿Qué evento autoriza el descenso desde cada altitud y cómo identificas el MAP?”</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="G1000 VOR">
+  <div class="eyebrow">PRESENTACIÓN EN CABINA · VOR</div><div class="accent"></div>
+  <h2>Antes de seguir el CDI, verbaliza la fuente</h2>
+  <div class="source-layout" style="margin-top:22px">
+    <div class="card">
+      <div class="hotspot-wrap">
+        <img class="source-img" src="assets/g1000_vor.jpeg" alt="G1000 con fuente VOR1 y CDI verde">
+        <button class="hot" style="left:45%;top:60%" data-vorhot="source">1</button>
+        <button class="hot" style="left:58%;top:51%" data-vorhot="course">2</button>
+        <button class="hot" style="left:29%;top:75%" data-vorhot="dme">3</button>
+        <button class="hot" style="left:49%;top:72%" data-vorhot="cdi">4</button>
+      </div>
+    </div>
+    <div class="card info-box">
+      <div class="label">LECTURA GUIADA</div>
+      <h3 id="vorHotTitle">Selecciona un marcador</h3>
+      <p id="vorHotBody">Comprueba fuente, curso, CDI y distancia antes de ejecutar cualquier descenso o interceptación.</p>
+      <div class="callout"><strong>Call-out propuesto:</strong> “VOR1 verde, frecuencia e identificación confirmadas, curso seleccionado, CDI disponible y DME identificado.”</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Caso LOC">
+  <div class="eyebrow">CASO REAL · LOC Z RWY 14L</div><div class="accent"></div>
+  <h2>Vuela el localizador usando sus propios mínimos</h2>
+  <div class="chart-layout" style="margin-top:22px">
+    <div class="card">
+      <figure>
+        <img class="figure zoomable" src="assets/skbo_ils_loc14l.jpeg" alt="Carta Jeppesen ILS Z o LOC Z RWY 14L de Bogotá">
+        <figcaption>La carta contiene ILS y LOC. En este módulo se trabaja la columna <strong>LOC (GS out)</strong>: guiado lateral, MDA, fixes y MAP.</figcaption>
+      </figure>
+    </div>
+    <div class="card">
+      <div class="label">BRIEFING LOC</div>
+      <div class="steps">
+        <div class="step"><strong>Identificación:</strong> LOC Z RWY 14L.</div>
+        <div class="step"><strong>Frecuencia / identificación:</strong> 111.3 IEDR.</div>
+        <div class="step"><strong>Front course:</strong> 135°.</div>
+        <div class="step"><strong>Fuente:</strong> LOC1 en verde; confirmar que no permanece GPS.</div>
+        <div class="step"><strong>Vertical:</strong> utilizar step-down fixes, perfil LOC y MDA publicada.</div>
+        <div class="step"><strong>MAP:</strong> punto publicado en la carta; preparar la frustrada antes del FAF.</div>
+      </div>
+      <div class="callout danger" style="margin-top:15px"><strong>GS out:</strong> no uses el glideslope como referencia autorizada para descender cuando estás volando los mínimos LOC.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="G1000 LOC">
+  <div class="eyebrow">PRESENTACIÓN EN CABINA · LOC</div><div class="accent"></div>
+  <h2>LOC1 debe aparecer en verde y con el front course correcto</h2>
+  <div class="source-layout" style="margin-top:22px">
+    <div class="card">
+      <div class="hotspot-wrap">
+        <img class="source-img" src="assets/g1000_loc.jpeg" alt="G1000 con fuente LOC1 verde">
+        <button class="hot" style="left:38%;top:58%" data-lochot="source">1</button>
+        <button class="hot" style="left:57%;top:51%" data-lochot="course">2</button>
+        <button class="hot" style="left:48%;top:70%" data-lochot="needle">3</button>
+        <button class="hot" style="left:28%;top:78%" data-lochot="ident">4</button>
+      </div>
+    </div>
+    <div class="card info-box">
+      <div class="label">LECTURA GUIADA</div>
+      <h3 id="locHotTitle">Selecciona un marcador</h3>
+      <p id="locHotBody">Confirma LOC1, front course, identificación y desviación antes de interceptar.</p>
+      <div class="callout"><strong>Precaución:</strong> no interpretes el localizador con la lógica de un radial VOR. No hay TO/FROM y la sensibilidad aumenta en final.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Descenso y MDA">
+  <div class="eyebrow">DESCENSO FINAL</div><div class="accent"></div>
+  <h2>El descenso comienza por autorización y geometría, no por intuición</h2>
+  <div class="grid2" style="margin-top:22px">
+    <div class="card">
+      <div class="label">ANTES DE DESCENDER</div>
+      <div class="list">
+        <div class="item">Autorización de aproximación recibida.</div>
+        <div class="item">Aeronave establecida en el segmento publicado correspondiente.</div>
+        <div class="item">Fix y altitud de cruce identificados.</div>
+        <div class="item">Fuente de navegación correcta y señal válida.</div>
+        <div class="item">Mínimos y frustrada brieféados.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="control-group">
+        <label>Situación simulada</label>
+        <div class="seg">
+          <button class="pill desc-scenario active" data-desc="before">Antes del FAF</button>
+          <button class="pill desc-scenario" data-desc="after">Después del FAF</button>
+          <button class="pill desc-scenario" data-desc="mda">En MDA</button>
+        </div>
+      </div>
+      <div class="choice-list">
+        <button class="choice desc-choice" data-choice="descend">Iniciar / continuar descenso</button>
+        <button class="choice desc-choice" data-choice="level">Mantener altitud</button>
+        <button class="choice desc-choice" data-choice="miss">Ejecutar aproximación frustrada</button>
+      </div>
+      <div class="feedback" id="descFeedback">Selecciona una acción para el escenario.</div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:18px"><strong>CDFA:</strong> cuando es aplicable y está respaldada por los procedimientos de la operación, una trayectoria continua y estabilizada reduce cambios bruscos de configuración y potencia. La MDA sigue siendo un límite que no puede infringirse.</div>
+</section>
+
+<section class="slide" data-title="Estabilización">
+  <div class="eyebrow">MONITOREO Y ESTABILIZACIÓN</div><div class="accent"></div>
+  <h2>La aproximación debe volverse más simple a medida que avanza</h2>
+  <div class="grid3" style="margin-top:22px">
+    <div class="card"><div class="label">LATERAL</div><h3>Curso controlado</h3><p>CDI dentro de límites aceptables, tendencia entendida y correcciones pequeñas.</p></div>
+    <div class="card"><div class="label">VERTICAL</div><h3>Perfil respetado</h3><p>Altitudes de cruce, MDA y razón de descenso compatibles con la carta y el SOP.</p></div>
+    <div class="card"><div class="label">ENERGÍA</div><h3>Configuración oportuna</h3><p>Velocidad, potencia, configuración y checklist preparados antes de que la carga aumente.</p></div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card"><div class="label">TENDENCIA</div><h3>No persigas la aguja</h3><p>Especialmente en LOC, la sensibilidad aumenta en final. Grandes correcciones tardías producen oscilaciones y pérdida de estabilidad.</p></div>
+    <div class="card"><div class="label">DECISIÓN</div><h3>Frustra cuando corresponda</h3><p>Si no se cumplen los criterios de estabilización, se pierde la señal requerida o no existen referencias visuales al llegar al punto aplicable, ejecuta la frustrada.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-title="Frustrada">
+  <div class="eyebrow">MISSED APPROACH</div><div class="accent"></div>
+  <h2>La frustrada es una maniobra previamente preparada</h2>
+  <div class="grid2" style="margin-top:22px">
+    <div class="card">
+      <div class="label">SECUENCIA MENTAL</div>
+      <div class="steps">
+        <div class="step">Aplicar potencia y establecer la actitud/configuración correspondiente.</div>
+        <div class="step">Cumplir el rumbo o track inicial publicado.</div>
+        <div class="step">Respetar la altitud inicial y cualquier gradiente requerido.</div>
+        <div class="step">Realizar el viraje únicamente cuando lo autorice la geometría publicada.</div>
+        <div class="step">Navegar al fix de espera y preparar la entrada.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">BRIEFING ANTES DEL FAF</div>
+      <div class="list">
+        <div class="item">¿Dónde está el MAP?</div>
+        <div class="item">¿Cuál es el rumbo/track inicial?</div>
+        <div class="item">¿Hasta qué altitud debo ascender?</div>
+        <div class="item">¿Cuándo comienza el primer viraje?</div>
+        <div class="item">¿Cuál es el fix de espera y la entrada probable?</div>
+      </div>
+      <div class="callout danger" style="margin-top:15px"><strong>No improvises:</strong> el momento de frustrar no es el momento de empezar a leer la carta.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Práctica">
+  <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent"></div>
+  <h2>Aplica los conceptos antes de la evaluación</h2>
+  <div class="practice-grid" style="margin-top:22px">
+    <div class="practice-card"><div class="label">CASO 1</div><h3>Fuente VOR</h3><p>La frecuencia está sintonizada, pero el HSI muestra GPS magenta.</p><button class="practice-btn" data-practice="1a">Cambiar a VOR1/VOR2 y verificar identificación</button><button class="practice-btn" data-practice="1b">Continuar porque la frecuencia está activa</button><div class="practice-feedback" id="practice1">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 2</div><h3>LOC sin GS</h3><p>Estás autorizado para LOC y aparece glideslope.</p><button class="practice-btn" data-practice="2a">Usar mínimos LOC y perfil publicado</button><button class="practice-btn" data-practice="2b">Usar DA ILS automáticamente</button><div class="practice-feedback" id="practice2">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 3</div><h3>MDA</h3><p>Llegas a MDA sin referencias visuales y antes del MAP.</p><button class="practice-btn" data-practice="3a">Mantener MDA hasta MAP si la técnica/procedimiento lo permite</button><button class="practice-btn" data-practice="3b">Descender para buscar la pista</button><div class="practice-feedback" id="practice3">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 4</div><h3>Localizer sensible</h3><p>El CDI oscila cerca de la pista.</p><button class="practice-btn" data-practice="4a">Usar correcciones pequeñas y evaluar tendencia</button><button class="practice-btn" data-practice="4b">Aplicar grandes cambios de rumbo</button><div class="practice-feedback" id="practice4">Selecciona una respuesta.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-title="Evaluación">
+  <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div>
+  <h2>Integra carta, fuente, descenso y frustrada</h2>
+  <p class="lede">Aprobación: 80 % y preguntas críticas correctas.</p>
+  <div class="quiz-layout" style="margin-top:24px">
+    <div>
+      <div class="question" data-q="0" data-correct="b" data-critical="true"><h3>1. Para volar una aproximación VOR en G1000, ¿qué debe verse como fuente activa?</h3><button class="answer" data-a="a">GPS en magenta</button><button class="answer" data-a="b">VOR1 o VOR2 en verde</button><button class="answer" data-a="c">LOC1 en verde</button></div>
+      <div class="question" data-q="1" data-correct="c"><h3>2. ¿Qué diferencia al localizador del VOR?</h3><button class="answer" data-a="a">El LOC siempre usa TO/FROM</button><button class="answer" data-a="b">El LOC es menos sensible</button><button class="answer" data-a="c">El LOC no usa TO/FROM y se vuelve más sensible en final</button></div>
+      <div class="question" data-q="2" data-correct="a"><h3>3. ¿Qué representa el FAF?</h3><button class="answer" data-a="a">El inicio del segmento final y normalmente del descenso final publicado</button><button class="answer" data-a="b">El punto de parqueo</button><button class="answer" data-a="c">La altitud mínima de sector</button></div>
+      <div class="question" data-q="3" data-correct="b"><h3>4. En una carta que combina ILS y LOC, si vuelas LOC (GS out), ¿qué mínimos debes usar?</h3><button class="answer" data-a="a">DA del ILS</button><button class="answer" data-a="b">MDA y mínimos LOC publicados</button><button class="answer" data-a="c">Los mínimos más bajos disponibles</button></div>
+      <div class="question" data-q="4" data-correct="c" data-critical="true"><h3>5. ¿Qué debes verificar antes de comenzar el descenso desde un fix?</h3><button class="answer" data-a="a">Solo la velocidad</button><button class="answer" data-a="b">Que la pista se vea</button><button class="answer" data-a="c">Autorización, segmento publicado, fix, altitud y fuente válida</button></div>
+      <div class="question" data-q="5" data-correct="a"><h3>6. ¿Qué significa MDA?</h3><button class="answer" data-a="a">Altitud mínima de descenso que no debe infringirse sin referencias requeridas</button><button class="answer" data-a="b">Altitud de decisión ILS</button><button class="answer" data-a="c">Altitud de transición</button></div>
+      <div class="question" data-q="6" data-correct="b"><h3>7. ¿Por qué se recomienda seleccionar el front course publicado en LOC?</h3><button class="answer" data-a="a">Para obtener TO/FROM</button><button class="answer" data-a="b">Para mantener una interpretación lateral coherente y evitar sensing incorrecto</button><button class="answer" data-a="c">Para activar el DME</button></div>
+      <div class="question" data-q="7" data-correct="c"><h3>8. Cerca de la pista, el CDI LOC se mueve rápidamente. ¿Qué técnica corresponde?</h3><button class="answer" data-a="a">Grandes correcciones</button><button class="answer" data-a="b">Ignorar el CDI</button><button class="answer" data-a="c">Correcciones pequeñas y lectura de tendencia</button></div>
+      <div class="question" data-q="8" data-correct="a"><h3>9. ¿Cuándo debe briefearse la aproximación frustrada?</h3><button class="answer" data-a="a">Antes del FAF o antes de iniciar la aproximación final</button><button class="answer" data-a="b">Después de iniciar el viraje de frustrada</button><button class="answer" data-a="c">Solo si ATC la solicita</button></div>
+      <div class="question" data-q="9" data-correct="b"><h3>10. ¿Cuál es el objetivo de una CDFA bien planificada?</h3><button class="answer" data-a="a">Ignorar la MDA</button><button class="answer" data-a="b">Mantener una trayectoria continua y estabilizada respetando todos los límites</button><button class="answer" data-a="c">Aumentar la velocidad en final</button></div>
+    </div>
+    <aside class="card quiz-summary">
+      <div class="label">RESULTADO</div><div class="score" id="score">—</div><p id="scoreText">Responde las diez preguntas y selecciona “Calificar”.</p>
+      <div class="critical">Críticas: preguntas 1 y 5.</div>
+      <div class="actions"><button class="primary" id="gradeQuiz">Calificar</button><button class="secondary" id="resetQuiz">Reiniciar</button></div>
+      <div class="completion" id="completionBox"><div class="callout"><strong>Módulo completado.</strong><br>El resultado fue guardado localmente y enviado al contenedor de Veyra.</div><div class="actions"><button class="primary" id="finishModule">Finalizar módulo</button></div></div>
+    </aside>
+  </div>
+  <div class="card" style="margin-top:22px">
+    <div class="label">REFERENCIAS DE ESTUDIO</div>
+    <p class="small">FAA Instrument Procedures Handbook; FAA Aeronautical Information Manual; Instrument Flying Handbook; cartas Jeppesen utilizadas en el módulo; AFM/POH, suplemento de aviónica y SOP de la aeronave aplicable.</p>
+  </div>
+</section>
+</main>
+
+<nav class="nav"><button class="secondary" id="prevBtn">← Anterior</button><div class="nav-center"><span id="slideTitle">Inicio</span><br>Progreso guardado localmente</div><button class="primary" id="nextBtn">Siguiente →</button></nav>
+
+<div class="modal" id="imageModal"><button class="modal-close" id="modalClose">×</button><img id="modalImage" alt="Carta ampliada"></div>
+</div>
+
+<script>
+(()=>{
+const slides=[...document.querySelectorAll('.slide')],bar=document.getElementById('progressBar'),pText=document.getElementById('progressText'),pPct=document.getElementById('progressPercent'),title=document.getElementById('slideTitle'),prev=document.getElementById('prevBtn'),next=document.getElementById('nextBtn');
+const key='veyra_ifr_approach_module_09',startedAt=Date.now();let current=0,bestScore=null;const saved=JSON.parse(localStorage.getItem(key)||'{}');if(Number.isInteger(saved.current)&&saved.current>=0&&saved.current<slides.length)current=saved.current;if(typeof saved.bestScore==='number')bestScore=saved.bestScore;
+function emit(type,data={}){const payload={source:'veyra-module',type,moduleId:'veyra-ifr-approaches-09',timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+function save(extra={}){localStorage.setItem(key,JSON.stringify({current,bestScore,updatedAt:new Date().toISOString(),...extra}))}
+function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round((current+1)/slides.length*100);bar.style.width=pct+'%';pText.textContent=`Pantalla ${current+1} de ${slides.length}`;pPct.textContent=pct+'%';title.textContent=slides[current].dataset.title||'';prev.disabled=current===0;next.textContent=current===slides.length-1?'Finalizar':'Siguiente →';save();emit('veyra:progress',{progress:pct,screen:current+1,totalScreens:slides.length});window.scrollTo({top:0,behavior:'smooth'})}
+prev.onclick=()=>show(current-1);next.onclick=()=>{if(current<slides.length-1){show(current+1);return;}emit('veyra:exit',{score:bestScore,completed:Boolean(saved.completed),progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});setTimeout(()=>{window.location.href='/';},150);};document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(Number(b.dataset.go)));
+
+const phaseSlider=document.getElementById('phaseSlider'),phaseValue=document.getElementById('phaseValue'),phaseFeedback=document.getElementById('phaseFeedback'),timelineFill=document.getElementById('timelineFill');
+const phaseData=[
+ ['IAF','IAF — Initial Approach Fix','Confirma la transición, el curso, la altitud, la velocidad y la secuencia hacia el segmento intermedio.'],
+ ['IF','IF — Intermediate Fix','Estabiliza la alineación, completa la configuración inicial y verifica la altitud hacia el FAF.'],
+ ['FAF','FAF — Final Approach Fix','Cruza a la altitud publicada, confirma fuente/señal y comienza el descenso final conforme al procedimiento.'],
+ ['MAP','MAP — Missed Approach Point','Con referencias requeridas, continúa según autorización; sin ellas, ejecuta inmediatamente la aproximación frustrada.']
+];
+function updatePhase(){const i=Number(phaseSlider.value),d=phaseData[i];phaseValue.textContent=d[0];phaseFeedback.innerHTML=`<div class="status-big">${d[1]}</div>${d[2]}`;timelineFill.style.width=(i/3*100)+'%';document.querySelectorAll('.tp').forEach((x,n)=>x.classList.toggle('active',n<=i))}
+phaseSlider.oninput=updatePhase;updatePhase();
+
+const vorHot={
+ source:['VOR1 en verde','Confirma que el CDI está siendo gobernado por la radioayuda VOR y no por GPS.'],
+ course:['Curso seleccionado','El CRS debe corresponder al curso publicado en la carta y al sentido de vuelo requerido.'],
+ dme:['DME asociado','Verifica que la distancia pertenece a la estación/equipo requerido para identificar fixes.'],
+ cdi:['Desviación lateral','Interpreta posición y tendencia; evita grandes correcciones cerca del final.']
+};
+document.querySelectorAll('[data-vorhot]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-vorhot]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=vorHot[b.dataset.vorhot];document.getElementById('vorHotTitle').textContent=d[0];document.getElementById('vorHotBody').textContent=d[1]});
+
+const locHot={
+ source:['LOC1 en verde','La fuente lateral activa es el localizador. No debe quedar GPS magenta para seguir la señal LOC.'],
+ course:['Front course','Selecciona el curso frontal publicado para mantener una lectura lateral coherente.'],
+ needle:['CDI LOC','La aguja se vuelve más sensible al acercarse a la pista; usa correcciones pequeñas.'],
+ ident:['Identificación / frecuencia','Confirma la frecuencia, identificación y cualquier DME requerido por el procedimiento.']
+};
+document.querySelectorAll('[data-lochot]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-lochot]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=locHot[b.dataset.lochot];document.getElementById('locHotTitle').textContent=d[0];document.getElementById('locHotBody').textContent=d[1]});
+
+let descScenario='before';
+const descCorrect={before:'level',after:'descend',mda:'level'};
+const descMessages={
+ before:'Antes del FAF o del punto que autoriza el siguiente descenso, mantén la altitud publicada.',
+ after:'Después del FAF, establecido y con autorización, continúa el descenso conforme al perfil publicado.',
+ mda:'En MDA no desciendas por debajo sin referencias requeridas. Mantén hasta el MAP o frustra según la técnica/procedimiento aplicable.'
+};
+document.querySelectorAll('.desc-scenario').forEach(b=>b.onclick=()=>{document.querySelectorAll('.desc-scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');descScenario=b.dataset.desc;document.getElementById('descFeedback').className='feedback';document.getElementById('descFeedback').textContent='Selecciona una acción para el escenario.'});
+document.querySelectorAll('.desc-choice').forEach(b=>b.onclick=()=>{document.querySelectorAll('.desc-choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const ok=b.dataset.choice===descCorrect[descScenario],fb=document.getElementById('descFeedback');fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'Correcto. ':'Revisa la secuencia. ')+descMessages[descScenario]});
+
+const practiceCorrect={'1a':1,'1b':0,'2a':1,'2b':0,'3a':1,'3b':0,'4a':1,'4b':0};
+const practiceMsg={
+ '1a':'Correcto. La frecuencia sintonizada no basta; la fuente activa debe ser VOR1/VOR2.',
+ '1b':'No. El CDI sigue controlado por GPS.',
+ '2a':'Correcto. Si vuelas LOC, aplica el perfil y los mínimos LOC publicados.',
+ '2b':'No. La DA ILS no corresponde automáticamente a una operación LOC.',
+ '3a':'Correcto. Mantén la MDA sin infringirla y continúa hasta el MAP según la técnica autorizada.',
+ '3b':'No. No se desciende por debajo de la MDA para buscar referencias.',
+ '4a':'Correcto. La sensibilidad LOC exige control fino y lectura de tendencia.',
+ '4b':'No. Las correcciones grandes pueden producir oscilaciones.'
+};
+document.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>{const k=b.dataset.practice,n=k[0],fb=document.getElementById('practice'+n),ok=practiceCorrect[k];fb.style.color=ok?'#9fe8b0':'#ffaaaa';fb.textContent=practiceMsg[k]});
+
+const modal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage');
+document.querySelectorAll('.zoomable').forEach(img=>img.onclick=()=>{modalImage.src=img.src;modalImage.alt=img.alt;modal.classList.add('show')});
+document.getElementById('modalClose').onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('show')});
+
+const answers={};document.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{const q=b.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');answers[q.dataset.q]=b.dataset.a});
+document.getElementById('gradeQuiz').onclick=()=>{const qs=[...document.querySelectorAll('.question')];let correct=0,criticalOk=true;qs.forEach(q=>{const ok=answers[q.dataset.q]===q.dataset.correct;if(ok)correct++;if(q.dataset.critical==='true'&&!ok)criticalOk=false});const score=Math.round(correct/qs.length*100),passed=score>=80&&criticalOk;bestScore=bestScore===null?score:Math.max(bestScore,score);document.getElementById('score').textContent=score+'%';document.getElementById('scoreText').textContent=passed?'Aprobado. Puedes continuar con el módulo de ILS.':!criticalOk?'No aprobado: revisa las preguntas críticas de fuente y descenso.':'Aún no alcanzas 80 %. Revisa los casos VOR y LOC.';document.getElementById('completionBox').classList.toggle('show',passed);save({bestScore,completed:passed,score});emit('veyra:complete',{score,passed,criticalOk,timeSeconds:Math.round((Date.now()-startedAt)/1000)})};
+document.getElementById('resetQuiz').onclick=()=>{Object.keys(answers).forEach(k=>delete answers[k]);document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));document.getElementById('score').textContent='—';document.getElementById('scoreText').textContent='Responde las diez preguntas y selecciona “Calificar”.';document.getElementById('completionBox').classList.remove('show')};
+document.getElementById('finishModule').onclick=()=>{emit('veyra:exit',{score:bestScore,completed:true,progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});setTimeout(()=>{window.location.href='/';},150);};
+emit('veyra:ready',{progress:Math.round((current+1)/slides.length*100),bestScore});show(current);
+})();
+</script>
+</body>
+</html>
