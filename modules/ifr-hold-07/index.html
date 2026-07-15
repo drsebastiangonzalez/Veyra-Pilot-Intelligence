@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070b">
+<title>VEYRA IFR PATH · Módulo 07 · Esperas IFR</title>
+<style>
+:root{
+  --bg:#05070b;--bg2:#080d14;--panel:#0c131d;--panel2:#111a26;
+  --gold:#d9b56b;--gold2:#f0cf86;--white:#f7f4ee;--muted:#adb6c4;
+  --green:#58db78;--cyan:#65d8e8;--magenta:#ec5bd8;--danger:#ee7777;
+  --line:rgba(217,181,107,.27);--line2:rgba(255,255,255,.09);
+  --shadow:0 24px 65px rgba(0,0,0,.4);--r:22px;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);
+  background:
+    radial-gradient(circle at 83% 8%,rgba(217,181,107,.08),transparent 29rem),
+    linear-gradient(180deg,#05070b,#080c12 60%,#05070b);
+  overflow-x:hidden
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.17;
+  background-image:linear-gradient(rgba(255,255,255,.026) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.026) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 90%)
+}
+button,input{font:inherit}.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;
+  padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.92);
+  border-bottom:1px solid var(--line);backdrop-filter:blur(16px)
+}
+.brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}
+.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.progress-wrap{width:min(280px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:9%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 116px}
+.slide{display:none;animation:enter .38s ease both}.slide.active{display:block}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+h1,h2,h3{margin:0}h1{font:500 clamp(45px,7vw,88px)/.96 var(--serif);letter-spacing:-.045em}
+h2{font:500 clamp(34px,5vw,60px)/1 var(--serif);letter-spacing:-.035em}
+h3{font:600 22px/1.2 var(--serif)}p{margin-top:13px}
+.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d7dde6;max-width:930px}
+.tiny{font-size:12px;color:var(--muted);line-height:1.5}.green{color:var(--green);font-weight:850}.gold{color:var(--gold2);font-weight:850}.cyan{color:var(--cyan);font-weight:850}.magenta{color:var(--magenta);font-weight:850}
+.hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.93fr 1.07fr;gap:38px;align-items:center}
+.hero-visual{
+  position:relative;min-height:590px;border:1px solid var(--line);border-radius:30px;
+  background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.98));
+  box-shadow:var(--shadow);overflow:hidden;padding:24px;display:grid;place-items:center
+}
+.hero-visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 50%);transform:translate(18%,4%)}
+.hero-visual svg{position:relative;width:min(100%,730px);height:auto}
+.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:700px;color:#d8dde6;border-radius:0 14px 14px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.98));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}
+.card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e5dfd4;line-height:1.55}
+.callout strong{color:var(--gold2)}.danger{border-color:rgba(238,119,119,.35);background:rgba(238,119,119,.065)}.danger strong{color:#ffaaaa}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+.route{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px}.route-step{border:1px solid var(--line);border-radius:18px;padding:17px 12px;text-align:center;background:rgba(217,181,107,.035);font-size:13px;color:#cdd4df}.route-step b{display:block;color:var(--gold2);margin-bottom:7px}
+.diagram{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));padding:18px;min-height:500px;box-shadow:var(--shadow);display:grid;place-items:center}
+.diagram svg{width:min(100%,760px);height:auto}.concept{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.lab{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:start}
+.control-group{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}
+.control-group label{display:flex;justify-content:space-between;gap:12px;color:var(--gold2);font-weight:800;margin-bottom:10px}
+.control-group input[type=range]{width:100%;accent-color:var(--gold)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}
+.pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}
+.result-box{min-height:150px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.55}
+.status-big{font:600 34px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15}.metric b{display:block;font:600 28px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{color:var(--muted);font-size:12px}
+.choice-list{display:grid;gap:10px}.choice{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.choice:hover,.choice.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}
+.feedback{min-height:70px;color:#cbd2dd;line-height:1.5}.feedback.ok{color:#9ee8b0}.feedback.bad{color:#ffaaaa}
+.entry-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.entry-tabs button{border:1px solid var(--line);background:#090e15;color:#d9dfe8;border-radius:999px;padding:10px 15px;cursor:pointer}.entry-tabs button.active{background:rgba(217,181,107,.12);border-color:var(--gold);color:var(--gold2)}
+.entry-detail{display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:start}.steps{counter-reset:s;display:grid;gap:12px}.step{position:relative;padding:15px 15px 15px 52px;border:1px solid var(--line2);border-radius:15px;background:#090e15;color:#d7dde5;line-height:1.5}.step:before{counter-increment:s;content:counter(s);position:absolute;left:15px;top:14px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:rgba(217,181,107,.13);color:var(--gold2);font-weight:900}
+.formula{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:16px;border-radius:16px;background:rgba(217,181,107,.055);border:1px solid var(--line);font:600 clamp(19px,3vw,31px)/1.25 var(--serif);color:var(--gold2)}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.practice-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:20px}.practice-btn{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e9edf3;text-align:left;cursor:pointer}.practice-btn:hover{border-color:var(--gold)}.practice-feedback{min-height:48px;margin-top:12px;color:var(--muted)}
+.quiz-layout{display:grid;grid-template-columns:1.18fr .82fr;gap:24px}.question{padding:20px;border:1px solid var(--line2);border-radius:17px;background:rgba(255,255,255,.018);margin-bottom:15px}.question h3{font-family:var(--sans);font-size:17px;line-height:1.45}.answer{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e9edf3;text-align:left;cursor:pointer}.answer:hover{border-color:var(--gold)}.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.09)}
+.quiz-summary{position:sticky;top:95px}.score{font:600 70px/1 var(--serif);color:var(--gold2)}.critical{color:#ffaaaa;font-size:12px;margin-top:7px}
+.primary,.secondary{border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:850;letter-spacing:.035em}.primary{border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#c7953d);color:#171005}.secondary{border:1px solid var(--line);background:#0a0f17;color:#e8ebf0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.nav{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px clamp(16px,3vw,40px) calc(13px + env(safe-area-inset-bottom));background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px)}.nav-center{color:var(--muted);font-size:12px;text-align:center}.nav button:disabled{opacity:.35;cursor:not-allowed}
+.completion{display:none;margin-top:18px}.completion.show{display:block}.ref-list{display:grid;gap:9px;color:#ccd3dd;font-size:13px;line-height:1.5}
+@media(max-width:950px){.top-title{display:none}.progress-wrap{margin-left:auto}.hero,.concept,.lab,.entry-detail,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:470px}.grid3{grid-template-columns:1fr}.route{grid-template-columns:repeat(2,1fr)}.quiz-summary{position:static}}
+@media(max-width:620px){main{padding-top:20px}.brand-name{font-size:25px}.brand-sub{display:none}.progress-wrap{width:130px}.grid2,.practice-grid{grid-template-columns:1fr}.route{grid-template-columns:1fr}.nav-center{display:none}.hero-visual{min-height:390px;padding:12px}.metric-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+  <div class="top-title">IFR PATH · Módulo 07 · Esperas IFR</div>
+  <div class="progress-wrap"><div class="progress-meta"><span id="progressText">Pantalla 1 de 11</span><span id="progressPercent">9%</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+</header>
+
+<main>
+<section class="slide active" data-title="Inicio">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">MÓDULO 07 · PROCEDIMIENTOS IFR</div><div class="accent"></div>
+      <h1>Esperas IFR: <span class="gold">entrada, control y salida</span></h1>
+      <p class="lede">Interpreta la autorización, reconoce el lado protegido, selecciona una entrada lógica y estabiliza la espera con tiempo, distancia y corrección por viento.</p>
+      <div class="chips"><span class="chip">Directa</span><span class="chip">Paralela</span><span class="chip">Gota</span><span class="chip">Tiempo y DME</span><span class="chip">Viento</span><span class="chip">G1000/RNAV</span></div>
+      <div class="hero-note"><span>◉</span><div><strong>Resultado esperado:</strong> el estudiante podrá briefear y ejecutar una espera sin decidir la entrada únicamente “por intuición”.</div></div>
+      <div class="actions"><button class="primary" data-go="1">Comenzar módulo</button></div>
+    </div>
+    <div class="hero-visual">
+      <svg viewBox="0 0 760 650" role="img" aria-label="Patrón de espera estándar">
+        <defs><filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <g transform="translate(380 325)">
+          <circle r="34" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/>
+          <path d="M0 0H190 A95 95 0 0 1 190-190 H0 A95 95 0 0 0 0 0" fill="none" stroke="#58db78" stroke-width="12" filter="url(#g)"/>
+          <path d="M-250 0H0" stroke="#d9b56b" stroke-width="6" stroke-dasharray="12 8"/>
+          <g transform="translate(-115 0) rotate(90)"><path d="M0-25l9 18 29 7-29 7L0 25-8 7-34 0l26-7z" fill="#f7f4ee"/></g>
+          <text x="-220" y="-25" fill="#f0cf86" font-size="24" font-family="Georgia">INBOUND 090°</text>
+          <text x="52" y="-215" fill="#58db78" font-size="23" font-family="Georgia">OUTBOUND 270°</text>
+          <text x="55" y="45" fill="#f0cf86" font-size="22" font-family="system-ui">FIX</text>
+          <path d="M205-95l30 0-15 22z" fill="#f0cf86"/>
+          <path d="M95-190l0-30 22 15z" fill="#f0cf86"/>
+          <text x="175" y="85" fill="#aeb7c4" font-size="18" font-family="system-ui">GIROS DERECHA</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Ruta">
+  <div class="eyebrow">RUTA DEL MÓDULO</div><div class="accent"></div>
+  <h2>Una espera comienza antes de cruzar el fix</h2>
+  <p class="lede">La mayor parte de los errores nace de llegar al punto sin haber organizado los datos.</p>
+  <div class="route">
+    <div class="route-step"><b>1. Escuchar</b>Copiar autorización y EFC.</div>
+    <div class="route-step"><b>2. Dibujar</b>Fix, inbound y giros.</div>
+    <div class="route-step"><b>3. Entrar</b>Directa, paralela o gota.</div>
+    <div class="route-step"><b>4. Estabilizar</b>Curso, tiempo o distancia.</div>
+    <div class="route-step"><b>5. Corregir</b>Viento y tendencia.</div>
+    <div class="route-step"><b>6. Salir</b>Según autorización ATC.</div>
+  </div>
+  <div class="grid2" style="margin-top:24px">
+    <div class="card"><div class="label">BRIEFING</div><h3>Datos mínimos</h3><p>Fix, curso inbound, dirección de giros, tramo por tiempo o distancia, altitud, velocidad máxima publicada y EFC cuando sea suministrado.</p></div>
+    <div class="card"><div class="label">PRIORIDAD</div><h3>Control antes que programación</h3><p>La línea magenta puede ayudar, pero no sustituye la comprensión del patrón ni la verificación de lo que fue autorizado.</p></div>
+  </div>
+  <div class="callout danger" style="margin-top:22px"><strong>No universalices límites:</strong> la velocidad máxima y los criterios operacionales dependen de la carta, AIP, autoridad y SOP aplicables.</div>
+</section>
+
+<section class="slide" data-title="Anatomía">
+  <div class="eyebrow">ANATOMÍA DE LA ESPERA</div><div class="accent"></div>
+  <h2>Primero construye la pista de carreras</h2>
+  <div class="concept" style="margin-top:26px">
+    <div class="diagram">
+      <svg viewBox="0 0 760 610" role="img" aria-label="Elementos de una espera">
+        <g transform="translate(330 320)">
+          <circle r="31" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/>
+          <path d="M0 0H220A95 95 0 0 1 220-190H0A95 95 0 0 0 0 0" fill="none" stroke="#58db78" stroke-width="10"/>
+          <line x1="-245" y1="0" x2="0" y2="0" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 7"/>
+          <text x="-210" y="-25" fill="#f0cf86" font-size="22" font-family="Georgia">CURSO INBOUND 090°</text>
+          <text x="48" y="-215" fill="#65d8e8" font-size="22" font-family="Georgia">TRAMO OUTBOUND</text>
+          <text x="72" y="-20" fill="#58db78" font-size="22" font-family="Georgia">TRAMO INBOUND</text>
+          <text x="5" y="54" fill="#f0cf86" font-size="20" font-family="system-ui">HOLDING FIX</text>
+          <path d="M238-95h30l-15 22z" fill="#f0cf86"/>
+          <text x="355" y="-100" fill="#aeb7c4" font-size="18" font-family="system-ui">GIROS DERECHA</text>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <div class="card"><div class="label">ESTÁNDAR</div><h3>Giros a la derecha</h3><p>Cuando no se especifican giros izquierdos, el patrón estándar utiliza giros a la derecha.</p></div>
+      <div class="card" style="margin-top:16px"><div class="label">NO ESTÁNDAR</div><h3>Giros a la izquierda</h3><p>Debe estar publicado o ser expresamente autorizado. La geometría de las entradas se refleja.</p></div>
+      <div class="callout" style="margin-top:16px"><strong>Curso inbound:</strong> es el curso hacia el fix. El outbound es su recíproco, pero el rumbo real puede variar por viento.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Autorización">
+  <div class="eyebrow">COPIA Y BRIEFING</div><div class="accent"></div>
+  <h2>Convierte la autorización en seis datos</h2>
+  <p class="lede">Selecciona cada bloque para completar el briefing de una espera no publicada.</p>
+  <div class="grid3" style="margin-top:26px">
+    <button class="card brief-card" data-brief="fix" style="text-align:left;color:inherit;cursor:pointer"><div class="label">1</div><h3>Fix</h3><p>Punto sobre el cual se establece la espera.</p></button>
+    <button class="card brief-card" data-brief="side" style="text-align:left;color:inherit;cursor:pointer"><div class="label">2</div><h3>Dirección desde el fix</h3><p>Norte, sur, este, oeste o sector intermedio.</p></button>
+    <button class="card brief-card" data-brief="inbound" style="text-align:left;color:inherit;cursor:pointer"><div class="label">3</div><h3>Radial/curso/bearing</h3><p>Define la orientación del patrón.</p></button>
+    <button class="card brief-card" data-brief="leg" style="text-align:left;color:inherit;cursor:pointer"><div class="label">4</div><h3>Tramo</h3><p>Tiempo o distancia, cuando se especifica.</p></button>
+    <button class="card brief-card" data-brief="turns" style="text-align:left;color:inherit;cursor:pointer"><div class="label">5</div><h3>Giros</h3><p>Izquierdos si son no estándar.</p></button>
+    <button class="card brief-card" data-brief="efc" style="text-align:left;color:inherit;cursor:pointer"><div class="label">6</div><h3>EFC y altitud</h3><p>Expect Further Clearance y nivel autorizado.</p></button>
+  </div>
+  <div class="result-box" id="briefFeedback" style="margin-top:20px"><div class="status-big">Briefing de ejemplo</div>“Hold east of ABC on the 090 radial, right turns, 1-minute legs, maintain 8,000 feet, expect further clearance at 35.”</div>
+</section>
+
+<section class="slide" data-title="Selector de entrada">
+  <div class="eyebrow">LABORATORIO DE ENTRADAS</div><div class="accent"></div>
+  <h2>Reconoce el sector antes de llegar al fix</h2>
+  <p class="lede">Patrón mostrado: curso inbound 270°, giros a la derecha. El escenario evita zonas cercanas a los límites de sector.</p>
+  <div class="lab" style="margin-top:26px">
+    <div class="diagram">
+      <svg viewBox="0 0 760 650" id="sectorSvg" role="img" aria-label="Sectores de entrada a una espera">
+        <g transform="translate(380 330)">
+          <path d="M0 0 L-285 -165 A330 330 0 0 1 -285 165 Z" fill="rgba(101,216,232,.18)" stroke="#65d8e8" stroke-width="2"/>
+          <path d="M0 0 L-285 165 A330 330 0 0 1 0 330 Z" fill="rgba(217,181,107,.18)" stroke="#d9b56b" stroke-width="2"/>
+          <path d="M0 0 L0 330 A330 330 0 1 1 -285 -165 Z" fill="rgba(88,219,120,.12)" stroke="#58db78" stroke-width="2"/>
+          <circle r="29" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/>
+          <path d="M0 0H195A88 88 0 0 0 195-176H0A88 88 0 0 1 0 0" fill="none" stroke="#f7f4ee" stroke-width="7"/>
+          <text x="-250" y="-205" fill="#65d8e8" font-size="22" font-family="Georgia">PARALELA</text>
+          <text x="-245" y="250" fill="#f0cf86" font-size="22" font-family="Georgia">GOTA</text>
+          <text x="125" y="255" fill="#58db78" font-size="22" font-family="Georgia">DIRECTA</text>
+          <text x="35" y="45" fill="#f0cf86" font-size="18" font-family="system-ui">FIX</text>
+          <g id="arrivalAircraft" transform="translate(-220 -210) rotate(135)"><path d="M0-24l8 17 28 7-28 7L0 24-7 7-32 0l25-7z" fill="#f7f4ee"/></g>
+          <line id="arrivalLine" x1="-220" y1="-210" x2="0" y2="0" stroke="#f0cf86" stroke-width="4" stroke-dasharray="9 7"/>
+        </g>
+      </svg>
+    </div>
+    <div class="card">
+      <div class="control-group"><label>Procedencia del escenario</label><div class="seg">
+        <button class="pill scenario active" data-scenario="nw">Noroeste</button>
+        <button class="pill scenario" data-scenario="sw">Suroeste</button>
+        <button class="pill scenario" data-scenario="e">Este</button>
+      </div></div>
+      <div class="choice-list">
+        <button class="choice entry-choice" data-entry="parallel">Entrada paralela</button>
+        <button class="choice entry-choice" data-entry="teardrop">Entrada en gota</button>
+        <button class="choice entry-choice" data-entry="direct">Entrada directa</button>
+      </div>
+      <div class="feedback" id="entryFeedback">Selecciona la entrada recomendada.</div>
+      <div class="callout" style="margin-top:14px"><strong>FAA:</strong> las tres entradas son procedimientos recomendados y forman parte del diseño del espacio protegido.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Entradas paso a paso">
+  <div class="eyebrow">TRES PROCEDIMIENTOS</div><div class="accent"></div>
+  <h2>Qué hace la aeronave después de cruzar el fix</h2>
+  <div class="entry-tabs"><button class="active" data-entry-tab="direct">Directa</button><button data-entry-tab="parallel">Paralela</button><button data-entry-tab="teardrop">Gota</button></div>
+  <div class="entry-detail">
+    <div class="diagram" style="min-height:470px">
+      <svg viewBox="0 0 760 570" id="entryDiagram" role="img" aria-label="Diagrama de entrada">
+        <g transform="translate(290 310)">
+          <circle r="30" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/>
+          <path d="M0 0H210A90 90 0 0 0 210-180H0A90 90 0 0 1 0 0" fill="none" stroke="#34404e" stroke-width="8"/>
+          <path id="entryPath" d="M-220 0H0 C60 0 70-95 140-95" fill="none" stroke="#58db78" stroke-width="10" stroke-linecap="round"/>
+          <g id="entryPlane" transform="translate(-125 0) rotate(90)"><path d="M0-23l8 16 27 7-27 7L0 23-7 7-31 0l24-7z" fill="#f7f4ee"/></g>
+          <text id="entryDiagramLabel" x="-210" y="-35" fill="#f0cf86" font-size="25" font-family="Georgia">DIRECTA</text>
+        </g>
+      </svg>
+    </div>
+    <div class="card">
+      <div class="label" id="entryName">ENTRADA DIRECTA</div>
+      <h3 id="entryHeadline">Cruza el fix y gira para seguir el patrón</h3>
+      <div class="steps" id="entrySteps">
+        <div class="step">Llega al holding fix.</div><div class="step">Inicia el giro en la dirección publicada.</div><div class="step">Establece el tramo outbound.</div><div class="step">Vuela el patrón normalmente.</div>
+      </div>
+      <div class="callout" style="margin-top:15px"><strong>Clave:</strong> la entrada no termina hasta que la aeronave queda establecida en el curso inbound hacia el fix.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Tiempo y distancia">
+  <div class="eyebrow">CONTROL LONGITUDINAL</div><div class="accent"></div>
+  <h2>Tiempo o distancia: no mezcles los dos criterios</h2>
+  <div class="grid2" style="margin-top:26px">
+    <div class="card">
+      <div class="label">ESPERA POR TIEMPO</div><h3>Objetivo del tramo inbound</h3>
+      <p>Referencia FAA: 1 minuto a 14.000 ft MSL o menos; 1½ minutos por encima. El outbound inicial usa el tiempo correspondiente y luego se ajusta para lograr el inbound requerido.</p>
+      <div class="formula">Inicio outbound = sobre/abeam el fix, lo que ocurra después</div>
+    </div>
+    <div class="card">
+      <div class="label">ESPERA DME / RNAV</div><h3>El extremo se define por distancia</h3>
+      <p>Cuando el tramo está publicado en millas, la lectura DME o along-track distance determina el final del outbound. No reemplaces esa distancia por un minuto arbitrario.</p>
+      <div class="formula">Fix + longitud publicada = extremo outbound</div>
+    </div>
+  </div>
+  <div class="lab" style="margin-top:22px">
+    <div class="card">
+      <div class="control-group"><label>Altitud de entrenamiento <span id="altValue">10.000 ft</span></label><input id="altSlider" type="range" min="4000" max="18000" step="1000" value="10000"></div>
+      <div class="control-group"><label>Inbound observado <span id="inboundTimeValue">55 s</span></label><input id="timeSlider" type="range" min="40" max="110" step="5" value="55"></div>
+    </div>
+    <div class="result-box" id="timingFeedback"><div class="status-big">Ajuste outbound</div>Calculando...</div>
+  </div>
+</section>
+
+<section class="slide" data-title="Viento">
+  <div class="eyebrow">CORRECCIÓN POR VIENTO</div><div class="accent"></div>
+  <h2>Estabiliza primero el inbound</h2>
+  <p class="lede">La corrección outbound busca compensar el desplazamiento acumulado durante el circuito.</p>
+  <div class="lab" style="margin-top:26px">
+    <div class="diagram">
+      <svg viewBox="0 0 760 590" role="img" aria-label="Corrección de viento en espera">
+        <g transform="translate(310 320)">
+          <circle r="30" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/>
+          <path d="M0 0H215A92 92 0 0 0 215-184H0A92 92 0 0 1 0 0" fill="none" stroke="#58db78" stroke-width="10"/>
+          <path d="M-230 0H0" stroke="#d9b56b" stroke-width="5" stroke-dasharray="10 7"/>
+          <path d="M70 95l70-75" stroke="#65d8e8" stroke-width="7"/><path d="M140 20l-9 29-22-21z" fill="#65d8e8"/>
+          <text x="54" y="125" fill="#65d8e8" font-size="20" font-family="Georgia">VIENTO</text>
+          <text x="-220" y="-28" fill="#f0cf86" font-size="20" font-family="Georgia">INBOUND WCA</text>
+          <text x="45" y="-212" fill="#f0cf86" font-size="20" font-family="Georgia">OUTBOUND ≈ 3 × WCA</text>
+        </g>
+      </svg>
+    </div>
+    <div class="card">
+      <div class="control-group"><label>Corrección inbound <span id="wcaValue">6° izquierda</span></label><input id="wcaSlider" type="range" min="-12" max="12" step="1" value="-6"></div>
+      <div class="metric-grid">
+        <div class="metric"><b id="inboundWcaMetric">6° L</b><span>Inbound</span></div>
+        <div class="metric"><b id="outboundWcaMetric">18° R</b><span>Outbound inicial FAA</span></div>
+        <div class="metric"><b>Bracketing</b><span>Ajusta según resultado</span></div>
+      </div>
+      <div class="callout" style="margin-top:15px"><strong>Técnica FAA:</strong> triplicar inicialmente la corrección de deriva inbound en sentido opuesto durante outbound. Después debe verificarse y ajustarse.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="G1000 y RNAV">
+  <div class="eyebrow">PRESENTACIÓN MODERNA</div><div class="accent"></div>
+  <h2>La automatización debe coincidir con tu briefing</h2>
+  <div class="concept" style="margin-top:26px">
+    <div class="diagram">
+      <svg viewBox="0 0 760 610" role="img" aria-label="HSI simulado con espera RNAV">
+        <rect x="75" y="45" width="610" height="510" rx="28" fill="#08101b" stroke="#d9b56b" stroke-width="3"/>
+        <circle cx="365" cy="315" r="175" fill="#111a26" stroke="#e8edf4" stroke-width="4"/>
+        <g stroke="#e8edf4" stroke-width="3"><line x1="365" y1="128" x2="365" y2="153"/><line x1="552" y1="315" x2="527" y2="315"/><line x1="365" y1="502" x2="365" y2="477"/><line x1="178" y1="315" x2="203" y2="315"/></g>
+        <text x="365" y="118" text-anchor="middle" fill="#f7f4ee" font-size="28" font-family="system-ui">N</text><text x="565" y="323" fill="#f7f4ee" font-size="28" font-family="system-ui">E</text><text x="365" y="530" text-anchor="middle" fill="#f7f4ee" font-size="28" font-family="system-ui">S</text><text x="150" y="323" fill="#f7f4ee" font-size="28" font-family="system-ui">W</text>
+        <path d="M365 315H505A62 62 0 0 0 505 191H365A62 62 0 0 1 365 315" fill="none" stroke="#ec5bd8" stroke-width="11"/>
+        <path d="M365 450V185" stroke="#ec5bd8" stroke-width="8"/><path d="M365 175l-13 25h26z" fill="#ec5bd8"/>
+        <path d="M365 280l12 26 38 9-38 9-12 27-11-27-37-9 37-9z" fill="#f7f4ee"/>
+        <text x="110" y="85" fill="#ec5bd8" font-size="22" font-family="system-ui">GPS · HOLD</text>
+        <text x="505" y="85" fill="#58db78" font-size="21" font-family="system-ui">R TURNS</text>
+        <text x="110" y="530" fill="#65d8e8" font-size="20" font-family="system-ui">INB 360°</text>
+        <text x="505" y="530" fill="#f0cf86" font-size="20" font-family="system-ui">1:00</text>
+      </svg>
+    </div>
+    <div>
+      <div class="card"><div class="label">ANTES DE ACTIVAR</div><h3>Verifica</h3><p>Fix, curso inbound, dirección de giros, tiempo o distancia, altitud, velocidad y secuencia posterior.</p></div>
+      <div class="card" style="margin-top:16px"><div class="label">DURANTE</div><h3>Monitorea</h3><p>Modo activo, fuente GPS, leg activo, tiempo/distancia, tendencia y punto de giro calculado.</p></div>
+      <div class="callout danger" style="margin-top:16px"><strong>Variación de equipos:</strong> la creación y activación manual de una espera cambia entre instalaciones Garmin. Debe utilizarse el suplemento y procedimiento de la aeronave.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Práctica">
+  <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent"></div>
+  <h2>Resuelve el patrón antes de mirar la respuesta</h2>
+  <div class="practice-grid" style="margin-top:26px">
+    <div class="practice-card"><div class="label">CASO 1</div><h3>Patrón estándar</h3><p>¿Qué dirección tienen los giros?</p><button class="practice-btn" data-practice="1a">Derecha</button><button class="practice-btn" data-practice="1b">Izquierda</button><div class="practice-feedback" id="practice1">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 2</div><h3>Inbound 090°</h3><p>¿Cuál es el curso outbound sin viento?</p><button class="practice-btn" data-practice="2a">270°</button><button class="practice-btn" data-practice="2b">090°</button><div class="practice-feedback" id="practice2">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 3</div><h3>Inbound dura 45 segundos</h3><p>¿Qué tendencia debe tener el siguiente outbound?</p><button class="practice-btn" data-practice="3a">Más largo</button><button class="practice-btn" data-practice="3b">Más corto</button><div class="practice-feedback" id="practice3">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 4</div><h3>Espera DME con leg de 6 NM</h3><p>¿Qué determina el final outbound?</p><button class="practice-btn" data-practice="4a">La distancia publicada</button><button class="practice-btn" data-practice="4b">Siempre un minuto</button><div class="practice-feedback" id="practice4">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CASO 5</div><h3>Inbound WCA 8° izquierda</h3><p>Corrección outbound inicial FAA:</p><button class="practice-btn" data-practice="5a">24° derecha</button><button class="practice-btn" data-practice="5b">8° izquierda</button><div class="practice-feedback" id="practice5">Selecciona una respuesta.</div></div>
+    <div class="practice-card"><div class="label">CALLOUT</div><h3>Briefing esperado</h3><p>“Fix ABC, inbound 090°, giros derecha, un minuto, 8.000 ft, entrada paralela, EFC 35.”</p><div class="callout"><strong>Orden:</strong> orientación → restricciones → entrada → control del patrón.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-title="Evaluación">
+  <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div>
+  <h2>Integra autorización, entrada y mantenimiento</h2>
+  <p class="lede">Se requiere 80 % y responder correctamente las preguntas críticas de patrón y entrada.</p>
+  <div class="quiz-layout" style="margin-top:26px">
+    <div id="quizQuestions">
+      <div class="question" data-q="0" data-correct="b" data-critical="true"><h3>1. En una espera estándar, ¿qué dirección tienen los giros?</h3><button class="answer" data-a="a">Izquierda</button><button class="answer" data-a="b">Derecha</button><button class="answer" data-a="c">Depende únicamente del viento</button></div>
+      <div class="question" data-q="1" data-correct="c"><h3>2. Si el curso inbound es 060°, ¿cuál es el outbound sin viento?</h3><button class="answer" data-a="a">060°</button><button class="answer" data-a="b">120°</button><button class="answer" data-a="c">240°</button></div>
+      <div class="question" data-q="2" data-correct="a" data-critical="true"><h3>3. ¿Qué entrada vuela outbound paralela al curso inbound por el lado no protegido y luego regresa al fix?</h3><button class="answer" data-a="a">Paralela</button><button class="answer" data-a="b">Directa</button><button class="answer" data-a="c">Gota</button></div>
+      <div class="question" data-q="3" data-correct="b"><h3>4. En la entrada en gota FAA, el heading inicial se coloca aproximadamente:</h3><button class="answer" data-a="a">90° fuera del área protegida</button><button class="answer" data-a="b">30° dentro del lado protegido respecto al outbound</button><button class="answer" data-a="c">Sobre el inbound sin girar</button></div>
+      <div class="question" data-q="4" data-correct="c"><h3>5. ¿Cuándo inicia el tiempo outbound?</h3><button class="answer" data-a="a">Al comenzar el giro en el fix</button><button class="answer" data-a="b">Siempre 30 segundos después del fix</button><button class="answer" data-a="c">Sobre/abeam el fix, lo que ocurra después; si no se determina, al completar el giro outbound</button></div>
+      <div class="question" data-q="5" data-correct="a"><h3>6. En una espera por distancia, ¿qué define el extremo outbound?</h3><button class="answer" data-a="a">La distancia DME/ATD publicada o autorizada</button><button class="answer" data-a="b">Siempre 1 minuto</button><button class="answer" data-a="c">La indicación TO/FROM solamente</button></div>
+      <div class="question" data-q="6" data-correct="b"><h3>7. Si el inbound dura menos de lo requerido, el siguiente outbound debe tender a ser:</h3><button class="answer" data-a="a">Más corto</button><button class="answer" data-a="b">Más largo</button><button class="answer" data-a="c">Idéntico sin importar el resultado</button></div>
+      <div class="question" data-q="7" data-correct="c"><h3>8. Con corrección inbound de 6° izquierda, la técnica inicial FAA outbound es aproximadamente:</h3><button class="answer" data-a="a">6° izquierda</button><button class="answer" data-a="b">12° izquierda</button><button class="answer" data-a="c">18° derecha</button></div>
+      <div class="question" data-q="8" data-correct="a"><h3>9. Antes de aceptar la representación RNAV/G1000, debes verificar:</h3><button class="answer" data-a="a">Fix, inbound, giros, tramo y restricciones</button><button class="answer" data-a="b">Solo que la línea sea magenta</button><button class="answer" data-a="c">Únicamente la altitud</button></div>
+      <div class="question" data-q="9" data-correct="b"><h3>10. ¿Qué afirmación describe mejor las entradas directa, paralela y gota?</h3><button class="answer" data-a="a">Son maniobras obligatorias sin tolerancia alguna</button><button class="answer" data-a="b">Son procedimientos recomendados ligados al diseño del espacio protegido</button><button class="answer" data-a="c">Solo aplican a aeronaves sin GPS</button></div>
+    </div>
+    <aside class="card quiz-summary">
+      <div class="label">RESULTADO</div><div class="score" id="score">—</div><p id="scoreText">Responde las diez preguntas y selecciona “Calificar”.</p>
+      <div class="critical">Críticas: preguntas 1 y 3.</div>
+      <div class="actions"><button class="primary" id="gradeQuiz">Calificar</button><button class="secondary" id="resetQuiz">Reiniciar</button></div>
+      <div class="completion" id="completionBox"><div class="callout"><strong>Módulo completado.</strong><br>El resultado fue registrado localmente y enviado al contenedor de Veyra.</div><div class="actions"><button class="primary" id="finishModule">Finalizar módulo</button></div></div>
+    </aside>
+  </div>
+  <div class="card" style="margin-top:24px"><div class="label">REFERENCIAS</div><div class="ref-list">
+    <span>FAA Aeronautical Information Manual, 5-3-8 Holding.</span>
+    <span>FAA Instrument Flying Handbook, capítulo de navegación y procedimientos IFR.</span>
+    <span>EASA Easy Access Rules for Aircrew, revisión noviembre de 2025, como marco vigente de formación IR.</span>
+    <span>AIP, carta, AFM/POH, suplemento de aviónica y SOP aplicables a la operación.</span>
+  </div></div>
+</section>
+</main>
+
+<nav class="nav"><button class="secondary" id="prevBtn">← Anterior</button><div class="nav-center"><span id="slideTitle">Inicio</span><br>Progreso guardado localmente</div><button class="primary" id="nextBtn">Siguiente →</button></nav>
+</div>
+
+<script>
+(()=>{
+const slides=[...document.querySelectorAll('.slide')],bar=document.getElementById('progressBar'),pText=document.getElementById('progressText'),pPct=document.getElementById('progressPercent'),title=document.getElementById('slideTitle'),prev=document.getElementById('prevBtn'),next=document.getElementById('nextBtn');
+const key='veyra_ifr_hold_module_07',startedAt=Date.now();let current=0,bestScore=null;const saved=JSON.parse(localStorage.getItem(key)||'{}');if(Number.isInteger(saved.current)&&saved.current>=0&&saved.current<slides.length)current=saved.current;if(typeof saved.bestScore==='number')bestScore=saved.bestScore;
+function emit(type,data={}){const payload={source:'veyra-module',type,moduleId:'veyra-ifr-hold-07',timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+function save(extra={}){localStorage.setItem(key,JSON.stringify({current,bestScore,updatedAt:new Date().toISOString(),...extra}))}
+function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round((current+1)/slides.length*100);bar.style.width=pct+'%';pText.textContent=`Pantalla ${current+1} de ${slides.length}`;pPct.textContent=pct+'%';title.textContent=slides[current].dataset.title||'';prev.disabled=current===0;next.textContent=current===slides.length-1?'Finalizar':'Siguiente →';save();emit('veyra:progress',{progress:pct,screen:current+1,totalScreens:slides.length});window.scrollTo({top:0,behavior:'smooth'})}
+prev.onclick=()=>show(current-1);next.onclick=()=>{if(current<slides.length-1){show(current+1);return;}emit('veyra:exit',{score:bestScore,completed:Boolean(saved.completed),progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});setTimeout(()=>{window.location.href='/';},150);};document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(Number(b.dataset.go)));
+
+const brief={
+fix:'El holding fix es el punto que debes cruzar y reportar cuando sea requerido.',
+side:'La dirección desde el fix ubica el patrón: norte, noreste, este, etc.',
+inbound:'El radial, curso, bearing, airway o route define la orientación del inbound.',
+leg:'El tramo puede expresarse en tiempo o millas. No sustituyas un criterio por el otro.',
+turns:'Los giros izquierdos deben quedar identificados; si no, el patrón estándar utiliza derecha.',
+efc:'La altitud limita verticalmente la maniobra y el EFC ayuda a gestionar la continuación.'
+};
+document.querySelectorAll('.brief-card').forEach(b=>b.onclick=()=>{document.querySelectorAll('.brief-card').forEach(x=>x.style.borderColor='');b.style.borderColor='var(--gold)';document.getElementById('briefFeedback').innerHTML=`<div class="status-big">${b.querySelector('h3').textContent}</div>${brief[b.dataset.brief]}`});
+
+let scenario='nw';const coords={nw:[-220,-210,135],sw:[-230,210,45],e:[250,20,-90]},correctEntry={nw:'parallel',sw:'teardrop',e:'direct'};
+function updateScenario(){const [x,y,r]=coords[scenario],pl=document.getElementById('arrivalAircraft'),ln=document.getElementById('arrivalLine');pl.setAttribute('transform',`translate(${x} ${y}) rotate(${r})`);ln.setAttribute('x1',x);ln.setAttribute('y1',y);document.getElementById('entryFeedback').className='feedback';document.getElementById('entryFeedback').textContent='Selecciona la entrada recomendada.'}
+document.querySelectorAll('.scenario').forEach(b=>b.onclick=()=>{document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');scenario=b.dataset.scenario;updateScenario()});
+document.querySelectorAll('.entry-choice').forEach(b=>b.onclick=()=>{document.querySelectorAll('.entry-choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const ok=b.dataset.entry===correctEntry[scenario],fb=document.getElementById('entryFeedback');fb.className='feedback '+(ok?'ok':'bad');const names={parallel:'paralela',teardrop:'gota',direct:'directa'};fb.textContent=ok?`Correcto: el escenario cae claramente en el sector de entrada ${names[b.dataset.entry]}.`:`Revisa el sector: para esta procedencia la entrada recomendada es ${names[correctEntry[scenario]]}.`});
+updateScenario();
+
+const entryData={
+direct:{name:'ENTRADA DIRECTA',head:'Cruza el fix y gira para seguir el patrón',path:'M-220 0H0 C60 0 70-95 140-95',label:'DIRECTA',steps:['Llega al holding fix.','Inicia el giro en la dirección publicada.','Establece el tramo outbound.','Vuela el patrón normalmente.']},
+parallel:{name:'ENTRADA PARALELA',head:'Paralela al inbound por el lado no protegido',path:'M-220 0H0 L205 0 C95 5 20-85 20-175',label:'PARALELA',steps:['Cruza el fix.','Vuela outbound paralela al curso inbound por el lado no protegido durante el tiempo apropiado.','Gira hacia el lado del patrón más de 180°.','Intercepta el curso inbound y regresa al fix.']},
+teardrop:{name:'ENTRADA EN GOTA',head:'30° dentro del lado protegido',path:'M-220 0H0 L165-95 C205-125 110-190 25-175',label:'GOTA',steps:['Cruza el fix.','Selecciona un heading 30° dentro del lado protegido respecto al outbound.','Mantén el tiempo apropiado.','Gira en la dirección del patrón e intercepta inbound.']}
+};
+function renderEntry(k){const d=entryData[k];document.getElementById('entryName').textContent=d.name;document.getElementById('entryHeadline').textContent=d.head;document.getElementById('entryPath').setAttribute('d',d.path);document.getElementById('entryDiagramLabel').textContent=d.label;document.getElementById('entrySteps').innerHTML=d.steps.map(s=>`<div class="step">${s}</div>`).join('')}
+document.querySelectorAll('[data-entry-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-entry-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderEntry(b.dataset.entryTab)});renderEntry('direct');
+
+const alt=document.getElementById('altSlider'),time=document.getElementById('timeSlider'),altV=document.getElementById('altValue'),timeV=document.getElementById('inboundTimeValue'),timing=document.getElementById('timingFeedback');
+function timingUpdate(){const a=Number(alt.value),t=Number(time.value),target=a<=14000?60:90;altV.textContent=a.toLocaleString('es-CO')+' ft';timeV.textContent=t+' s';const diff=target-t;let msg;if(Math.abs(diff)<=5)msg='El inbound está dentro del margen didáctico. Mantén aproximadamente el outbound actual y continúa afinando.';else if(diff>0)msg=`El inbound quedó ${diff} s corto. El siguiente outbound debe aumentar para acercarse a ${target} s inbound.`;else msg=`El inbound quedó ${Math.abs(diff)} s largo. Reduce el siguiente outbound para acercarte a ${target} s inbound.`;timing.innerHTML=`<div class="status-big">Objetivo inbound: ${target} s</div>${msg}<br><span class="tiny">La respuesta real también depende del viento y de la técnica de viraje.</span>`}
+alt.oninput=timingUpdate;time.oninput=timingUpdate;timingUpdate();
+
+const wca=document.getElementById('wcaSlider');function wcaUpdate(){const v=Number(wca.value),side=v<0?'izquierda':v>0?'derecha':'sin corrección',abs=Math.abs(v),out=-v*3,outSide=out<0?'L':out>0?'R':'—';document.getElementById('wcaValue').textContent=v===0?'0°':`${abs}° ${side}`;document.getElementById('inboundWcaMetric').textContent=v===0?'0°':`${abs}° ${v<0?'L':'R'}`;document.getElementById('outboundWcaMetric').textContent=out===0?'0°':`${Math.abs(out)}° ${outSide}`}
+wca.oninput=wcaUpdate;wcaUpdate();
+
+const pCorrect={'1a':1,'1b':0,'2a':1,'2b':0,'3a':1,'3b':0,'4a':1,'4b':0,'5a':1,'5b':0},pMsg={
+'1a':'Correcto. Estándar significa giros a la derecha.','1b':'No. Izquierda corresponde a un patrón no estándar.',
+'2a':'Correcto. El recíproco de 090° es 270°.','2b':'No. 090° es el inbound suministrado.',
+'3a':'Correcto. Debes extender outbound para aumentar el siguiente inbound.','3b':'No. Acortar outbound reduciría aún más el tiempo inbound.',
+'4a':'Correcto. La distancia publicada/ATD define el extremo.','4b':'No. En una espera por distancia no se usa automáticamente un minuto.',
+'5a':'Correcto. La técnica inicial FAA triplica y aplica en sentido opuesto.','5b':'No. El outbound requiere una corrección inicial opuesta y mayor.'
+};
+document.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>{const k=b.dataset.practice,n=k[0],fb=document.getElementById('practice'+n),ok=pCorrect[k];fb.style.color=ok?'#9ee8b0':'#ffaaaa';fb.textContent=pMsg[k]});
+
+const answers={};document.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{const q=b.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');answers[q.dataset.q]=b.dataset.a});
+document.getElementById('gradeQuiz').onclick=()=>{const qs=[...document.querySelectorAll('.question')];let correct=0,criticalOk=true;qs.forEach(q=>{const ok=answers[q.dataset.q]===q.dataset.correct;if(ok)correct++;if(q.dataset.critical==='true'&&!ok)criticalOk=false});const score=Math.round(correct/qs.length*100),passed=score>=80&&criticalOk;bestScore=bestScore===null?score:Math.max(bestScore,score);document.getElementById('score').textContent=score+'%';document.getElementById('scoreText').textContent=passed?'Aprobado. Puedes briefear, ingresar y estabilizar una espera básica.':!criticalOk?'No aprobado: revisa patrón estándar y entrada paralela.':'Aún no alcanzas 80 %. Revisa los laboratorios.';document.getElementById('completionBox').classList.toggle('show',passed);save({bestScore,completed:passed,score});emit('veyra:complete',{score,passed,criticalOk,timeSeconds:Math.round((Date.now()-startedAt)/1000)})};
+document.getElementById('resetQuiz').onclick=()=>{Object.keys(answers).forEach(k=>delete answers[k]);document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));document.getElementById('score').textContent='—';document.getElementById('scoreText').textContent='Responde las diez preguntas y selecciona “Calificar”.';document.getElementById('completionBox').classList.remove('show')};
+document.getElementById('finishModule').onclick=()=>{emit('veyra:exit',{score:bestScore,completed:true,progress:100,timeSeconds:Math.round((Date.now()-startedAt)/1000)});setTimeout(()=>{window.location.href='/';},150);};
+emit('veyra:ready',{progress:Math.round((current+1)/slides.length*100),bestScore});show(current);
+})();
+</script>
+</body>
+</html>
