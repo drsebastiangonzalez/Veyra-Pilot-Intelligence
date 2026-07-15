@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <title>VEYRA IFR PATH · Módulo 05 · DME y determinación de posición</title>
+  <style>
+    :root{
+      --bg:#05070b;--bg2:#080d14;--panel:#0d131c;--panel2:#111a26;
+      --gold:#d9b56b;--gold2:#f0cf86;--white:#f7f4ee;--muted:#aeb7c4;
+      --green:#58db78;--magenta:#ee58d6;--cyan:#65d8e8;--danger:#ef7272;
+      --line:rgba(217,181,107,.28);--line2:rgba(255,255,255,.09);
+      --shadow:0 22px 60px rgba(0,0,0,.38);--r:22px;
+      --serif:Georgia,'Times New Roman',serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--white);font-family:var(--sans);background:radial-gradient(circle at 86% 8%,rgba(217,181,107,.08),transparent 28rem),linear-gradient(180deg,#05070b,#080c12 58%,#05070b);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+    button,select,input{font:inherit}.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.91);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+    .brand{min-width:max-content;text-decoration:none;color:inherit;cursor:pointer}.brand-name{font:600 30px/1 var(--serif);letter-spacing:-.02em}.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}.progress-wrap{width:min(280px,30vw);min-width:130px}.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}.progress-track{height:5px;background:#1a2230;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:9%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.35s}
+    main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 112px}.slide{display:none;animation:enter .4s ease both}.slide.active{display:block}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}h1,h2,h3{margin:0}h1{font:500 clamp(44px,7vw,88px)/.96 var(--serif);letter-spacing:-.045em}h2{font:500 clamp(34px,5vw,60px)/1 var(--serif);letter-spacing:-.035em}h3{font:600 22px/1.2 var(--serif)}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dde6;max-width:900px}.tiny{font-size:12px;color:var(--muted);line-height:1.5}.green{color:var(--green);font-weight:850}.magenta{color:var(--magenta);font-weight:850}.gold{color:var(--gold2);font-weight:850}.cyan{color:var(--cyan);font-weight:850}
+    .hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.92fr 1.08fr;gap:38px;align-items:center}.hero-visual{position:relative;min-height:590px;border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,rgba(18,25,36,.94),rgba(7,10,15,.97));box-shadow:var(--shadow);overflow:hidden;padding:24px;display:grid;place-items:center}.hero-visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(217,181,107,.12),transparent 50%);transform:translate(18%,4%)}
+    .hero-copy .chips{margin-top:22px}.hero-note{display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(217,181,107,.055);max-width:680px;color:#d8dde6;border-radius:0 14px 14px 0}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{border:1px solid rgba(217,181,107,.23);border-radius:var(--r);background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:24px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card p{color:#cbd2dd;line-height:1.6}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}.callout{border:1px solid rgba(217,181,107,.36);background:rgba(217,181,107,.055);padding:18px 20px;border-radius:16px;color:#e6e0d5;line-height:1.55}.callout strong{color:var(--gold2)}.danger{border-color:rgba(239,114,114,.35);background:rgba(239,114,114,.065)}.danger strong{color:#ffaaaa}.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dce4;font-size:12px;background:rgba(217,181,107,.035)}
+    .objective{display:flex;gap:14px;align-items:center;padding:15px;border-bottom:1px solid var(--line2)}.objective:last-child{border-bottom:0}.num{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);font-weight:800;flex:0 0 auto}.route{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}.route-step{border:1px solid var(--line);border-radius:18px;padding:18px 14px;text-align:center;background:rgba(217,181,107,.035)}.route-step b{display:block;color:var(--gold2);margin-bottom:7px}
+    .concept{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}.diagram{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));padding:18px;min-height:500px;box-shadow:var(--shadow);display:grid;place-items:center}.diagram svg{width:min(100%,680px);height:auto}
+    .photo-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:start}.photo-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.photo-wrap img{width:100%;display:block}.hotspot{position:absolute;width:35px;height:35px;border-radius:50%;border:2px solid var(--gold2);background:rgba(5,7,11,.84);color:var(--gold2);font-weight:900;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 7px rgba(217,181,107,.12)}.hotspot:hover,.hotspot.active{background:var(--gold2);color:#171005}.hotspot-info{min-height:210px}.hotspot-info h3{color:var(--gold2);font-size:21px}
+    .lab{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}.control-group{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}.control-group label{display:flex;justify-content:space-between;gap:12px;color:var(--gold2);font-weight:800;margin-bottom:10px}.control-group input[type=range]{width:100%;accent-color:var(--gold)}.result-box{min-height:145px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.55}.status-big{font:600 34px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+    .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15}.metric b{display:block;font:600 28px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{color:var(--muted);font-size:12px}
+    .seg{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid rgba(255,255,255,.14);background:#0a0f17;color:#d8dde6;border-radius:999px;padding:10px 14px;cursor:pointer}.pill:hover,.pill.active{border-color:var(--gold);background:rgba(217,181,107,.1);color:var(--gold2)}
+    .fix-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}.fix-stage{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,15,23,.97),rgba(5,8,13,.99));padding:18px;min-height:570px;display:grid;place-items:center}.fix-stage svg{width:min(100%,700px)}
+    .formula{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:16px;border-radius:16px;background:rgba(217,181,107,.055);border:1px solid var(--line);font:600 clamp(20px,3vw,34px)/1.25 var(--serif);color:var(--gold2)}
+    .cross-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}.choice-list{display:grid;gap:10px}.choice{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:14px;background:#090e15;color:#e8ebf0;cursor:pointer;text-align:left}.choice:hover,.choice.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}.feedback{min-height:70px;color:#cbd2dd;line-height:1.5}.feedback.ok{color:#9ee8b0}.feedback.bad{color:#ffaaaa}
+    .calc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.field{display:grid;gap:8px}.field span{color:var(--gold2);font-weight:800}.field input{width:100%;padding:13px 14px;border:1px solid var(--line2);border-radius:12px;background:#080d14;color:var(--white)}
+    .practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.practice-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(17,24,35,.95),rgba(9,13,20,.97));padding:20px}.practice-btn{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e9edf3;text-align:left;cursor:pointer}.practice-btn:hover{border-color:var(--gold)}.practice-feedback{min-height:48px;margin-top:12px;color:var(--muted)}
+    .quiz-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.question{padding:20px;border:1px solid var(--line2);border-radius:17px;background:rgba(255,255,255,.018);margin-bottom:14px}.question.correct{border-color:rgba(88,219,120,.55)}.question.incorrect{border-color:rgba(239,114,114,.55)}.answer{display:block;width:100%;text-align:left;margin-top:9px;padding:12px 14px;border:1px solid var(--line2);border-radius:12px;background:#090e15;color:#e7ebf1;cursor:pointer}.answer:hover,.answer.selected{border-color:var(--gold);background:rgba(217,181,107,.07)}.question .feedback{min-height:24px;margin-top:10px;font-size:13px}.result-panel{position:sticky;top:100px}.score-ring{width:170px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;margin:14px auto;background:conic-gradient(var(--gold) 0deg,#1b2431 0deg);position:relative}.score-ring:after{content:"";position:absolute;inset:14px;border-radius:50%;background:#090e15}.score-ring strong{position:relative;z-index:1;font:600 46px/1 var(--serif)}
+    .footer-nav{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px clamp(14px,3vw,36px);background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px)}.nav-btn{border:1px solid var(--line);border-radius:999px;padding:12px 18px;background:#090e15;color:#f2f1ed;cursor:pointer}.nav-btn.primary{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#191208;font-weight:850}.nav-btn:disabled{opacity:.35;cursor:not-allowed}.slide-title{font-size:12px;color:var(--muted);text-align:center;flex:1}
+    .source-list a{color:var(--gold2);text-decoration:none}.source-list a:hover{text-decoration:underline}.source-list li{margin:10px 0;color:#cbd2dd;line-height:1.45}
+    @media(max-width:900px){.top-title{display:none}.hero,.concept,.photo-layout,.lab,.fix-layout,.cross-layout,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.hero-visual{min-height:420px}.grid3,.route,.calc-grid{grid-template-columns:1fr 1fr}.result-panel{position:static}.metric-grid{grid-template-columns:1fr}.practice-grid{grid-template-columns:1fr}}
+    @media(max-width:590px){.brand-name{font-size:25px}.brand-sub{font-size:8px}.progress-wrap{min-width:105px}.grid2,.grid3,.route,.calc-grid{grid-template-columns:1fr}.topbar{gap:10px}.footer-nav{padding:10px}.nav-btn{padding:10px 13px}.slide-title{display:none}main{padding-bottom:100px}h1{font-size:44px}.hero-visual{min-height:360px}.photo-wrap{overflow:auto}.photo-wrap img{min-width:760px}.hotspot{display:none}.metric-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+    <div class="top-title">IFR PATH · Módulo 05 · DME y determinación de posición</div>
+    <div class="progress-wrap"><div class="progress-meta"><span id="stepText">1 / 11</span><span id="pctText">9%</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+  </header>
+
+  <main>
+    <section class="slide active" data-title="Inicio">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">VEYRA IFR PATH · MÓDULO 05</div><div class="accent"></div>
+          <h1>DME y<br><span class="gold">determinación de posición</span></h1>
+          <p class="lede">Aprende qué distancia entrega el DME, cómo interpretar el <em>slant range</em> y cómo combinar radial, distancia y cruces de radioayudas para construir una posición IFR.</p>
+          <div class="chips"><span class="chip">15–18 minutos</span><span class="chip">G1000 real</span><span class="chip">Laboratorios interactivos</span><span class="chip">Evaluación 80%</span></div>
+          <div class="hero-note"><span>◆</span><div><b>Idea central:</b> DME por sí solo entrega distancia. Para obtener una posición definida necesitas combinarla con una dirección, un radial, otro DME o un procedimiento publicado.</div></div>
+        </div>
+        <div class="hero-visual" aria-label="Diagrama DME">
+          <svg viewBox="0 0 760 620" role="img" aria-label="Aeronave, estación DME y distancia oblicua">
+            <defs><filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <path d="M80 500H680" stroke="#4c5868" stroke-width="3"/><path d="M100 500Q210 420 310 500T520 500T680 500" fill="none" stroke="#263241" stroke-width="4"/>
+            <g transform="translate(180 480)"><rect x="-34" y="-22" width="68" height="42" rx="8" fill="#0b1018" stroke="#f0cf86" stroke-width="3"/><path d="M0-22V-78" stroke="#f0cf86" stroke-width="5"/><circle cy="-83" r="9" fill="#f0cf86"/></g>
+            <g transform="translate(590 150) rotate(12)"><path d="M0-34l11 25 38 9-38 9L0 34-10 9-45 0l35-9z" fill="#f7f4ee"/><path d="M0-17V20" stroke="#58db78" stroke-width="4"/></g>
+            <line x1="180" y1="395" x2="590" y2="150" stroke="#f0cf86" stroke-width="5" stroke-dasharray="12 10" filter="url(#glow)"/>
+            <line x1="180" y1="395" x2="590" y2="395" stroke="#65d8e8" stroke-width="4" stroke-dasharray="10 10"/>
+            <line x1="590" y1="395" x2="590" y2="150" stroke="#58db78" stroke-width="4" stroke-dasharray="10 10"/>
+            <text x="335" y="235" fill="#f0cf86" font-size="26" font-family="system-ui" font-weight="800">SLANT RANGE</text>
+            <text x="325" y="430" fill="#65d8e8" font-size="22" font-family="system-ui">distancia horizontal</text>
+            <text x="610" y="285" fill="#58db78" font-size="22" font-family="system-ui">altura</text>
+            <g transform="translate(385 55)"><rect x="-120" y="-30" width="240" height="66" rx="18" fill="#080d14" stroke="#d9b56b" stroke-width="2"/><text x="0" y="13" text-anchor="middle" fill="#f0cf86" font-size="32" font-family="Georgia" font-weight="700">12.6 NM DME</text></g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Objetivos">
+      <div class="eyebrow">ANTES DE COMENZAR</div><div class="accent"></div><h2>¿Qué vas a lograr?</h2>
+      <p class="lede">El estudiante debe terminar este módulo pudiendo convertir una lectura de distancia en información de posición útil y operacional.</p>
+      <div class="grid2" style="margin-top:26px">
+        <div class="card">
+          <div class="objective"><div class="num">1</div><div><b>Explicar qué mide el DME</b><div class="tiny">Interrogación, respuesta y distancia oblicua.</div></div></div>
+          <div class="objective"><div class="num">2</div><div><b>Reconocer la fuente</b><div class="tiny">Frecuencia, identificación y DME asociado.</div></div></div>
+          <div class="objective"><div class="num">3</div><div><b>Interpretar slant range</b><div class="tiny">Error mayor cerca y alto sobre la estación.</div></div></div>
+          <div class="objective"><div class="num">4</div><div><b>Construir un fix</b><div class="tiny">Radial + DME o cruce de dos líneas.</div></div></div>
+          <div class="objective"><div class="num">5</div><div><b>Estimar cierre y tiempo</b><div class="tiny">Conocer cuándo el cálculo es representativo.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="label">Ruta del módulo</div>
+          <div class="route">
+            <div class="route-step"><b>1</b>Concepto</div><div class="route-step"><b>2</b>G1000</div><div class="route-step"><b>3</b>Slant range</div><div class="route-step"><b>4</b>Fix</div><div class="route-step"><b>5</b>Aplicación</div>
+          </div>
+          <div class="callout" style="margin-top:18px"><strong>Prerrequisito:</strong> reconocer VOR1/VOR2 en verde, leer un radial y diferenciar curso, rumbo y posición.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Qué es DME">
+      <div class="eyebrow">FUNDAMENTO</div><div class="accent"></div><h2>¿Qué mide realmente el DME?</h2>
+      <p class="lede">El equipo mide el tiempo de ida y regreso de pulsos entre la aeronave y la estación y lo convierte en distancia náutica.</p>
+      <div class="concept" style="margin-top:26px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 520" role="img" aria-label="Interrogación y respuesta DME">
+            <g transform="translate(120 270)"><rect x="-48" y="-34" width="96" height="68" rx="12" fill="#0b1018" stroke="#f0cf86" stroke-width="4"/><path d="M0-34V-95" stroke="#f0cf86" stroke-width="5"/><circle cy="-102" r="10" fill="#f0cf86"/><text x="0" y="70" text-anchor="middle" fill="#f7f4ee" font-size="22" font-family="system-ui">ESTACIÓN DME</text></g>
+            <g transform="translate(625 175) rotate(8)"><path d="M0-32l10 23 36 9-36 9L0 32-10 9-42 0l32-9z" fill="#f7f4ee"/><path d="M0-15V18" stroke="#58db78" stroke-width="4"/></g>
+            <path d="M170 220Q350 80 575 150" fill="none" stroke="#65d8e8" stroke-width="5" stroke-dasharray="15 11"/><path d="M575 205Q355 380 175 315" fill="none" stroke="#f0cf86" stroke-width="5" stroke-dasharray="15 11"/>
+            <path d="M552 143l26 7-18 20" fill="none" stroke="#65d8e8" stroke-width="5"/><path d="M198 306l-26 8 18 20" fill="none" stroke="#f0cf86" stroke-width="5"/>
+            <text x="300" y="100" fill="#65d8e8" font-size="24" font-family="system-ui" font-weight="800">INTERROGACIÓN</text><text x="310" y="405" fill="#f0cf86" font-size="24" font-family="system-ui" font-weight="800">RESPUESTA</text>
+            <rect x="240" y="215" width="270" height="82" rx="18" fill="#080d14" stroke="#d9b56b" stroke-width="2"/><text x="375" y="249" text-anchor="middle" fill="#f7f4ee" font-size="20" font-family="system-ui">Tiempo de ida y regreso</text><text x="375" y="280" text-anchor="middle" fill="#f0cf86" font-size="27" font-family="Georgia" font-weight="700">→ distancia en NM</text>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="label">Lectura operacional</div>
+          <div class="objective"><div class="num">1</div><div><b>Es distancia oblicua</b><div class="tiny">De antena de aeronave a antena terrestre.</div></div></div>
+          <div class="objective"><div class="num">2</div><div><b>Trabaja por línea de vista</b><div class="tiny">Terreno y obstáculos pueden limitar recepción.</div></div></div>
+          <div class="objective"><div class="num">3</div><div><b>Puede estar asociado</b><div class="tiny">VOR/DME, VORTAC, ILS/DME o LOC/DME.</div></div></div>
+          <div class="objective"><div class="num">4</div><div><b>No entrega dirección</b><div class="tiny">Una distancia sola forma un círculo de posibles posiciones.</div></div></div>
+          <div class="callout" style="margin-top:16px"><strong>Frase correcta:</strong> “DME 12 NM de la estación”. No significa automáticamente 12 NM sobre el terreno.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="DME en G1000">
+      <div class="eyebrow">APLICACIÓN EN CABINA</div><div class="accent"></div><h2>Cómo leer el DME en el G1000</h2>
+      <p class="lede">Usa la imagen real para identificar la distancia, la radio asociada y la fuente lateral que está activa.</p>
+      <div class="photo-layout" style="margin-top:26px">
+        <div class="photo-wrap">
+          <img src="assets/g1000-dme-vor.jpg" alt="G1000 con VOR1 y DME 3.9 NM" />
+          <button class="hotspot active" style="left:19%;top:76%" data-hotspot="dme">1</button>
+          <button class="hotspot" style="left:26%;top:4%" data-hotspot="freq">2</button>
+          <button class="hotspot" style="left:42%;top:57%" data-hotspot="source">3</button>
+          <button class="hotspot" style="left:65%;top:48%" data-hotspot="course">4</button>
+          <button class="hotspot" style="left:24%;top:84%" data-hotspot="ident">5</button>
+        </div>
+        <div class="card hotspot-info" id="hotspotInfo">
+          <div class="label">Punto 1</div><h3>Distancia DME</h3><p>La pantalla muestra <span class="cyan">3.9 NM</span>. Es la distancia oblicua a la estación DME asociada con NAV1.</p>
+          <div class="callout"><strong>Antes de usarla:</strong> confirma que la estación publicada dispone de DME y que la identificación corresponde a la instalación seleccionada.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Slant range">
+      <div class="eyebrow">LABORATORIO 1</div><div class="accent"></div><h2>Explora el error de <em>slant range</em></h2>
+      <p class="lede">Ajusta altura y distancia horizontal. Observa que la diferencia crece cuando estás alto y cerca de la estación.</p>
+      <div class="lab" style="margin-top:26px">
+        <div class="diagram">
+          <svg id="slantSvg" viewBox="0 0 760 520" role="img" aria-label="Laboratorio de slant range">
+            <path d="M80 440H690" stroke="#4c5868" stroke-width="3"/><g transform="translate(145 420)"><rect x="-35" y="-24" width="70" height="46" rx="9" fill="#0b1018" stroke="#f0cf86" stroke-width="3"/><path d="M0-24V-75" stroke="#f0cf86" stroke-width="5"/><circle cy="-80" r="9" fill="#f0cf86"/></g>
+            <g id="slantAircraft" transform="translate(565 190)"><path d="M0-30l10 22 33 8-33 8L0 30-9 8-38 0l29-8z" fill="#f7f4ee"/><path d="M0-14V17" stroke="#58db78" stroke-width="4"/></g>
+            <line id="slantLine" x1="145" y1="340" x2="565" y2="190" stroke="#f0cf86" stroke-width="5" stroke-dasharray="13 10"/><line id="groundLine" x1="145" y1="340" x2="565" y2="340" stroke="#65d8e8" stroke-width="4" stroke-dasharray="10 10"/><line id="heightLine" x1="565" y1="340" x2="565" y2="190" stroke="#58db78" stroke-width="4" stroke-dasharray="10 10"/>
+            <text id="slantLabel" x="335" y="205" fill="#f0cf86" font-size="25" font-family="system-ui" font-weight="800">10.2 NM</text><text id="groundLabel" x="325" y="375" fill="#65d8e8" font-size="21" font-family="system-ui">10.0 NM horizontal</text><text id="heightLabel" x="585" y="270" fill="#58db78" font-size="21" font-family="system-ui">2,000 ft</text>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="control-group"><label><span>Distancia horizontal</span><span id="groundValue">10.0 NM</span></label><input id="groundRange" type="range" min="0" max="40" value="10" step="0.5" /></div>
+          <div class="control-group"><label><span>Altura sobre la estación</span><span id="heightValue">2,000 ft</span></label><input id="heightRange" type="range" min="0" max="18000" value="2000" step="500" /></div>
+          <div class="metric-grid"><div class="metric"><b id="dmeValue">10.0</b><span>NM DME</span></div><div class="metric"><b id="errorValue">0.0</b><span>NM de diferencia</span></div><div class="metric"><b id="errorPct">0%</b><span>sobre horizontal</span></div></div>
+          <div class="result-box" id="slantResult" style="margin-top:14px"><div class="status-big">Error bajo</div>Lejos de la estación, la lectura DME se aproxima bastante a la distancia horizontal.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Radial + DME">
+      <div class="eyebrow">LABORATORIO 2</div><div class="accent"></div><h2>Radial + DME = un fix definido</h2>
+      <p class="lede">Selecciona un radial y una distancia. La intersección de la línea con el círculo DME fija una posición concreta.</p>
+      <div class="fix-layout" style="margin-top:26px">
+        <div class="fix-stage">
+          <svg id="fixSvg" viewBox="0 0 700 620" role="img" aria-label="Posición por radial y DME">
+            <g transform="translate(350 310)">
+              <circle r="230" fill="none" stroke="#273241" stroke-width="2"/><circle r="165" fill="none" stroke="#273241" stroke-width="2"/><circle r="100" fill="none" stroke="#273241" stroke-width="2"/>
+              <line x1="0" y1="-260" x2="0" y2="260" stroke="#34404e" stroke-width="2"/><line x1="-260" y1="0" x2="260" y2="0" stroke="#34404e" stroke-width="2"/>
+              <text x="-8" y="-275" fill="#f7f4ee" font-size="24" font-family="system-ui">N</text><text x="272" y="8" fill="#f7f4ee" font-size="24" font-family="system-ui">E</text><text x="-8" y="292" fill="#f7f4ee" font-size="24" font-family="system-ui">S</text><text x="-292" y="8" fill="#f7f4ee" font-size="24" font-family="system-ui">W</text>
+              <circle r="38" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="8" fill="#f0cf86"/><text x="0" y="62" text-anchor="middle" fill="#f0cf86" font-size="18" font-family="system-ui">VOR/DME</text>
+              <g id="radialGroup" transform="rotate(90)"><line x1="0" y1="0" x2="0" y2="-260" stroke="#58db78" stroke-width="6"/><path d="M0-272l-11 24h22z" fill="#58db78"/></g>
+              <circle id="dmeCircle" r="165" fill="none" stroke="#65d8e8" stroke-width="5" stroke-dasharray="12 9"/>
+              <g id="fixAircraft" transform="translate(165 0) rotate(90)"><path d="M0-25l9 18 29 7-29 7L0 25-8 7-34 0l26-7z" fill="#f7f4ee"/></g>
+              <circle id="fixDot" cx="165" cy="0" r="12" fill="#f0cf86" stroke="#05070b" stroke-width="4"/>
+            </g>
+            <rect x="205" y="565" width="290" height="46" rx="14" fill="#080d14" stroke="#d9b56b"/><text id="fixCaption" x="350" y="596" text-anchor="middle" fill="#f0cf86" font-size="24" font-family="Georgia">R-090 · 10 DME</text>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="label">Selecciona la posición</div>
+          <div class="control-group"><label>Radial</label><div class="seg" id="radialButtons"><button class="pill" data-radial="30">030°</button><button class="pill active" data-radial="90">090°</button><button class="pill" data-radial="150">150°</button><button class="pill" data-radial="210">210°</button><button class="pill" data-radial="270">270°</button><button class="pill" data-radial="330">330°</button></div></div>
+          <div class="control-group"><label>DME</label><div class="seg" id="dmeButtons"><button class="pill" data-dme="5">5 NM</button><button class="pill active" data-dme="10">10 NM</button><button class="pill" data-dme="15">15 NM</button><button class="pill" data-dme="20">20 NM</button></div></div>
+          <div class="formula"><span id="fixFormula">R-090</span><span>+</span><span id="fixDmeFormula">10 DME</span><span>=</span><span>FIX</span></div>
+          <div class="callout" style="margin-top:16px"><strong>DME solo:</strong> círculo de posibles posiciones. <strong>Radial solo:</strong> línea de posibles posiciones. La combinación determina el punto.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Cruce de radiales">
+      <div class="eyebrow">LABORATORIO 3</div><div class="accent"></div><h2>Determina un fix por cruce de líneas</h2>
+      <p class="lede">Dos radiales de estaciones diferentes pueden definir una posición. Debes identificar correctamente qué línea pertenece a cada estación.</p>
+      <div class="cross-layout" style="margin-top:26px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 560" role="img" aria-label="Cruce de radiales">
+            <g transform="translate(170 400)"><circle r="33" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="7" fill="#f0cf86"/><text x="0" y="58" text-anchor="middle" fill="#f0cf86" font-size="19" font-family="system-ui">VOR ABC</text></g>
+            <g transform="translate(595 405)"><circle r="33" fill="#080d14" stroke="#65d8e8" stroke-width="4"/><circle r="7" fill="#65d8e8"/><text x="0" y="58" text-anchor="middle" fill="#65d8e8" font-size="19" font-family="system-ui">VOR XYZ</text></g>
+            <line x1="170" y1="400" x2="650" y2="123" stroke="#f0cf86" stroke-width="6"/><line x1="595" y1="405" x2="330" y2="95" stroke="#65d8e8" stroke-width="6"/>
+            <text x="330" y="255" fill="#f0cf86" font-size="22" font-family="system-ui" font-weight="800">R-060 ABC</text><text x="445" y="250" fill="#65d8e8" font-size="22" font-family="system-ui" font-weight="800">R-320 XYZ</text>
+            <circle cx="430" cy="250" r="16" fill="#f7f4ee" stroke="#05070b" stroke-width="5"/><g transform="translate(430 220)"><path d="M0-20l7 14 23 6-23 6L0 20-6 6-26 0l20-6z" fill="#f7f4ee"/></g>
+            <rect x="300" y="30" width="260" height="55" rx="16" fill="#080d14" stroke="#d9b56b"/><text x="430" y="66" text-anchor="middle" fill="#f0cf86" font-size="25" font-family="Georgia">FIX ALFA</text>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="label">Pregunta</div><h3>¿Cuál descripción identifica el FIX ALFA?</h3>
+          <div class="choice-list" id="crossChoices" style="margin-top:15px">
+            <button class="choice" data-value="a">R-060 de ABC y R-320 de XYZ</button>
+            <button class="choice" data-value="b">R-240 de ABC y R-140 de XYZ</button>
+            <button class="choice" data-value="c">060 DME de ABC y 320 DME de XYZ</button>
+            <button class="choice" data-value="d">Curso 060 TO ABC y curso 320 TO XYZ</button>
+          </div>
+          <div class="feedback" id="crossFeedback">Selecciona una respuesta.</div>
+          <div class="callout"><strong>Clave:</strong> los radiales se nombran desde cada estación hacia afuera. No los confundas con el curso que se volaría inbound.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Cierre y tiempo">
+      <div class="eyebrow">LABORATORIO 4</div><div class="accent"></div><h2>Estima velocidad de cierre y tiempo a la estación</h2>
+      <p class="lede">Compara dos lecturas DME separadas por un intervalo. El resultado es representativo cuando la aeronave vuela directamente hacia o desde la estación.</p>
+      <div class="card" style="margin-top:26px">
+        <div class="calc-grid">
+          <label class="field"><span>DME inicial (NM)</span><input id="dmeStart" type="number" min="0.1" step="0.1" value="18" /></label>
+          <label class="field"><span>DME final (NM)</span><input id="dmeEnd" type="number" min="0" step="0.1" value="16" /></label>
+          <label class="field"><span>Tiempo transcurrido (min)</span><input id="elapsedMin" type="number" min="0.1" step="0.1" value="1" /></label>
+        </div>
+        <div class="metric-grid" style="margin-top:20px"><div class="metric"><b id="closureRate">120</b><span>kt de cierre</span></div><div class="metric"><b id="timeStation">8.0</b><span>min a la estación</span></div><div class="metric"><b id="trendText">INBOUND</b><span>tendencia DME</span></div></div>
+        <div class="formula" style="margin-top:20px"><span>Velocidad de cierre</span><span>=</span><span>Δ DME × 60</span><span>÷</span><span>minutos</span></div>
+        <div class="callout danger" style="margin-top:18px"><strong>Limitación:</strong> si cruzas oblicuamente, haces un arco o vuelas paralelo, la variación DME representa cierre con la estación, no necesariamente tu velocidad verdadera sobre el suelo ni un tiempo válido para llegar directamente.</div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Aplicación y arco">
+      <div class="eyebrow">APLICACIÓN IFR</div><div class="accent"></div><h2>Qué puedes hacer con el DME</h2>
+      <p class="lede">La distancia se convierte en una herramienta operacional cuando se integra con una carta, una radioayuda y un procedimiento.</p>
+      <div class="grid3" style="margin-top:26px">
+        <div class="card"><div class="label">FIX</div><h3>Radial + distancia</h3><p>Define puntos de reporte, límites de procedimiento, descensos y posiciones de aproximación.</p><div class="formula">R-245 + 12 DME</div></div>
+        <div class="card"><div class="label">Cruce</div><h3>Dos líneas</h3><p>Dos radiales o un radial con una línea de rumbo pueden crear un punto definido.</p><div class="formula">R-060 ABC + R-320 XYZ</div></div>
+        <div class="card"><div class="label">Arco</div><h3>Distancia constante</h3><p>Mantener una lectura DME aproximadamente constante produce una trayectoria circular alrededor de la estación.</p><div class="formula">12 DME ARC</div></div>
+      </div>
+      <div class="concept" style="margin-top:22px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 470" role="img" aria-label="Introducción a arco DME">
+            <g transform="translate(380 255)"><circle r="42" fill="#080d14" stroke="#f0cf86" stroke-width="4"/><circle r="9" fill="#f0cf86"/><text x="0" y="68" text-anchor="middle" fill="#f0cf86" font-size="19" font-family="system-ui">VOR/DME</text><circle r="170" fill="none" stroke="#65d8e8" stroke-width="6" stroke-dasharray="12 9"/><path d="M215-100A170 170 0 0 1 205 117" fill="none" stroke="#58db78" stroke-width="9"/><path d="M208 101l9 28 20-20" fill="none" stroke="#58db78" stroke-width="7"/></g>
+            <g transform="translate(568 185) rotate(145)"><path d="M0-24l8 17 28 7-28 7L0 24-7 7-32 0l25-7z" fill="#f7f4ee"/></g><text x="515" y="85" fill="#65d8e8" font-size="28" font-family="Georgia" font-weight="700">12.0 NM</text>
+          </svg>
+        </div>
+        <div class="card"><div class="label">Puente al Módulo 06</div><h3>Un arco no es “volar mirando solo el número”</h3><p>La entrada, la tendencia DME, el viento, los virajes pequeños, el radial de salida y la anticipación deben trabajarse como una técnica completa.</p><div class="callout"><strong>Siguiente módulo:</strong> entrada, mantenimiento y salida de arcos DME.</div></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Práctica">
+      <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent"></div><h2>Resuelve antes de continuar</h2>
+      <p class="lede">Cada caso reproduce una decisión que el estudiante debe poder verbalizar en cabina.</p>
+      <div class="practice-grid" style="margin-top:26px">
+        <div class="practice-card" data-correct="b"><div class="label">Caso 1</div><h3>DME 15 NM sin radial</h3><p>¿La posición es única?</p><button class="practice-btn" data-value="a">Sí, es un punto exacto.</button><button class="practice-btn" data-value="b">No, es un círculo de posibles posiciones.</button><button class="practice-btn" data-value="c">Sí, si el CDI está centrado en GPS.</button><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="a"><div class="label">Caso 2</div><h3>R-270 a 8 DME</h3><p>¿Dónde está la aeronave?</p><button class="practice-btn" data-value="a">Al oeste, a 8 NM DME.</button><button class="practice-btn" data-value="b">Al este, curso 270° TO.</button><button class="practice-btn" data-value="c">Al sur, a 8 NM horizontales exactas.</button><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="c"><div class="label">Caso 3</div><h3>Directamente sobre el DME a 6,076 ft</h3><p>¿Qué puede indicar aproximadamente?</p><button class="practice-btn" data-value="a">0.0 NM</button><button class="practice-btn" data-value="b">6.0 NM</button><button class="practice-btn" data-value="c">1.0 NM</button><div class="practice-feedback"></div></div>
+        <div class="practice-card" data-correct="b"><div class="label">Caso 4</div><h3>Lectura baja 2 NM en un minuto</h3><p>¿Qué cierre aproximado representa?</p><button class="practice-btn" data-value="a">60 kt</button><button class="practice-btn" data-value="b">120 kt</button><button class="practice-btn" data-value="c">180 kt</button><div class="practice-feedback"></div></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Evaluación">
+      <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div><h2>Demuestra dominio del DME</h2>
+      <p class="lede">Aprobación: 80 %. Las preguntas marcadas como críticas deben responderse correctamente.</p>
+      <div class="quiz-layout" style="margin-top:26px">
+        <div id="quizQuestions">
+          <div class="question critical" data-correct="b"><h3>1. ¿Qué distancia entrega el DME?</h3><button class="answer" data-value="a">Distancia horizontal exacta.</button><button class="answer" data-value="b">Distancia oblicua entre antenas.</button><button class="answer" data-value="c">Distancia recorrida sobre el radial.</button><div class="feedback"></div></div>
+          <div class="question" data-correct="c"><h3>2. ¿Cuándo es mayor el efecto de slant range?</h3><button class="answer" data-value="a">Lejos y bajo.</button><button class="answer" data-value="b">Lejos y con viento de cola.</button><button class="answer" data-value="c">Alto y cerca de la estación.</button><div class="feedback"></div></div>
+          <div class="question" data-correct="a"><h3>3. ¿Qué produce una lectura DME sin dirección?</h3><button class="answer" data-value="a">Un círculo de posibles posiciones.</button><button class="answer" data-value="b">Un radial definido.</button><button class="answer" data-value="c">Un curso inbound.</button><div class="feedback"></div></div>
+          <div class="question critical" data-correct="b"><h3>4. ¿Qué información define un fix convencional?</h3><button class="answer" data-value="a">Solo rumbo y velocidad.</button><button class="answer" data-value="b">Radial identificado y distancia DME asociada.</button><button class="answer" data-value="c">GPS en magenta y altitud.</button><div class="feedback"></div></div>
+          <div class="question" data-correct="c"><h3>5. R-090 a 10 DME ubica la aeronave...</h3><button class="answer" data-value="a">Al oeste.</button><button class="answer" data-value="b">Al sur.</button><button class="answer" data-value="c">Al este de la estación.</button><div class="feedback"></div></div>
+          <div class="question" data-correct="a"><h3>6. Si el DME baja 3 NM en 1.5 min, el cierre es...</h3><button class="answer" data-value="a">120 kt.</button><button class="answer" data-value="b">90 kt.</button><button class="answer" data-value="c">180 kt.</button><div class="feedback"></div></div>
+          <div class="question" data-correct="c"><h3>7. ¿Cuándo el tiempo DME a estación es más representativo?</h3><button class="answer" data-value="a">Volando un arco constante.</button><button class="answer" data-value="b">Cruzando el radial a 90°.</button><button class="answer" data-value="c">Volando directamente hacia la estación.</button><div class="feedback"></div></div>
+          <div class="question critical" data-correct="a"><h3>8. Si la estación seleccionada no tiene DME publicado...</h3><button class="answer" data-value="a">No uses una distancia automática como referencia de posición sin verificar la fuente.</button><button class="answer" data-value="b">La distancia siempre pertenece a esa estación.</button><button class="answer" data-value="c">Convierte la indicación GPS a DME.</button><div class="feedback"></div></div>
+        </div>
+        <aside class="card result-panel">
+          <div class="label">Resultado</div><div class="score-ring" id="scoreRing"><strong id="scoreValue">—</strong></div><h3 id="resultTitle" style="text-align:center">Completa la evaluación</h3><p id="resultText" style="text-align:center">El resultado aparecerá aquí.</p><div id="completionBadge" style="text-align:center"></div>
+          <button class="nav-btn primary" id="gradeBtn" style="width:100%;margin-top:16px">Calificar</button><button class="nav-btn" id="resetBtn" style="width:100%;margin-top:10px">Reiniciar</button>
+          <div class="callout" style="margin-top:16px"><strong>Criterio:</strong> 80 % y todas las preguntas críticas correctas.</div>
+        </aside>
+      </div>
+      <div class="card source-list" style="margin-top:22px"><div class="label">Fuentes y límites</div><ul><li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html" target="_blank" rel="noopener">FAA AIM, Chapter 1, Sections 1-1-7 y 1-1-8</a></li><li><a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf" target="_blank" rel="noopener">FAA Instrument Procedures Handbook</a></li><li>La presentación y funciones exactas dependen de la instalación aprobada, AFM/POH/AFMS y guía del equipo utilizado por la escuela.</li></ul></div>
+    </section>
+  </main>
+
+  <footer class="footer-nav"><button class="nav-btn" id="prevBtn">← Anterior</button><div class="slide-title" id="slideTitle">Inicio</div><button class="nav-btn primary" id="nextBtn">Continuar →</button></footer>
+</div>
+<script>
+(()=>{
+  'use strict';
+  const MODULE_ID='veyra-ifr-dme-05';
+  const slides=[...document.querySelectorAll('.slide')];
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  let current=Math.min(Number(localStorage.getItem(MODULE_ID+':slide')||0),slides.length-1);
+  const startedAt=Date.now();
+  function post(type,data={}){const payload={source:'veyra-module',type,moduleId:MODULE_ID,timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+  function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round(((current+1)/slides.length)*100);$('#stepText').textContent=`${current+1} / ${slides.length}`;$('#pctText').textContent=pct+'%';$('#progressBar').style.width=pct+'%';$('#slideTitle').textContent=slides[current].dataset.title||'';$('#prevBtn').disabled=current===0;$('#nextBtn').textContent=current===slides.length-1?'Finalizar':'Continuar →';localStorage.setItem(MODULE_ID+':slide',current);post('veyra:progress',{slide:current+1,totalSlides:slides.length,progress:pct});window.scrollTo({top:0,behavior:'smooth'})}
+  $('#prevBtn').addEventListener('click',()=>show(current-1));$('#nextBtn').addEventListener('click',()=>{if(current===slides.length-1){post('veyra:exit',{slide:current+1,progress:100});setTimeout(()=>{window.location.href='/';},150);return}show(current+1)});document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(current+1);if(e.key==='ArrowLeft')show(current-1)});show(current);post('veyra:ready',{totalSlides:slides.length});
+
+  // hotspots
+  const hotspotData={
+    dme:['Distancia DME','La indicación muestra <span class="cyan">3.9 NM</span>. Es distancia oblicua hacia la estación DME asociada.'],
+    freq:['Frecuencia NAV1','La frecuencia activa debe corresponder a una instalación VOR/DME o VORTAC publicada.'],
+    source:['Fuente lateral','<span class="green">VOR1</span> confirma navegación convencional para la información lateral.'],
+    course:['Curso seleccionado','CRS 229° describe la línea seleccionada; no modifica por sí mismo la distancia DME.'],
+    ident:['Identificación','Verifica que el identificador mostrado/escuchado corresponda a la estación seleccionada y que el DME esté disponible.']
+  };
+  $$('.hotspot').forEach(b=>b.addEventListener('click',()=>{$$('.hotspot').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=hotspotData[b.dataset.hotspot];$('#hotspotInfo').innerHTML=`<div class="label">${d[0]}</div><h3>${d[0]}</h3><p>${d[1]}</p><div class="callout"><strong>Secuencia:</strong> estación publicada → frecuencia → identificación → DME asociado → lectura.</div>`}));
+
+  // slant lab
+  function slantUpdate(){const ground=Number($('#groundRange').value),feet=Number($('#heightRange').value),hNm=feet/6076.12,slant=Math.sqrt(ground*ground+hNm*hNm),err=slant-ground,pct=ground>0?(err/ground)*100:0;$('#groundValue').textContent=ground.toFixed(1)+' NM';$('#heightValue').textContent=feet.toLocaleString('es-CO')+' ft';$('#dmeValue').textContent=slant.toFixed(1);$('#errorValue').textContent=err.toFixed(1);$('#errorPct').textContent=(ground>0?pct.toFixed(0):'—')+'%';const x=145+Math.min(420,ground/40*420),y=340-Math.min(245,feet/18000*245);$('#slantAircraft').setAttribute('transform',`translate(${x} ${y})`);$('#slantLine').setAttribute('x2',x);$('#slantLine').setAttribute('y2',y);$('#groundLine').setAttribute('x2',x);$('#heightLine').setAttribute('x1',x);$('#heightLine').setAttribute('x2',x);$('#heightLine').setAttribute('y2',y);$('#slantLabel').setAttribute('x',(145+x)/2);$('#slantLabel').setAttribute('y',(340+y)/2-18);$('#slantLabel').textContent=slant.toFixed(1)+' NM DME';$('#groundLabel').setAttribute('x',(145+x)/2-70);$('#groundLabel').textContent=ground.toFixed(1)+' NM horizontal';$('#heightLabel').setAttribute('x',x+18);$('#heightLabel').setAttribute('y',(340+y)/2);$('#heightLabel').textContent=feet.toLocaleString('es-CO')+' ft';let title='Error bajo',text='Lejos de la estación, la lectura DME se aproxima bastante a la distancia horizontal.';if(ground<3&&feet>6000){title='Error significativo';text='Estás alto y muy cerca: la lectura puede estar dominada por la altura sobre la estación.'}else if(err>.5){title='Diferencia visible';text='La lectura DME es mayor que la distancia horizontal. Considera el slant range al interpretar fixes cercanos.'}$('#slantResult').innerHTML=`<div class="status-big">${title}</div>${text}`}
+  $('#groundRange').addEventListener('input',slantUpdate);$('#heightRange').addEventListener('input',slantUpdate);slantUpdate();
+
+  // fix lab
+  let radial=90,dme=10;
+  function fixUpdate(){const scale=16.5,r=dme*scale,ang=(radial-90)*Math.PI/180,x=r*Math.cos(ang),y=r*Math.sin(ang);$('#radialGroup').setAttribute('transform',`rotate(${radial})`);$('#dmeCircle').setAttribute('r',r);$('#fixAircraft').setAttribute('transform',`translate(${x} ${y}) rotate(${radial})`);$('#fixDot').setAttribute('cx',x);$('#fixDot').setAttribute('cy',y);$('#fixCaption').textContent=`R-${String(radial).padStart(3,'0')} · ${dme} DME`;$('#fixFormula').textContent=`R-${String(radial).padStart(3,'0')}`;$('#fixDmeFormula').textContent=`${dme} DME`}
+  $$('#radialButtons .pill').forEach(b=>b.addEventListener('click',()=>{$$('#radialButtons .pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');radial=Number(b.dataset.radial);fixUpdate()}));$$('#dmeButtons .pill').forEach(b=>b.addEventListener('click',()=>{$$('#dmeButtons .pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');dme=Number(b.dataset.dme);fixUpdate()}));fixUpdate();
+
+  // crossing radials
+  $$('#crossChoices .choice').forEach(b=>b.addEventListener('click',()=>{$$('#crossChoices .choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');const ok=b.dataset.value==='a';$('#crossFeedback').textContent=ok?'Correcto. El punto está en R-060 de ABC y R-320 de XYZ.':'Revisa desde qué estación sale cada radial y el sentido de numeración.';$('#crossFeedback').className='feedback '+(ok?'ok':'bad')}));
+
+  // closure calculator
+  function closureUpdate(){const start=Number($('#dmeStart').value),end=Number($('#dmeEnd').value),mins=Math.max(.1,Number($('#elapsedMin').value)),delta=Math.abs(start-end),rate=delta*60/mins,inbound=end<start,outbound=end>start,time=inbound&&rate>0?end/rate*60:null;$('#closureRate').textContent=rate.toFixed(0);$('#timeStation').textContent=time!==null?time.toFixed(1):'—';$('#trendText').textContent=inbound?'INBOUND':outbound?'OUTBOUND':'SIN CAMBIO'}
+  ['dmeStart','dmeEnd','elapsedMin'].forEach(id=>$('#'+id).addEventListener('input',closureUpdate));closureUpdate();
+
+  // practice
+  $$('.practice-card').forEach(card=>card.querySelectorAll('.practice-btn').forEach(btn=>btn.addEventListener('click',()=>{const ok=btn.dataset.value===card.dataset.correct;card.querySelector('.practice-feedback').textContent=ok?'Correcto.':'Revisa el concepto y vuelve a intentarlo.';card.querySelector('.practice-feedback').style.color=ok?'#9ee8b0':'#ffaaaa'})));
+
+  // quiz
+  $$('.answer').forEach(a=>a.addEventListener('click',()=>{const q=a.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));a.classList.add('selected');q.dataset.answer=a.dataset.value}));
+  $('#gradeBtn').addEventListener('click',()=>{let correct=0,criticalFail=false;const questions=$$('.question');questions.forEach(q=>{q.classList.remove('correct','incorrect');const ok=q.dataset.answer===q.dataset.correct;if(ok){correct++;q.classList.add('correct');q.querySelector('.feedback').textContent='Correcto.'}else{q.classList.add('incorrect');q.querySelector('.feedback').textContent='Respuesta incorrecta. Revisa el concepto antes de continuar.';if(q.classList.contains('critical'))criticalFail=true}});const score=Math.round(correct/questions.length*100),passed=score>=80&&!criticalFail;$('#scoreValue').textContent=score+'%';$('#scoreRing').style.background=`conic-gradient(${passed?'#58db78':'#d9b56b'} ${score*3.6}deg,#1b2431 0deg)`;$('#resultTitle').textContent=passed?'Módulo aprobado':'Requiere refuerzo';$('#resultText').textContent=passed?'Demostraste comprensión de DME, slant range y determinación de posición.':criticalFail?'Fallaste una pregunta crítica de fuente o interpretación. Revisa el módulo y repite la evaluación.':'Necesitas 80 % para aprobar.';$('#completionBadge').innerHTML=passed?'<span class="chip" style="color:#9ee8b0;border-color:rgba(88,219,120,.5)">Completado</span>':'';const payload={score,passed,timeSeconds:Math.round((Date.now()-startedAt)/1000),attemptedAt:new Date().toISOString()};localStorage.setItem(MODULE_ID+':result',JSON.stringify(payload));if(passed)localStorage.setItem(MODULE_ID+':complete','1');post('veyra:complete',payload)});
+  $('#resetBtn').addEventListener('click',()=>{$$('.question').forEach(q=>{delete q.dataset.answer;q.classList.remove('correct','incorrect');q.querySelectorAll('.answer').forEach(a=>a.classList.remove('selected'));q.querySelector('.feedback').textContent=''});$('#scoreValue').textContent='—';$('#scoreRing').style.background='conic-gradient(#d9b56b 0deg,#1b2431 0deg)';$('#resultTitle').textContent='Completa la evaluación';$('#resultText').textContent='El resultado aparecerá aquí.';$('#completionBadge').innerHTML=''});
+})();
+</script>
+</body>
+</html>
