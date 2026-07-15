@@ -1593,7 +1593,7 @@ main{max-width:1180px;}
         <div class="ifrIntroStat"><b>80%</b><span>Criterio de aprobación definido dentro de cada módulo.</span></div>
       </div>
       <div class="ifrIntroActions">
-        <button class="trainingBtnGold" onclick="location.href='/modules/ifr-vor-01/index.html'">Comenzar módulo 01</button>
+        <button class="trainingBtnGold" onclick="document.getElementById('ifrModuleRoadmap').scrollIntoView({behavior:'smooth'})">Ver los 10 módulos</button>
         <button class="trainingBtnDark" onclick="showTrainingCenter()">Volver al Training Center</button>
       </div>
     </div>
@@ -1607,7 +1607,7 @@ main{max-width:1180px;}
       <div class="ifrPurposeCard"><small>03 · APLICAR</small><h3>Más tiempo de simulador</h3><p>Reduce el tiempo dedicado a explicar fundamentos y permite concentrar la sesión en ejecución, corrección y criterio.</p></div>
     </div>
   </div>
-  <div class="ifrRoadmap">
+  <div class="ifrRoadmap" id="ifrModuleRoadmap">
     <div class="ifrRoadmapHead">
       <div><h2>Ruta inicial IFR</h2><p>Los diez módulos están organizados de forma progresiva: primero el lenguaje de navegación, después la determinación de posición y, finalmente, la aplicación en procedimientos y aproximaciones.</p></div>
       <div class="ifrRoadmapLegend">10 módulos · Acceso individual</div>
@@ -2549,6 +2549,19 @@ document.addEventListener("DOMContentLoaded", function(){
       });
     }
   });
+});
+</script>
+
+<script>
+/* === Veyra IFR Path · deep link back to course roadmap === */
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    if(new URLSearchParams(window.location.search).get('course') === 'ifr'){
+      setTimeout(function(){
+        if(typeof showIFRCourseIntro === 'function') showIFRCourseIntro();
+      },80);
+    }
+  }catch(e){}
 });
 </script>
 
