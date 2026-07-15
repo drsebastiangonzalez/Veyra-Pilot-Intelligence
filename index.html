@@ -1195,7 +1195,15 @@ main{max-width:1180px;}
 .ifrPurposeHead{max-width:820px;margin-bottom:26px}.ifrPurposeHead h2{font-family:Georgia,serif;font-size:clamp(34px,4vw,52px);margin:0 0 10px}.ifrPurposeHead p{color:#5d6470;line-height:1.6;margin:0}
 .ifrPurposeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .ifrPurposeCard{background:#fffaf2;border:1px solid #e3d3b8;border-radius:18px;padding:22px}.ifrPurposeCard small{display:block;color:#9b772f;font-weight:900;letter-spacing:.13em;margin-bottom:9px}.ifrPurposeCard h3{font-family:Georgia,serif;font-size:25px;margin:0 0 8px}.ifrPurposeCard p{color:#656b74;line-height:1.5;margin:0}
-@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats{grid-template-columns:1fr}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose{padding:36px 20px 44px}}
+.ifrRoadmap{padding:54px clamp(28px,6vw,86px) 70px;background:#07101b;color:#fff;border-top:1px solid rgba(200,164,93,.28)}
+.ifrRoadmapHead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:28px}.ifrRoadmapHead h2{font-family:Georgia,serif;font-size:clamp(38px,4.5vw,58px);margin:0 0 10px}.ifrRoadmapHead p{color:#aeb8c7;line-height:1.55;margin:0;max-width:720px}.ifrRoadmapLegend{color:#d6ad55;font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap}
+.ifrModuleGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ifrModuleCard{display:grid;grid-template-columns:66px 1fr auto;gap:18px;align-items:center;border:1px solid rgba(200,164,93,.24);background:rgba(255,255,255,.035);border-radius:18px;padding:18px;text-decoration:none;color:#fff;transition:.2s ease}
+.ifrModuleCard:hover,.ifrModuleCard:focus{transform:translateY(-2px);border-color:#d6ad55;background:rgba(200,164,93,.09);outline:none}
+.ifrModuleNumber{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;border:1px solid rgba(200,164,93,.42);color:#f0cf86;font-family:Georgia,serif;font-size:23px;background:#0a1523}
+.ifrModuleCopy small{display:block;color:#8fa0b5;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.ifrModuleCopy strong{display:block;font-family:Georgia,serif;font-size:20px;line-height:1.25}.ifrModuleArrow{color:#d6ad55;font-size:22px}
+.ifrRoadmapNote{margin-top:22px;padding:17px 19px;border-left:3px solid #d6ad55;background:rgba(200,164,93,.07);color:#cbd3df;line-height:1.5;border-radius:0 14px 14px 0}
+@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}}
 </style>
 </head>
 <body>
@@ -1598,6 +1606,25 @@ main{max-width:1180px;}
       <div class="ifrPurposeCard"><small>02 · INTERPRETAR</small><h3>Lectura operacional</h3><p>Relaciona instrumentos, indicaciones y procedimientos con decisiones concretas dentro de la cabina.</p></div>
       <div class="ifrPurposeCard"><small>03 · APLICAR</small><h3>Más tiempo de simulador</h3><p>Reduce el tiempo dedicado a explicar fundamentos y permite concentrar la sesión en ejecución, corrección y criterio.</p></div>
     </div>
+  </div>
+  <div class="ifrRoadmap">
+    <div class="ifrRoadmapHead">
+      <div><h2>Ruta inicial IFR</h2><p>Los diez módulos están organizados de forma progresiva: primero el lenguaje de navegación, después la determinación de posición y, finalmente, la aplicación en procedimientos y aproximaciones.</p></div>
+      <div class="ifrRoadmapLegend">10 módulos · Acceso individual</div>
+    </div>
+    <div class="ifrModuleGrid">
+      <a class="ifrModuleCard" href="/modules/ifr-vor-01/index.html"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Fundamentos VOR</small><strong>El lenguaje del VOR</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-vor-02/index.html"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Navegación convencional</small><strong>Interceptación y seguimiento de radiales</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-cdi-03/index.html"><span class="ifrModuleNumber">03</span><span class="ifrModuleCopy"><small>Presentación G1000</small><strong>Fuentes del CDI: VOR, GPS y LOC</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-vor-04/index.html"><span class="ifrModuleNumber">04</span><span class="ifrModuleCopy"><small>Interpretación avanzada</small><strong>TO/FROM, reverse sensing y paso de estación</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-dme-05/index.html"><span class="ifrModuleNumber">05</span><span class="ifrModuleCopy"><small>Determinación de posición</small><strong>DME y posición de la aeronave</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-dme-06/index.html"><span class="ifrModuleNumber">06</span><span class="ifrModuleCopy"><small>Procedimiento DME</small><strong>Arcos DME: entrada, mantenimiento y salida</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-hold-07/index.html"><span class="ifrModuleNumber">07</span><span class="ifrModuleCopy"><small>Procedimientos IFR</small><strong>Esperas: entrada, control y salida</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-cartas-08/index.html"><span class="ifrModuleNumber">08</span><span class="ifrModuleCopy"><small>Preparación operacional</small><strong>Lectura de cartas IFR</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-approaches-09/index.html"><span class="ifrModuleNumber">09</span><span class="ifrModuleCopy"><small>Aproximaciones convencionales</small><strong>VOR y LOC: de la carta a la ejecución</strong></span><span class="ifrModuleArrow">→</span></a>
+      <a class="ifrModuleCard" href="/modules/ifr-ils-10/index.html"><span class="ifrModuleNumber">10</span><span class="ifrModuleCopy"><small>Instrument Landing System</small><strong>ILS desde cero: CAT I, II y III</strong></span><span class="ifrModuleArrow">→</span></a>
+    </div>
+    <div class="ifrRoadmapNote"><strong>PBN continuará en una sección especializada.</strong> Esta primera ruta consolida la base instrumental necesaria para comenzar la fase de simulador con conceptos y referencias comunes.</div>
   </div>
 </section>
 
