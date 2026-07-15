@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070b">
+<title>VEYRA IFR PATH · Módulo 10 · ILS CAT I, II y III</title>
+<style>
+:root{
+ --bg:#05070b;--bg2:#09101a;--panel:#0d151f;--panel2:#111c2a;
+ --gold:#d8b66d;--gold2:#f1d08a;--white:#f7f3ec;--muted:#adb8c7;
+ --green:#61db7a;--cyan:#65d8e8;--danger:#ef7b7b;
+ --line:rgba(216,182,109,.28);--line2:rgba(255,255,255,.09);
+ --serif:Georgia,'Times New Roman',serif;--sans:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;color:var(--white);font-family:var(--sans);background:radial-gradient(circle at 86% 8%,rgba(216,182,109,.09),transparent 28rem),linear-gradient(180deg,#05070b,#0a1018 58%,#05070b);overflow-x:hidden}
+button,input{font:inherit}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;padding:14px clamp(16px,3vw,40px);background:rgba(5,7,11,.93);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+.brand{text-decoration:none;color:inherit;cursor:pointer;min-width:max-content}.brand-name{font:600 30px/1 var(--serif)}.brand-sub{margin-top:6px;color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+.top-title{flex:1;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.progress{width:min(310px,31vw);min-width:140px}.pmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:6px}.track{height:5px;background:#1a2432;border-radius:999px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:6%}
+main{max-width:1280px;margin:0 auto;padding:28px clamp(16px,4vw,52px) 116px}
+.slide{display:none}.slide.active{display:block;animation:in .3s ease}@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.accent{width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0}
+h1,h2,h3{margin:0}h1{font:500 clamp(43px,7vw,86px)/.96 var(--serif);letter-spacing:-.045em}h2{font:500 clamp(34px,5vw,58px)/1 var(--serif);letter-spacing:-.035em}h3{font:600 22px/1.2 var(--serif)}
+p{color:#ccd4df;line-height:1.62}.lede{font-size:clamp(17px,2vw,22px);line-height:1.55;color:#d8dee7;max-width:1000px}.small{font-size:12px;color:var(--muted)}
+.gold{color:var(--gold2);font-weight:850}.green{color:var(--green);font-weight:850}
+.hero{min-height:calc(100vh - 190px);display:grid;grid-template-columns:.9fr 1.1fr;gap:32px;align-items:center}.hero-chart{min-height:580px;border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,rgba(18,26,38,.96),rgba(7,10,15,.98));padding:20px;display:grid;place-items:center;box-shadow:0 24px 65px rgba(0,0,0,.42)}.hero-chart img{max-width:100%;max-height:690px;object-fit:contain;border-radius:16px;background:#fff}
+.hero-note{margin-top:24px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(216,182,109,.055);border-radius:0 14px 14px 0;color:#d8dee7}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.card{border:1px solid rgba(216,182,109,.23);border-radius:22px;background:linear-gradient(155deg,rgba(17,26,39,.96),rgba(9,14,21,.98));padding:23px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.label{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.callout{border:1px solid rgba(216,182,109,.36);background:rgba(216,182,109,.055);padding:17px 19px;border-radius:16px;color:#e4dfd5;line-height:1.58}.callout strong{color:var(--gold2)}.danger{border-color:rgba(239,123,123,.35);background:rgba(239,123,123,.065)}.danger strong{color:#ffaaaa}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#d7dee8;font-size:12px}
+.route{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:20px}.route div{border:1px solid var(--line);border-radius:17px;padding:16px 12px;text-align:center;background:rgba(216,182,109,.035);font-size:13px;color:#cad2dd}.route b{display:block;color:var(--gold2);margin-bottom:7px}
+.list{display:grid;gap:10px}.item{padding:14px 15px;border:1px solid var(--line2);border-radius:14px;background:#0a1018;line-height:1.52}
+.steps{counter-reset:s;display:grid;gap:11px}.step{position:relative;padding:14px 14px 14px 50px;border:1px solid var(--line2);border-radius:14px;background:#0a1018;color:#d6dde7;line-height:1.52}.step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:13px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:rgba(216,182,109,.13);color:var(--gold2);font-weight:900}
+.chart-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:start}.figure{display:block;width:100%;max-height:760px;object-fit:contain;border-radius:16px;border:1px solid var(--line2);background:#fff;cursor:zoom-in}figcaption{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
+.control{padding:18px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.02);margin-bottom:14px}.control label{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px}.control input{width:100%;accent-color:var(--gold)}.control input[type=text]{padding:12px;border:1px solid var(--line2);border-radius:12px;background:#080d14;color:#eef2f6}
+.seg{display:flex;flex-wrap:wrap;gap:8px}.pill,.tab{border:1px solid rgba(255,255,255,.14);background:#0a1018;color:#d8dfe8;border-radius:999px;padding:10px 14px;cursor:pointer}.pill.active,.pill:hover,.tab.active,.tab:hover{border-color:var(--gold);background:rgba(216,182,109,.1);color:var(--gold2)}
+.result{min-height:145px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(4,6,10,.55);line-height:1.56}.status{font:600 33px/1 var(--serif);margin-bottom:9px;color:var(--gold2)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:14px;border:1px solid var(--line2);border-radius:14px;background:#0a1018}.metric b{display:block;font:600 27px/1 var(--serif);color:var(--gold2);margin-bottom:6px}.metric span{font-size:12px;color:var(--muted)}
+.glossary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.term{padding:15px;border:1px solid var(--line2);border-radius:14px;background:#0a1018;cursor:pointer;text-align:left;color:#eef2f6}.term:hover,.term.active{border-color:var(--gold);background:rgba(216,182,109,.07)}.term b{display:block;color:var(--gold2);font-size:17px}.term span{font-size:12px;color:var(--muted)}.glossary-detail{min-height:190px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:760px;background:#0a1018}th,td{padding:14px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:top}th{color:var(--gold2);font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:#111a26}td{color:#d6dde6;line-height:1.48}
+.choice-list{display:grid;gap:10px}.choice{display:block;width:100%;padding:13px 14px;border:1px solid var(--line2);border-radius:13px;background:#0a1018;color:#eef2f6;text-align:left;cursor:pointer}.choice:hover,.choice.selected{border-color:var(--gold);background:rgba(216,182,109,.07)}.feedback{min-height:65px;color:#cdd5df;line-height:1.52}.feedback.ok{color:#9fe8b0}.feedback.bad{color:#ffaaaa}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.practice-card{border:1px solid var(--line);border-radius:19px;background:linear-gradient(155deg,rgba(17,26,39,.96),rgba(9,14,21,.98));padding:19px}.practice-btn,.answer{display:block;width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line2);border-radius:12px;background:#0a1018;color:#eef2f6;text-align:left;cursor:pointer}.practice-btn:hover,.answer:hover,.answer.selected{border-color:var(--gold)}.practice-feedback{min-height:48px;margin-top:11px;color:var(--muted)}
+.quiz-layout{display:grid;grid-template-columns:1.18fr .82fr;gap:22px}.question{padding:19px;border:1px solid var(--line2);border-radius:16px;background:rgba(255,255,255,.018);margin-bottom:14px}.question h3{font-family:var(--sans);font-size:17px;line-height:1.45}.answer.selected{background:rgba(216,182,109,.08)}
+.quiz-summary{position:sticky;top:95px}.score{font:600 70px/1 var(--serif);color:var(--gold2)}.critical{color:#ffaaaa;font-size:12px}.primary,.secondary{border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:850}.primary{border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#c6943a);color:#171005}.secondary{border:1px solid var(--line);background:#0a1018;color:#eef2f6}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.completion{display:none}.completion.show{display:block}
+.nav{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px clamp(16px,3vw,40px) calc(13px + env(safe-area-inset-bottom));background:rgba(5,7,11,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px)}.nav-center{color:var(--muted);font-size:12px;text-align:center}.nav button:disabled{opacity:.35}
+.modal{display:none;position:fixed;z-index:200;inset:0;background:rgba(0,0,0,.93);padding:24px;align-items:center;justify-content:center}.modal.show{display:flex}.modal img{max-width:96vw;max-height:92vh;object-fit:contain;background:#fff;border-radius:12px}.close{position:fixed;top:18px;right:22px;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);background:#0a1018;color:var(--gold2);font-size:25px;cursor:pointer}
+@media(max-width:1040px){.top-title{display:none}.progress{margin-left:auto}.hero,.chart-layout,.quiz-layout{grid-template-columns:1fr}.hero{min-height:auto}.route{grid-template-columns:repeat(2,1fr)}.glossary-grid{grid-template-columns:1fr 1fr}.quiz-summary{position:static}}
+@media(max-width:760px){.grid2,.grid3,.grid4,.practice-grid,.metrics,.glossary-grid,.route{grid-template-columns:1fr}.hero-chart{min-height:380px}.nav-center{display:none}.brand-sub{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+ <a class="brand" href="/" aria-label="Volver a la página principal de Veyra"><div class="brand-name">Veyra</div><div class="brand-sub">Pilot Intelligence</div></a>
+ <div class="top-title">IFR PATH · Módulo 10 · ILS CAT I, II y III</div>
+ <div class="progress"><div class="pmeta"><span id="progressText">Pantalla 1 de 18</span><span id="progressPercent">6%</span></div><div class="track"><div id="progressBar" class="bar"></div></div></div>
+</header>
+<main>
+
+<section class="slide active" data-title="Inicio">
+ <div class="hero">
+  <div>
+   <div class="eyebrow">MÓDULO 10 · INSTRUMENT LANDING SYSTEM</div><div class="accent"></div>
+   <h1>ILS desde cero: <span class="gold">CAT I, CAT II y CAT III</span></h1>
+   <p class="lede">Este módulo no presupone conocimientos previos. Cada sigla se explica antes de utilizarse y cada dato de la carta se convierte en una acción concreta de cabina.</p>
+   <div class="chips"><span class="chip">Localizer</span><span class="chip">Glide Slope</span><span class="chip">DA / DH</span><span class="chip">RA</span><span class="chip">RVR</span><span class="chip">Autoland</span><span class="chip">LVP</span></div>
+   <div class="hero-note"><strong>Regla del módulo:</strong> no memorices letras sin comprenderlas. Primero identifica el término; después determina cómo modifica la operación.</div>
+   <div class="actions"><button class="primary" data-go="1">Comenzar módulo</button></div>
+  </div>
+  <div class="hero-chart"><img src="assets/lfpg_ils_loc_08l.jpeg" alt="Carta ILS o LOC RWY 08L de París"></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Ruta">
+ <div class="eyebrow">RUTA DE APRENDIZAJE</div><div class="accent"></div>
+ <h2>El ILS se aprende por capas</h2>
+ <div class="route">
+  <div><b>1. Palabras</b>Siglas y símbolos.</div><div><b>2. Sistema</b>LOC y GS.</div><div><b>3. Carta</b>Datos y restricciones.</div><div><b>4. Captura</b>Interceptación correcta.</div><div><b>5. Decisión</b>DA, DH y RA.</div><div><b>6. Categoría</b>CAT I, II y III.</div><div><b>7. Fallas</b>Decidir y frustrar.</div>
+ </div>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card"><div class="label">CASO 1</div><h3>París RWY 08L</h3><p>Carta combinada ILS o LOC: frecuencia, curso, DA(H), MDA(H), DME, luces y frustrada.</p></div>
+  <div class="card"><div class="label">CASO 2</div><h3>Dubái RWY 12L</h3><p>Carta CAT II/III: RA, DH, RVR, certificación especial y mínimos CAT II, IIIA y IIIB.</p></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Qué es un ILS">
+ <div class="eyebrow">CONCEPTO BÁSICO</div><div class="accent"></div>
+ <h2>¿Qué es un ILS?</h2>
+ <p class="lede"><strong>ILS</strong> significa <em>Instrument Landing System</em>. Es un sistema de aproximación de precisión que proporciona guiado lateral y vertical hacia una pista.</p>
+ <div class="grid3" style="margin-top:22px">
+  <div class="card"><div class="label">LATERAL</div><h3>LOC — Localizer</h3><p>Indica si la aeronave está a la izquierda o a la derecha del eje de aproximación.</p></div>
+  <div class="card"><div class="label">VERTICAL</div><h3>GS — Glide Slope</h3><p>Indica si la aeronave está por encima o por debajo de la senda vertical publicada.</p></div>
+  <div class="card"><div class="label">POSICIÓN</div><h3>DME y fixes</h3><p>Permiten identificar puntos como IF, FAP, FAF o MAP.</p></div>
+ </div>
+ <div class="callout" style="margin-top:18px"><strong>El ILS no aterriza por sí solo.</strong> El sistema transmite señales; la aeronave y la tripulación las utilizan según su capacidad y autorización.</div>
+</section>
+
+<section class="slide" data-title="Glosario">
+ <div class="eyebrow">GLOSARIO INTERACTIVO</div><div class="accent"></div>
+ <h2>Aprende las letras antes de leer la carta</h2>
+ <div class="control"><label>Buscar término <span>Sigla o palabra</span></label><input type="text" id="glossarySearch" placeholder="DA, RVR, HIALS, FAP, RA..."></div>
+ <div class="grid2">
+  <div class="glossary-grid" id="glossaryGrid"></div>
+  <div class="card glossary-detail"><div class="label">DEFINICIÓN</div><h3 id="glossaryTitle">Selecciona un término</h3><p id="glossaryBody">Aquí aparecerá la explicación completa y su importancia operacional.</p></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Encabezado">
+ <div class="eyebrow">BRIEFING STRIP</div><div class="accent"></div>
+ <h2>El encabezado responde las primeras preguntas</h2>
+ <div class="chart-layout" style="margin-top:22px">
+  <div class="card"><figure><img class="figure zoomable" src="assets/lfpg_ils_loc_08l.jpeg" alt="Carta ILS o LOC RWY 08L París"><figcaption>Selecciona la carta para ampliarla.</figcaption></figure></div>
+  <div class="card"><div class="steps">
+   <div class="step"><strong>Aeropuerto y pista:</strong> LFPG/CDG, ILS o LOC RWY 08L.</div>
+   <div class="step"><strong>Localizador:</strong> GLE 108.7 MHz.</div>
+   <div class="step"><strong>Final Approach Course:</strong> 084°.</div>
+   <div class="step"><strong>Referencia:</strong> D14.6 GLE a 5000 ft.</div>
+   <div class="step"><strong>Mínimo ILS:</strong> DA(H) 538 ft (200 ft).</div>
+   <div class="step"><strong>Elevaciones:</strong> aeropuerto 392 ft; pista 338 ft.</div>
+   <div class="step"><strong>Notas:</strong> DME requerido y RNAV 1 requerido para la frustrada.</div>
+  </div></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Plan y perfil">
+ <div class="eyebrow">PLAN VIEW Y PROFILE VIEW</div><div class="accent"></div>
+ <h2>La vista superior y el perfil cuentan historias distintas</h2>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card"><div class="label">PLAN VIEW</div><h3>Vista en planta</h3><div class="list"><div class="item">Ruta lateral vista desde arriba.</div><div class="item">IF, FAP, fixes DME, curso final y frustrada.</div><div class="item">Terreno, obstáculos y notas de operación simultánea.</div></div></div>
+  <div class="card"><div class="label">PROFILE VIEW</div><h3>Vista de perfil</h3><div class="list"><div class="item">Aproximación vista de lado.</div><div class="item">Altitudes, distancias, senda de 3°, TCH y decisión.</div><div class="item">Diferencia entre perfil ILS y LOC cuando el GS no se utiliza.</div></div></div>
+ </div>
+ <div class="callout" style="margin-top:18px"><strong>Método:</strong> primero entiende por dónde vuelas; después confirma cómo debes descender.</div>
+</section>
+
+<section class="slide" data-title="Interceptación">
+ <div class="eyebrow">CAPTURA DEL ILS</div><div class="accent"></div>
+ <h2>Primero localizador; después senda de planeo</h2>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card"><div class="steps">
+   <div class="step">Sintoniza y verifica frecuencia e identificación.</div>
+   <div class="step">Selecciona el front course publicado.</div>
+   <div class="step">Confirma LOC como fuente lateral.</div>
+   <div class="step">Intercepta el localizador.</div>
+   <div class="step">Establécete lateralmente.</div>
+   <div class="step">Intercepta normalmente el GS desde abajo.</div>
+  </div></div>
+  <div class="card">
+   <div class="control"><label>Situación simulada</label><div class="seg"><button class="pill int-s active" data-int="below">GS arriba</button><button class="pill int-s" data-int="center">GS centrado</button><button class="pill int-s" data-int="above">GS abajo</button></div></div>
+   <div class="choice-list"><button class="choice int-c" data-choice="maintain">Mantener altitud y esperar captura</button><button class="choice int-c" data-choice="descend">Descender para perseguir la senda</button><button class="choice int-c" data-choice="stabilize">Establecer descenso estabilizado</button><button class="choice int-c" data-choice="reassess">No perseguir; reevaluar</button></div>
+   <div class="feedback" id="interceptFeedback">Selecciona una acción.</div>
+  </div>
+ </div>
+ <div class="callout danger" style="margin-top:18px"><strong>Falsas sendas:</strong> pueden existir indicaciones no fiables por encima de la senda publicada. No se persigue una captura desde arriba con un descenso agresivo.</div>
+</section>
+
+<section class="slide" data-title="Razón de descenso">
+ <div class="eyebrow">SENDA DE 3 GRADOS</div><div class="accent"></div>
+ <h2>Convierte velocidad en razón de descenso aproximada</h2>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card">
+   <div class="control"><label>Groundspeed <span id="gsValue">120 kt</span></label><input type="range" min="70" max="180" step="5" value="120" id="gsSlider"></div>
+   <div class="metrics"><div class="metric"><b id="approxVs">600</b><span>ft/min con GS × 5</span></div><div class="metric"><b id="exactVs">637</b><span>ft/min según tabla cercana</span></div><div class="metric"><b>3.00°</b><span>Senda del caso</span></div></div>
+  </div>
+  <div class="card"><div class="list"><div class="item"><strong>GS × 5</strong> es una regla mental rápida.</div><div class="item">La tabla Jeppesen es más precisa.</div><div class="item">La razón real se ajusta según viento y tendencia.</div><div class="item">El ILS no se vuela mirando solo ft/min; se monitorea el GS.</div></div></div>
+ </div>
+</section>
+
+<section class="slide" data-title="DA, DH y RA">
+ <div class="eyebrow">PUNTO DE DECISIÓN</div><div class="accent"></div>
+ <h2>DA, DH y RA no significan lo mismo</h2>
+ <div class="table-wrap" style="margin-top:22px"><table>
+ <thead><tr><th>Término</th><th>Nombre</th><th>Qué representa</th><th>Fuente</th></tr></thead>
+ <tbody>
+  <tr><td><strong>DA</strong></td><td>Decision Altitude</td><td>Altitud barométrica de decisión.</td><td>Altímetro barométrico.</td></tr>
+  <tr><td><strong>DH</strong></td><td>Decision Height</td><td>Altura sobre una referencia para tomar la decisión.</td><td>Puede relacionarse con RA.</td></tr>
+  <tr><td><strong>RA</strong></td><td>Radio Altitude</td><td>Altura sobre el terreno inmediatamente debajo.</td><td>Radioaltímetro.</td></tr>
+  <tr><td><strong>DA(H)</strong></td><td>Decision Altitude (Height)</td><td>Altitud principal y altura entre paréntesis.</td><td>París: 538 (200).</td></tr>
+ </tbody></table></div>
+ <div class="callout" style="margin-top:18px"><strong>En DA/DH:</strong> sin referencias requeridas se inicia la frustrada. No se espera después del mínimo para “ver si aparece” la pista.</div>
+</section>
+
+<section class="slide" data-title="RVR y luces">
+ <div class="eyebrow">VISIBILIDAD Y AYUDAS VISUALES</div><div class="accent"></div>
+ <h2>RVR, TDZ, CL, HIALS, REIL y PAPI</h2>
+ <div class="grid3" style="margin-top:22px">
+  <div class="card"><div class="label">RVR</div><h3>Runway Visual Range</h3><p>Alcance visual de pista.</p></div>
+  <div class="card"><div class="label">TDZ / TDZE</div><h3>Touchdown Zone</h3><p>Zona de toma de contacto y su elevación.</p></div>
+  <div class="card"><div class="label">CL</div><h3>Centerline Lights</h3><p>Luces del eje de pista.</p></div>
+  <div class="card"><div class="label">HIALS-II</div><h3>High Intensity Approach Lighting System</h3><p>Luces de aproximación de alta intensidad.</p></div>
+  <div class="card"><div class="label">REIL</div><h3>Runway End Identifier Lights</h3><p>Luces que ayudan a identificar el umbral.</p></div>
+  <div class="card"><div class="label">PAPI</div><h3>Precision Approach Path Indicator</h3><p>Ayuda visual para la senda en fase visual.</p></div>
+ </div>
+ <div class="callout danger" style="margin-top:18px"><strong>Luces inoperativas:</strong> pueden aumentar mínimos o impedir una operación de baja visibilidad.</div>
+</section>
+
+<section class="slide" data-title="Caso París">
+ <div class="eyebrow">CASO REAL · PARÍS 08L</div><div class="accent"></div>
+ <h2>Una carta, dos aproximaciones: ILS o LOC</h2>
+ <div class="chart-layout" style="margin-top:22px">
+  <div class="card"><figure><img class="figure zoomable" src="assets/lfpg_ils_loc_08l.jpeg" alt="Carta París"><figcaption>Amplía la carta para comprobar los datos.</figcaption></figure></div>
+  <div class="card">
+   <div class="seg"><button class="tab active" data-paris="ils">ILS</button><button class="tab" data-paris="loc">LOC GS out</button></div>
+   <div id="paris-ils" style="margin-top:16px"><div class="list"><div class="item">LOC GLE 108.7 MHz.</div><div class="item">Curso 084°.</div><div class="item">DA(H) 538 ft (200 ft).</div><div class="item">RVR base 550 m, sujeto a notas.</div><div class="item">DME requerido.</div></div></div>
+   <div id="paris-loc" style="display:none;margin-top:16px"><div class="list"><div class="item">No se utiliza el GS como guía vertical autorizada.</div><div class="item">Se usa la tabla de altitudes por DME.</div><div class="item">Mínimos CDFA: A 740, B 770, C 790, D 810 ft.</div><div class="item">DA(H) en lugar de MDA(H) depende de política del operador.</div><div class="item">El RVR cambia por categoría y luces.</div></div></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-title="Categorías">
+ <div class="eyebrow">CAT I, CAT II Y CAT III</div><div class="accent"></div>
+ <h2>La categoría no depende solo de la carta</h2>
+ <div class="table-wrap" style="margin-top:22px"><table>
+ <thead><tr><th>Categoría</th><th>Concepto</th><th>Requisitos crecientes</th></tr></thead>
+ <tbody>
+  <tr><td><strong>CAT I</strong></td><td>ILS estándar; decisión normalmente alrededor de 200 ft.</td><td>Procedimiento, equipo y tripulación aprobados.</td></tr>
+  <tr><td><strong>CAT II</strong></td><td>Menor DH y RVR que CAT I.</td><td>RA, automatización/HUD, luces y protección de señal.</td></tr>
+  <tr><td><strong>CAT IIIA</strong></td><td>DH menor de 100 ft o sin DH, según aprobación.</td><td>Autoland o sistema aprobado y mayor redundancia.</td></tr>
+  <tr><td><strong>CAT IIIB</strong></td><td>RVR muy bajo y posible capacidad de rollout.</td><td>Fail-operational, autoland y autorización completa.</td></tr>
+ </tbody></table></div>
+ <div class="callout danger" style="margin-top:18px"><strong>La carta no autoriza.</strong> Aeronave, tripulación, operador, aeródromo y pista deben estar aprobados.</div>
+</section>
+
+<section class="slide" data-title="Caso Dubái">
+ <div class="eyebrow">CASO REAL · DUBÁI 12L</div><div class="accent"></div>
+ <h2>Cómo leer una carta CAT II/III</h2>
+ <div class="chart-layout" style="margin-top:22px">
+  <div class="card"><figure><img class="figure zoomable" src="assets/omdb_cat_ii_iii_ils_12l.jpeg" alt="Carta Dubái CAT II/III"><figcaption>La carta exige certificación especial de aeronave y tripulación.</figcaption></figure></div>
+  <div class="card"><div class="steps">
+   <div class="step">CAT II/III ILS RWY 12L.</div>
+   <div class="step">Localizador IDBL 110.1 MHz.</div>
+   <div class="step">Curso final 119°.</div>
+   <div class="step">DB612 obligatorio a 2000 ft.</div>
+   <div class="step">RNAV 1 para transiciones y certificación especial.</div>
+   <div class="step">ILS DME marca cero en la TDZ.</div>
+   <div class="step">Frustrada: DB611, track 104° a TALTU, 3000 ft, gradiente 3.0%.</div>
+  </div></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Mínimos Dubái">
+ <div class="eyebrow">TABLA DE MÍNIMOS</div><div class="accent"></div>
+ <h2>Lee primero la columna; después la categoría</h2>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card"><div class="list">
+   <div class="item"><strong>CAT IIIB:</strong> DH 50 ft y RVR 75 m.</div>
+   <div class="item"><strong>CAT IIIA:</strong> A RA 100 / DA(H) 112 (100); B RA 109 / DA(H) 121 (109); RVR 200 m.</div>
+   <div class="item"><strong>CAT II:</strong> C RA 121 / DA(H) 133 (121); D RA 135 / DA(H) 147 (135).</div>
+   <div class="item"><strong>RVR CAT II:</strong> 300 m para A/B y 400 m para C/D.</div>
+  </div></div>
+  <div class="card">
+   <div class="control"><label>Selecciona operación</label><div class="seg"><button class="pill min-mode active" data-min="ii">CAT II</button><button class="pill min-mode" data-min="iiia">CAT IIIA</button><button class="pill min-mode" data-min="iiib">CAT IIIB</button></div></div>
+   <div class="result" id="minFeedback"><div class="status">CAT II</div>Comprueba categoría, RA/DA(H), RVR y aprobación CAT II.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-title="Automatización">
+ <div class="eyebrow">AP, FD, HUD Y AUTOLAND</div><div class="accent"></div>
+ <h2>La automatización debe comprenderse</h2>
+ <div class="grid4" style="margin-top:22px">
+  <div class="card"><div class="label">AP</div><h3>Autopilot</h3><p>Piloto automático.</p></div>
+  <div class="card"><div class="label">FD</div><h3>Flight Director</h3><p>Director de vuelo.</p></div>
+  <div class="card"><div class="label">HUD</div><h3>Head-Up Display</h3><p>Presentación frontal de guiado.</p></div>
+  <div class="card"><div class="label">AUTOLAND</div><h3>Aterrizaje automático</h3><p>Puede controlar aproximación, flare y aterrizaje según certificación.</p></div>
+ </div>
+ <div class="grid2" style="margin-top:18px">
+  <div class="card"><div class="label">FAIL-PASSIVE</div><p>Tras una falla no produce desviación importante, pero normalmente exige intervención del piloto.</p></div>
+  <div class="card"><div class="label">FAIL-OPERATIONAL</div><p>Tras una falla simple, la capacidad restante puede completar la operación según aprobación.</p></div>
+ </div>
+</section>
+
+<section class="slide" data-title="LVO y LVP">
+ <div class="eyebrow">BAJA VISIBILIDAD</div><div class="accent"></div>
+ <h2>LVO, LVP y áreas críticas del ILS</h2>
+ <div class="grid3" style="margin-top:22px">
+  <div class="card"><div class="label">LVO</div><h3>Low-Visibility Operations</h3><p>Operaciones bajo condiciones y aprobaciones de baja visibilidad.</p></div>
+  <div class="card"><div class="label">LVP</div><h3>Low-Visibility Procedures</h3><p>Procedimientos aeroportuarios de protección y separación.</p></div>
+  <div class="card"><div class="label">ÁREA CRÍTICA</div><h3>ILS Critical Area</h3><p>Zona donde vehículos o aeronaves pueden distorsionar LOC/GS.</p></div>
+ </div>
+ <div class="callout danger" style="margin-top:18px"><strong>Autoland no elimina el monitoreo.</strong> La tripulación debe vigilar modos, trayectoria y señales.</div>
+</section>
+
+<section class="slide" data-title="Secuencia">
+ <div class="eyebrow">FLUJO COMPLETO</div><div class="accent"></div>
+ <h2>De la autorización al aterrizaje o frustrada</h2>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card"><div class="label">ANTES DEL FAP</div><div class="steps"><div class="step">Carta, NOTAM, mínimos y estado de equipos.</div><div class="step">Frecuencia, identificación y curso.</div><div class="step">Fuente LOC activa y modos armados.</div><div class="step">Altitud de interceptación y captura desde abajo.</div><div class="step">Frustrada y referencias brieféadas.</div></div></div>
+  <div class="card"><div class="label">DESPUÉS DE CAPTURA</div><div class="steps"><div class="step">Confirmar LOC y GS capturados.</div><div class="step">Controlar velocidad y configuración.</div><div class="step">Comparar altitud y distancia.</div><div class="step">Monitorear desviaciones y modos.</div><div class="step">En DA/DH: continuar o frustrar.</div></div></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Fallas">
+ <div class="eyebrow">FALLAS Y RESPUESTAS</div><div class="accent"></div>
+ <h2>Una falla cambia la capacidad disponible</h2>
+ <div class="table-wrap" style="margin-top:22px"><table>
+ <thead><tr><th>Falla</th><th>Consecuencia</th><th>Respuesta general</th></tr></thead>
+ <tbody>
+  <tr><td>Localizador</td><td>Sin guiado lateral ILS.</td><td>No continuar el ILS; aplicar SOP y frustrar o usar otro procedimiento.</td></tr>
+  <tr><td>Glide slope</td><td>Puede revertir a LOC si existe.</td><td>Usar perfil y mínimos LOC.</td></tr>
+  <tr><td>DME requerido</td><td>No se identifican fixes.</td><td>No continuar salvo sustitución autorizada.</td></tr>
+  <tr><td>Autopilot</td><td>Puede perderse CAT II/III.</td><td>Aplicar SOP y frustrar si desaparece la capacidad requerida.</td></tr>
+  <tr><td>Radioaltímetro</td><td>Puede perderse mínimo RA.</td><td>Aplicar degradación AFM/MEL/SOP.</td></tr>
+  <tr><td>Señal inestable</td><td>Guiado no fiable.</td><td>No perseguir; monitorear y frustrar si corresponde.</td></tr>
+ </tbody></table></div>
+</section>
+
+<section class="slide" data-title="Práctica">
+ <div class="eyebrow">PRÁCTICA GUIADA</div><div class="accent"></div>
+ <h2>Resuelve antes de ver la respuesta</h2>
+ <div class="practice-grid" style="margin-top:22px">
+  <div class="practice-card"><h3>GS arriba</h3><button class="practice-btn" data-p="1a">Mantener altitud y capturar desde abajo</button><button class="practice-btn" data-p="1b">Descender para alcanzarla</button><div class="practice-feedback" id="pf1">Selecciona.</div></div>
+  <div class="practice-card"><h3>Falla de GS</h3><button class="practice-btn" data-p="2a">Rebriefear LOC y sus mínimos</button><button class="practice-btn" data-p="2b">Mantener DA ILS</button><div class="practice-feedback" id="pf2">Selecciona.</div></div>
+  <div class="practice-card"><h3>CAT III sin aprobación</h3><button class="practice-btn" data-p="3a">No usar mínimos CAT III</button><button class="practice-btn" data-p="3b">Usarlos porque están impresos</button><div class="practice-feedback" id="pf3">Selecciona.</div></div>
+  <div class="practice-card"><h3>DA sin referencias</h3><button class="practice-btn" data-p="4a">Frustrar inmediatamente</button><button class="practice-btn" data-p="4b">Continuar unos segundos</button><div class="practice-feedback" id="pf4">Selecciona.</div></div>
+  <div class="practice-card"><h3>RVR inferior</h3><button class="practice-btn" data-p="5a">No continuar según autorización</button><button class="practice-btn" data-p="5b">Continuar por techo suficiente</button><div class="practice-feedback" id="pf5">Selecciona.</div></div>
+  <div class="practice-card"><h3>Anomalía en autoland</h3><button class="practice-btn" data-p="6a">Monitorear, intervenir y aplicar SOP</button><button class="practice-btn" data-p="6b">No intervenir</button><div class="practice-feedback" id="pf6">Selecciona.</div></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Evaluación">
+ <div class="eyebrow">EVALUACIÓN FINAL</div><div class="accent"></div>
+ <h2>Demuestra comprensión, no memoria</h2>
+ <div class="quiz-layout" style="margin-top:22px">
+  <div id="quiz">
+   <div class="question" data-q="0" data-c="b" data-k="1"><h3>1. ¿Qué proporciona el ILS?</h3><button class="answer" data-a="a">Solo distancia</button><button class="answer" data-a="b">Guiado lateral LOC y vertical GS</button><button class="answer" data-a="c">Solo rumbo</button></div>
+   <div class="question" data-q="1" data-c="a"><h3>2. ¿Qué significa LOC?</h3><button class="answer" data-a="a">Localizer</button><button class="answer" data-a="b">Low Operations Category</button><button class="answer" data-a="c">Landing Output Computer</button></div>
+   <div class="question" data-q="2" data-c="c"><h3>3. ¿Cómo se intercepta normalmente el GS?</h3><button class="answer" data-a="a">Desde arriba</button><button class="answer" data-a="b">Desde cualquier posición</button><button class="answer" data-a="c">Desde abajo, con LOC establecido</button></div>
+   <div class="question" data-q="3" data-c="b"><h3>4. DA(H) 538 (200) significa:</h3><button class="answer" data-a="a">538 m y 200 kt</button><button class="answer" data-a="b">DA 538 ft y altura 200 ft</button><button class="answer" data-a="c">RVR 538 m</button></div>
+   <div class="question" data-q="4" data-c="a"><h3>5. ¿Qué suministra RA?</h3><button class="answer" data-a="a">Radioaltímetro</button><button class="answer" data-a="b">VOR</button><button class="answer" data-a="c">DME</button></div>
+   <div class="question" data-q="5" data-c="c"><h3>6. RVR significa:</h3><button class="answer" data-a="a">Radio Vertical Reference</button><button class="answer" data-a="b">Runway VOR Radial</button><button class="answer" data-a="c">Runway Visual Range</button></div>
+   <div class="question" data-q="6" data-c="b" data-k="1"><h3>7. En DA sin referencias:</h3><button class="answer" data-a="a">Descender un poco</button><button class="answer" data-a="b">Frustrar inmediatamente</button><button class="answer" data-a="c">Mantener indefinidamente</button></div>
+   <div class="question" data-q="7" data-c="a"><h3>8. Si falla GS y existe LOC autorizado:</h3><button class="answer" data-a="a">Usar perfil y mínimos LOC</button><button class="answer" data-a="b">Conservar DA ILS</button><button class="answer" data-a="c">Convertir a GPS</button></div>
+   <div class="question" data-q="8" data-c="c"><h3>9. Para usar CAT III se requiere:</h3><button class="answer" data-a="a">Solo que lo diga la carta</button><button class="answer" data-a="b">Solo experiencia IFR</button><button class="answer" data-a="c">Aprobación de procedimiento, aeronave, tripulación y operador</button></div>
+   <div class="question" data-q="9" data-c="b"><h3>10. Fail-passive significa:</h3><button class="answer" data-a="a">Completa siempre rollout</button><button class="answer" data-a="b">No causa desviación importante, pero puede exigir intervención</button><button class="answer" data-a="c">Ignora fallas</button></div>
+   <div class="question" data-q="10" data-c="a"><h3>11. LVP sirve para:</h3><button class="answer" data-a="a">Proteger operaciones en baja visibilidad</button><button class="answer" data-a="b">Aumentar velocidad</button><button class="answer" data-a="c">Eliminar RVR</button></div>
+   <div class="question" data-q="11" data-c="c"><h3>12. Durante autoland la tripulación debe:</h3><button class="answer" data-a="a">Dejar de monitorear</button><button class="answer" data-a="b">Mirar solo afuera</button><button class="answer" data-a="c">Monitorear y estar lista para intervenir</button></div>
+   <div class="question" data-q="12" data-c="b"><h3>13. La carta de Dubái exige:</h3><button class="answer" data-a="a">Solo DME</button><button class="answer" data-a="b">Certificación especial de tripulación y aeronave</button><button class="answer" data-a="c">Vuelo visual previo</button></div>
+   <div class="question" data-q="13" data-c="a"><h3>14. HIALS-II es:</h3><button class="answer" data-a="a">Sistema de luces de aproximación de alta intensidad</button><button class="answer" data-a="b">Radioaltímetro</button><button class="answer" data-a="c">Tipo de localizador</button></div>
+  </div>
+  <aside class="card quiz-summary"><div class="label">RESULTADO</div><div class="score" id="score">—</div><p id="scoreText">Responde las 14 preguntas.</p><div class="critical">Críticas: 1 y 7.</div><div class="actions"><button class="primary" id="grade">Calificar</button><button class="secondary" id="reset">Reiniciar</button></div><div class="completion" id="done"><div class="callout"><strong>Módulo completado.</strong></div><div class="actions"><button class="primary" id="finish">Finalizar módulo</button></div></div></aside>
+ </div>
+ <div class="card" style="margin-top:22px"><div class="label">REFERENCIAS</div><p class="small">FAA AIM, sección ILS; FAA Instrument Procedures Handbook; EASA Easy Access Rules for Air Operations; cartas Jeppesen LFPG RWY 08L y OMDB RWY 12L; AFM/POH, MEL y SOP aplicables.</p></div>
+</section>
+
+</main>
+<nav class="nav"><button class="secondary" id="prev">← Anterior</button><div class="nav-center"><span id="title">Inicio</span><br>Progreso guardado</div><button class="primary" id="next">Siguiente →</button></nav>
+<div class="modal" id="modal"><button class="close" id="close">×</button><img id="modalImg" alt="Carta ampliada"></div>
+
+<script>
+(()=>{
+const slides=[...document.querySelectorAll('.slide')],bar=document.getElementById('progressBar'),pt=document.getElementById('progressText'),pp=document.getElementById('progressPercent'),title=document.getElementById('title'),prev=document.getElementById('prev'),next=document.getElementById('next');
+const key='veyra_ifr_ils_module_10',t0=Date.now();let current=0,best=null;const saved=JSON.parse(localStorage.getItem(key)||'{}');if(Number.isInteger(saved.current))current=saved.current;if(typeof saved.best==='number')best=saved.best;
+function emit(type,data={}){const payload={source:'veyra-module',type,moduleId:'veyra-ifr-ils-10',timestamp:new Date().toISOString(),...data};try{window.parent.postMessage(payload,'*')}catch(e){}window.dispatchEvent(new CustomEvent(type,{detail:payload}))}
+function save(extra={}){localStorage.setItem(key,JSON.stringify({current,best,...extra}))}
+function show(i){current=Math.max(0,Math.min(i,slides.length-1));slides.forEach((s,n)=>s.classList.toggle('active',n===current));const pct=Math.round((current+1)/slides.length*100);bar.style.width=pct+'%';pt.textContent=`Pantalla ${current+1} de ${slides.length}`;pp.textContent=pct+'%';title.textContent=slides[current].dataset.title;prev.disabled=current===0;next.textContent=current===slides.length-1?'Finalizar':'Siguiente →';save();emit('veyra:progress',{progress:pct,screen:current+1,total:slides.length})}
+prev.onclick=()=>show(current-1);next.onclick=()=>{if(current<slides.length-1){show(current+1);return;}emit('veyra:exit',{completed:Boolean(saved.completed),score:best,progress:100,timeSeconds:Math.round((Date.now()-t0)/1000)});setTimeout(()=>{window.location.href='/?course=ifr';},150);};document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(Number(b.dataset.go)));
+
+const terms=[
+['ILS','Instrument Landing System','Sistema de aproximación de precisión con guiado lateral LOC y vertical GS.'],
+['LOC','Localizer','Guiado lateral respecto al eje de aproximación.'],
+['GS','Glide Slope','Guiado vertical respecto a la senda publicada.'],
+['DME','Distance Measuring Equipment','Distancia oblicua a una estación asociada.'],
+['IF','Intermediate Fix','Punto intermedio antes del segmento final.'],
+['FAP','Final Approach Point','Punto donde normalmente se intercepta la senda nominal.'],
+['FAF','Final Approach Fix','Fix de aproximación final usado especialmente en no precisión.'],
+['MAP','Missed Approach Point','Punto de inicio de la frustrada si no se puede continuar.'],
+['DA','Decision Altitude','Altitud barométrica de decisión.'],
+['DH','Decision Height','Altura de decisión sobre una referencia.'],
+['DA(H)','Decision Altitude (Height)','Altitud y altura asociada entre paréntesis.'],
+['MDA','Minimum Descent Altitude','Altitud mínima de descenso.'],
+['RA','Radio Altitude','Altura medida por radioaltímetro.'],
+['RVR','Runway Visual Range','Alcance visual de pista.'],
+['TDZ','Touchdown Zone','Zona de toma de contacto.'],
+['TDZE','Touchdown Zone Elevation','Elevación de la zona de toma de contacto.'],
+['TCH','Threshold Crossing Height','Altura teórica de cruce del umbral.'],
+['AP','Autopilot','Piloto automático.'],
+['FD','Flight Director','Director de vuelo.'],
+['HUD','Head-Up Display','Presentación frontal de información.'],
+['HUDLS','Head-Up Display Landing System','Sistema HUD aprobado para aterrizaje.'],
+['LVO','Low-Visibility Operations','Operaciones de baja visibilidad.'],
+['LVP','Low-Visibility Procedures','Procedimientos aeroportuarios de baja visibilidad.'],
+['HIALS-II','High Intensity Approach Lighting System II','Luces de aproximación de alta intensidad.'],
+['REIL','Runway End Identifier Lights','Luces de identificación del umbral.'],
+['PAPI','Precision Approach Path Indicator','Ayuda visual de senda.'],
+['CL','Centerline Lights','Luces de eje de pista.'],
+['CDFA','Continuous Descent Final Approach','Descenso final continuo estabilizado.'],
+['RNAV 1','Area Navigation 1','Especificación de navegación con precisión requerida.'],
+['MHA','Minimum Holding Altitude','Altitud mínima de espera.'],
+['THR','Threshold','Umbral de pista.'],
+['V/V','Vertical Velocity','Razón vertical.'],
+['GS OUT','Glide Slope Out','GS no disponible; se usan perfil y mínimos LOC.'],
+['CAT','Category','Categoría operacional ILS.']
+];
+const g=document.getElementById('glossaryGrid'),gs=document.getElementById('glossarySearch');
+function render(f=''){g.innerHTML='';terms.filter(x=>x.join(' ').toLowerCase().includes(f.toLowerCase())).forEach(x=>{const b=document.createElement('button');b.className='term';b.innerHTML=`<b>${x[0]}</b><span>${x[1]}</span>`;b.onclick=()=>{document.querySelectorAll('.term').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.getElementById('glossaryTitle').textContent=x[0]+' — '+x[1];document.getElementById('glossaryBody').textContent=x[2]};g.appendChild(b)})}
+gs.oninput=()=>render(gs.value);render();
+
+let scen='below';const corr={below:'maintain',center:'stabilize',above:'reassess'},msg={below:'Mantén la altitud y captura desde abajo.',center:'Establece el descenso publicado.',above:'No persigas la senda desde arriba; reevalúa.'};
+document.querySelectorAll('.int-s').forEach(b=>b.onclick=()=>{document.querySelectorAll('.int-s').forEach(x=>x.classList.remove('active'));b.classList.add('active');scen=b.dataset.int});
+document.querySelectorAll('.int-c').forEach(b=>b.onclick=()=>{const ok=b.dataset.choice===corr[scen],fb=document.getElementById('interceptFeedback');fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'Correcto. ':'Revisa. ')+msg[scen]});
+
+const chart={70:372,90:478,100:531,120:637,140:743,160:849},slider=document.getElementById('gsSlider');
+function nearest(v){return Object.keys(chart).map(Number).reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a)}
+function updateGs(){const v=Number(slider.value),n=nearest(v);document.getElementById('gsValue').textContent=v+' kt';document.getElementById('approxVs').textContent=v*5;document.getElementById('exactVs').textContent=chart[n]+(n===v?'':'*')}
+slider.oninput=updateGs;updateGs();
+
+document.querySelectorAll('[data-paris]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-paris]').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('paris-ils').style.display=b.dataset.paris==='ils'?'block':'none';document.getElementById('paris-loc').style.display=b.dataset.paris==='loc'?'block':'none'});
+
+const minText={ii:['CAT II','Comprueba categoría, RA/DA(H), RVR y aprobación CAT II.'],iiia:['CAT IIIA','En este caso RVR 200 m y mínimos RA/DA(H) por categoría.'],iiib:['CAT IIIB','En esta carta DH 50 ft y RVR 75 m; exige aprobación CAT IIIB.']};
+document.querySelectorAll('.min-mode').forEach(b=>b.onclick=()=>{document.querySelectorAll('.min-mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');const d=minText[b.dataset.min];document.getElementById('minFeedback').innerHTML=`<div class="status">${d[0]}</div>${d[1]}`});
+
+const pc={'1a':1,'1b':0,'2a':1,'2b':0,'3a':1,'3b':0,'4a':1,'4b':0,'5a':1,'5b':0,'6a':1,'6b':0};
+const pm={'1a':'Correcto. Captura desde abajo.','1b':'No. No persigas la senda.','2a':'Correcto. Cambia a LOC y sus mínimos.','2b':'No. La DA ILS ya no aplica.','3a':'Correcto. La carta no concede aprobación.','3b':'No. Se requiere autorización.','4a':'Correcto. Frustra en DA sin referencias.','4b':'No. No continúes por debajo.','5a':'Correcto. Debe cumplirse el RVR autorizado.','5b':'No. El techo no sustituye RVR.','6a':'Correcto. Monitorea e intervén.','6b':'No. Autoland requiere vigilancia.'};
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const k=b.dataset.p,fb=document.getElementById('pf'+k[0]);fb.style.color=pc[k]?'#9fe8b0':'#ffaaaa';fb.textContent=pm[k]});
+
+const modal=document.getElementById('modal'),mi=document.getElementById('modalImg');document.querySelectorAll('.zoomable').forEach(img=>img.onclick=()=>{mi.src=img.src;modal.classList.add('show')});document.getElementById('close').onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')};
+
+const ans={};document.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{const q=b.closest('.question');q.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');ans[q.dataset.q]=b.dataset.a});
+document.getElementById('grade').onclick=()=>{const qs=[...document.querySelectorAll('.question')];let ok=0,crit=true;qs.forEach(q=>{const good=ans[q.dataset.q]===q.dataset.c;if(good)ok++;if(q.dataset.k==='1'&&!good)crit=false});const score=Math.round(ok/qs.length*100),pass=score>=80&&crit;best=best===null?score:Math.max(best,score);document.getElementById('score').textContent=score+'%';document.getElementById('scoreText').textContent=pass?'Aprobado. Dominas los fundamentos del ILS.':'Aún no apruebas. Revisa glosario, categorías y casos.';document.getElementById('done').classList.toggle('show',pass);save({best});emit('veyra:complete',{score,passed:pass,criticalOk:crit,timeSeconds:Math.round((Date.now()-t0)/1000)})};
+document.getElementById('reset').onclick=()=>{Object.keys(ans).forEach(k=>delete ans[k]);document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));document.getElementById('score').textContent='—';document.getElementById('done').classList.remove('show')};
+document.getElementById('finish').onclick=()=>{emit('veyra:exit',{completed:true,score:best,progress:100,timeSeconds:Math.round((Date.now()-t0)/1000)});setTimeout(()=>{window.location.href='/?course=ifr';},150);};
+emit('veyra:ready',{progress:Math.round((current+1)/slides.length*100),bestScore:best});show(current);
+})();
+</script>
+</body>
+</html>
