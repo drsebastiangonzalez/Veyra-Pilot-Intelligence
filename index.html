@@ -248,6 +248,40 @@ main{max-width:1180px;}
 .levelCard h3{font-size:17px;color:#fff;margin:0 0 9px}
 .levelCard p{font-size:13px;line-height:1.5;color:#b9c1cd;margin:0}
 .levelClarifier{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);color:#d5dae2;font-size:13px;line-height:1.55}
+.cbtaDoctrine{margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.doctrineCard{border-radius:24px;padding:30px;border:1px solid #dfd2b8;background:#fffaf0;box-shadow:0 18px 42px rgba(15,23,42,.08)}
+.doctrineCard.dark{background:linear-gradient(145deg,#071019,#111827);border-color:rgba(200,164,93,.42);color:#fff}
+.doctrineTag{display:inline-flex;align-items:center;min-height:30px;padding:0 13px;border-radius:999px;background:#d9ad4f;color:#101827;font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.doctrineCard h2{font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:1.04;letter-spacing:-.035em;margin:18px 0 12px;color:#101827}
+.doctrineCard.dark h2{color:#fff}
+.doctrineCard p{margin:0;color:#586274;font-size:15px;line-height:1.68}
+.doctrineCard.dark p{color:#c5ccd6}
+.doctrineBridge{margin:20px 0 0;padding-top:18px;border-top:1px solid rgba(200,164,93,.32);font-size:13px!important;color:#8b6b2d!important;font-weight:800}
+.doctrineCard.dark .doctrineBridge{color:#e2c77f!important}
+.dataSection{margin:24px 0;border:1px solid #dfd2b8;border-radius:28px;padding:36px;background:#fff;box-shadow:0 22px 52px rgba(15,23,42,.08)}
+.dataHead{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:end;margin-bottom:28px}
+.dataHead h2{font-family:Georgia,'Times New Roman',serif;font-size:42px;font-weight:500;letter-spacing:-.04em;line-height:1.04;margin:0;color:#0f172a}
+.dataHead p{margin:0;color:#596274;font-size:16px;line-height:1.65}
+.qualityGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.qualityCard{border-radius:18px;padding:20px;background:#f5efe4;border:1px solid #e4d8c2}
+.qualityCard b{display:block;color:#a77a25;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
+.qualityCard p{margin:0;color:#4f5969;font-size:13px;line-height:1.55}
+.comparisonTitle{margin:34px 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#0f172a}
+.comparisonGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.comparisonCard{border-radius:20px;padding:24px;background:#f3eee4;border:1px solid #ded3c0}
+.comparisonCard.cbta{background:#091421;border-color:rgba(200,164,93,.4);color:#fff}
+.comparisonCard h3{margin:0 0 14px;font-size:17px;color:#172033}
+.comparisonCard.cbta h3{color:#e5bd63}
+.comparisonRow{display:grid;grid-template-columns:112px 1fr;gap:12px;padding:10px 0;border-top:1px solid rgba(15,23,42,.1);font-size:13px;line-height:1.48;color:#586274}
+.comparisonCard.cbta .comparisonRow{color:#c7ced8;border-color:rgba(255,255,255,.1)}
+.comparisonRow b{color:#1f2937}.comparisonCard.cbta .comparisonRow b{color:#fff}
+.comparisonStatement{margin:18px 0 0;padding:20px 22px;border-left:3px solid #d9ad4f;background:#fff9ed;color:#263244;font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.48}
+.protectionGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.protectionCard{padding:20px;border:1px solid rgba(255,255,255,.11);border-radius:18px;background:rgba(255,255,255,.045)}
+.protectionCard b{display:block;color:#e5bd63;font-size:14px;margin-bottom:8px}.protectionCard p{margin:0!important;color:#c6cdd7!important;font-size:13px!important;line-height:1.55!important}
+.protectionFoot{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.11);color:#fff;font-family:Georgia,'Times New Roman',serif;font-size:20px;line-height:1.45}
+@media(max-width:850px){.cbtaDoctrine,.dataHead,.comparisonGrid{grid-template-columns:1fr}.qualityGrid,.protectionGrid{grid-template-columns:1fr 1fr}.comparisonRow{grid-template-columns:94px 1fr}}
+@media(max-width:540px){.qualityGrid,.protectionGrid{grid-template-columns:1fr}.dataSection{padding:25px 18px}.doctrineCard{padding:25px 20px}}
 .reportBlock{display:grid;grid-template-columns:.88fr 1.12fr;gap:22px;align-items:stretch;background:rgba(255,255,255,.94);border:1px solid #e6dcc8;border-radius:28px;padding:28px;box-shadow:0 20px 44px rgba(43,32,13,.1);margin:22px 0;}
 .reportBlock.reverse{grid-template-columns:1.12fr .88fr;}
 .reportText{display:flex;flex-direction:column;justify-content:center;padding:18px;}
@@ -1477,7 +1511,7 @@ main{max-width:1180px;}
   <div class="cbtaContent">
     <div class="cbtaIntro">
       <h2>Un enfoque formativo basado en competencias</h2>
-      <p><b>Veyra Pilot Intelligence</b> integra principios de entrenamiento basado en competencias (CBTA), con apoyo en el enfoque KSA100 y elementos de EBT, para fortalecer la preparación, la trazabilidad académica y la seguridad operacional en formación aeronáutica.</p>
+      <p><b>Veyra Pilot Intelligence</b> aplica principios de entrenamiento y evaluación basados en competencias (CBTA) a la formación inicial. El enfoque KSA100 permite que el estudiante no solo recuerde conocimientos teóricos, sino que aprenda a integrarlos con habilidades y actitudes dentro de situaciones prácticas.</p>
       <p>Cada evaluación permite consolidar información académica relevante sobre el desempeño del estudiante, facilitando la identificación de fortalezas, brechas de conocimiento, criterios críticos y áreas prioritarias de refuerzo dentro del proceso formativo.</p>
       <div class="cbtaKsaGrid">
         <div class="cbtaKsa"><b>Knowledge</b><span>Fundamentos teóricos, procedimientos, limitaciones y comprensión operacional.</span></div>
@@ -1485,6 +1519,21 @@ main{max-width:1180px;}
         <div class="cbtaKsa"><b>Attitudes</b><span>Disciplina, criterio, conciencia situacional y toma de decisiones segura.</span></div>
       </div>
     </div>
+
+    <section class="cbtaDoctrine" aria-label="Relación entre KSA100 y EBT">
+      <article class="doctrineCard">
+        <span class="doctrineTag">Formación inicial</span>
+        <h2>KSA100: aprender a aplicar</h2>
+        <p>En una escuela de vuelo, KSA100 incorpora conocimientos, habilidades y actitudes a la enseñanza teórica. Mediante ejercicios prácticos y evaluación continua, prepara al estudiante para transferir lo aprendido a la cabina, al simulador y a la toma de decisiones.</p>
+        <p class="doctrineBridge">Es el punto de entrada de Veyra para desarrollar una base competencial desde las primeras etapas de la carrera.</p>
+      </article>
+      <article class="doctrineCard dark">
+        <span class="doctrineTag">Entrenamiento avanzado</span>
+        <h2>EBT: entrenar con evidencia</h2>
+        <p>Evidence-Based Training es una aplicación de CBTA orientada al entrenamiento operacional. Utiliza datos y escenarios relevantes para desarrollar la capacidad global del piloto en varias competencias, en lugar de limitar la evaluación a maniobras aisladas.</p>
+        <p class="doctrineBridge">Veyra proyecta este enfoque para futuros entornos avanzados, como entrenamiento A320, sin confundirlo con el alcance actual de formación inicial.</p>
+      </article>
+    </section>
 
     <section class="cbtaFramework" aria-label="Competencias del piloto y comportamientos observables">
       <div class="cbtaFrameworkHead">
@@ -1517,6 +1566,49 @@ main{max-width:1180px;}
         <article class="levelCard"><div class="levelNumber">3</div><h3>Métricas TEM</h3><p>Registra amenazas, errores y reducciones del margen de seguridad observadas durante el escenario.</p></article>
       </div>
       <div class="levelClarifier"><strong>Importante:</strong> estos niveles indican la profundidad de la información recopilada; no representan una escala ascendente de “malo” a “excelente”.</div>
+    </section>
+
+    <section class="dataSection" aria-label="Calidad de los datos de entrenamiento">
+      <div class="dataHead">
+        <div><div class="cbtaEyebrow">Información útil y comparable</div><h2>Calidad de los datos de entrenamiento</h2></div>
+        <p>Las decisiones formativas solo son tan confiables como la evidencia que las sustenta. Veyra organiza la captura de información para conservar su contexto y convertir observaciones del instructor en retroalimentación clara, trazable y accionable.</p>
+      </div>
+      <div class="qualityGrid">
+        <article class="qualityCard"><b>Limpieza</b><p>Detectar registros incompletos, duplicados, incorrectos o carentes de contexto antes del análisis.</p></article>
+        <article class="qualityCard"><b>Relevancia</b><p>Recopilar información vinculada con el objetivo formativo, el escenario y las competencias evaluadas.</p></article>
+        <article class="qualityCard"><b>Oportunidad</b><p>Registrar y analizar la evidencia cerca del evento para reflejar el desempeño de manera vigente.</p></article>
+        <article class="qualityCard"><b>Exactitud</b><p>Describir lo observado con criterios comunes, evitando errores de registro e interpretaciones ambiguas.</p></article>
+      </div>
+      <h3 class="comparisonTitle">De comprobar tareas a comprender el desempeño</h3>
+      <div class="comparisonGrid">
+        <article class="comparisonCard">
+          <h3>Evaluación tradicional</h3>
+          <div class="comparisonRow"><b>Contexto</b><span>Maniobras o procedimientos considerados de manera individual.</span></div>
+          <div class="comparisonRow"><b>Evidencia</b><span>Tolerancias, desviaciones y resultado de aprobado o no aprobado.</span></div>
+          <div class="comparisonRow"><b>Lectura</b><span>Confirma principalmente si una tarea fue completada dentro del estándar.</span></div>
+        </article>
+        <article class="comparisonCard cbta">
+          <h3>Evaluación basada en competencias</h3>
+          <div class="comparisonRow"><b>Contexto</b><span>Escenarios integrados y representativos del entorno operacional.</span></div>
+          <div class="comparisonRow"><b>Evidencia</b><span>Comportamientos efectivos e inefectivos observados y asociados con competencias.</span></div>
+          <div class="comparisonRow"><b>Lectura</b><span>Busca causas, necesidades individuales y prioridades para el entrenamiento posterior.</span></div>
+        </article>
+      </div>
+      <blockquote class="comparisonStatement">La evaluación tradicional determina si la tarea fue completada. El modelo basado en competencias busca comprender cómo se alcanzó el resultado y qué debe desarrollarse después.</blockquote>
+    </section>
+
+    <section class="cbtaLevels" aria-label="Protección de los datos de entrenamiento">
+      <div class="cbtaLevelsHead">
+        <div><div class="cbtaEyebrow">Gobernanza de la información</div><h2>Protección responsable de los datos</h2></div>
+        <p>La información de entrenamiento debe permanecer disponible para acompañar el desarrollo del piloto, pero siempre dentro de un entorno controlado, con acceso definido y una finalidad formativa legítima.</p>
+      </div>
+      <div class="protectionGrid">
+        <article class="protectionCard"><b>Confidencialidad</b><p>Acceso limitado según el rol y la necesidad académica.</p></article>
+        <article class="protectionCard"><b>Disponibilidad</b><p>Continuidad de los registros necesarios para orientar el proceso formativo.</p></article>
+        <article class="protectionCard"><b>Uso responsable</b><p>Información utilizada para seguimiento, retroalimentación y mejora, conservando su contexto.</p></article>
+        <article class="protectionCard"><b>Desidentificación</b><p>Análisis colectivos sin identificación directa cuando no sea necesaria para el propósito definido.</p></article>
+      </div>
+      <div class="protectionFoot">Proteger la información no significa impedir su utilización. Significa asegurar que cada dato sea utilizado por la persona adecuada, para una finalidad definida y dentro del contexto correcto.</div>
     </section>
 
     <div class="reportBlock">
