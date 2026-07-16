@@ -219,6 +219,35 @@ main{max-width:1180px;}
 .cbtaKsa{border:1px solid #e6dcc8;border-radius:18px;padding:16px;background:#fffaf1;color:#1f2937;}
 .cbtaKsa b{display:block;color:#111827;margin-bottom:5px;}
 .cbtaKsa span{color:#64748b;line-height:1.45;font-size:14px;}
+.cbtaFramework{margin:22px 0;background:#fff;border:1px solid #e6dcc8;border-radius:28px;padding:34px;box-shadow:0 20px 44px rgba(43,32,13,.09)}
+.cbtaFrameworkHead{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:end;margin-bottom:28px}
+.cbtaFrameworkHead h2,.cbtaLevelsHead h2{font-family:Georgia,'Times New Roman',serif;font-size:44px;font-weight:500;letter-spacing:-.04em;line-height:1.03;margin:0;color:#0f172a}
+.cbtaFrameworkHead p,.cbtaLevelsHead p{font-size:16px;line-height:1.62;color:#596274;margin:0}
+.competencyGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.competencyCard{border:1px solid #e6dcc8;border-radius:18px;background:#fffaf1;overflow:hidden;transition:.2s ease}
+.competencyCard[open]{border-color:#c8a45d;box-shadow:0 12px 30px rgba(70,49,15,.08)}
+.competencyCard summary{list-style:none;cursor:pointer;padding:20px;display:grid;grid-template-columns:48px 1fr 18px;gap:13px;align-items:center}
+.competencyCard summary::-webkit-details-marker{display:none}
+.competencyCode{width:48px;height:48px;border:1px solid rgba(166,120,38,.35);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#9a6d23;font-size:12px;font-weight:950;letter-spacing:.05em;background:#fff}
+.competencyName b{display:block;color:#111827;font-size:15px;line-height:1.25;margin-bottom:4px}
+.competencyName span{display:block;color:#6b7280;font-size:12px;line-height:1.35}
+.competencyChevron{color:#a77b2f;font-size:19px;transition:transform .2s ease}
+.competencyCard[open] .competencyChevron{transform:rotate(45deg)}
+.obList{padding:0 20px 20px 81px}
+.obLabel{display:block;color:#9a6d23;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:900;margin-bottom:9px}
+.obItem{position:relative;color:#4b5563;font-size:13px;line-height:1.48;padding:7px 0 7px 15px;border-top:1px solid rgba(15,23,42,.08)}
+.obItem:before{content:'';position:absolute;left:0;top:14px;width:5px;height:5px;border-radius:50%;background:#c8a45d}
+.cbtaObNote{margin-top:18px;border-left:2px solid #c8a45d;padding:13px 16px;color:#596274;background:#fffaf1;font-size:14px;line-height:1.55}
+.cbtaLevels{margin:22px 0;background:linear-gradient(145deg,#071019,#111827);border:1px solid rgba(200,164,93,.36);border-radius:28px;padding:34px;color:#fff;box-shadow:0 22px 48px rgba(5,10,18,.18)}
+.cbtaLevelsHead{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:26px}
+.cbtaLevelsHead h2{color:#fff}
+.cbtaLevelsHead p{color:#b8c0cc}
+.levelGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.levelCard{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);border-radius:18px;padding:21px;min-height:210px}
+.levelNumber{font-family:Georgia,serif;color:#e0bc72;font-size:38px;line-height:1;margin-bottom:36px}
+.levelCard h3{font-size:17px;color:#fff;margin:0 0 9px}
+.levelCard p{font-size:13px;line-height:1.5;color:#b9c1cd;margin:0}
+.levelClarifier{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);color:#d5dae2;font-size:13px;line-height:1.55}
 .reportBlock{display:grid;grid-template-columns:.88fr 1.12fr;gap:22px;align-items:stretch;background:rgba(255,255,255,.94);border:1px solid #e6dcc8;border-radius:28px;padding:28px;box-shadow:0 20px 44px rgba(43,32,13,.1);margin:22px 0;}
 .reportBlock.reverse{grid-template-columns:1.12fr .88fr;}
 .reportText{display:flex;flex-direction:column;justify-content:center;padding:18px;}
@@ -267,7 +296,7 @@ main{max-width:1180px;}
 .decisionCard{background:linear-gradient(135deg,#080d13,#111827);border:1px solid rgba(200,164,93,.35);border-radius:22px;padding:22px;color:#fff;}
 .decisionCard b{display:block;color:#d9bd7a;text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin-bottom:9px;}
 .decisionCard p{margin:0;color:#cbd5e1;line-height:1.5;}
-@media(max-width:900px){#cbta{background:#f6f1e8}.cbtaHero{min-height:360px}.cbtaContent{margin-top:-34px}.reportBlock,.reportBlock.reverse{grid-template-columns:1fr;padding:18px}.reportText{padding:10px}.reportText h2{font-size:36px}.metricRow,.decisionBand,.cbtaKsaGrid,.insightGrid{grid-template-columns:1fr}.chartBars{gap:8px;padding-left:10px;padding-right:10px}.subjectRow{grid-template-columns:1fr 1fr 44px}.heatmapGrid{grid-template-columns:90px repeat(8,1fr);gap:3px;overflow-x:auto}.heatCell{min-height:34px;font-size:11px}}
+@media(max-width:900px){#cbta{background:#f6f1e8}.cbtaHero{min-height:360px}.cbtaContent{margin-top:-34px}.reportBlock,.reportBlock.reverse{grid-template-columns:1fr;padding:18px}.reportText{padding:10px}.reportText h2{font-size:36px}.metricRow,.decisionBand,.cbtaKsaGrid,.insightGrid,.competencyGrid,.levelGrid,.cbtaFrameworkHead,.cbtaLevelsHead{grid-template-columns:1fr}.cbtaFramework,.cbtaLevels{padding:23px}.cbtaFrameworkHead h2,.cbtaLevelsHead h2{font-size:36px}.obList{padding-left:20px}.chartBars{gap:8px;padding-left:10px;padding-right:10px}.subjectRow{grid-template-columns:1fr 1fr 44px}.heatmapGrid{grid-template-columns:90px repeat(8,1fr);gap:3px;overflow-x:auto}.heatCell{min-height:34px;font-size:11px}}
 
 
 
@@ -1456,6 +1485,39 @@ main{max-width:1180px;}
         <div class="cbtaKsa"><b>Attitudes</b><span>Disciplina, criterio, conciencia situacional y toma de decisiones segura.</span></div>
       </div>
     </div>
+
+    <section class="cbtaFramework" aria-label="Competencias del piloto y comportamientos observables">
+      <div class="cbtaFrameworkHead">
+        <div><div class="cbtaEyebrow">Marco de competencias · Modelo Veyra</div><h2>Las nueve competencias del piloto</h2></div>
+        <p>Veyra organiza la observación del desempeño alrededor de las competencias reconocidas en el marco CBTA. Cada una se evidencia mediante comportamientos concretos que pueden observarse, registrarse y retroalimentarse.</p>
+      </div>
+      <div class="competencyGrid">
+        <details class="competencyCard"><summary><span class="competencyCode">KNO</span><span class="competencyName"><b>Conocimientos</b><span>Knowledge</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Demuestra conocimiento de procedimientos, limitaciones y fundamentos aplicables.</div><div class="obItem">Integra la información técnica al contexto operacional.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">PRO</span><span class="competencyName"><b>Aplicación de procedimientos</b><span>Application of procedures</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Identifica y aplica el procedimiento correspondiente a la situación.</div><div class="obItem">Ejecuta secuencias, listas y llamados con disciplina operacional.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">COM</span><span class="competencyName"><b>Comunicación</b><span>Communication</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Transmite información clara, precisa y oportuna.</div><div class="obItem">Escucha, confirma y mantiene un entendimiento compartido.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">FPA</span><span class="competencyName"><b>Gestión automatizada de la trayectoria</b><span>Flight path management — automation</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Selecciona modos y niveles de automatización adecuados.</div><div class="obItem">Monitorea la trayectoria y confirma el comportamiento del sistema.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">FPM</span><span class="competencyName"><b>Gestión manual de la trayectoria</b><span>Flight path management — manual control</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Controla manualmente la aeronave dentro de los parámetros aplicables.</div><div class="obItem">Reconoce y corrige desviaciones de manera oportuna.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">LTW</span><span class="competencyName"><b>Liderazgo y trabajo en equipo</b><span>Leadership and teamwork</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Coordina tareas y promueve la participación efectiva.</div><div class="obItem">Mantiene un entorno profesional que favorece la seguridad.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">PSD</span><span class="competencyName"><b>Resolución de problemas y toma de decisiones</b><span>Problem-solving and decision-making</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Identifica el problema y analiza opciones, riesgos y consecuencias.</div><div class="obItem">Toma una decisión, la comunica y revisa su resultado.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">SAW</span><span class="competencyName"><b>Conciencia situacional</b><span>Situation awareness</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Reúne y comprende información relevante del entorno.</div><div class="obItem">Anticipa estados futuros, amenazas y cambios en la operación.</div></div></details>
+        <details class="competencyCard"><summary><span class="competencyCode">WLM</span><span class="competencyName"><b>Gestión de la carga de trabajo</b><span>Workload management</span></span><span class="competencyChevron">+</span></summary><div class="obList"><span class="obLabel">Comportamientos observables</span><div class="obItem">Prioriza y distribuye tareas de acuerdo con la fase de vuelo.</div><div class="obItem">Utiliza los recursos disponibles y evita la saturación de tareas.</div></div></details>
+      </div>
+      <div class="cbtaObNote"><strong>Modelo Veyra:</strong> los comportamientos observables se seleccionan según el objetivo de entrenamiento, la fase y el escenario. La evaluación se sustenta en evidencia del desempeño, no en impresiones generales.</div>
+    </section>
+
+    <section class="cbtaLevels" aria-label="Niveles de medición CBTA">
+      <div class="cbtaLevelsHead">
+        <div><div class="cbtaEyebrow">Arquitectura de evaluación</div><h2>Cuatro niveles de medición</h2></div>
+        <p>La información puede registrarse con diferente profundidad: desde el resultado general de competencia hasta las amenazas, errores y reducciones del margen de seguridad.</p>
+      </div>
+      <div class="levelGrid">
+        <article class="levelCard"><div class="levelNumber">0</div><h3>Resultado de competencia</h3><p>Determina si el piloto demuestra o no la competencia requerida para el objetivo evaluado.</p></article>
+        <article class="levelCard"><div class="levelNumber">1</div><h3>Desempeño por competencia</h3><p>Registra el nivel alcanzado en cada competencia mediante la escala definida por el programa.</p></article>
+        <article class="levelCard"><div class="levelNumber">2</div><h3>Comportamientos observables</h3><p>Documenta los OB predeterminados o requeridos por el programa, la organización o la normativa aplicable.</p></article>
+        <article class="levelCard"><div class="levelNumber">3</div><h3>Métricas TEM</h3><p>Registra amenazas, errores y reducciones del margen de seguridad observadas durante el escenario.</p></article>
+      </div>
+      <div class="levelClarifier"><strong>Importante:</strong> estos niveles indican la profundidad de la información recopilada; no representan una escala ascendente de “malo” a “excelente”.</div>
+    </section>
 
     <div class="reportBlock">
       <div class="reportText">
