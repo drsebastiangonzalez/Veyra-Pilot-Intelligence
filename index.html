@@ -1790,6 +1790,16 @@ main{max-width:1180px;}
           <div style="margin-top:20px"><button class="trainingBtnGold" onclick="showIFRCourseIntro()">Conocer el curso</button></div>
         </div>
       </article>
+
+      <article class="trainingCard ifrTrainingCard">
+        <div class="trainingCardImg"><img src="veyra-moon.jpeg" alt="Aeronave en navegación de precisión"></div>
+        <div class="trainingCardBody">
+          <h3>PBN Path <span>Navegación basada en la performance</span></h3>
+          <p class="trainingMeta">Ruta conceptual de 10 módulos para comprender RNAV, RNP, especificaciones de navegación y su aplicación operacional.</p>
+          <span class="trainingBadge">10 módulos</span><span class="trainingBadge">RNAV + RNP</span><span class="trainingBadge">Ruta especializada</span>
+          <div style="margin-top:20px"><button class="trainingBtnGold" onclick="showPBNCourseIntro()">Conocer la ruta</button></div>
+        </div>
+      </article>
     </div>
 
     <div class="trainingInfoBand">
@@ -1854,6 +1864,56 @@ main{max-width:1180px;}
       <a class="ifrModuleCard" href="/modules/ifr-ils-10/index.html"><span class="ifrModuleNumber">10</span><span class="ifrModuleCopy"><small>Instrument Landing System</small><strong>ILS desde cero: CAT I, II y III</strong></span><span class="ifrModuleArrow">→</span></a>
     </div>
     <div class="ifrRoadmapNote"><strong>PBN continuará en una sección especializada.</strong> Esta primera ruta consolida la base instrumental necesaria para comenzar la fase de simulador con conceptos y referencias comunes.</div>
+  </div>
+</section>
+
+<section id="pbnCourseIntro" class="screen trainingScreen ifrIntro">
+  <div class="ifrIntroHero">
+    <div class="ifrIntroCopy">
+      <div class="ifrIntroEyebrow">Veyra PBN Path · Training Center</div>
+      <h1>Navegación basada en la performance</h1>
+      <p class="ifrIntroLead">Una ruta especializada para pasar de seguir ayudas convencionales a comprender cómo una aeronave cumple requisitos definidos de navegación durante rutas, salidas, llegadas y aproximaciones.</p>
+      <div class="ifrNeed"><strong>PBN no consiste únicamente en seguir una línea magenta.</strong> El piloto debe reconocer la capacidad aprobada de la aeronave, la especificación requerida, la infraestructura disponible y las consecuencias operacionales de cualquier degradación.</div>
+      <div class="ifrIntroStats">
+        <div class="ifrIntroStat"><b>10</b><span>Módulos conceptuales organizados de fundamentos a aplicación operacional.</span></div>
+        <div class="ifrIntroStat"><b>RNAV</b><span>Operación sobre una trayectoria deseada dentro de la capacidad del sistema.</span></div>
+        <div class="ifrIntroStat"><b>RNP</b><span>RNAV con monitoreo y alerta de la performance a bordo.</span></div>
+      </div>
+      <div class="ifrIntroActions">
+        <button class="trainingBtnGold" onclick="document.getElementById('pbnModuleRoadmap').scrollIntoView({behavior:'smooth'})">Ver la ruta de 10 módulos</button>
+        <button class="trainingBtnDark" onclick="showTrainingCenter()">Volver al Training Center</button>
+      </div>
+    </div>
+    <div class="ifrIntroVisual"><img src="veyra-moon.jpeg" alt="Aeronave en una operación de navegación nocturna"></div>
+  </div>
+
+  <div class="ifrPurpose">
+    <div class="ifrPurposeHead"><h2>De la capacidad declarada a la decisión operacional</h2><p>PBN expresa requisitos de performance para una operación concreta. La formación debe conectar la especificación publicada con la capacidad de la aeronave, la habilitación de la tripulación y el procedimiento que se volará.</p></div>
+    <div class="ifrPurposeGrid">
+      <div class="ifrPurposeCard"><small>01 · RECONOCER</small><h3>Qué exige el procedimiento</h3><p>Identifica la especificación de navegación y el nivel de precisión asociados con la ruta o procedimiento.</p></div>
+      <div class="ifrPurposeCard"><small>02 · VERIFICAR</small><h3>Con qué capacidad se cuenta</h3><p>Relaciona aviónica, sensores, aprobación operacional y entrenamiento de la tripulación.</p></div>
+      <div class="ifrPurposeCard"><small>03 · GESTIONAR</small><h3>Cómo responder</h3><p>Interpreta alertas, degradaciones y contingencias antes y durante la operación.</p></div>
+    </div>
+  </div>
+
+  <div class="ifrRoadmap" id="pbnModuleRoadmap">
+    <div class="ifrRoadmapHead">
+      <div><h2>Ruta inicial PBN</h2><p>La secuencia parte del concepto general, diferencia RNAV de RNP y termina integrando cartas, elegibilidad, planificación y contingencias.</p></div>
+      <div class="ifrRoadmapLegend">Arquitectura académica · Próxima fase</div>
+    </div>
+    <div class="ifrModuleGrid">
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Visión general</small><strong>Fundamentos del concepto PBN</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Conceptos esenciales</small><strong>Navegación convencional, RNAV y RNP</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">03</span><span class="ifrModuleCopy"><small>Estructura PBN</small><strong>Aplicación, especificación e infraestructura</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">04</span><span class="ifrModuleCopy"><small>Requisitos</small><strong>Precisión, integridad, continuidad y disponibilidad</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">05</span><span class="ifrModuleCopy"><small>Diferencia crítica</small><strong>Monitoreo y alerta de performance a bordo</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">06</span><span class="ifrModuleCopy"><small>NavSpecs</small><strong>Especificaciones y designaciones numéricas</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">07</span><span class="ifrModuleCopy"><small>Sistema de navegación</small><strong>Sensores e infraestructura habilitante</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">08</span><span class="ifrModuleCopy"><small>Operación terminal y en ruta</small><strong>PBN en aerovías, SID y STAR</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">09</span><span class="ifrModuleCopy"><small>Aproximaciones</small><strong>RNP APCH y consideraciones operacionales</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <div class="ifrModuleCard"><span class="ifrModuleNumber">10</span><span class="ifrModuleCopy"><small>Integración operacional</small><strong>Cartas, elegibilidad, planificación y contingencias</strong></span><span class="trainingBadge">Próximamente</span></div>
+    </div>
+    <div class="ifrRoadmapNote"><strong>Esta entrega define la arquitectura del curso.</strong> Los módulos permanecerán señalados como “Próximamente” hasta desarrollar, revisar y publicar cada lección; así evitamos accesos incompletos o enlaces 404.</div>
   </div>
 </section>
 
@@ -2629,6 +2689,20 @@ function showIFRCourseIntro(){
   }catch(e){}
   document.querySelectorAll('.screen').forEach(function(el){el.classList.remove('active');});
   const intro=document.getElementById('ifrCourseIntro');
+  if(intro){
+    intro.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+function showPBNCourseIntro(){
+  try{
+    if(typeof showScreen === 'function'){
+      showScreen('pbnCourseIntro');
+      return;
+    }
+  }catch(e){}
+  document.querySelectorAll('.screen').forEach(function(el){el.classList.remove('active');});
+  const intro=document.getElementById('pbnCourseIntro');
   if(intro){
     intro.classList.add('active');
     window.scrollTo({top:0,behavior:'smooth'});
