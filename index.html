@@ -1306,6 +1306,16 @@ main{max-width:1180px;}
 .ifrModuleCopy small{display:block;color:#8fa0b5;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.ifrModuleCopy strong{display:block;font-family:Georgia,serif;font-size:20px;line-height:1.25}.ifrModuleArrow{color:#d6ad55;font-size:22px}
 .ifrRoadmapNote{margin-top:22px;padding:17px 19px;border-left:3px solid #d6ad55;background:rgba(200,164,93,.07);color:#cbd3df;line-height:1.5;border-radius:0 14px 14px 0}
 @media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}}
+
+/* Veyra mobile navigation · hide on downward scroll, reveal on upward scroll */
+@media(max-width:900px){
+  .premiumTopbar{
+    transition:transform .32s cubic-bezier(.22,.61,.36,1),background-color .2s ease;
+    will-change:transform;
+    transform:translate3d(0,0,0);
+  }
+  .premiumTopbar.mobileNavHidden{transform:translate3d(0,-105%,0)}
+}
 </style>
 </head>
 <body>
@@ -2782,6 +2792,52 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }catch(e){}
 });
+</script>
+
+<script>
+/* === Veyra mobile header · directional scroll behavior === */
+(function(){
+  const header = document.querySelector('.premiumTopbar');
+  if(!header) return;
+
+  let lastY = Math.max(0, window.scrollY || 0);
+  let ticking = false;
+
+  function updateMobileHeader(){
+    const currentY = Math.max(0, window.scrollY || 0);
+    const delta = currentY - lastY;
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+    if(!isMobile || currentY < 80){
+      header.classList.remove('mobileNavHidden');
+    }else if(delta > 8){
+      header.classList.add('mobileNavHidden');
+    }else if(delta < -8){
+      header.classList.remove('mobileNavHidden');
+    }
+
+    lastY = currentY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!ticking){
+      window.requestAnimationFrame(updateMobileHeader);
+      ticking = true;
+    }
+  }, {passive:true});
+
+  window.addEventListener('resize', function(){
+    if(!window.matchMedia('(max-width: 900px)').matches){
+      header.classList.remove('mobileNavHidden');
+    }
+    lastY = Math.max(0, window.scrollY || 0);
+  });
+
+  header.addEventListener('click', function(){
+    header.classList.remove('mobileNavHidden');
+  });
+})();
 </script>
 
 </body>
