@@ -1902,7 +1902,7 @@ main{max-width:1180px;}
       <div class="ifrRoadmapLegend">Arquitectura académica · Próxima fase</div>
     </div>
     <div class="ifrModuleGrid">
-      <div class="ifrModuleCard"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Visión general</small><strong>Fundamentos del concepto PBN</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <a class="ifrModuleCard" href="/modules/pbn-01/index.html"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Visión general</small><strong>Fundamentos del concepto PBN</strong></span><span class="ifrModuleArrow">→</span></a>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Conceptos esenciales</small><strong>Navegación convencional, RNAV y RNP</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">03</span><span class="ifrModuleCopy"><small>Estructura PBN</small><strong>Aplicación, especificación e infraestructura</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">04</span><span class="ifrModuleCopy"><small>Requisitos</small><strong>Precisión, integridad, continuidad y disponibilidad</strong></span><span class="trainingBadge">Próximamente</span></div>
@@ -2708,6 +2708,11 @@ function showPBNCourseIntro(){
     window.scrollTo({top:0,behavior:'smooth'});
   }
 }
+document.addEventListener('DOMContentLoaded',function(){
+  if(new URLSearchParams(window.location.search).get('view')==='pbn'){
+    setTimeout(showPBNCourseIntro,120);
+  }
+});
 function openTrainingModule(type){
   if(type !== 'PPA') {
     alert('Este módulo se cargará en una siguiente fase.');
