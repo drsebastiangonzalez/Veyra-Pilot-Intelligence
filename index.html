@@ -1899,12 +1899,12 @@ main{max-width:1180px;}
   <div class="ifrRoadmap" id="pbnModuleRoadmap">
     <div class="ifrRoadmapHead">
       <div><h2>Ruta inicial PBN</h2><p>La secuencia parte del concepto general, diferencia RNAV de RNP y termina integrando cartas, elegibilidad, planificación y contingencias.</p></div>
-      <div class="ifrRoadmapLegend">2 módulos disponibles · Ruta progresiva</div>
+      <div class="ifrRoadmapLegend">3 módulos disponibles · Ruta progresiva</div>
     </div>
     <div class="ifrModuleGrid">
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleOne()"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Visión general</small><strong>Fundamentos del concepto PBN</strong></span><span class="ifrModuleArrow">→</span></button>
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleTwo()"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Performance de navegación</small><strong>Errores del sistema: TSE, PDE, FTE y NSE</strong></span><span class="ifrModuleArrow">→</span></button>
-      <div class="ifrModuleCard"><span class="ifrModuleNumber">03</span><span class="ifrModuleCopy"><small>Estructura PBN</small><strong>Aplicación, especificación e infraestructura</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <button class="ifrModuleCard" type="button" onclick="openPBNModuleThree()"><span class="ifrModuleNumber">03</span><span class="ifrModuleCopy"><small>NavSpecs</small><strong>Especificaciones RNAV y RNP</strong></span><span class="ifrModuleArrow">→</span></button>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">04</span><span class="ifrModuleCopy"><small>Requisitos</small><strong>Precisión, integridad, continuidad y disponibilidad</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">05</span><span class="ifrModuleCopy"><small>Diferencia crítica</small><strong>Monitoreo y alerta de performance a bordo</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">06</span><span class="ifrModuleCopy"><small>NavSpecs</small><strong>Especificaciones y designaciones numéricas</strong></span><span class="trainingBadge">Próximamente</span></div>
@@ -1913,7 +1913,7 @@ main{max-width:1180px;}
       <div class="ifrModuleCard"><span class="ifrModuleNumber">09</span><span class="ifrModuleCopy"><small>Aproximaciones</small><strong>RNP APCH y consideraciones operacionales</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">10</span><span class="ifrModuleCopy"><small>Integración operacional</small><strong>Cartas, elegibilidad, planificación y contingencias</strong></span><span class="trainingBadge">Próximamente</span></div>
     </div>
-    <div class="ifrRoadmapNote"><strong>Los módulos 01 y 02 ya están disponibles.</strong> El estudiante puede seguir la secuencia progresiva o regresar directamente a cualquier módulo publicado para repasarlo.</div>
+    <div class="ifrRoadmapNote"><strong>Los módulos 01, 02 y 03 ya están disponibles.</strong> El estudiante puede seguir la secuencia progresiva o regresar directamente a cualquier módulo publicado para repasarlo.</div>
   </div>
 </section>
 
@@ -2715,6 +2715,11 @@ function openPBNModuleOne(){
 }
 function openPBNModuleTwo(){
   const target='/modules/pbn-02/index.html?v=1';
+  try{ window.top.location.assign(target); }
+  catch(e){ window.location.assign(target); }
+}
+function openPBNModuleThree(){
+  const target='/modules/pbn-03/index.html?v=1';
   try{ window.top.location.assign(target); }
   catch(e){ window.location.assign(target); }
 }
