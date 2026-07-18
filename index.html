@@ -1911,11 +1911,11 @@ main{max-width:1180px;}
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleFive()"><span class="ifrModuleNumber">05</span><span class="ifrModuleCopy"><small>Integridad de la posición</small><strong>GNSS, RAIM/FDE y limitaciones</strong></span><span class="ifrModuleArrow">→</span></button>
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleSix()"><span class="ifrModuleNumber">06</span><span class="ifrModuleCopy"><small>Construcción de trayectorias</small><strong>Waypoints y terminadores de trayectoria</strong></span><span class="ifrModuleArrow">→</span></button>
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleSeven()"><span class="ifrModuleNumber">07</span><span class="ifrModuleCopy"><small>Datos de navegación</small><strong>Base de datos y validación FMS–carta</strong></span><span class="ifrModuleArrow">→</span></button>
-      <div class="ifrModuleCard"><span class="ifrModuleNumber">08</span><span class="ifrModuleCopy"><small>Operación terminal y en ruta</small><strong>PBN en aerovías, SID y STAR</strong></span><span class="trainingBadge">Próximamente</span></div>
+      <button class="ifrModuleCard" type="button" onclick="openPBNModuleEight()"><span class="ifrModuleNumber">08</span><span class="ifrModuleCopy"><small>Arquitectura de la ruta</small><strong>PBN en aerovías, SID y STAR</strong></span><span class="ifrModuleArrow">→</span></button>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">09</span><span class="ifrModuleCopy"><small>Aproximaciones</small><strong>RNP APCH y consideraciones operacionales</strong></span><span class="trainingBadge">Próximamente</span></div>
       <div class="ifrModuleCard"><span class="ifrModuleNumber">10</span><span class="ifrModuleCopy"><small>Integración operacional</small><strong>Cartas, elegibilidad, planificación y contingencias</strong></span><span class="trainingBadge">Próximamente</span></div>
     </div>
-    <div class="ifrRoadmapNote"><strong>Los módulos 01 al 07 ya están disponibles.</strong> El estudiante puede seguir la secuencia progresiva o regresar directamente a cualquier módulo publicado para repasarlo.</div>
+    <div class="ifrRoadmapNote"><strong>Los módulos 01 al 08 ya están disponibles.</strong> El estudiante puede seguir la secuencia progresiva o regresar directamente a cualquier módulo publicado para repasarlo.</div>
   </div>
 </section>
 
@@ -2742,6 +2742,11 @@ function openPBNModuleSix(){
 }
 function openPBNModuleSeven(){
   const target='/modules/pbn-07/index.html?v=1';
+  try{ window.top.location.assign(target); }
+  catch(e){ window.location.assign(target); }
+}
+function openPBNModuleEight(){
+  const target='/modules/pbn-08/index.html?v=1';
   try{ window.top.location.assign(target); }
   catch(e){ window.location.assign(target); }
 }
