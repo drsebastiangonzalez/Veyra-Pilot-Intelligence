@@ -1280,6 +1280,14 @@ main{max-width:1180px;}
 #training .ifrTrainingCard .trainingCardImg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(5,10,18,.72))}
 #training .ifrPathCard .trainingCardImg img{object-position:center 58%!important}
 #training .pbnPathCard .trainingCardImg img{object-position:64% 48%!important}
+#training .abbrToolCard{grid-column:1/-1;grid-template-columns:minmax(330px,.78fr) minmax(0,1.22fr)!important}
+#training .abbrToolCard:before{content:"HERRAMIENTA"}
+#training .abbrToolVisual{height:auto!important;min-height:330px!important;background:radial-gradient(circle at 76% 22%,rgba(214,173,85,.16),transparent 25%),linear-gradient(145deg,#07101b,#03070d);display:flex;align-items:center;justify-content:center;padding:35px;overflow:hidden}
+#training .abbrToolVisual:after{background:linear-gradient(180deg,transparent 35%,rgba(3,7,13,.65))}
+.abbrVisualPanel{position:relative;z-index:1;width:min(100%,520px);border:1px solid rgba(214,173,85,.38);border-radius:20px;background:rgba(255,255,255,.035);padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.abbrVisualSearch{display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:13px 15px;color:#9ba8ba;font-size:14px;margin-bottom:20px}.abbrVisualSearch b{color:#e5c67e;font-size:20px}
+.abbrVisualTerms{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.abbrVisualTerms span{display:grid;place-items:center;min-height:70px;border-radius:13px;background:#0c1725;border:1px solid rgba(214,173,85,.22);font-family:Georgia,serif;color:#fff;font-size:24px}.abbrVisualTerms span:nth-child(2),.abbrVisualTerms span:nth-child(5){color:#e7c979}
+.abbrVisualCaption{color:#9facbd;font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-top:18px}
 #training .ifrTrainingCard h3{font-size:34px}
 .ifrIntro{min-height:calc(100vh - 80px);background:#050a12;color:#fff}
 .ifrIntroHero{min-height:590px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);background:#050a12;border-bottom:1px solid rgba(200,164,93,.3)}
@@ -1307,7 +1315,7 @@ main{max-width:1180px;}
 .ifrModuleNumber{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;border:1px solid rgba(200,164,93,.42);color:#f0cf86;font-family:Georgia,serif;font-size:23px;background:#0a1523}
 .ifrModuleCopy small{display:block;color:#8fa0b5;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.ifrModuleCopy strong{display:block;font-family:Georgia,serif;font-size:20px;line-height:1.25}.ifrModuleArrow{color:#d6ad55;font-size:22px}
 .ifrRoadmapNote{margin-top:22px;padding:17px 19px;border-left:3px solid #d6ad55;background:rgba(200,164,93,.07);color:#cbd3df;line-height:1.5;border-radius:0 14px 14px 0}
-@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}}
+@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}#training .abbrToolCard{grid-template-columns:1fr!important;grid-column:auto}.abbrVisualTerms span{font-size:21px;min-height:58px}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}}
 
 /* Veyra mobile navigation · hide on downward scroll, reveal on upward scroll */
 @media(max-width:900px){
@@ -1800,6 +1808,22 @@ main{max-width:1180px;}
           <p class="trainingMeta">Ruta conceptual de 10 módulos para comprender RNAV, RNP, especificaciones de navegación y su aplicación operacional.</p>
           <span class="trainingBadge">10 módulos</span><span class="trainingBadge">RNAV + RNP</span><span class="trainingBadge">Ruta especializada</span>
           <div style="margin-top:20px"><button class="trainingBtnGold" onclick="showPBNCourseIntro()">Conocer la ruta</button></div>
+        </div>
+      </article>
+
+      <article class="trainingCard ifrTrainingCard abbrToolCard">
+        <div class="trainingCardImg abbrToolVisual" aria-hidden="true">
+          <div class="abbrVisualPanel">
+            <div class="abbrVisualSearch"><b>⌕</b><span>Buscar una abreviatura…</span></div>
+            <div class="abbrVisualTerms"><span>DA</span><span>RNP</span><span>ILS</span><span>FAF</span><span>MEA</span><span>RVR</span></div>
+            <div class="abbrVisualCaption">Referencia aeronáutica rápida</div>
+          </div>
+        </div>
+        <div class="trainingCardBody">
+          <h3>Abreviaturas <span>Buscador aeronáutico</span></h3>
+          <p class="trainingMeta">Consulta rápidamente siglas utilizadas en cartas, aproximaciones, navegación PBN, meteorología, aeródromos y comunicaciones. Busca por abreviatura, término en inglés o concepto en español.</p>
+          <span class="trainingBadge">130 términos</span><span class="trainingBadge">Comparaciones clave</span><span class="trainingBadge">Favoritos locales</span>
+          <div style="margin-top:20px"><button class="trainingBtnGold" onclick="location.href='/modules/abreviaturas/index.html?v=1'">Abrir buscador</button></div>
         </div>
       </article>
     </div>
@@ -2761,6 +2785,9 @@ function openPBNModuleTen(){
   catch(e){ window.location.assign(target); }
 }
 document.addEventListener('DOMContentLoaded',function(){
+  if(new URLSearchParams(window.location.search).get('view')==='training'){
+    setTimeout(showTrainingCenter,120);
+  }
   if(new URLSearchParams(window.location.search).get('view')==='pbn'){
     setTimeout(showPBNCourseIntro,120);
     setTimeout(showPBNCourseIntro,1200);
