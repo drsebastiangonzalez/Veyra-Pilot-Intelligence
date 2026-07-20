@@ -46,9 +46,7 @@
       font-size:14px;
       font-weight:600;
     }
-    main{
-      padding:44px 56px 70px;
-    }
+    main{padding:44px 56px 70px}
     .panel{
       background:rgba(255,255,255,.72);
       border:1px solid var(--gold-soft);
@@ -82,7 +80,7 @@
     }
     .grid{
       display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
+      grid-template-columns:repeat(2, minmax(0,1fr));
       gap:22px;
     }
     .card{
@@ -142,18 +140,9 @@
       width:100%;
       font-family:Arial, Helvetica, sans-serif;
     }
-    .gold{
-      background:linear-gradient(180deg,#edc65d,#d5a139);
-      color:#07111f;
-    }
-    .dark{
-      background:var(--navy);
-      color:white;
-    }
-    .ghost{
-      background:transparent;
-      color:#07111f;
-    }
+    .gold{background:linear-gradient(180deg,#edc65d,#d5a139);color:#07111f}
+    .dark{background:var(--navy);color:white}
+    .ghost{background:transparent;color:#07111f}
     .note{
       margin-top:28px;
       background:var(--navy);
@@ -191,8 +180,7 @@
       <div class="eyebrow">Internal Access</div>
       <h1>Centro interno Veyra</h1>
       <p class="lead">
-        Acceso operativo para seguimiento académico, revisión de intentos, respuestas y módulos de práctica.
-        Esta página funciona como acceso interno controlado.
+        Acceso operativo para seguimiento académico, revisión de intentos, respuestas y herramientas de apoyo al instructor.
       </p>
 
       <div class="grid">
@@ -200,9 +188,7 @@
           <div>
             <div class="badge">I</div>
             <h2>Panel instructor</h2>
-            <p>
-              Revisa intentos guardados, respuestas, preguntas falladas, desempeño por materia y exporta el archivo CSV desde el dashboard.
-            </p>
+            <p>Revisa intentos guardados, respuestas, preguntas falladas, desempeño por materia y exporta el archivo CSV desde el dashboard.</p>
           </div>
           <div class="actions">
             <a class="btn gold" href="./training-dashboard.html?v=instructor">Abrir panel instructor</a>
@@ -211,11 +197,20 @@
 
         <article class="card">
           <div>
+            <div class="badge">V</div>
+            <h2>Asistente del instructor</h2>
+            <p>Convierte las notas de una sesión en un borrador técnico estructurado, vinculado a competencias y comportamientos observables, sin inventar evidencia.</p>
+          </div>
+          <div class="actions">
+            <a class="btn dark" href="./asistente-instructor.html?v=1">Abrir asistente</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
             <div class="badge">P</div>
             <h2>PPA Practice</h2>
-            <p>
-              Acceso directo al simulacro PPA conectado al banco oficial activo SRVSOP/Aerocivil.
-            </p>
+            <p>Acceso directo al simulacro PPA conectado al banco oficial activo SRVSOP/Aerocivil.</p>
           </div>
           <div class="actions">
             <a class="btn dark" href="./ppa-practice.html?v=409">Abrir práctica</a>
@@ -226,9 +221,7 @@
           <div>
             <div class="badge">A</div>
             <h2>Assessment</h2>
-            <p>
-              Regresa al módulo principal de evaluación académica y seguimiento formal de competencias.
-            </p>
+            <p>Regresa al módulo principal de evaluación académica y seguimiento formal de competencias.</p>
           </div>
           <div class="actions">
             <a class="btn gold" href="./index.html#assessment">Ir a Assessment</a>
@@ -238,8 +231,7 @@
       </div>
 
       <div class="note">
-        <b>Nota:</b> la descarga del archivo no se maneja desde esta pantalla. Se hace desde el <b>Panel instructor</b>,
-        donde ya está el botón de exportación y el detalle de respuestas.
+        <b>Nota:</b> la descarga del archivo de resultados se hace desde el <b>Panel instructor</b>. El asistente trabaja localmente en el navegador y genera un borrador que siempre debe revisar el instructor.
       </div>
     </section>
   </main>

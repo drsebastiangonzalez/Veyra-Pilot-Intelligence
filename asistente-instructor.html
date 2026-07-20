@@ -1,0 +1,1487 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#070b12">
+  <title>Veyra · Asistente del instructor</title>
+  <style>
+    :root {
+      --ink: #f7f2e9;
+      --muted: #aeb8c8;
+      --navy: #070b12;
+      --navy-2: #0c1420;
+      --panel: #101b29;
+      --panel-2: #142132;
+      --gold: #ddb45d;
+      --gold-2: #f0cf82;
+      --line: rgba(221, 180, 93, .28);
+      --blue: #8ab8f5;
+      --green: #74c69d;
+      --red: #eaa3a3;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .28);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 86% 2%, rgba(49, 92, 143, .18), transparent 30rem),
+        var(--navy);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 28px;
+      align-items: center;
+      min-height: 92px;
+      padding: 18px clamp(22px, 5vw, 78px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 8, 13, .94);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand { display: inline-flex; flex-direction: column; text-decoration: none; }
+    .brand strong { font: 700 34px/1 var(--serif); letter-spacing: -.02em; }
+    .brand span { margin-top: 7px; color: var(--gold); font-size: 10px; letter-spacing: .28em; text-transform: uppercase; }
+    .top-title { text-align: center; color: var(--muted); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; }
+    .back-link {
+      padding: 11px 17px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    main { width: min(1260px, calc(100% - 36px)); margin: 0 auto; padding: 62px 0 100px; }
+    .eyebrow { color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 880px; margin-bottom: 20px; font: 500 clamp(48px, 7vw, 92px)/.96 var(--serif); letter-spacing: -.045em; }
+    h2 { margin-bottom: 10px; font: 500 clamp(31px, 4vw, 50px)/1.05 var(--serif); letter-spacing: -.025em; }
+    h3 { margin-bottom: 8px; font: 650 23px/1.15 var(--serif); }
+    .lede { max-width: 820px; color: var(--muted); font-size: clamp(17px, 2vw, 21px); }
+
+    .status-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--gold-2);
+      background: rgba(221, 180, 93, .06);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .04em;
+    }
+
+    .guardrail {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 38px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(221, 180, 93, .1), rgba(16, 27, 41, .72));
+    }
+    .guardrail-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold-2);
+      font-weight: 900;
+    }
+    .guardrail strong { display: block; margin-bottom: 4px; }
+    .guardrail p { margin-bottom: 0; color: var(--muted); }
+
+    .step {
+      margin-top: 72px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+    .step-head { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 18px; align-items: start; margin-bottom: 28px; }
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      color: var(--gold-2);
+      background: var(--panel);
+      font: 700 22px/1 var(--serif);
+    }
+    .step-head p { margin-bottom: 0; color: var(--muted); }
+
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .span-2 { grid-column: span 2; }
+    .card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(20, 33, 50, .94), rgba(10, 17, 27, .96));
+      box-shadow: var(--shadow);
+    }
+    .card.soft { box-shadow: none; background: rgba(16, 27, 41, .72); }
+
+    label { display: block; margin-bottom: 8px; color: var(--gold-2); font-size: 12px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid rgba(174, 184, 200, .24);
+      border-radius: 13px;
+      outline: none;
+      color: var(--ink);
+      background: #09121d;
+      padding: 13px 15px;
+    }
+    textarea { min-height: 190px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(221, 180, 93, .12); }
+    .field-help { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+
+    .mission-card { margin-top: 18px; }
+    .mission-top { display: flex; gap: 14px; align-items: center; justify-content: space-between; }
+    .mission-id { color: var(--gold-2); font: 700 30px/1 var(--serif); }
+    .mission-meta { color: var(--muted); font-size: 13px; }
+    .mission-card h3 { margin: 17px 0 9px; font-size: 29px; }
+    .mission-card > p { color: var(--muted); }
+    .objective-list { margin: 18px 0 0; padding-left: 20px; }
+    .objective-list li { margin: 7px 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip {
+      padding: 6px 10px;
+      border: 1px solid rgba(138, 184, 245, .3);
+      border-radius: 999px;
+      color: #c7dcf7;
+      background: rgba(52, 99, 155, .13);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .writing-guide { margin: 0; padding-left: 20px; color: var(--muted); }
+    .writing-guide li { margin: 10px 0; }
+    .counter { margin-top: 8px; color: var(--muted); text-align: right; font-size: 12px; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .btn {
+      min-height: 48px;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--ink);
+      background: var(--panel-2);
+      font-weight: 850;
+    }
+    .btn.primary { border-color: transparent; color: #10131a; background: linear-gradient(135deg, var(--gold-2), var(--gold)); }
+    .btn.ghost { background: transparent; }
+    .btn.small { min-height: 38px; padding: 8px 12px; font-size: 12px; }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+    .btn:disabled { cursor: not-allowed; opacity: .45; transform: none; }
+
+    .empty-state {
+      padding: 30px;
+      border: 1px dashed rgba(174, 184, 200, .28);
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .message { margin: 0 0 18px; padding: 13px 15px; border-radius: 13px; color: var(--muted); background: rgba(138, 184, 245, .08); }
+    .message.warning { color: #f1d9a8; background: rgba(221, 180, 93, .09); }
+    .message.error { color: var(--red); background: rgba(189, 82, 82, .1); }
+
+    .candidate-list { display: grid; gap: 14px; }
+    .candidate {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 16px;
+      padding: 20px;
+      border: 1px solid rgba(174, 184, 200, .2);
+      border-radius: 18px;
+      background: rgba(9, 18, 29, .8);
+    }
+    .candidate.confirmed { border-color: rgba(116, 198, 157, .52); }
+    .candidate-check { width: 22px; height: 22px; min-height: 0; margin-top: 3px; accent-color: var(--gold); }
+    .candidate-heading { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+    .ob-code { color: var(--gold-2); font: 700 25px/1 var(--serif); }
+    .competency-code { color: var(--blue); font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+    .source-badge { margin-left: auto; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+    .candidate-title { margin: 5px 0 12px; color: var(--muted); font-size: 13px; }
+    .candidate-text { margin-bottom: 16px; font-weight: 680; }
+    .candidate textarea { min-height: 92px; }
+    .candidate-note { margin-top: 8px; color: var(--muted); font-size: 11px; }
+
+    .search-row { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 12px; }
+    .ob-results { display: grid; gap: 10px; margin-top: 18px; }
+    .ob-result {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid rgba(174, 184, 200, .16);
+      border-radius: 14px;
+      background: rgba(9, 18, 29, .74);
+    }
+    .ob-result strong { color: var(--gold-2); font: 700 21px/1 var(--serif); }
+    .ob-result p { margin: 0; color: var(--muted); font-size: 13px; }
+    .result-count { margin-top: 12px; color: var(--muted); font-size: 12px; }
+
+    .report-box {
+      min-height: 420px;
+      margin: 0;
+      padding: 26px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: #dce4ef;
+      background: #050a11;
+      font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .authority { display: grid; gap: 9px; margin-top: 18px; }
+    .authority div { padding: 11px 13px; border-left: 2px solid var(--gold); color: var(--muted); background: rgba(221, 180, 93, .05); font-size: 13px; }
+    footer { margin-top: 70px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 820px) {
+      .topbar { grid-template-columns: 1fr auto; min-height: 76px; gap: 12px; padding: 13px 18px; }
+      .brand strong { font-size: 28px; }
+      .brand span { font-size: 8px; }
+      .top-title { display: none; }
+      main { width: min(100% - 28px, 1260px); padding-top: 42px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .span-2 { grid-column: auto; }
+      .search-row { grid-template-columns: 1fr; }
+      .ob-result { grid-template-columns: 54px minmax(0, 1fr); }
+      .ob-result .btn { grid-column: 1 / -1; }
+      .candidate { grid-template-columns: 1fr; }
+      .candidate-check { order: 2; }
+      .source-badge { width: 100%; margin-left: 0; }
+      h1 { font-size: clamp(45px, 15vw, 68px); }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      body * { visibility: hidden; }
+      #reportSection, #reportSection * { visibility: visible; }
+      #reportSection { position: absolute; inset: 0; margin: 0; padding: 24px; border: 0; }
+      #reportSection .step-head, #reportSection .button-row, #reportSection .message { display: none; }
+      .report-box { overflow: visible; border: 0; color: #111; background: #fff; white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./internal-access.html" aria-label="Veyra, volver al acceso interno">
+      <strong>Veyra</strong>
+      <span>Pilot Intelligence</span>
+    </a>
+    <div class="top-title">Asistente del instructor · Prototipo académico</div>
+    <a class="back-link" href="./internal-access.html">Volver</a>
+  </header>
+
+  <main>
+    <section aria-labelledby="pageTitle">
+      <div class="eyebrow">Evidencia antes que inferencia</div>
+      <h1 id="pageTitle">Asistente del instructor</h1>
+      <p class="lede">Organiza notas de sesión, las contrasta con la misión seleccionada y presenta comportamientos observables candidatos para revisión humana.</p>
+
+      <div class="status-row" aria-label="Límites del prototipo">
+        <span class="status">Sin IA generativa</span>
+        <span class="status">Sin Supabase</span>
+        <span class="status">Sin calificación automática</span>
+        <span class="status">73 OB disponibles</span>
+        <span class="status">21 misiones MES</span>
+      </div>
+
+      <div class="guardrail">
+        <div class="guardrail-mark" aria-hidden="true">!</div>
+        <div>
+          <strong>La misión define el contexto; la nota del instructor aporta la evidencia.</strong>
+          <p>El sistema no puede concluir que una competencia fue demostrada solo porque aparece en el foco de una misión. Todo OB debe quedar respaldado por una conducta observada y ser confirmado por el instructor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="contextTitle">
+      <div class="step-head">
+        <div class="step-number">01</div>
+        <div>
+          <h2 id="contextTitle">Contexto de la sesión</h2>
+          <p>Selecciona la misión real antes de analizar la nota.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card soft span-2">
+          <label for="missionSelect">Misión MES</label>
+          <select id="missionSelect"></select>
+          <p class="field-help">El foco de competencias sirve para orientar la lectura, no para asignar resultados.</p>
+        </div>
+        <div class="card soft">
+          <label for="sessionDate">Fecha de sesión</label>
+          <input id="sessionDate" type="date">
+        </div>
+        <div class="card soft">
+          <label for="studentId">Identificador del estudiante</label>
+          <input id="studentId" type="text" maxlength="40" placeholder="Ej. EST-024">
+          <p class="field-help">Para el prototipo usa un código, no el nombre completo.</p>
+        </div>
+        <div class="card soft">
+          <label for="instructorId">Instructor</label>
+          <input id="instructorId" type="text" maxlength="60" placeholder="Iniciales o identificador">
+        </div>
+        <div class="card soft">
+          <label for="sessionRef">Referencia de sesión</label>
+          <input id="sessionRef" type="text" maxlength="50" placeholder="Ej. SIM-2026-041">
+        </div>
+      </div>
+
+      <article class="card mission-card" id="missionCard" aria-live="polite">
+        <div class="mission-top">
+          <div>
+            <div class="mission-id" id="missionId"></div>
+            <div class="mission-meta" id="missionMeta"></div>
+          </div>
+          <span class="status" id="missionProgram"></span>
+        </div>
+        <h3 id="missionTitle"></h3>
+        <p id="missionSynthesis"></p>
+        <div class="eyebrow">Objetivos de referencia</div>
+        <ul class="objective-list" id="missionObjectives"></ul>
+        <div class="chips" id="missionFocus" aria-label="Foco de competencias de la misión"></div>
+      </article>
+    </section>
+
+    <section class="step" aria-labelledby="noteTitle">
+      <div class="step-head">
+        <div class="step-number">02</div>
+        <div>
+          <h2 id="noteTitle">Nota original del instructor</h2>
+          <p>Registra conductas observables, sin diagnosticar competencias ni anticipar una calificación.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card span-2">
+          <label for="rawNote">Evidencia de la sesión</label>
+          <textarea id="rawNote" spellcheck="true" placeholder="Ejemplo: Durante la aproximación detectó una desviación de altitud y la corrigió oportunamente. Confirmó la autorización con fraseología estándar. Al presentarse una interrupción, retomó la lista desde el punto verificado..."></textarea>
+          <div class="counter"><span id="noteCount">0</span> caracteres</div>
+          <div class="button-row">
+            <button class="btn primary" id="analyzeButton" type="button">Analizar evidencia</button>
+            <button class="btn ghost" id="clearButton" type="button">Limpiar sesión</button>
+          </div>
+        </div>
+        <aside class="card soft">
+          <h3>Una nota útil incluye</h3>
+          <ul class="writing-guide">
+            <li>Qué ocurrió y en qué fase.</li>
+            <li>Qué hizo o dijo el estudiante.</li>
+            <li>Qué desviación, amenaza o resultado fue observable.</li>
+            <li>Qué corrección, verificación o decisión realizó.</li>
+          </ul>
+          <p class="field-help">Evita frases aisladas como “bien”, “mal”, “le falta CRM” o “no tiene conciencia situacional”.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="candidateTitle">
+      <div class="step-head">
+        <div class="step-number">03</div>
+        <div>
+          <h2 id="candidateTitle">OB candidatos</h2>
+          <p>Cada propuesta debe conservar la frase que la originó. Nada queda confirmado automáticamente.</p>
+        </div>
+      </div>
+
+      <div id="analysisMessage" class="message" role="status">Aún no se ha analizado una nota.</div>
+      <div id="candidateEmpty" class="empty-state">Escribe una nota y pulsa “Analizar evidencia”.</div>
+      <div id="candidateList" class="candidate-list" aria-live="polite"></div>
+    </section>
+
+    <section class="step" aria-labelledby="explorerTitle">
+      <div class="step-head">
+        <div class="step-number">04</div>
+        <div>
+          <h2 id="explorerTitle">Explorador manual de OB</h2>
+          <p>Si el comportamiento fue observado pero la regla conservadora no lo detectó, búscalo y agrega evidencia manualmente.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="search-row">
+          <div>
+            <label for="obSearch">Buscar código, competencia o conducta</label>
+            <input id="obSearch" type="search" placeholder="Ej. 7.1, amenaza, comunicación, trayectoria...">
+          </div>
+          <div>
+            <label for="competencyFilter">Competencia</label>
+            <select id="competencyFilter"></select>
+          </div>
+        </div>
+        <div class="result-count" id="resultCount"></div>
+        <div class="ob-results" id="obResults"></div>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="feedbackTitle">
+      <div class="step-head">
+        <div class="step-number">05</div>
+        <div>
+          <h2 id="feedbackTitle">Cierre del instructor</h2>
+          <p>Estos campos son criterio profesional del instructor. El prototipo no los genera.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card soft">
+          <label for="strengths">Fortalezas observadas</label>
+          <textarea id="strengths" placeholder="Conductas que deben mantenerse..." style="min-height:130px"></textarea>
+        </div>
+        <div class="card soft">
+          <label for="development">Foco de desarrollo</label>
+          <textarea id="development" placeholder="Conducta concreta que debe practicarse..." style="min-height:130px"></textarea>
+        </div>
+        <div class="card soft">
+          <label for="pendingChecks">Pendiente por verificar</label>
+          <textarea id="pendingChecks" placeholder="Fuente, procedimiento o dato que requiere confirmación..." style="min-height:130px"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="reportSection" aria-labelledby="reportTitle">
+      <div class="step-head">
+        <div class="step-number">06</div>
+        <div>
+          <h2 id="reportTitle">Borrador trazable</h2>
+          <p>Genera un texto estructurado para revisar. No constituye una calificación ni un registro oficial.</p>
+        </div>
+      </div>
+
+      <div id="reportMessage" class="message warning">Confirma únicamente OB respaldados por evidencia concreta.</div>
+      <pre class="report-box" id="reportText">El borrador aparecerá aquí.</pre>
+      <div class="button-row">
+        <button class="btn primary" id="reportButton" type="button">Generar borrador</button>
+        <button class="btn" id="copyButton" type="button" disabled>Copiar texto</button>
+        <button class="btn" id="downloadButton" type="button" disabled>Descargar .txt</button>
+        <button class="btn ghost" id="printButton" type="button" disabled>Imprimir</button>
+      </div>
+
+      <div class="authority" aria-label="Jerarquía documental">
+        <div><strong>MES:</strong> alcance y objetivos de la misión seleccionada.</div>
+        <div><strong>SOP vigente:</strong> estándar de operación de la organización.</div>
+        <div><strong>POH/AFM y documentación aprobada:</strong> autoridad para limitaciones, datos y procedimientos específicos de la aeronave.</div>
+        <div><strong>FOM:</strong> material de apoyo operacional; no sustituye documentación aprobada.</div>
+      </div>
+    </section>
+
+    <footer>
+      Prototipo Veyra v1 · La información permanece en este navegador durante la sesión y no se envía a un servidor. No ingreses datos personales reales durante la validación.
+    </footer>
+  </main>
+
+  <script>
+/*
+ * Veyra · Asistente del instructor · Base académica v1
+ *
+ * Esta base no califica ni determina competencias por sí sola. Resume el MES
+ * suministrado por el proyecto y contiene los comportamientos observables (OB)
+ * enviados por el usuario. Toda asociación automática es solamente candidata
+ * y requiere confirmación de un instructor autorizado.
+ */
+
+window.VEYRA_KB = (() => {
+  const missions = [
+    {
+      id: "M01",
+      program: "PPA",
+      title: "Introducción al simulador",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Familiarización con el entorno del simulador y la cabina antes de iniciar la práctica de vuelo.",
+      objectives: [
+        "Reconocer las capacidades y limitaciones del simulador.",
+        "Ubicar controles, instrumentos y elementos principales de cabina.",
+        "Aplicar listas de verificación básicas de puesta en marcha y apagado."
+      ],
+      focus: ["KNO", "PRO", "COM"]
+    },
+    {
+      id: "M02",
+      program: "PPA",
+      title: "Procedimientos iniciales",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Ejecución ordenada de los procedimientos de tierra y preparación de la aeronave.",
+      objectives: [
+        "Realizar la inspección y preparación previas al arranque.",
+        "Gestionar los sistemas eléctricos, de combustible, motor, aviónica y comunicaciones.",
+        "Ejecutar procedimientos normales y reconocer condiciones anormales en tierra."
+      ],
+      focus: ["KNO", "PRO", "COM", "WLM"]
+    },
+    {
+      id: "M03",
+      program: "PPA",
+      title: "Rodaje y configuración de despegue",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Operación segura en tierra y preparación completa para el despegue.",
+      objectives: [
+        "Controlar la aeronave durante el rodaje y mantener conciencia del entorno.",
+        "Aplicar comunicaciones, señales y autorizaciones pertinentes.",
+        "Configurar la aeronave para el despegue e identificar criterios para interrumpirlo."
+      ],
+      focus: ["PRO", "COM", "SAW", "WLM"]
+    },
+    {
+      id: "M04",
+      program: "PPA",
+      title: "Primeras maniobras en vuelo",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Desarrollo inicial del control manual mediante actitud, potencia y compensación.",
+      objectives: [
+        "Ejecutar un despegue estándar y establecer el ascenso.",
+        "Realizar vuelo recto y nivelado, ascensos, descensos y virajes básicos en VMC.",
+        "Coordinar actitud, potencia, velocidad y compensación con referencias visuales e instrumentos."
+      ],
+      focus: ["FPM", "PRO", "SAW", "WLM"]
+    },
+    {
+      id: "M05",
+      program: "PPA",
+      title: "Procedimientos de emergencia básicos",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Reconocimiento y gestión inicial de fallas y emergencias básicas.",
+      objectives: [
+        "Identificar fallas simuladas de motor, aviónica u otros sistemas.",
+        "Aplicar prioridades, listas y decisiones apropiadas ante la condición presentada.",
+        "Gestionar retorno, aterrizaje de emergencia y factores humanos asociados."
+      ],
+      focus: ["PSD", "SAW", "WLM", "PRO", "COM"]
+    },
+    {
+      id: "M06",
+      program: "PPA",
+      title: "Refuerzo pre-solo: control básico de la aeronave",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Consolidación del control básico y de la relación entre actitud, potencia, velocidad y compensación.",
+      objectives: [
+        "Reforzar inspección, preparación y conocimiento de sistemas.",
+        "Mantener vuelo estable con diferentes configuraciones de potencia y flaps.",
+        "Coordinar cabeceo, alabeo y guiñada mientras administra la carga de trabajo."
+      ],
+      focus: ["FPM", "PRO", "KNO", "WLM"]
+    },
+    {
+      id: "M07",
+      program: "PPA",
+      title: "Refuerzo de maniobras básicas: clima adverso",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Control de la aeronave y toma de decisiones con turbulencia y referencias externas reducidas.",
+      objectives: [
+        "Mantener el control durante turbulencia moderada simulada.",
+        "Realizar maniobras básicas con referencias visuales externas limitadas.",
+        "Gestionar carga de trabajo, amenazas meteorológicas y decisiones operacionales."
+      ],
+      focus: ["FPM", "SAW", "WLM", "PSD"]
+    },
+    {
+      id: "M08",
+      program: "PPA",
+      title: "Refuerzo de cruceros básicos: navegación y corrección",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Navegación visual y radioeléctrica básica con detección y corrección de desviaciones.",
+      objectives: [
+        "Aplicar navegación visual y ayudas radioeléctricas básicas.",
+        "Detectar y corregir desviaciones de rumbo y altitud.",
+        "Considerar viento y condiciones meteorológicas durante la navegación."
+      ],
+      focus: ["FPM", "SAW", "PSD", "WLM"]
+    },
+    {
+      id: "M09",
+      program: "PCA",
+      title: "Operaciones avanzadas y maniobras de alta precisión",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Maniobras de precisión y recuperación de actitudes inusuales con mayor exigencia operacional.",
+      objectives: [
+        "Ejecutar virajes pronunciados manteniendo parámetros definidos.",
+        "Recuperar actitudes inusuales de manera segura y ordenada.",
+        "Gestionar precisión, energía y carga de trabajo en espacio aéreo exigente."
+      ],
+      focus: ["FPM", "SAW", "WLM", "PSD"]
+    },
+    {
+      id: "M10",
+      program: "PCA",
+      title: "Aproximaciones avanzadas y aterrizajes complejos",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Aproximaciones estabilizadas y aterrizajes bajo condiciones operacionales complejas.",
+      objectives: [
+        "Mantener criterios de aproximación estabilizada en condiciones adversas.",
+        "Gestionar viento cruzado, control lateral y configuración de aterrizaje.",
+        "Ejecutar una aproximación frustrada cuando no se cumplen los criterios."
+      ],
+      focus: ["FPM", "PRO", "SAW", "PSD", "WLM"]
+    },
+    {
+      id: "M11",
+      program: "Instrumentos",
+      title: "Introducción al vuelo por instrumentos",
+      phase: "Prevuelo",
+      duration: "2 horas",
+      synthesis: "Fundamentos del control de la aeronave por instrumentos y transición entre referencias visuales e instrumentales.",
+      objectives: [
+        "Interpretar los instrumentos primarios y mantener control sin referencias visuales.",
+        "Realizar virajes cronometrados, nivelaciones y cambios de velocidad.",
+        "Gestionar transiciones VFR/IFR y patrones instrumentales básicos."
+      ],
+      focus: ["KNO", "FPM", "PRO", "SAW"]
+    },
+    {
+      id: "M12",
+      program: "Instrumentos",
+      title: "Virajes, ascensos y descensos IFR",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Control instrumental de trayectoria vertical y lateral en condiciones IMC simuladas.",
+      objectives: [
+        "Ejecutar virajes estándar por instrumentos.",
+        "Realizar ascensos y descensos mediante actitud y potencia con cambios de velocidad.",
+        "Mantener precisión y carga de trabajo en espacio aéreo controlado."
+      ],
+      focus: ["FPM", "PRO", "SAW", "WLM"]
+    },
+    {
+      id: "M13",
+      program: "Instrumentos",
+      title: "Interceptación y seguimiento de radiales",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Uso del VOR para interceptar y mantener radiales aplicando correcciones por viento.",
+      objectives: [
+        "Configurar e interpretar correctamente la información VOR.",
+        "Interceptar y seguir radiales con corrección por viento.",
+        "Detectar desviaciones y aplicar correcciones oportunas."
+      ],
+      focus: ["KNO", "FPM", "SAW", "PSD", "PRO"]
+    },
+    {
+      id: "M14",
+      program: "Instrumentos",
+      title: "Procedimientos de espera y entradas",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Planificación y ejecución de esperas, entradas y arcos DME.",
+      objectives: [
+        "Seleccionar y ejecutar la entrada apropiada al patrón de espera.",
+        "Corregir tiempo y deriva durante la espera.",
+        "Ejecutar arcos DME y mantener coordinación con el tránsito IFR."
+      ],
+      focus: ["KNO", "PRO", "FPM", "SAW", "WLM"]
+    },
+    {
+      id: "M15",
+      program: "Instrumentos",
+      title: "Aproximaciones instrumentales básicas",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Ejecución de aproximaciones VOR e ILS y aplicación de criterios de estabilización.",
+      objectives: [
+        "Interceptar y seguir localizador, senda o guía lateral según corresponda.",
+        "Mantener configuración, velocidad y trayectoria de aproximación estabilizada.",
+        "Ejecutar la aproximación frustrada o escape cuando sea requerido."
+      ],
+      focus: ["FPM", "PRO", "SAW", "PSD", "WLM"]
+    },
+    {
+      id: "M16",
+      program: "Instrumentos",
+      title: "Emergencias en vuelo IFR",
+      phase: "En vuelo",
+      duration: "2 horas",
+      synthesis: "Gestión de fallas instrumentales y de navegación en IMC simuladas.",
+      objectives: [
+        "Reconocer y gestionar la falla de instrumentos primarios.",
+        "Gestionar pérdida de ayudas de navegación y condiciones anormales en IMC.",
+        "Priorizar control, navegación, comunicación y decisiones bajo carga de trabajo."
+      ],
+      focus: ["PSD", "SAW", "WLM", "PRO", "COM", "FPM"]
+    },
+    {
+      id: "M17",
+      program: "Instrumentos",
+      title: "Procedimientos de espera y entradas: consolidación",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Consolidación de esperas, entradas, tiempo, deriva y coordinación IFR.",
+      objectives: [
+        "Planificar y ejecutar patrones de espera de mayor complejidad.",
+        "Aplicar correcciones de tiempo y viento de manera consistente.",
+        "Mantener conciencia situacional y coordinación operacional."
+      ],
+      focus: ["KNO", "PRO", "FPM", "SAW", "WLM"]
+    },
+    {
+      id: "M18",
+      program: "Instrumentos",
+      title: "Aproximaciones instrumentales avanzadas bajo concepto PBN",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Uso de navegación GNSS y especificaciones PBN en procedimientos instrumentales.",
+      objectives: [
+        "Configurar y verificar la navegación GNSS para el procedimiento.",
+        "Interceptar y mantener trayectorias y esperas definidas por waypoints.",
+        "Ejecutar aproximaciones RNP aplicando los mínimos y limitaciones correspondientes."
+      ],
+      focus: ["KNO", "PRO", "FPA", "FPM", "SAW", "PSD"]
+    },
+    {
+      id: "M19",
+      program: "Instrumentos",
+      title: "Procedimientos de salida y llegada IFR",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Planificación y ejecución de SID y STAR con gestión del perfil y coordinación ATC.",
+      objectives: [
+        "Interpretar y preparar procedimientos SID y STAR.",
+        "Gestionar restricciones, perfil vertical y energía de la aeronave.",
+        "Mantener comunicación, automatización y conciencia situacional."
+      ],
+      focus: ["PRO", "COM", "FPA", "SAW", "WLM"]
+    },
+    {
+      id: "M20",
+      program: "Instrumentos",
+      title: "Simulación de vuelo completo IFR",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Integración de un vuelo IFR completo con amenazas, desviaciones y condiciones anormales.",
+      objectives: [
+        "Planificar y ejecutar todas las fases de un vuelo IFR.",
+        "Gestionar meteorología, desviaciones, fallas o pérdida de ayudas de navegación.",
+        "Integrar control, procedimientos, comunicación, decisiones y carga de trabajo."
+      ],
+      focus: ["KNO", "PRO", "COM", "FPA", "FPM", "LTW", "PSD", "SAW", "WLM"]
+    },
+    {
+      id: "M21",
+      program: "Instrumentos",
+      title: "Evaluación final en simulador",
+      phase: "Postvuelo",
+      duration: "2 horas",
+      synthesis: "Demostración integrada de las competencias requeridas durante una operación IFR completa.",
+      objectives: [
+        "Ejecutar de manera integrada las fases y transiciones del vuelo IFR.",
+        "Gestionar maniobras, esperas, aproximaciones y condiciones anormales.",
+        "Demostrar decisiones, conciencia situacional y gestión de la carga de trabajo."
+      ],
+      focus: ["KNO", "PRO", "COM", "FPA", "FPM", "LTW", "PSD", "SAW", "WLM"]
+    }
+  ];
+
+  const competencyNames = {
+    KNO: "Aplicación de conocimientos",
+    PRO: "Aplicación de procedimientos y cumplimiento",
+    COM: "Comunicación",
+    FPA: "Gestión de la trayectoria mediante automatización",
+    FPM: "Gestión de la trayectoria mediante vuelo manual",
+    LTW: "Liderazgo y trabajo en equipo",
+    PSD: "Resolución de problemas y toma de decisiones",
+    SAW: "Conciencia de la situación",
+    WLM: "Gestión de la carga de trabajo"
+  };
+
+  const obs = [
+    ["1.1", "KNO", "Demuestra conocimiento práctico y aplicable de las limitaciones y sistemas, y su interacción."],
+    ["1.2", "KNO", "Demuestra el conocimiento requerido de las instrucciones de operación publicadas."],
+    ["1.3", "KNO", "Demuestra conocimiento del entorno físico, el entorno del tráfico aéreo, incluyendo las rutas, condiciones meteorológicas, los aeropuertos y la infraestructura operativa."],
+    ["1.4", "KNO", "Demuestra conocimiento apropiado de la legislación aplicable."],
+    ["1.5", "KNO", "Sabe dónde obtener la información requerida."],
+    ["1.6", "KNO", "Demuestra un interés positivo en adquirir conocimientos."],
+    ["1.7", "KNO", "Es capaz de aplicar el conocimiento efectivamente."],
+    ["2.1", "PRO", "Identifica dónde encontrar los procedimientos y las regulaciones."],
+    ["2.2", "PRO", "Aplica las instrucciones de operación relevantes, procedimientos y técnicas de manera oportuna."],
+    ["2.3", "PRO", "Sigue los SOP a menos que una desviación apropiada sea requerida para obtener un grado de seguridad más alto."],
+    ["2.4", "PRO", "Opera los sistemas de la aeronave y el equipo asociado correctamente."],
+    ["2.5", "PRO", "Monitorea correctamente los sistemas de la aeronave y sus equipos asociados."],
+    ["2.6", "PRO", "Cumple la regulación aplicable."],
+    ["2.7", "PRO", "Aplica el conocimiento procedimental relevante."],
+    ["3.1", "COM", "Se asegura de que el receptor está listo y es capaz de recibir la información."],
+    ["3.2", "COM", "Selecciona de forma apropiada qué comunicar, cuándo, cómo y con quién."],
+    ["3.3", "COM", "Transmite mensajes de forma clara, precisa y concisa."],
+    ["3.4", "COM", "Confirma que el receptor demuestra el entendimiento de la información importante."],
+    ["3.5", "COM", "Escucha activamente y demuestra entendimiento al recibir la información."],
+    ["3.6", "COM", "Formula preguntas relevantes y efectivas."],
+    ["3.7", "COM", "Utiliza la escalación en comunicaciones adecuadamente para resolver desviaciones identificadas."],
+    ["3.8", "COM", "Utiliza e interpreta la comunicación no verbal en una manera apropiada a la cultura organizacional y social."],
+    ["3.9", "COM", "Se adhiere a la fraseología y los procedimientos radiotelefónicos estándar."],
+    ["3.10", "COM", "Lee, interpreta, crea y responde con precisión a los mensajes de enlace de datos en inglés."],
+    ["4.1", "FPA", "Utiliza la gestión de vuelo, sistemas de guía y la automatización apropiada, como están instalados y aplicable a las condiciones."],
+    ["4.2", "FPA", "Monitorea y detecta desviaciones de la trayectoria de vuelo deseada y toma las acciones apropiadas."],
+    ["4.3", "FPA", "Gestiona la trayectoria de vuelo de manera segura para lograr un desempeño operacional óptimo."],
+    ["4.4", "FPA", "Mantiene la trayectoria deseada durante el vuelo utilizando la automatización, mientras gestiona otras tareas y distracciones."],
+    ["4.5", "FPA", "Selecciona en tiempo oportuno el nivel y modo de automatización apropiados, teniendo en cuenta la fase de vuelo y la carga de trabajo."],
+    ["4.6", "FPA", "Monitorea eficazmente la automatización, incluyendo su activación y las transiciones de modo automático."],
+    ["5.1", "FPM", "Controla la aeronave manualmente, con precisión y suavidad como sea apropiado para la situación."],
+    ["5.2", "FPM", "Monitorea y detecta desviaciones de la trayectoria de vuelo deseada y toma las acciones apropiadas."],
+    ["5.3", "FPM", "Manualmente controla la aeronave usando la relación entre la actitud, velocidad y empuje de la aeronave y señales de navegación o información visual."],
+    ["5.4", "FPM", "Gestiona la trayectoria de vuelo de manera segura para lograr un desempeño operacional óptimo."],
+    ["5.5", "FPM", "Mantiene la trayectoria deseada durante el vuelo manual mientras gestiona otras tareas y distracciones."],
+    ["5.6", "FPM", "Utiliza apropiadamente la gestión de vuelo, los sistemas de guía de vuelo, de estar instalados y aplicable a las condiciones."],
+    ["5.7", "FPM", "Monitorea eficazmente los sistemas de guía de vuelo, incluyendo su activación y las transiciones de modo automático."],
+    ["6.1", "LTW", "Alienta la participación y comunicación abierta del equipo."],
+    ["6.2", "LTW", "Demuestra iniciativa y provee direccionamiento cuando es requerido."],
+    ["6.3", "LTW", "Involucra a los otros en la planificación."],
+    ["6.4", "LTW", "Considera aportes de los demás."],
+    ["6.5", "LTW", "Da y recibe retroalimentación constructiva."],
+    ["6.6", "LTW", "Afronta y resuelve conflictos y desacuerdos de manera constructiva."],
+    ["6.7", "LTW", "Ejerce liderazgo decisivo cuando es requerido."],
+    ["6.8", "LTW", "Acepta la responsabilidad de sus decisiones y acciones."],
+    ["6.9", "LTW", "Lleva a cabo instrucciones cuando se le indica."],
+    ["6.10", "LTW", "Aplica estrategias de intervención efectivas para resolver desviaciones identificadas."],
+    ["6.11", "LTW", "Maneja los desafíos culturales y de lenguaje, de ser aplicable."],
+    ["7.1", "PSD", "Identifica, evalúa y gestiona amenazas y errores en el momento oportuno."],
+    ["7.2", "PSD", "Busca información precisa y adecuada de fuentes apropiadas."],
+    ["7.3", "PSD", "Identifica y verifica qué y por qué no han salido bien las cosas, si es apropiado."],
+    ["7.4", "PSD", "Persevera en la resolución de problemas priorizando la seguridad operacional."],
+    ["7.5", "PSD", "Identifica y considera opciones apropiadas."],
+    ["7.6", "PSD", "Aplica técnicas apropiadas y oportunas de toma de decisiones."],
+    ["7.7", "PSD", "Monitorea, revisa y adapta las decisiones cuando se requiera."],
+    ["7.8", "PSD", "Se adapta cuando se enfrenta a situaciones donde no existen guías o procedimientos."],
+    ["7.9", "PSD", "Demuestra resiliencia cuando encuentra un evento inesperado."],
+    ["8.1", "SAW", "Monitorea y evalúa con precisión el estado de la aeronave y de sus sistemas."],
+    ["8.2", "SAW", "Monitorea y evalúa con precisión el estado de la energía de la aeronave y la trayectoria de vuelo anticipada."],
+    ["8.3", "SAW", "Monitorea y evalúa con precisión el entorno general que pueda afectar a la operación."],
+    ["8.4", "SAW", "Valida la precisión de la información y verifica errores graves."],
+    ["8.5", "SAW", "Se mantiene alerta sobre las personas involucradas en, o que se ven afectadas por, la operación y de su capacidad para desempeñarse como es esperado."],
+    ["8.6", "SAW", "Desarrolla planes de contingencia efectivos, basados en los riesgos potenciales asociados a las amenazas y errores."],
+    ["8.7", "SAW", "Responde según las indicaciones de disminución de la conciencia de la situación."],
+    ["9.1", "WLM", "Mantiene el autocontrol en todas las situaciones."],
+    ["9.2", "WLM", "Planea, prioriza y programa las tareas apropiadas efectivamente."],
+    ["9.3", "WLM", "Gestiona efectivamente el tiempo mientras desempeña tareas."],
+    ["9.4", "WLM", "Ofrece y acepta asistencia."],
+    ["9.5", "WLM", "Delega tareas cuando es necesario."],
+    ["9.6", "WLM", "Busca y acepta asistencia cuando es apropiado."],
+    ["9.7", "WLM", "Monitorea, revisa y comprueba por distintos medios las acciones conscientemente."],
+    ["9.8", "WLM", "Verifica que se completen las tareas de acuerdo con los resultados esperados."],
+    ["9.9", "WLM", "Gestiona y se recupera efectivamente de interrupciones, distracciones, variaciones y fallas durante el desarrollo de tareas."]
+  ].map(([code, competency, text]) => ({ code, competency, text }));
+
+  /*
+   * Reglas conservadoras. Cada regla exige evidencia lingüística explícita.
+   * No cubren todos los OB: los demás siguen disponibles para selección manual.
+   */
+  const evidenceRules = {
+    "1.1": [["limitacion", "sistema"], ["sistemas", "interaccion"]],
+    "1.2": [["manual", "consult"], ["instruccion", "operacion", "public"]],
+    "1.3": [["meteorolog", "ruta"], ["trafico", "aeropuerto"]],
+    "1.5": [["consult", "poh"], ["consult", "sop"], ["busco", "manual"], ["verifico", "fuente"]],
+    "2.1": [["ubico", "procedimiento"], ["consult", "regulacion"]],
+    "2.2": [["aplico", "procedimiento"], ["ejecuto", "lista"], ["checklist", "complet"]],
+    "2.3": [["siguio", "sop"], ["aplico", "sop"], ["desvio", "sop", "seguridad"]],
+    "2.4": [["opero", "sistema", "correct"], ["configuro", "equipo", "correct"]],
+    "2.5": [["monitoreo", "sistema"], ["vigilo", "parametro", "sistema"]],
+    "3.2": [["comunico", "atc"], ["informo", "momento", "oportun"]],
+    "3.3": [["comunicacion", "clara", "precisa"], ["mensaje", "claro", "conciso"]],
+    "3.4": [["confirmo", "entendimiento"], ["verifico", "comprend"]],
+    "3.5": [["escucho", "instruccion"], ["colaciono", "correct"]],
+    "3.6": [["pregunta", "relevante"], ["pregunto", "aclarar"]],
+    "3.9": [["fraseologia", "estandar"], ["radiotelefon", "correct"]],
+    "4.1": [["automatizacion", "apropiad"], ["piloto automatico", "utilizo"]],
+    "4.2": [["automat", "desviacion", "corrig"], ["automat", "trayectoria", "monitore"]],
+    "4.5": [["selecciono", "modo", "automat"], ["cambio", "modo", "oportun"]],
+    "4.6": [["monitoreo", "modo", "automat"], ["transicion", "modo", "verific"]],
+    "5.1": [["vuelo manual", "precision"], ["controlo", "manual", "suav"]],
+    "5.2": [["desviacion", "trayectoria", "corrig"], ["desviacion", "rumbo", "corrig"], ["desviacion", "altitud", "corrig"]],
+    "5.3": [["actitud", "velocidad", "potencia"], ["actitud", "empuje", "manual"]],
+    "5.5": [["vuelo manual", "distraccion"], ["manual", "otra tarea", "trayectoria"]],
+    "6.1": [["invito", "participar"], ["comunicacion", "abierta", "equipo"]],
+    "6.2": [["tomo", "iniciativa"], ["dio", "direccion", "equipo"]],
+    "6.3": [["involucro", "planificacion"], ["planifico", "equipo"]],
+    "6.4": [["considero", "aporte"], ["acepto", "sugerencia"]],
+    "6.5": [["retroalimentacion", "constructiva"], ["feedback", "constructiv"]],
+    "6.7": [["liderazgo", "decisivo"], ["tomo", "liderazgo", "requer"]],
+    "6.8": [["acepto", "responsabilidad"], ["asumio", "responsabilidad"]],
+    "7.1": [["amenaza", "error", "gestion"], ["identifico", "amenaza", "oportun"]],
+    "7.2": [["busco", "informacion", "fuente"], ["consulto", "fuente", "apropiad"]],
+    "7.3": [["identifico", "causa"], ["verifico", "por que", "fall"]],
+    "7.4": [["resolvio", "problema", "seguridad"], ["priorizo", "seguridad", "problema"]],
+    "7.5": [["considero", "opciones"], ["evaluo", "alternativas"]],
+    "7.6": [["tomo", "decision", "oportun"], ["decision", "apropiada"]],
+    "7.7": [["reviso", "decision"], ["adapto", "decision"]],
+    "7.9": [["evento", "inesperado", "recuper"], ["falla", "inesperada", "gestion"]],
+    "8.1": [["monitoreo", "estado", "aeronave"], ["monitoreo", "sistemas", "aeronave"]],
+    "8.2": [["energia", "trayectoria", "monitore"], ["anticip", "trayectoria", "energia"]],
+    "8.3": [["monitoreo", "meteorolog"], ["monitoreo", "trafico"], ["evalua", "entorno", "operacion"]],
+    "8.4": [["verifico", "informacion", "error"], ["cruzo", "informacion", "fuente"]],
+    "8.6": [["plan", "contingencia", "riesgo"], ["alterno", "amenaza", "plan"]],
+    "9.1": [["mantuvo", "autocontrol"], ["conservo", "calma", "falla"]],
+    "9.2": [["priorizo", "tareas"], ["planifico", "tareas"]],
+    "9.3": [["gestiono", "tiempo"], ["tiempo", "tareas", "efectiv"]],
+    "9.4": [["ofrecio", "asistencia"], ["acepto", "asistencia"]],
+    "9.6": [["solicito", "asistencia"], ["pidio", "ayuda", "oportun"]],
+    "9.7": [["verifico", "accion", "otro medio"], ["comprobo", "accion"]],
+    "9.8": [["verifico", "tarea", "resultado"], ["confirmo", "lista", "completa"]],
+    "9.9": [["distraccion", "recuper"], ["interrupcion", "recuper"], ["falla", "carga", "gestion"]]
+  };
+
+  const referencesByProgram = {
+    PPA: [
+      "MES: misión seleccionada y objetivos aplicables.",
+      "SOP de la organización: secuencia y técnica normal o anormal aplicable.",
+      "POH/AFM: limitaciones, procedimientos y datos específicos de la aeronave.",
+      "FOM: apoyo operacional; no reemplaza al POH/AFM ni al SOP vigente."
+    ],
+    PCA: [
+      "MES: misión seleccionada y objetivos aplicables.",
+      "SOP de la organización: criterios de aproximación, maniobra o contingencia.",
+      "POH/AFM: limitaciones y técnica específica de la aeronave.",
+      "FOM: apoyo operacional; el POH/AFM conserva la autoridad final."
+    ],
+    Instrumentos: [
+      "MES: misión seleccionada y objetivos aplicables.",
+      "SOP de la organización: procedimientos IFR y criterios operacionales.",
+      "POH/AFM y documentación de aviónica: limitaciones, modos y procedimientos aplicables.",
+      "Carta o publicación aeronáutica vigente usada durante la sesión.",
+      "FOM: apoyo operacional; no sustituye ninguna publicación autorizada."
+    ]
+  };
+
+  return {
+    version: "1.0-prototipo",
+    sourceNotice: "Síntesis de trabajo basada en el MES y en los OB suministrados. Validación final requerida por la organización.",
+    missions,
+    competencyNames,
+    obs,
+    evidenceRules,
+    referencesByProgram
+  };
+})();
+
+  </script>
+  <script>
+(function () {
+  "use strict";
+
+  const kb = window.VEYRA_KB;
+  if (!kb) {
+    document.body.textContent = "No fue posible cargar la base académica del asistente.";
+    return;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const elements = {
+    missionSelect: $("missionSelect"),
+    sessionDate: $("sessionDate"),
+    studentId: $("studentId"),
+    instructorId: $("instructorId"),
+    sessionRef: $("sessionRef"),
+    missionId: $("missionId"),
+    missionMeta: $("missionMeta"),
+    missionProgram: $("missionProgram"),
+    missionTitle: $("missionTitle"),
+    missionSynthesis: $("missionSynthesis"),
+    missionObjectives: $("missionObjectives"),
+    missionFocus: $("missionFocus"),
+    rawNote: $("rawNote"),
+    noteCount: $("noteCount"),
+    analyzeButton: $("analyzeButton"),
+    clearButton: $("clearButton"),
+    analysisMessage: $("analysisMessage"),
+    candidateEmpty: $("candidateEmpty"),
+    candidateList: $("candidateList"),
+    obSearch: $("obSearch"),
+    competencyFilter: $("competencyFilter"),
+    resultCount: $("resultCount"),
+    obResults: $("obResults"),
+    strengths: $("strengths"),
+    development: $("development"),
+    pendingChecks: $("pendingChecks"),
+    reportMessage: $("reportMessage"),
+    reportText: $("reportText"),
+    reportButton: $("reportButton"),
+    copyButton: $("copyButton"),
+    downloadButton: $("downloadButton"),
+    printButton: $("printButton")
+  };
+
+  const state = {
+    candidates: new Map(),
+    evidenceSentences: [],
+    report: ""
+  };
+
+  function normalize(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function tidySentence(value) {
+    const compact = String(value || "").replace(/\s+/g, " ").trim();
+    if (!compact) return "";
+    const initial = compact.charAt(0).toUpperCase() + compact.slice(1);
+    return /[.!?;:]$/.test(initial) ? initial : initial + ".";
+  }
+
+  function splitEvidence(value) {
+    const lines = String(value || "").split(/\n+/);
+    const results = [];
+
+    lines.forEach((line) => {
+      const pieces = line.match(/[^.!?;]+[.!?;]?/g) || [];
+      pieces.forEach((piece) => {
+        const tidy = tidySentence(piece);
+        if (normalize(tidy).length >= 8) results.push(tidy);
+      });
+    });
+
+    return Array.from(new Set(results));
+  }
+
+  function selectedMission() {
+    return kb.missions.find((mission) => mission.id === elements.missionSelect.value) || kb.missions[0];
+  }
+
+  function setDefaultDate() {
+    if (elements.sessionDate.value) return;
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    elements.sessionDate.value = local.toISOString().slice(0, 10);
+  }
+
+  function populateMissions() {
+    elements.missionSelect.replaceChildren();
+    kb.missions.forEach((mission) => {
+      const option = document.createElement("option");
+      option.value = mission.id;
+      option.textContent = `${mission.id} · ${mission.program} · ${mission.title}`;
+      elements.missionSelect.appendChild(option);
+    });
+  }
+
+  function populateCompetencies() {
+    elements.competencyFilter.replaceChildren();
+    const all = document.createElement("option");
+    all.value = "";
+    all.textContent = "Todas";
+    elements.competencyFilter.appendChild(all);
+
+    Object.entries(kb.competencyNames).forEach(([code, name]) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = `${code} · ${name}`;
+      elements.competencyFilter.appendChild(option);
+    });
+  }
+
+  function renderMission() {
+    const mission = selectedMission();
+    elements.missionId.textContent = mission.id;
+    elements.missionMeta.textContent = `${mission.phase} · ${mission.duration}`;
+    elements.missionProgram.textContent = mission.program;
+    elements.missionTitle.textContent = mission.title;
+    elements.missionSynthesis.textContent = mission.synthesis;
+    elements.missionObjectives.replaceChildren();
+    mission.objectives.forEach((objective) => {
+      const item = document.createElement("li");
+      item.textContent = objective;
+      elements.missionObjectives.appendChild(item);
+    });
+    elements.missionFocus.replaceChildren();
+    mission.focus.forEach((code) => {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = `${code} · ${kb.competencyNames[code]}`;
+      elements.missionFocus.appendChild(chip);
+    });
+  }
+
+  function obByCode(code) {
+    return kb.obs.find((ob) => ob.code === code);
+  }
+
+  function detectCandidates(sentences) {
+    const mission = selectedMission();
+    const detected = [];
+
+    Object.entries(kb.evidenceRules).forEach(([code, patterns]) => {
+      const ob = obByCode(code);
+      if (!ob) return;
+
+      const supports = [];
+      patterns.forEach((pattern) => {
+        sentences.forEach((sentence) => {
+          const normalizedSentence = normalize(sentence);
+          const isMatch = pattern.every((token) => normalizedSentence.includes(normalize(token)));
+          if (isMatch && !supports.includes(sentence)) supports.push(sentence);
+        });
+      });
+
+      if (supports.length) {
+        detected.push({
+          ob,
+          evidence: supports.join("\n"),
+          source: "regla conservadora",
+          confirmed: false,
+          missionPriority: mission.focus.includes(ob.competency) ? 1 : 0
+        });
+      }
+    });
+
+    return detected.sort((a, b) => {
+      if (a.missionPriority !== b.missionPriority) return b.missionPriority - a.missionPriority;
+      return Number(a.ob.code.split(".")[0]) - Number(b.ob.code.split(".")[0]) || a.ob.code.localeCompare(b.ob.code);
+    });
+  }
+
+  function analyzeNote() {
+    const note = elements.rawNote.value.trim();
+    state.candidates.clear();
+    state.evidenceSentences = splitEvidence(note);
+
+    if (!note || !state.evidenceSentences.length) {
+      elements.analysisMessage.className = "message error";
+      elements.analysisMessage.textContent = "Escribe evidencia concreta antes de analizar.";
+      renderCandidates();
+      return;
+    }
+
+    const detected = detectCandidates(state.evidenceSentences);
+    detected.forEach((candidate) => state.candidates.set(candidate.ob.code, candidate));
+
+    if (detected.length) {
+      elements.analysisMessage.className = "message warning";
+      elements.analysisMessage.textContent = `${detected.length} OB candidato(s). Ninguno está confirmado: revisa la frase de evidencia y marca solamente lo que observaste.`;
+    } else {
+      elements.analysisMessage.className = "message warning";
+      elements.analysisMessage.textContent = "La nota fue ordenada, pero no contiene evidencia suficiente para proponer un OB con las reglas conservadoras. Usa el explorador manual o añade detalles observables.";
+    }
+    renderCandidates();
+  }
+
+  function makeTextElement(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    element.textContent = text;
+    return element;
+  }
+
+  function renderCandidates() {
+    elements.candidateList.replaceChildren();
+    const candidates = Array.from(state.candidates.values());
+    elements.candidateEmpty.hidden = candidates.length > 0;
+
+    if (!candidates.length) {
+      elements.candidateEmpty.textContent = state.evidenceSentences.length
+        ? "No hay OB candidatos. Esto no significa que la sesión no tenga evidencia; significa que requiere selección manual o una nota más específica."
+        : "Escribe una nota y pulsa “Analizar evidencia”.";
+      return;
+    }
+
+    candidates.forEach((candidate) => {
+      const article = document.createElement("article");
+      article.className = "candidate" + (candidate.confirmed ? " confirmed" : "");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "candidate-check";
+      checkbox.checked = Boolean(candidate.confirmed);
+      checkbox.disabled = !candidate.evidence.trim();
+      checkbox.setAttribute("aria-label", `Confirmar OB ${candidate.ob.code}`);
+
+      const content = document.createElement("div");
+      const heading = document.createElement("div");
+      heading.className = "candidate-heading";
+      heading.appendChild(makeTextElement("strong", "ob-code", candidate.ob.code));
+      heading.appendChild(makeTextElement("span", "competency-code", candidate.ob.competency));
+      heading.appendChild(makeTextElement("span", "source-badge", candidate.source));
+      content.appendChild(heading);
+      content.appendChild(makeTextElement("div", "candidate-title", kb.competencyNames[candidate.ob.competency]));
+      content.appendChild(makeTextElement("p", "candidate-text", candidate.ob.text));
+
+      const evidenceLabel = document.createElement("label");
+      evidenceLabel.textContent = "Frase exacta que respalda este OB";
+      const evidenceArea = document.createElement("textarea");
+      evidenceArea.value = candidate.evidence;
+      evidenceArea.placeholder = "Escribe la conducta observada. Sin evidencia no puede confirmarse.";
+      evidenceArea.setAttribute("aria-label", `Evidencia para OB ${candidate.ob.code}`);
+      content.appendChild(evidenceLabel);
+      content.appendChild(evidenceArea);
+      content.appendChild(makeTextElement("div", "candidate-note", "La confirmación pertenece al instructor; el sistema solo organiza la evidencia."));
+
+      checkbox.addEventListener("change", () => {
+        candidate.confirmed = checkbox.checked && Boolean(candidate.evidence.trim());
+        renderCandidates();
+      });
+
+      evidenceArea.addEventListener("input", () => {
+        candidate.evidence = evidenceArea.value;
+        checkbox.disabled = !candidate.evidence.trim();
+        if (!candidate.evidence.trim()) {
+          candidate.confirmed = false;
+          checkbox.checked = false;
+          article.classList.remove("confirmed");
+        }
+      });
+
+      article.appendChild(checkbox);
+      article.appendChild(content);
+      elements.candidateList.appendChild(article);
+    });
+  }
+
+  function addManualCandidate(ob) {
+    if (state.candidates.has(ob.code)) {
+      const existing = state.candidates.get(ob.code);
+      elements.analysisMessage.className = "message";
+      elements.analysisMessage.textContent = `El OB ${ob.code} ya está en la lista de revisión.`;
+      if (!existing.evidence) existing.source = "selección manual";
+    } else {
+      state.candidates.set(ob.code, {
+        ob,
+        evidence: "",
+        source: "selección manual",
+        confirmed: false,
+        missionPriority: 0
+      });
+      elements.analysisMessage.className = "message warning";
+      elements.analysisMessage.textContent = `OB ${ob.code} agregado. Escribe la evidencia exacta antes de confirmarlo.`;
+    }
+    renderCandidates();
+    renderExplorer();
+    document.querySelector("#candidateTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderExplorer() {
+    const term = normalize(elements.obSearch.value);
+    const competency = elements.competencyFilter.value;
+    const matches = kb.obs.filter((ob) => {
+      if (competency && ob.competency !== competency) return false;
+      if (!term) return true;
+      const haystack = normalize(`${ob.code} ${ob.competency} ${kb.competencyNames[ob.competency]} ${ob.text}`);
+      return haystack.includes(term);
+    });
+
+    elements.resultCount.textContent = `${matches.length} resultado(s). Se muestran hasta 15 por búsqueda.`;
+    elements.obResults.replaceChildren();
+    matches.slice(0, 15).forEach((ob) => {
+      const row = document.createElement("div");
+      row.className = "ob-result";
+      row.appendChild(makeTextElement("strong", "", ob.code));
+      const copy = document.createElement("div");
+      copy.appendChild(makeTextElement("div", "competency-code", `${ob.competency} · ${kb.competencyNames[ob.competency]}`));
+      copy.appendChild(makeTextElement("p", "", ob.text));
+      row.appendChild(copy);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn small";
+      button.textContent = state.candidates.has(ob.code) ? "En revisión" : "Agregar OB";
+      button.disabled = state.candidates.has(ob.code);
+      button.addEventListener("click", () => addManualCandidate(ob));
+      row.appendChild(button);
+      elements.obResults.appendChild(row);
+    });
+  }
+
+  function valueOrPending(value) {
+    const compact = String(value || "").replace(/\s+/g, " ").trim();
+    return compact || "No registrado en este borrador.";
+  }
+
+  function generateReport() {
+    const mission = selectedMission();
+    const confirmed = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && candidate.evidence.trim());
+    const ignoredWithoutEvidence = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && !candidate.evidence.trim());
+    const date = elements.sessionDate.value || "Sin fecha";
+    const evidence = state.evidenceSentences.length ? state.evidenceSentences : splitEvidence(elements.rawNote.value);
+    const references = kb.referencesByProgram[mission.program] || kb.referencesByProgram.Instrumentos;
+    const lines = [];
+
+    lines.push("VEYRA · BORRADOR DE OBSERVACIÓN DE SESIÓN");
+    lines.push("================================================");
+    lines.push("Estado: BORRADOR PARA REVISIÓN HUMANA · NO CONSTITUYE CALIFICACIÓN");
+    lines.push("");
+    lines.push("1. CONTEXTO");
+    lines.push(`Fecha: ${date}`);
+    lines.push(`Referencia de sesión: ${valueOrPending(elements.sessionRef.value)}`);
+    lines.push(`Estudiante: ${valueOrPending(elements.studentId.value)}`);
+    lines.push(`Instructor: ${valueOrPending(elements.instructorId.value)}`);
+    lines.push(`Misión: ${mission.id} · ${mission.program} · ${mission.title}`);
+    lines.push(`Fase / duración de referencia: ${mission.phase} · ${mission.duration}`);
+    lines.push("");
+    lines.push("2. ALCANCE MES DE REFERENCIA");
+    lines.push(mission.synthesis);
+    mission.objectives.forEach((objective) => lines.push(`- ${objective}`));
+    lines.push("");
+    lines.push("Nota: el foco de competencias de la misión orienta la observación, pero no demuestra ningún OB por sí solo.");
+    lines.push("");
+    lines.push("3. EVIDENCIA ORIGINAL ORDENADA");
+    if (evidence.length) evidence.forEach((sentence) => lines.push(`- ${sentence}`));
+    else lines.push("- No se registró evidencia observable.");
+    lines.push("");
+    lines.push("4. COMPORTAMIENTOS OBSERVABLES CONFIRMADOS POR EL INSTRUCTOR");
+    if (confirmed.length) {
+      confirmed.forEach((candidate) => {
+        lines.push(`${candidate.ob.code} · ${candidate.ob.competency} · ${kb.competencyNames[candidate.ob.competency]}`);
+        lines.push(`OB: ${candidate.ob.text}`);
+        lines.push(`Evidencia: ${candidate.evidence.trim()}`);
+        lines.push("");
+      });
+    } else {
+      lines.push("- Ningún OB confirmado. No inferir competencia ni calificación.");
+      lines.push("");
+    }
+    lines.push("5. CIERRE DEL INSTRUCTOR");
+    lines.push(`Fortalezas observadas: ${valueOrPending(elements.strengths.value)}`);
+    lines.push(`Foco de desarrollo: ${valueOrPending(elements.development.value)}`);
+    lines.push(`Pendiente por verificar: ${valueOrPending(elements.pendingChecks.value)}`);
+    lines.push("");
+    lines.push("6. FUENTES QUE DEBEN CONTRASTARSE");
+    references.forEach((reference) => lines.push(`- ${reference}`));
+    lines.push("");
+    lines.push("7. LÍMITES DEL BORRADOR");
+    lines.push("- No asigna niveles de desempeño, resultado competente/no competente ni aprobación/reprobación.");
+    lines.push("- No agrega hechos que no estén escritos por el instructor.");
+    lines.push("- No sustituye el juicio del instructor ni la documentación vigente de la organización.");
+    lines.push("- Antes de incorporarlo a un registro oficial deben verificarse misión, fuentes y evidencia.");
+    if (ignoredWithoutEvidence.length) lines.push("- Se detectaron selecciones sin evidencia; fueron excluidas del borrador.");
+    lines.push("");
+    lines.push(`Base académica: ${kb.version}. ${kb.sourceNotice}`);
+
+    state.report = lines.join("\n");
+    elements.reportText.textContent = state.report;
+    elements.copyButton.disabled = false;
+    elements.downloadButton.disabled = false;
+    elements.printButton.disabled = false;
+    elements.reportMessage.className = confirmed.length ? "message" : "message warning";
+    elements.reportMessage.textContent = confirmed.length
+      ? `${confirmed.length} OB confirmado(s) incluidos. Revisa el texto completo antes de usarlo.`
+      : "El borrador no incluye OB confirmados. Esto es válido cuando la evidencia es insuficiente.";
+  }
+
+  async function copyReport() {
+    if (!state.report) return;
+    try {
+      await navigator.clipboard.writeText(state.report);
+      elements.reportMessage.className = "message";
+      elements.reportMessage.textContent = "Borrador copiado al portapapeles.";
+    } catch (error) {
+      const area = document.createElement("textarea");
+      area.value = state.report;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      elements.reportMessage.textContent = "Borrador copiado.";
+    }
+  }
+
+  function downloadReport() {
+    if (!state.report) return;
+    const mission = selectedMission();
+    const fileName = `veyra-borrador-${mission.id.toLowerCase()}-${elements.sessionDate.value || "sin-fecha"}.txt`;
+    const blob = new Blob([state.report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function clearSession() {
+    elements.rawNote.value = "";
+    elements.noteCount.textContent = "0";
+    elements.strengths.value = "";
+    elements.development.value = "";
+    elements.pendingChecks.value = "";
+    elements.sessionRef.value = "";
+    state.candidates.clear();
+    state.evidenceSentences = [];
+    state.report = "";
+    elements.analysisMessage.className = "message";
+    elements.analysisMessage.textContent = "Aún no se ha analizado una nota.";
+    elements.reportMessage.className = "message warning";
+    elements.reportMessage.textContent = "Confirma únicamente OB respaldados por evidencia concreta.";
+    elements.reportText.textContent = "El borrador aparecerá aquí.";
+    elements.copyButton.disabled = true;
+    elements.downloadButton.disabled = true;
+    elements.printButton.disabled = true;
+    renderCandidates();
+    renderExplorer();
+  }
+
+  elements.missionSelect.addEventListener("change", () => {
+    renderMission();
+    if (state.candidates.size) {
+      elements.analysisMessage.className = "message warning";
+      elements.analysisMessage.textContent = "La misión cambió. Vuelve a analizar la nota para revisar el contexto.";
+    }
+  });
+  elements.rawNote.addEventListener("input", () => {
+    elements.noteCount.textContent = String(elements.rawNote.value.length);
+  });
+  elements.analyzeButton.addEventListener("click", analyzeNote);
+  elements.clearButton.addEventListener("click", clearSession);
+  elements.obSearch.addEventListener("input", renderExplorer);
+  elements.competencyFilter.addEventListener("change", renderExplorer);
+  elements.reportButton.addEventListener("click", generateReport);
+  elements.copyButton.addEventListener("click", copyReport);
+  elements.downloadButton.addEventListener("click", downloadReport);
+  elements.printButton.addEventListener("click", () => window.print());
+
+  populateMissions();
+  populateCompetencies();
+  setDefaultDate();
+  renderMission();
+  renderCandidates();
+  renderExplorer();
+})();
+
+  </script>
+</body>
+</html>
