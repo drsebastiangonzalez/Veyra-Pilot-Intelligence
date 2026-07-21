@@ -502,7 +502,7 @@
     </section>
 
     <footer>
-      Prototipo Veyra v1 · La información permanece en este navegador durante la sesión y no se envía a un servidor. No ingreses datos personales reales durante la validación.
+      Prototipo Veyra v1.1 · La información permanece en este navegador durante la sesión y no se envía a un servidor. No ingreses datos personales reales durante la validación.
     </footer>
   </main>
 
@@ -912,7 +912,14 @@ window.VEYRA_KB = (() => {
     "1.3": [["meteorolog", "ruta"], ["trafico", "aeropuerto"]],
     "1.5": [["consult", "poh"], ["consult", "sop"], ["busco", "manual"], ["verifico", "fuente"]],
     "2.1": [["ubico", "procedimiento"], ["consult", "regulacion"]],
-    "2.2": [["aplico", "procedimiento"], ["ejecuto", "lista"], ["checklist", "complet"]],
+    "2.2": [
+      ["aplico", "procedimiento"],
+      ["ejecuto", "lista"],
+      ["checklist", "complet"],
+      ["siguio", "lista", "verificacion"],
+      ["aplico", "lista", "verificacion"],
+      ["realizo", "lista", "verificacion"]
+    ],
     "2.3": [["siguio", "sop"], ["aplico", "sop"], ["desvio", "sop", "seguridad"]],
     "2.4": [["opero", "sistema", "correct"], ["configuro", "equipo", "correct"]],
     "2.5": [["monitoreo", "sistema"], ["vigilo", "parametro", "sistema"]],
@@ -955,7 +962,12 @@ window.VEYRA_KB = (() => {
     "9.3": [["gestiono", "tiempo"], ["tiempo", "tareas", "efectiv"]],
     "9.4": [["ofrecio", "asistencia"], ["acepto", "asistencia"]],
     "9.6": [["solicito", "asistencia"], ["pidio", "ayuda", "oportun"]],
-    "9.7": [["verifico", "accion", "otro medio"], ["comprobo", "accion"]],
+    "9.7": [
+      ["verifico", "accion", "otro medio"],
+      ["comprobo", "accion"],
+      ["detecto", "omision"],
+      ["retomo", "lista", "punto", "verific"]
+    ],
     "9.8": [["verifico", "tarea", "resultado"], ["confirmo", "lista", "completa"]],
     "9.9": [["distraccion", "recuper"], ["interrupcion", "recuper"], ["falla", "carga", "gestion"]]
   };
@@ -983,7 +995,7 @@ window.VEYRA_KB = (() => {
   };
 
   return {
-    version: "1.0-prototipo",
+    version: "1.1-prototipo",
     sourceNotice: "Síntesis de trabajo basada en el MES y en los OB suministrados. Validación final requerida por la organización.",
     missions,
     competencyNames,
