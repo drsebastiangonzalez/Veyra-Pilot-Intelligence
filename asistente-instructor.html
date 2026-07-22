@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#070b12">
-  <title>Veyra · Asistente del instructor</title>
+  <title>Veyra · Asistente del instructor · v1.2</title>
   <style>
     :root {
       --ink: #f7f2e9;
@@ -72,15 +72,15 @@
       font-weight: 800;
     }
 
-    main { width: min(1260px, calc(100% - 36px)); margin: 0 auto; padding: 62px 0 100px; }
+    main { width: min(1260px, calc(100% - 36px)); margin: 0 auto; padding: 38px 0 86px; }
     .eyebrow { color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; }
     h1, h2, h3, p { margin-top: 0; }
-    h1 { max-width: 880px; margin-bottom: 20px; font: 500 clamp(48px, 7vw, 92px)/.96 var(--serif); letter-spacing: -.045em; }
+    h1 { max-width: 880px; margin-bottom: 14px; font: 500 clamp(44px, 6vw, 72px)/.98 var(--serif); letter-spacing: -.045em; }
     h2 { margin-bottom: 10px; font: 500 clamp(31px, 4vw, 50px)/1.05 var(--serif); letter-spacing: -.025em; }
     h3 { margin-bottom: 8px; font: 650 23px/1.15 var(--serif); }
     .lede { max-width: 820px; color: var(--muted); font-size: clamp(17px, 2vw, 21px); }
 
-    .status-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
+    .status-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
     .status {
       display: inline-flex;
       align-items: center;
@@ -100,8 +100,8 @@
       grid-template-columns: auto 1fr;
       gap: 18px;
       align-items: start;
-      margin-top: 38px;
-      padding: 24px;
+      margin-top: 24px;
+      padding: 18px 20px;
       border: 1px solid var(--line);
       border-radius: 22px;
       background: linear-gradient(135deg, rgba(221, 180, 93, .1), rgba(16, 27, 41, .72));
@@ -120,8 +120,8 @@
     .guardrail p { margin-bottom: 0; color: var(--muted); }
 
     .step {
-      margin-top: 72px;
-      padding-top: 28px;
+      margin-top: 54px;
+      padding-top: 24px;
       border-top: 1px solid var(--line);
     }
     .step-head { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 18px; align-items: start; margin-bottom: 28px; }
@@ -167,6 +167,27 @@
     .field-help { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
 
     .mission-card { margin-top: 18px; }
+    .mission-card > summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      list-style: none;
+      cursor: pointer;
+    }
+    .mission-card > summary::-webkit-details-marker { display: none; }
+    .mission-card > summary::after {
+      content: "Ver objetivos MES";
+      color: var(--gold-2);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .mission-card[open] > summary::after { content: "Ocultar objetivos"; }
+    .mission-summary { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .mission-summary-title { color: var(--ink); font: 650 20px/1.2 var(--serif); }
+    .mission-details { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(174, 184, 200, .16); }
     .mission-top { display: flex; gap: 14px; align-items: center; justify-content: space-between; }
     .mission-id { color: var(--gold-2); font: 700 30px/1 var(--serif); }
     .mission-meta { color: var(--muted); font-size: 13px; }
@@ -231,10 +252,32 @@
     .ob-code { color: var(--gold-2); font: 700 25px/1 var(--serif); }
     .competency-code { color: var(--blue); font-size: 11px; font-weight: 900; letter-spacing: .12em; }
     .source-badge { margin-left: auto; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+    .support-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 9px;
+      border: 1px solid rgba(116, 198, 157, .4);
+      border-radius: 999px;
+      color: #a6dfc2;
+      background: rgba(116, 198, 157, .08);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .support-badge.partial {
+      border-color: rgba(221, 180, 93, .48);
+      color: var(--gold-2);
+      background: rgba(221, 180, 93, .09);
+    }
     .candidate-title { margin: 5px 0 12px; color: var(--muted); font-size: 13px; }
     .candidate-text { margin-bottom: 16px; font-weight: 680; }
     .candidate textarea { min-height: 92px; }
     .candidate-note { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .support-row { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 12px; align-items: end; margin-top: 14px; }
+    .support-explanation { margin: 0; color: var(--muted); font-size: 12px; }
+    .support-select { min-height: 44px; }
 
     .search-row { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 12px; }
     .ob-results { display: grid; gap: 10px; margin-top: 18px; }
@@ -264,6 +307,7 @@
       background: #050a11;
       font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
+    .report-controls { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 14px; align-items: end; margin-bottom: 16px; }
 
     .authority { display: grid; gap: 9px; margin-top: 18px; }
     .authority div { padding: 11px 13px; border-left: 2px solid var(--gold); color: var(--muted); background: rgba(221, 180, 93, .05); font-size: 13px; }
@@ -283,6 +327,8 @@
       .candidate { grid-template-columns: 1fr; }
       .candidate-check { order: 2; }
       .source-badge { width: 100%; margin-left: 0; }
+      .support-row, .report-controls { grid-template-columns: 1fr; }
+      .mission-card > summary { grid-template-columns: 1fr; }
       h1 { font-size: clamp(45px, 15vw, 68px); }
     }
 
@@ -291,7 +337,7 @@
       body * { visibility: hidden; }
       #reportSection, #reportSection * { visibility: visible; }
       #reportSection { position: absolute; inset: 0; margin: 0; padding: 24px; border: 0; }
-      #reportSection .step-head, #reportSection .button-row, #reportSection .message { display: none; }
+      #reportSection .step-head, #reportSection .button-row, #reportSection .message, #reportSection .report-controls { display: none; }
       .report-box { overflow: visible; border: 0; color: #111; background: #fff; white-space: pre-wrap; }
     }
   </style>
@@ -302,7 +348,7 @@
       <strong>Veyra</strong>
       <span>Pilot Intelligence</span>
     </a>
-    <div class="top-title">Asistente del instructor · Prototipo académico</div>
+    <div class="top-title">Asistente del instructor · Prototipo académico v1.2</div>
     <a class="back-link" href="./internal-access.html">Volver</a>
   </header>
 
@@ -312,12 +358,10 @@
       <h1 id="pageTitle">Asistente del instructor</h1>
       <p class="lede">Organiza notas de sesión, las contrasta con la misión seleccionada y presenta comportamientos observables candidatos para revisión humana.</p>
 
-      <div class="status-row" aria-label="Límites del prototipo">
-        <span class="status">Sin IA generativa</span>
-        <span class="status">Sin Supabase</span>
+      <div class="status-row" aria-label="Alcance del prototipo">
+        <span class="status">Reglas locales · sin conexión a IA</span>
         <span class="status">Sin calificación automática</span>
-        <span class="status">73 OB disponibles</span>
-        <span class="status">21 misiones MES</span>
+        <span class="status">21 misiones · 73 OB</span>
       </div>
 
       <div class="guardrail">
@@ -363,20 +407,22 @@
         </div>
       </div>
 
-      <article class="card mission-card" id="missionCard" aria-live="polite">
-        <div class="mission-top">
-          <div>
-            <div class="mission-id" id="missionId"></div>
-            <div class="mission-meta" id="missionMeta"></div>
+      <details class="card mission-card" id="missionCard" aria-live="polite">
+        <summary>
+          <div class="mission-summary">
+            <span class="mission-id" id="missionId"></span>
+            <span class="mission-summary-title" id="missionTitle"></span>
+            <span class="mission-meta" id="missionMeta"></span>
+            <span class="status" id="missionProgram"></span>
           </div>
-          <span class="status" id="missionProgram"></span>
+        </summary>
+        <div class="mission-details">
+          <p id="missionSynthesis"></p>
+          <div class="eyebrow">Objetivos de referencia</div>
+          <ul class="objective-list" id="missionObjectives"></ul>
+          <div class="chips" id="missionFocus" aria-label="Foco de competencias de la misión"></div>
         </div>
-        <h3 id="missionTitle"></h3>
-        <p id="missionSynthesis"></p>
-        <div class="eyebrow">Objetivos de referencia</div>
-        <ul class="objective-list" id="missionObjectives"></ul>
-        <div class="chips" id="missionFocus" aria-label="Foco de competencias de la misión"></div>
-      </article>
+      </details>
     </section>
 
     <section class="step" aria-labelledby="noteTitle">
@@ -479,15 +525,24 @@
       <div class="step-head">
         <div class="step-number">06</div>
         <div>
-          <h2 id="reportTitle">Borrador trazable</h2>
-          <p>Genera un texto estructurado para revisar. No constituye una calificación ni un registro oficial.</p>
+          <h2 id="reportTitle">Reporte para revisión</h2>
+          <p>Elige una versión breve para uso cotidiano o una versión trazable para auditoría.</p>
         </div>
       </div>
 
-      <div id="reportMessage" class="message warning">Confirma únicamente OB respaldados por evidencia concreta.</div>
+      <div class="report-controls">
+        <div id="reportMessage" class="message warning" style="margin:0">Confirma únicamente OB respaldados por evidencia concreta.</div>
+        <div>
+          <label for="reportMode">Formato del reporte</label>
+          <select id="reportMode">
+            <option value="brief">Vista breve</option>
+            <option value="traceable">Borrador trazable</option>
+          </select>
+        </div>
+      </div>
       <pre class="report-box" id="reportText">El borrador aparecerá aquí.</pre>
       <div class="button-row">
-        <button class="btn primary" id="reportButton" type="button">Generar borrador</button>
+        <button class="btn primary" id="reportButton" type="button">Generar reporte</button>
         <button class="btn" id="copyButton" type="button" disabled>Copiar texto</button>
         <button class="btn" id="downloadButton" type="button" disabled>Descargar .txt</button>
         <button class="btn ghost" id="printButton" type="button" disabled>Imprimir</button>
@@ -502,7 +557,7 @@
     </section>
 
     <footer>
-      Prototipo Veyra v1.1 · La información permanece en este navegador durante la sesión y no se envía a un servidor. No ingreses datos personales reales durante la validación.
+      Prototipo Veyra v1.2 · La información permanece en este navegador durante la sesión y no se envía a un servidor. No ingreses datos personales reales durante la validación.
     </footer>
   </main>
 
@@ -964,12 +1019,22 @@ window.VEYRA_KB = (() => {
     "9.6": [["solicito", "asistencia"], ["pidio", "ayuda", "oportun"]],
     "9.7": [
       ["verifico", "accion", "otro medio"],
-      ["comprobo", "accion"],
-      ["detecto", "omision"],
-      ["retomo", "lista", "punto", "verific"]
+      ["comprobo", "accion", "medio diferente"],
+      ["contrasto", "accion", "fuente"]
     ],
     "9.8": [["verifico", "tarea", "resultado"], ["confirmo", "lista", "completa"]],
     "9.9": [["distraccion", "recuper"], ["interrupcion", "recuper"], ["falla", "carga", "gestion"]]
+  };
+
+  /*
+   * Coincidencias que son compatibles con parte del descriptor, pero no prueban
+   * todos sus elementos. Siempre deben mostrarse como evidencia parcial.
+   */
+  const partialEvidenceRules = {
+    "9.7": [
+      ["detecto", "omision"],
+      ["retomo", "lista", "punto", "verific"]
+    ]
   };
 
   const referencesByProgram = {
@@ -995,12 +1060,13 @@ window.VEYRA_KB = (() => {
   };
 
   return {
-    version: "1.1-prototipo",
+    version: "1.2-prototipo",
     sourceNotice: "Síntesis de trabajo basada en el MES y en los OB suministrados. Validación final requerida por la organización.",
     missions,
     competencyNames,
     obs,
     evidenceRules,
+    partialEvidenceRules,
     referencesByProgram
   };
 })();
@@ -1044,6 +1110,7 @@ window.VEYRA_KB = (() => {
     strengths: $("strengths"),
     development: $("development"),
     pendingChecks: $("pendingChecks"),
+    reportMode: $("reportMode"),
     reportMessage: $("reportMessage"),
     reportText: $("reportText"),
     reportButton: $("reportButton"),
@@ -1152,6 +1219,18 @@ window.VEYRA_KB = (() => {
     return kb.obs.find((ob) => ob.code === code);
   }
 
+  function matchingEvidence(sentences, patterns) {
+    const supports = [];
+    (patterns || []).forEach((pattern) => {
+      sentences.forEach((sentence) => {
+        const normalizedSentence = normalize(sentence);
+        const isMatch = pattern.every((token) => normalizedSentence.includes(normalize(token)));
+        if (isMatch && !supports.includes(sentence)) supports.push(sentence);
+      });
+    });
+    return supports;
+  }
+
   function detectCandidates(sentences) {
     const mission = selectedMission();
     const detected = [];
@@ -1160,24 +1239,36 @@ window.VEYRA_KB = (() => {
       const ob = obByCode(code);
       if (!ob) return;
 
-      const supports = [];
-      patterns.forEach((pattern) => {
-        sentences.forEach((sentence) => {
-          const normalizedSentence = normalize(sentence);
-          const isMatch = pattern.every((token) => normalizedSentence.includes(normalize(token)));
-          if (isMatch && !supports.includes(sentence)) supports.push(sentence);
-        });
-      });
+      const directSupports = matchingEvidence(sentences, patterns);
+      const partialSupports = matchingEvidence(sentences, kb.partialEvidenceRules?.[code]);
+      const supports = directSupports.length ? directSupports : partialSupports;
 
       if (supports.length) {
         detected.push({
           ob,
           evidence: supports.join("\n"),
           source: "regla conservadora",
+          supportLevel: directSupports.length ? "direct" : "partial",
           confirmed: false,
           missionPriority: mission.focus.includes(ob.competency) ? 1 : 0
         });
       }
+    });
+
+    Object.entries(kb.partialEvidenceRules || {}).forEach(([code, patterns]) => {
+      if (detected.some((candidate) => candidate.ob.code === code)) return;
+      const ob = obByCode(code);
+      if (!ob) return;
+      const supports = matchingEvidence(sentences, patterns);
+      if (!supports.length) return;
+      detected.push({
+        ob,
+        evidence: supports.join("\n"),
+        source: "regla conservadora",
+        supportLevel: "partial",
+        confirmed: false,
+        missionPriority: mission.focus.includes(ob.competency) ? 1 : 0
+      });
     });
 
     return detected.sort((a, b) => {
@@ -1246,6 +1337,12 @@ window.VEYRA_KB = (() => {
       heading.className = "candidate-heading";
       heading.appendChild(makeTextElement("strong", "ob-code", candidate.ob.code));
       heading.appendChild(makeTextElement("span", "competency-code", candidate.ob.competency));
+      const supportLevel = candidate.supportLevel === "direct" ? "direct" : "partial";
+      heading.appendChild(makeTextElement(
+        "span",
+        `support-badge${supportLevel === "partial" ? " partial" : ""}`,
+        supportLevel === "direct" ? "Evidencia directa" : "Compatibilidad parcial"
+      ));
       heading.appendChild(makeTextElement("span", "source-badge", candidate.source));
       content.appendChild(heading);
       content.appendChild(makeTextElement("div", "candidate-title", kb.competencyNames[candidate.ob.competency]));
@@ -1259,7 +1356,38 @@ window.VEYRA_KB = (() => {
       evidenceArea.setAttribute("aria-label", `Evidencia para OB ${candidate.ob.code}`);
       content.appendChild(evidenceLabel);
       content.appendChild(evidenceArea);
-      content.appendChild(makeTextElement("div", "candidate-note", "La confirmación pertenece al instructor; el sistema solo organiza la evidencia."));
+
+      const supportRow = document.createElement("div");
+      supportRow.className = "support-row";
+      const supportExplanation = makeTextElement(
+        "p",
+        "support-explanation",
+        supportLevel === "direct"
+          ? "La frase coincide con los elementos esenciales del descriptor. El instructor debe verificarlo antes de seleccionarlo."
+          : "La frase coincide solo con una parte del descriptor. Seleccionarla no demuestra el OB completo."
+      );
+      const supportField = document.createElement("div");
+      const supportLabel = document.createElement("label");
+      supportLabel.textContent = "Alcance de la evidencia";
+      const supportSelect = document.createElement("select");
+      supportSelect.className = "support-select";
+      supportSelect.setAttribute("aria-label", `Alcance de evidencia para OB ${candidate.ob.code}`);
+      [
+        ["direct", "Evidencia directa"],
+        ["partial", "Compatibilidad parcial"]
+      ].forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        option.selected = value === supportLevel;
+        supportSelect.appendChild(option);
+      });
+      supportField.appendChild(supportLabel);
+      supportField.appendChild(supportSelect);
+      supportRow.appendChild(supportExplanation);
+      supportRow.appendChild(supportField);
+      content.appendChild(supportRow);
+      content.appendChild(makeTextElement("div", "candidate-note", "Seleccionar el círculo incorpora esta asociación al borrador; no asigna una calificación."));
 
       checkbox.addEventListener("change", () => {
         candidate.confirmed = checkbox.checked && Boolean(candidate.evidence.trim());
@@ -1274,6 +1402,11 @@ window.VEYRA_KB = (() => {
           checkbox.checked = false;
           article.classList.remove("confirmed");
         }
+      });
+
+      supportSelect.addEventListener("change", () => {
+        candidate.supportLevel = supportSelect.value;
+        renderCandidates();
       });
 
       article.appendChild(checkbox);
@@ -1293,6 +1426,7 @@ window.VEYRA_KB = (() => {
         ob,
         evidence: "",
         source: "selección manual",
+        supportLevel: "partial",
         confirmed: false,
         missionPriority: 0
       });
@@ -1340,17 +1474,73 @@ window.VEYRA_KB = (() => {
     return compact || "No registrado en este borrador.";
   }
 
-  function generateReport() {
-    const mission = selectedMission();
-    const confirmed = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && candidate.evidence.trim());
-    const ignoredWithoutEvidence = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && !candidate.evidence.trim());
-    const date = elements.sessionDate.value || "Sin fecha";
-    const evidence = state.evidenceSentences.length ? state.evidenceSentences : splitEvidence(elements.rawNote.value);
-    const references = kb.referencesByProgram[mission.program] || kb.referencesByProgram.Instrumentos;
+  function compactValue(value) {
+    return String(value || "").replace(/\s+/g, " ").trim();
+  }
+
+  function supportText(candidate) {
+    return candidate.supportLevel === "direct"
+      ? "Evidencia directa validada por el instructor."
+      : "Compatibilidad parcial: la evidencia no cubre todos los elementos del descriptor.";
+  }
+
+  function appendConfirmedObs(lines, confirmed) {
+    if (!confirmed.length) {
+      lines.push("- Ningún OB seleccionado. No inferir competencia ni calificación.");
+      lines.push("");
+      return;
+    }
+
+    confirmed.forEach((candidate) => {
+      lines.push(`${candidate.ob.code} · ${candidate.ob.competency} · ${kb.competencyNames[candidate.ob.competency]}`);
+      lines.push(`OB: ${candidate.ob.text}`);
+      lines.push(`Alcance: ${supportText(candidate)}`);
+      lines.push(`Evidencia: ${candidate.evidence.trim()}`);
+      lines.push("");
+    });
+  }
+
+  function buildBriefReport({ mission, confirmed, date, evidence }) {
+    const lines = [];
+    const sessionRef = compactValue(elements.sessionRef.value);
+    const studentId = compactValue(elements.studentId.value);
+    const instructorId = compactValue(elements.instructorId.value);
+    const strengths = compactValue(elements.strengths.value);
+    const development = compactValue(elements.development.value);
+    const pendingChecks = compactValue(elements.pendingChecks.value);
+
+    lines.push("VEYRA · REPORTE BREVE DE OBSERVACIÓN");
+    lines.push("=====================================");
+    lines.push("Borrador para revisión humana · No constituye calificación");
+    lines.push("");
+    lines.push("CONTEXTO");
+    lines.push(`${mission.id} · ${mission.program} · ${mission.title}`);
+    lines.push(`Fecha: ${date}`);
+    if (sessionRef) lines.push(`Referencia: ${sessionRef}`);
+    if (studentId) lines.push(`Estudiante: ${studentId}`);
+    if (instructorId) lines.push(`Instructor: ${instructorId}`);
+    lines.push("");
+    lines.push("EVIDENCIA REGISTRADA");
+    if (evidence.length) evidence.forEach((sentence) => lines.push(`- ${sentence}`));
+    else lines.push("- No se registró evidencia observable.");
+    lines.push("");
+    lines.push("OB SELECCIONADOS Y VALIDADOS POR EL INSTRUCTOR");
+    appendConfirmedObs(lines, confirmed);
+    lines.push("CIERRE DEL INSTRUCTOR");
+    if (strengths) lines.push(`Fortalezas: ${strengths}`);
+    if (development) lines.push(`Foco de desarrollo: ${development}`);
+    if (pendingChecks) lines.push(`Pendiente por verificar: ${pendingChecks}`);
+    if (!strengths && !development && !pendingChecks) lines.push("- Sin cierre registrado.");
+    lines.push("");
+    lines.push("Nota: el reporte organiza evidencia escrita y OB seleccionados; no asigna niveles ni reemplaza el juicio del instructor.");
+    return lines;
+  }
+
+  function buildTraceableReport({ mission, confirmed, date, evidence, references, ignoredWithoutEvidence }) {
     const lines = [];
 
-    lines.push("VEYRA · BORRADOR DE OBSERVACIÓN DE SESIÓN");
-    lines.push("================================================");
+    lines.push("VEYRA · BORRADOR TRAZABLE DE OBSERVACIÓN DE SESIÓN");
+    lines.push("====================================================");
     lines.push("Estado: BORRADOR PARA REVISIÓN HUMANA · NO CONSTITUYE CALIFICACIÓN");
     lines.push("");
     lines.push("1. CONTEXTO");
@@ -1371,18 +1561,8 @@ window.VEYRA_KB = (() => {
     if (evidence.length) evidence.forEach((sentence) => lines.push(`- ${sentence}`));
     else lines.push("- No se registró evidencia observable.");
     lines.push("");
-    lines.push("4. COMPORTAMIENTOS OBSERVABLES CONFIRMADOS POR EL INSTRUCTOR");
-    if (confirmed.length) {
-      confirmed.forEach((candidate) => {
-        lines.push(`${candidate.ob.code} · ${candidate.ob.competency} · ${kb.competencyNames[candidate.ob.competency]}`);
-        lines.push(`OB: ${candidate.ob.text}`);
-        lines.push(`Evidencia: ${candidate.evidence.trim()}`);
-        lines.push("");
-      });
-    } else {
-      lines.push("- Ningún OB confirmado. No inferir competencia ni calificación.");
-      lines.push("");
-    }
+    lines.push("4. OB SELECCIONADOS Y VALIDADOS POR EL INSTRUCTOR");
+    appendConfirmedObs(lines, confirmed);
     lines.push("5. CIERRE DEL INSTRUCTOR");
     lines.push(`Fortalezas observadas: ${valueOrPending(elements.strengths.value)}`);
     lines.push(`Foco de desarrollo: ${valueOrPending(elements.development.value)}`);
@@ -1399,6 +1579,20 @@ window.VEYRA_KB = (() => {
     if (ignoredWithoutEvidence.length) lines.push("- Se detectaron selecciones sin evidencia; fueron excluidas del borrador.");
     lines.push("");
     lines.push(`Base académica: ${kb.version}. ${kb.sourceNotice}`);
+    return lines;
+  }
+
+  function generateReport() {
+    const mission = selectedMission();
+    const confirmed = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && candidate.evidence.trim());
+    const ignoredWithoutEvidence = Array.from(state.candidates.values()).filter((candidate) => candidate.confirmed && !candidate.evidence.trim());
+    const date = elements.sessionDate.value || "Sin fecha";
+    const evidence = state.evidenceSentences.length ? state.evidenceSentences : splitEvidence(elements.rawNote.value);
+    const references = kb.referencesByProgram[mission.program] || kb.referencesByProgram.Instrumentos;
+    const reportData = { mission, confirmed, date, evidence, references, ignoredWithoutEvidence };
+    const lines = elements.reportMode.value === "traceable"
+      ? buildTraceableReport(reportData)
+      : buildBriefReport(reportData);
 
     state.report = lines.join("\n");
     elements.reportText.textContent = state.report;
@@ -1406,9 +1600,10 @@ window.VEYRA_KB = (() => {
     elements.downloadButton.disabled = false;
     elements.printButton.disabled = false;
     elements.reportMessage.className = confirmed.length ? "message" : "message warning";
+    const partialCount = confirmed.filter((candidate) => candidate.supportLevel !== "direct").length;
     elements.reportMessage.textContent = confirmed.length
-      ? `${confirmed.length} OB confirmado(s) incluidos. Revisa el texto completo antes de usarlo.`
-      : "El borrador no incluye OB confirmados. Esto es válido cuando la evidencia es insuficiente.";
+      ? `${confirmed.length} OB incluido(s); ${partialCount} con compatibilidad parcial. Revisa el texto antes de usarlo.`
+      : "El reporte no incluye OB seleccionados. Esto es válido cuando la evidencia es insuficiente.";
   }
 
   async function copyReport() {
@@ -1416,7 +1611,7 @@ window.VEYRA_KB = (() => {
     try {
       await navigator.clipboard.writeText(state.report);
       elements.reportMessage.className = "message";
-      elements.reportMessage.textContent = "Borrador copiado al portapapeles.";
+      elements.reportMessage.textContent = "Reporte copiado al portapapeles.";
     } catch (error) {
       const area = document.createElement("textarea");
       area.value = state.report;
@@ -1426,14 +1621,15 @@ window.VEYRA_KB = (() => {
       area.select();
       document.execCommand("copy");
       area.remove();
-      elements.reportMessage.textContent = "Borrador copiado.";
+      elements.reportMessage.textContent = "Reporte copiado.";
     }
   }
 
   function downloadReport() {
     if (!state.report) return;
     const mission = selectedMission();
-    const fileName = `veyra-borrador-${mission.id.toLowerCase()}-${elements.sessionDate.value || "sin-fecha"}.txt`;
+    const reportType = elements.reportMode.value === "traceable" ? "trazable" : "breve";
+    const fileName = `veyra-reporte-${reportType}-${mission.id.toLowerCase()}-${elements.sessionDate.value || "sin-fecha"}.txt`;
     const blob = new Blob([state.report], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -1482,6 +1678,9 @@ window.VEYRA_KB = (() => {
   elements.obSearch.addEventListener("input", renderExplorer);
   elements.competencyFilter.addEventListener("change", renderExplorer);
   elements.reportButton.addEventListener("click", generateReport);
+  elements.reportMode.addEventListener("change", () => {
+    if (state.report) generateReport();
+  });
   elements.copyButton.addEventListener("click", copyReport);
   elements.downloadButton.addEventListener("click", downloadReport);
   elements.printButton.addEventListener("click", () => window.print());
