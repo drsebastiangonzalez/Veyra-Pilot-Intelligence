@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Veyra | Panel Instructor Pre-Solo</title>
+  <title>Veyra | Resultados Pre-Solo</title>
   <style>
     :root{
       --navy:#07111f; --cream:#f7f1e8; --gold:#d7a63a; --gold-soft:#ead7b5;
@@ -134,9 +134,9 @@
 
 <main>
 <section class="panel">
-  <div class="eyebrow">Instructor Assessment Dashboard</div>
-  <h1>Panel Pre-Solo</h1>
-  <p class="lead">Panel para revisar exámenes Pre-Solo guardados en Supabase desde el módulo Assessment: estudiante, nota, respuestas y preguntas falladas.</p>
+  <div class="eyebrow">Seguimiento académico · Instructores</div>
+  <h1>Resultados Pre-Solo</h1>
+  <p class="lead">Consulta directa de las evaluaciones realizadas en Assessment: estudiante, curso, nota, respuestas y preguntas falladas.</p>
 
   <div class="filters">
     <div>
@@ -144,12 +144,9 @@
       <input id="searchInput" placeholder="Nombre, curso o ID" />
     </div>
     <div>
-      <label>Tipo de examen</label>
-      <select id="examFilter">
+      <label>Evaluación</label>
+      <select id="examFilter" disabled>
         <option value="pre">Pre-Solo / Assessment</option>
-        <option value="all">Todos</option>
-        <option value="ppa">PPA</option>
-        <option value="pca">PCA</option>
       </select>
     </div>
     <div>
@@ -183,7 +180,6 @@
 
   <div class="actions">
     <a class="btn ghost" href="./internal-access.html">Volver al centro interno</a>
-    <a class="btn dark" href="./ppa-practice.html?v=409">Abrir PPA Practice</a>
     <button class="gold" onclick="exportCSV()">Exportar CSV</button>
     <button class="ghost" onclick="cerrarPanelInstructor()">Cerrar acceso</button>
   </div>
@@ -222,29 +218,42 @@
 
 <script>
 
-const PANEL_PASSWORD = "Veyra2026";
+const PANEL_ACCESS_HASH = "b7245e7fc481105f1761b032bf5200c55ffc4cac10f93f0942cd270ceba73a15";
+async function sha256(value){
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 function isPanelUnlocked(){
-  return sessionStorage.getItem("veyra_presolo_panel_unlocked") === "yes";
+  return sessionStorage.getItem("veyra_internal_access_unlocked") === "yes"
+    || sessionStorage.getItem("veyra_presolo_panel_unlocked") === "yes";
 }
 function showOrHideLock(){
   const lock = document.getElementById("lockScreen");
   if(!lock) return;
   lock.style.display = isPanelUnlocked() ? "none" : "flex";
 }
-function unlockPanel(){
+async function unlockPanel(){
   const input = document.getElementById("panelPassword");
   const error = document.getElementById("lockError");
-  if((input?.value || "") === PANEL_PASSWORD){
-    sessionStorage.setItem("veyra_presolo_panel_unlocked","yes");
-    showOrHideLock();
-    showOrHideLock();
-if(isPanelUnlocked()) loadData();
-  }else{
-    if(error) error.textContent = "Contraseña incorrecta.";
-    if(input){ input.value=""; input.focus(); }
+  try{
+    if(await sha256(input?.value || "") === PANEL_ACCESS_HASH){
+      sessionStorage.setItem("veyra_internal_access_unlocked","yes");
+      sessionStorage.setItem("veyra_presolo_panel_unlocked","yes");
+      showOrHideLock();
+      loadData();
+    }else{
+      if(error) error.textContent = "Contraseña incorrecta.";
+      if(input){ input.value=""; input.focus(); }
+    }
+  }catch{
+    if(error) error.textContent = "No fue posible validar el acceso en este navegador.";
   }
 }
 function cerrarPanelInstructor(){
+  sessionStorage.removeItem("veyra_internal_access_unlocked");
   sessionStorage.removeItem("veyra_presolo_panel_unlocked");
   showOrHideLock();
 }
@@ -285,7 +294,7 @@ function correctText(row){
   return val(row,["score_text","result_text"],"—");
 }
 function examName(row){
-  return val(row,["exam_name","exam","test_name","module","license","practice_type","assessment_type","type"],"Assessment");
+  return val(row,["evaluation","exam_name","exam","test_name","module","practice_type","assessment_type","type","license"],"Pre-Solo");
 }
 function studentName(row){
   return val(row,["student_name","student","name","nombre","full_name"],"Sin nombre");
@@ -310,8 +319,16 @@ function flattenText(row){
   return JSON.stringify(row).toLowerCase();
 }
 function isPreSolo(row){
-  const t = flattenText(row);
-  return t.includes("pre") || t.includes("solo") || t.includes("presolo") || t.includes("pre-solo") || t.includes("assessment");
+  const identity = [
+    val(row,["evaluation"],""),
+    val(row,["exam_name","exam","test_name"],""),
+    val(row,["module","practice_type","assessment_type","type"],""),
+    val(row,["bank_version","bankVersion"],""),
+    val(row,["license"],"")
+  ].join(" ").toLowerCase();
+
+  if(/(^|[^a-z])ppa([^a-z]|$)|(^|[^a-z])pca([^a-z]|$)/.test(identity)) return false;
+  return /pre[\s_-]*solo|presolo/.test(identity);
 }
 function datePass(row){
   const f = document.getElementById("dateFilter").value;
@@ -332,8 +349,6 @@ function filterRows(){
     if(q && !text.includes(q)) return false;
     if(!datePass(r)) return false;
     if(exam==="pre" && !isPreSolo(r)) return false;
-    if(exam==="ppa" && !text.includes("ppa")) return false;
-    if(exam==="pca" && !text.includes("pca")) return false;
     return true;
   });
   render();
@@ -349,8 +364,9 @@ async function loadData(){
       const err=await res.text();
       throw new Error(err);
     }
-    allRows=await res.json();
-    document.getElementById("status").textContent=`Intentos cargados correctamente: ${allRows.length}`;
+    const rows=await res.json();
+    allRows=rows.filter(isPreSolo);
+    document.getElementById("status").textContent=`Intentos Pre-Solo cargados: ${allRows.length}`;
     filterRows();
   }catch(e){
     document.getElementById("status").textContent="No pude leer exam_results. Revisa que exista la tabla y sus permisos RLS.";
@@ -385,7 +401,7 @@ function render(){
   document.getElementById("kBest").textContent=attempts?best+"%":"—";
   document.getElementById("kWeak").textContent=weakArea(filteredRows);
   if(!attempts){
-    rowsEl.innerHTML='<tr><td colspan="9" class="muted">No hay intentos con esos filtros. Cambia Fecha a “Todo” o Tipo de examen a “Todos”.</td></tr>';
+    rowsEl.innerHTML='<tr><td colspan="9" class="muted">No hay intentos Pre-Solo con esos filtros. Cambia Fecha a “Todo” o actualiza la consulta.</td></tr>';
     return;
   }
   rowsEl.innerHTML=filteredRows.map((r,i)=>{
@@ -489,5 +505,5 @@ if(isPanelUnlocked()) loadData();
 </script>
 </body>
 
-<!-- Veyra presolo instructor dashboard v1.1 password gate -->
+<!-- Veyra · Resultados Pre-Solo · acceso compartido v2.0 -->
 </html>
