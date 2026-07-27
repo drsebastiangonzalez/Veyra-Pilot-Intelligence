@@ -78,7 +78,10 @@
       border:1px solid rgba(255,255,255,.24);
       border-radius:999px;
       padding:11px 17px;
+      cursor:pointer;
+      background:transparent;
       color:var(--white);
+      font:inherit;
       text-decoration:none;
       font-size:12px;
       font-weight:800;
@@ -353,12 +356,225 @@
 
     .note strong{color:var(--navy)}
 
+    body.locked header,
+    body.locked main{
+      visibility:hidden;
+    }
+
+    .access-lock{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at 80% 12%, rgba(215,166,58,.16), transparent 28rem),
+        var(--navy);
+    }
+
+    body.access-granted .access-lock{display:none}
+
+    .access-card{
+      width:min(460px,100%);
+      padding:36px;
+      border:1px solid rgba(215,166,58,.55);
+      border-radius:24px;
+      background:rgba(12,29,51,.96);
+      color:var(--white);
+      box-shadow:0 24px 70px rgba(0,0,0,.28);
+    }
+
+    .access-brand{
+      margin-bottom:8px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:44px;
+      line-height:1;
+    }
+
+    .access-subbrand{
+      margin-bottom:34px;
+      color:#d8b35e;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:6px;
+    }
+
+    .access-card h2{
+      margin:0 0 10px;
+      color:var(--white);
+      font-size:30px;
+    }
+
+    .access-card p{
+      margin:0 0 22px;
+      color:#c7d0dc;
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .access-card label{
+      display:block;
+      margin-bottom:8px;
+      color:#f4dfaa;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.6px;
+      text-transform:uppercase;
+    }
+
+    .access-card input{
+      width:100%;
+      min-height:52px;
+      padding:13px 15px;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:12px;
+      outline:0;
+      background:#fff;
+      color:var(--navy);
+      font:inherit;
+    }
+
+    .access-card input:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.18);
+    }
+
+    .access-error{
+      min-height:20px;
+      margin:10px 0 0;
+      color:#ffb4ab;
+      font-size:13px;
+    }
+
+    .access-actions{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+    }
+
+    .access-actions button,
+    .access-actions a{
+      min-height:50px;
+      padding:14px 17px;
+      border:1px solid var(--gold);
+      border-radius:12px;
+      cursor:pointer;
+      font:inherit;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1.5px;
+      text-decoration:none;
+      text-transform:uppercase;
+    }
+
+    .access-actions button{
+      background:linear-gradient(180deg,#edc65d,#d5a139);
+      color:var(--navy);
+    }
+
+    .access-actions a{
+      display:grid;
+      place-items:center;
+      background:transparent;
+      color:#f4dfaa;
+    }
+
+    .tool-card.priority{
+      min-height:315px;
+      grid-column:1 / -1;
+      color:var(--white);
+      background:
+        radial-gradient(circle at 88% 18%, rgba(215,166,58,.22), transparent 19rem),
+        var(--navy);
+      border-color:rgba(215,166,58,.72);
+    }
+
+    .priority-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+      gap:36px;
+      align-items:end;
+    }
+
+    .priority .card-mark{color:#f2cc70;background:rgba(215,166,58,.1)}
+    .priority .status{color:#ead9ad;border-color:rgba(215,166,58,.36)}
+    .priority h2{color:var(--white)}
+    .priority p{color:#c7d0dc}
+    .priority .capabilities{color:#e4e9ef;margin-bottom:0}
+
+    .coming-soon{
+      margin-top:auto;
+      min-height:50px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.4px;
+      text-align:center;
+      text-transform:uppercase;
+    }
+
+    .admin-section{
+      margin-top:34px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.5);
+      overflow:hidden;
+    }
+
+    .admin-section summary{
+      min-height:78px;
+      padding:22px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      cursor:pointer;
+      color:var(--navy);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:20px;
+      font-weight:700;
+      list-style:none;
+    }
+
+    .admin-section summary::-webkit-details-marker{display:none}
+    .admin-section summary::after{content:"+";color:var(--gold-dark);font:700 25px/1 Arial,sans-serif}
+    .admin-section[open] summary::after{content:"−"}
+
+    .admin-content{
+      padding:0 24px 24px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:24px;
+      align-items:center;
+      border-top:1px solid var(--line);
+    }
+
+    .admin-content p{
+      margin:22px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .admin-content .btn{min-width:250px;margin-top:22px}
+
     @media(max-width:860px){
       .primary-grid{grid-template-columns:1fr}
+      .tool-card.priority{grid-column:auto}
+      .priority-layout{grid-template-columns:1fr}
       .tool-card{min-height:0}
       .quick-grid{grid-template-columns:1fr}
       .quick-link{border-right:0;border-bottom:1px solid var(--line)}
       .quick-link:last-child{border-bottom:0}
+      .admin-content{grid-template-columns:1fr}
+      .admin-content .btn{width:100%;min-width:0;margin-top:0}
     }
 
     @media(max-width:600px){
@@ -373,17 +589,35 @@
       .tool-card{padding:24px;border-radius:20px}
       .tool-card h2{font-size:30px}
       .status{font-size:9px;letter-spacing:.8px}
+      .access-card{padding:28px 22px}
+      .access-actions{grid-template-columns:1fr}
     }
   </style>
 </head>
-<body>
+<body class="locked">
+  <section class="access-lock" id="accessLock" aria-labelledby="access-title">
+    <form class="access-card" id="accessForm">
+      <div class="access-brand">Veyra</div>
+      <div class="access-subbrand">PILOT INTELLIGENCE</div>
+      <h2 id="access-title">Acceso de instructores</h2>
+      <p>Este espacio contiene resultados académicos e información de seguimiento. Ingresa la contraseña autorizada para continuar.</p>
+      <label for="accessPassword">Contraseña</label>
+      <input id="accessPassword" type="password" autocomplete="current-password" required />
+      <div class="access-error" id="accessError" role="alert" aria-live="polite"></div>
+      <div class="access-actions">
+        <button type="submit">Ingresar</button>
+        <a href="./index.html">Volver</a>
+      </div>
+    </form>
+  </section>
+
   <header>
     <div class="header-inner">
       <a class="logo" href="./index.html" aria-label="Volver al inicio de Veyra">
         <div class="brand">Veyra</div>
         <div class="subbrand">PILOT INTELLIGENCE</div>
       </a>
-      <a class="back-link" href="./index.html">Volver a Veyra</a>
+      <button class="back-link" type="button" onclick="logoutPortal()">Cerrar acceso</button>
     </div>
   </header>
 
@@ -392,34 +626,53 @@
       <div class="eyebrow">Uso interno · Instructores</div>
       <h1 id="page-title">Espacio del instructor</h1>
       <p class="lead">
-        Revisa el desempeño académico y transforma tus observaciones de sesión en reportes estructurados desde un solo lugar.
+        Consulta primero el progreso Pre‑solo y accede a las herramientas académicas del instructor desde un solo lugar.
       </p>
     </section>
 
     <section aria-labelledby="primary-tools">
-      <p class="section-label" id="primary-tools">Herramientas principales</p>
+      <p class="section-label" id="primary-tools">Prioridad académica</p>
 
       <div class="primary-grid">
-        <article class="tool-card">
+        <article class="tool-card priority">
           <div class="card-top">
             <div class="card-mark" aria-hidden="true">01</div>
-            <div class="status">Seguimiento académico</div>
+            <div class="status">Principal · Assessment</div>
           </div>
-          <h2>Panel instructor</h2>
-          <p>Consulta los resultados de las evaluaciones y revisa cada intento con el detalle necesario.</p>
+          <div class="priority-layout">
+            <div>
+              <h2>Resultados Pre‑solo</h2>
+              <p>Consulta directamente las evaluaciones realizadas en Assessment sin regresar a la página principal.</p>
+              <ul class="capabilities">
+                <li>Intentos, estudiantes, cursos y puntajes</li>
+                <li>Respuestas marcadas y respuestas correctas</li>
+                <li>Preguntas falladas, detalle y exportación CSV</li>
+              </ul>
+            </div>
+            <div class="card-action">
+              <a class="btn" href="./presolo-instructor-dashboard.html?v=2001">Abrir resultados Pre‑solo</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="card-top">
+            <div class="card-mark" aria-hidden="true">02</div>
+            <div class="status">Integración prevista</div>
+          </div>
+          <h2>Materias de tierra</h2>
+          <p>Espacio reservado para incorporar resultados y seguimiento de las asignaturas teóricas.</p>
           <ul class="capabilities">
-            <li>Intentos, estudiantes y puntajes</li>
-            <li>Respuestas marcadas y respuestas correctas</li>
-            <li>Preguntas falladas y exportación CSV</li>
+            <li>Progreso por materia</li>
+            <li>Intentos y áreas de refuerzo</li>
+            <li>Vista preparada para nuevos módulos</li>
           </ul>
-          <div class="card-action">
-            <a class="btn" href="./training-dashboard.html?v=instructor">Abrir panel instructor</a>
-          </div>
+          <div class="coming-soon">Disponible cuando se integren las materias</div>
         </article>
 
         <article class="tool-card featured">
           <div class="card-top">
-            <div class="card-mark" aria-hidden="true">02</div>
+            <div class="card-mark" aria-hidden="true">03</div>
             <div class="status">Versión 3.4 · 21 misiones · 73 OB</div>
           </div>
           <h2>Asistente del instructor</h2>
@@ -436,39 +689,70 @@
       </div>
     </section>
 
-    <section class="quick-section" aria-labelledby="quick-access">
-      <p class="section-label" id="quick-access">Accesos complementarios</p>
-      <div class="quick-grid">
-        <a class="quick-link" href="./ppa-practice.html?v=409">
-          <span>
-            <h3>PPA Practice</h3>
-            <p>Práctica con el banco activo.</p>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a>
-
-        <a class="quick-link" href="./index.html#assessment">
-          <span>
-            <h3>Assessment</h3>
-            <p>Evaluación y seguimiento formal.</p>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a>
-
-        <a class="quick-link" href="./index.html">
-          <span>
-            <h3>Inicio Veyra</h3>
-            <p>Regresa a la plataforma principal.</p>
-          </span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a>
+    <details class="admin-section">
+      <summary>Seguimiento administrativo · PPA y PCA</summary>
+      <div class="admin-content">
+        <p>Consulta secundaria para revisar el comportamiento general de PPA y PCA. No forma parte del flujo habitual del instructor.</p>
+        <a class="btn" href="./training-dashboard.html?v=admin">Abrir control administrativo</a>
       </div>
-    </section>
+    </details>
 
     <div class="note">
       <span aria-hidden="true">◆</span>
-      <span><strong>Revisión humana obligatoria:</strong> el asistente genera un borrador de apoyo y no reemplaza el juicio ni la calificación del instructor.</span>
+      <span><strong>Uso interno:</strong> los resultados académicos y el detalle de respuestas no deben compartirse con estudiantes. El asistente continúa sujeto a revisión humana.</span>
     </div>
   </main>
+  <script>
+    const ACCESS_HASH = "b7245e7fc481105f1761b032bf5200c55ffc4cac10f93f0942cd270ceba73a15";
+
+    async function sha256(value){
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function grantAccess(){
+      sessionStorage.setItem("veyra_internal_access_unlocked", "yes");
+      sessionStorage.setItem("veyra_presolo_panel_unlocked", "yes");
+      document.body.classList.remove("locked");
+      document.body.classList.add("access-granted");
+    }
+
+    function logoutPortal(){
+      sessionStorage.removeItem("veyra_internal_access_unlocked");
+      sessionStorage.removeItem("veyra_presolo_panel_unlocked");
+      document.body.classList.remove("access-granted");
+      document.body.classList.add("locked");
+      document.getElementById("accessPassword").value = "";
+      document.getElementById("accessPassword").focus();
+    }
+
+    document.getElementById("accessForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const input = document.getElementById("accessPassword");
+      const error = document.getElementById("accessError");
+      error.textContent = "";
+
+      try{
+        if(await sha256(input.value) === ACCESS_HASH){
+          grantAccess();
+        }else{
+          error.textContent = "Contraseña incorrecta.";
+          input.value = "";
+          input.focus();
+        }
+      }catch{
+        error.textContent = "No fue posible validar el acceso en este navegador.";
+      }
+    });
+
+    if(sessionStorage.getItem("veyra_internal_access_unlocked") === "yes"){
+      grantAccess();
+    }else{
+      document.getElementById("accessPassword").focus();
+    }
+  </script>
 </body>
 </html>
