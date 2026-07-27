@@ -650,7 +650,7 @@
               </ul>
             </div>
             <div class="card-action">
-              <a class="btn" href="./presolo-instructor-dashboard.html?v=2001">Abrir resultados Pre‑solo</a>
+              <a class="btn" href="./index.html?view=presolo-dashboard">Abrir resultados Pre‑solo</a>
             </div>
           </div>
         </article>
@@ -716,6 +716,7 @@
     function grantAccess(){
       sessionStorage.setItem("veyra_internal_access_unlocked", "yes");
       sessionStorage.setItem("veyra_presolo_panel_unlocked", "yes");
+      sessionStorage.setItem("veyra_dashboard_ok", "1");
       document.body.classList.remove("locked");
       document.body.classList.add("access-granted");
     }
@@ -723,6 +724,7 @@
     function logoutPortal(){
       sessionStorage.removeItem("veyra_internal_access_unlocked");
       sessionStorage.removeItem("veyra_presolo_panel_unlocked");
+      sessionStorage.removeItem("veyra_dashboard_ok");
       document.body.classList.remove("access-granted");
       document.body.classList.add("locked");
       document.getElementById("accessPassword").value = "";

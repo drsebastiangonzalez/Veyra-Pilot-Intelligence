@@ -1427,7 +1427,7 @@ main{max-width:1180px;}
       <p>Evaluaciones estructuradas para recopilar datos, orientar decisiones de entrenamiento y fortalecer la retroalimentación académica.</p>
       <div class="assessmentHeroActions">
         <button class="assessmentGoldBtn" onclick="document.getElementById('assessmentForm').scrollIntoView({behavior:'smooth',block:'start'})">Iniciar evaluación <span>→</span></button>
-        <button class="assessmentOutlineBtn" onclick="showDashboard()">Acceso interno</button>
+        <button class="assessmentOutlineBtn" onclick="location.href='internal-access.html'">Acceso interno</button>
       </div>
     </div>
   </div>
@@ -1734,11 +1734,11 @@ main{max-width:1180px;}
   <div class="contactPanel contentBlock"><h1>Queremos ofrecerte una mejor experiencia de preparación.</h1><p>Bogotá, Colombia.</p><div class="contactLinks"><div>Contáctenos</div><a href="mailto:veyrapilotintelligence@gmail.com">veyrapilotintelligence@gmail.com</a><br><a href="https://wa.me/573002006836" target="_blank">+57 300 200 6836</a></div><div class="actions"><button class="primary" onclick="showScreen('help')">Solicitar soporte</button></div></div>
 </section>
 <section id="exam" class="screen"><div class="examHeader"><div><b>Pre-Solo</b> <span id="progress"></span></div><div class="timer" id="timer">12:00</div></div><div id="questionsContainer"></div><button class="primary" onclick="submitExam(false)">Finalizar evaluación</button></section>
-<section id="result" class="card screen"><span class="viewTag">Vista del estudiante</span><h1>Resultado de la evaluación</h1><div id="resultContent"></div><div class="actions"><button class="primary" onclick="showScreen('start')">Nuevo intento</button><button class="ghost" onclick="showDashboard()">Acceso interno</button></div></section>
+<section id="result" class="card screen"><span class="viewTag">Vista del estudiante</span><h1>Resultado de la evaluación</h1><div id="resultContent"></div><div class="actions"><button class="primary" onclick="showScreen('start')">Nuevo intento</button><button class="ghost" onclick="location.href='internal-access.html'">Acceso interno</button></div></section>
 <section id="dashboard" class="screen">
 <div id="dashboardLock" class="card lockBox" style="display:none"><h1>Acceso interno Veyra</h1><p class="muted">Ingresa la clave para consultar resultados consolidados.</p><label>Clave de acceso<input id="dashboardPassword" type="password" placeholder="Clave"></label><div class="actions"><button class="primary" onclick="unlockDashboard()">Ingresar</button></div></div>
 <div id="dashboardContent" style="display:none">
-<div class="card"><span class="viewTag">Vista interna</span><h1>Dashboard Veyra</h1><p class="muted">Resultados consolidados desde Supabase con filtros por programa, curso, evaluador y resultado. Esta vista está destinada a análisis interno.</p><div class="filters"><label>Estudiante<input id="filterStudent" placeholder="Nombre del estudiante" oninput="renderDashboard(false)" onkeydown="if(event.key===\'Enter\')renderDashboard(false)"></label><label>Programa<select id="filterProgram" onchange="renderDashboard(false)"><option value="all">Todos</option><option>AC</option><option>MC</option><option>SC</option><option>MT</option><option>Adición al equipo</option><option>Convalidación</option><option>Otro</option></select></label><label>Curso<input id="filterCourse" placeholder="Ej. AC 01" oninput="renderDashboard(false)"></label><label>Evaluador<input id="filterInstructor" placeholder="Todos" oninput="renderDashboard(false)"></label><label>Estado<select id="filterStatus" onchange="renderDashboard(false)"><option value="all">Todos</option><option value="pass">Cumple</option><option value="fail">No cumple</option></select></label><label>Fuente<select id="filterSource" onchange="renderDashboard(false)"><option value="remote">Supabase</option><option value="local">Local</option></select></label></div><div id="dashboardStatus" class="statusLine"></div><div id="kpis" class="kpis" style="margin-top:16px"></div><div class="chartGrid"><div class="chartBox"><div class="chartTitle">Cumplimiento por curso</div><div class="chartHint">Porcentaje de estudiantes que cumplen y no cumplen, calculado con los intentos filtrados.</div><div id="coursePassChart"></div><div class="legend"><span><i class="pass"></i>Cumple</span><span><i class="fail"></i>No cumple</span></div></div><div class="chartBox"><div class="chartTitle">Materias con mayor dificultad</div><div class="chartHint">Materias oficiales con más errores o menor desempeño dentro del curso/filtro seleccionado.</div><div id="difficultTopicsChart"></div><div class="legend"><span><i class="gold"></i>% de dificultad</span></div></div></div><div class="actions dashboardActions"><button class="ghost" onclick="renderDashboard(true)">Actualizar datos</button><button class="ghost" onclick="downloadCSV()">Descargar CSV general</button><button class="ghost" onclick="downloadDetailedCSV()">Descargar CSV detallado</button><button class="danger" onclick="clearResults()">Borrar resultados locales</button><button class="danger" onclick="location.href='internal-access.html'">Cerrar acceso interno</button></div></div>
+<div class="card"><span class="viewTag">Vista interna</span><h1>Dashboard Veyra</h1><p class="muted">Resultados consolidados desde Supabase con filtros por programa, curso, evaluador y resultado. Esta vista está destinada a análisis interno.</p><div class="filters"><label>Estudiante<input id="filterStudent" placeholder="Nombre del estudiante" oninput="renderDashboard(false)" onkeydown="if(event.key===\'Enter\')renderDashboard(false)"></label><label>Programa<select id="filterProgram" onchange="renderDashboard(false)"><option value="all">Todos</option><option>AC</option><option>MC</option><option>SC</option><option>MT</option><option>Adición al equipo</option><option>Convalidación</option><option>Otro</option></select></label><label>Curso<input id="filterCourse" placeholder="Ej. AC 01" oninput="renderDashboard(false)"></label><label>Evaluador<input id="filterInstructor" placeholder="Todos" oninput="renderDashboard(false)"></label><label>Estado<select id="filterStatus" onchange="renderDashboard(false)"><option value="all">Todos</option><option value="pass">Cumple</option><option value="fail">No cumple</option></select></label><label>Fuente<select id="filterSource" onchange="renderDashboard(false)"><option value="remote">Supabase</option><option value="local">Local</option></select></label></div><div id="dashboardStatus" class="statusLine"></div><div id="kpis" class="kpis" style="margin-top:16px"></div><div class="chartGrid"><div class="chartBox"><div class="chartTitle">Cumplimiento por curso</div><div class="chartHint">Porcentaje de estudiantes que cumplen y no cumplen, calculado con los intentos filtrados.</div><div id="coursePassChart"></div><div class="legend"><span><i class="pass"></i>Cumple</span><span><i class="fail"></i>No cumple</span></div></div><div class="chartBox"><div class="chartTitle">Materias con mayor dificultad</div><div class="chartHint">Materias oficiales con más errores o menor desempeño dentro del curso/filtro seleccionado.</div><div id="difficultTopicsChart"></div><div class="legend"><span><i class="gold"></i>% de dificultad</span></div></div></div><div class="actions dashboardActions"><button class="ghost" onclick="renderDashboard(true)">Actualizar datos</button><button class="ghost" onclick="downloadCSV()">Descargar CSV general</button><button class="ghost" onclick="downloadDetailedCSV()">Descargar CSV detallado</button><button class="danger" onclick="clearResults()">Borrar resultados locales</button><button class="ghost" onclick="location.href='internal-access.html'">Volver al centro interno</button></div></div>
 <div class="grid two"><div class="card"><h2>Resultados por intento</h2><div id="attemptTable"></div></div><div class="card"><h2>Desempeño por materia</h2><div id="categoryTable"></div></div></div>
 <div class="grid two"><div class="card"><h2>Resultados por programa</h2><div id="programTable"></div></div><div class="card"><h2>Resultados por curso</h2><div id="courseTable"></div></div></div><div class="card"><h2>Resultados por evaluador</h2><div id="instructorTable"></div></div>
 <div class="card"><h2>Preguntas más falladas</h2><div id="missedTable"></div></div>
@@ -2919,6 +2919,26 @@ window.addEventListener('pageshow', veyraForceTimerRefresh);
 document.addEventListener('touchstart', veyraForceTimerRefresh, {passive:true});
 document.addEventListener('click', veyraForceTimerRefresh);
 
+</script>
+
+<script>
+/* === Veyra v2.9.7 · Dashboard Pre-Solo unificado === */
+document.addEventListener("DOMContentLoaded", function(){
+  try{
+    const requestedView = new URLSearchParams(window.location.search).get("view");
+    if(requestedView !== "presolo-dashboard") return;
+
+    if(sessionStorage.getItem("veyra_internal_access_unlocked") === "yes"){
+      sessionStorage.setItem("veyra_dashboard_ok", "1");
+    }
+
+    setTimeout(function(){
+      if(typeof showDashboard === "function") showDashboard();
+    }, 80);
+  }catch(e){
+    console.warn("No fue posible abrir el Dashboard Pre-Solo.", e);
+  }
+});
 </script>
 
 <script>
