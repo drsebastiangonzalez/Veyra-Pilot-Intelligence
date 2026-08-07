@@ -392,11 +392,13 @@
     .filters{
       padding:18px;
       display:grid;
-      grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(150px,.75fr)) auto;
-      gap:12px;
+      grid-template-columns:minmax(220px,1.5fr) minmax(132px,.52fr) minmax(180px,.82fr) minmax(150px,.7fr) auto;
+      column-gap:16px;
+      row-gap:12px;
       align-items:end;
       border-bottom:1px solid var(--line);
     }
+    .filter{min-width:0}
     .filter label{
       display:block;
       margin-bottom:7px;
@@ -408,6 +410,8 @@
     }
     .filter input,.filter select{
       width:100%;
+      min-width:0;
+      max-width:100%;
       min-height:44px;
       padding:10px 12px;
       border:1px solid var(--line);
@@ -721,6 +725,15 @@
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,reminder_sent_at";
+    const DEFAULT_INSTRUCTORS = [
+      "Cap. García",
+      "Cap. González",
+      "Cap. Gutiérrez",
+      "Cap. Sabogal",
+      "Cap. Sebastián González",
+      "Cap. Vargas",
+      "Cap. Vega"
+    ];
     const BOGOTA_TZ = "America/Bogota";
     const db = window.supabase
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -954,9 +967,9 @@
     function populateInstructors(rows){
       const select = $("instructorFilter");
       const current = select.value;
-      const names = Array.from(new Set(rows.map(function(row){
+      const names = Array.from(new Set(DEFAULT_INSTRUCTORS.concat(rows.map(function(row){
         return String(row.instructor_name || "").trim();
-      }).filter(Boolean))).sort(function(a,b){ return a.localeCompare(b,"es"); });
+      }).filter(Boolean)))).sort(function(a,b){ return a.localeCompare(b,"es"); });
       select.innerHTML = '<option value="">Todos</option>';
       names.forEach(function(name){
         const option = document.createElement("option");
