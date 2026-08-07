@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Veyra | Control VOA</title>
+  <style>
+    :root{
+      --navy:#07111f;
+      --navy-soft:#10233d;
+      --cream:#f7f1e8;
+      --cream-light:#fcfaf6;
+      --gold:#d7a63a;
+      --gold-dark:#b98017;
+      --gold-soft:#ead7b5;
+      --text:#101828;
+      --muted:#667085;
+      --line:#dfd5c6;
+      --white:#fff;
+      --green:#08774b;
+      --green-soft:#e9f7f0;
+      --red:#b42318;
+      --red-soft:#fff0ee;
+      --amber:#986b12;
+      --amber-soft:#fff7df;
+      --shadow:0 18px 48px rgba(7,17,31,.08);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(7,17,31,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(7,17,31,.025) 1px,transparent 1px),
+        radial-gradient(circle at 92% 0%,rgba(215,166,58,.14),transparent 29rem),
+        linear-gradient(180deg,var(--cream-light),var(--cream));
+      background-size:46px 46px,46px 46px,auto,auto;
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      color:var(--white);
+      background:rgba(7,17,31,.98);
+      border-bottom:2px solid var(--gold);
+      backdrop-filter:blur(14px);
+    }
+    .header-inner{
+      width:min(1320px,calc(100% - 42px));
+      min-height:88px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:22px;
+    }
+    .logo{color:inherit;text-decoration:none}
+    .brand{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:38px;
+      line-height:.9;
+      letter-spacing:-1px;
+    }
+    .subbrand{
+      margin-top:8px;
+      color:#d8b35e;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:6px;
+    }
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .header-email{
+      max-width:280px;
+      overflow:hidden;
+      color:#c7d0dc;
+      font-size:12px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .ghost-btn,.back-link{
+      min-height:40px;
+      padding:10px 14px;
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:999px;
+      background:transparent;
+      color:var(--white);
+      text-decoration:none;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .ghost-btn:hover,.ghost-btn:focus-visible,.back-link:hover,.back-link:focus-visible{
+      border-color:var(--gold);
+      background:rgba(255,255,255,.07);
+    }
+
+    .auth-shell{
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+      min-height:100vh;
+      padding:clamp(28px,5vw,76px);
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) minmax(380px,480px);
+      align-items:center;
+      gap:clamp(44px,7vw,110px);
+      background:
+        radial-gradient(circle at 88% 4%,rgba(227,181,74,.30),transparent 24rem),
+        radial-gradient(circle at 4% 94%,rgba(48,112,166,.36),transparent 34rem),
+        linear-gradient(118deg,#06101d 0%,#0b2845 48%,#071522 100%);
+    }
+    .auth-shell::before{
+      content:"";
+      position:absolute;
+      z-index:-2;
+      inset:-10%;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+      background-size:64px 64px;
+      transform:perspective(720px) rotateX(58deg) rotateZ(-8deg) scale(1.35);
+      transform-origin:center bottom;
+      -webkit-mask-image:linear-gradient(180deg,transparent 5%,#000 52%,transparent 96%);
+      mask-image:linear-gradient(180deg,transparent 5%,#000 52%,transparent 96%);
+    }
+    .auth-shell::after{
+      content:"VOA";
+      position:absolute;
+      z-index:-1;
+      right:-.04em;
+      bottom:-.21em;
+      color:rgba(255,255,255,.055);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(210px,35vw,560px);
+      font-weight:700;
+      letter-spacing:-.09em;
+      line-height:1;
+      pointer-events:none;
+    }
+    .auth-intro{
+      position:relative;
+      z-index:1;
+      width:min(610px,100%);
+      color:var(--white);
+    }
+    .auth-intro-label{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:22px;
+      color:#f0ca70;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:3.2px;
+      text-transform:uppercase;
+    }
+    .auth-intro-label::before{
+      content:"";
+      width:44px;
+      height:2px;
+      background:var(--gold);
+    }
+    .auth-intro h2{
+      max-width:560px;
+      margin:0;
+      color:var(--white);
+      font-size:clamp(48px,6vw,84px);
+      font-weight:400;
+      line-height:.98;
+      letter-spacing:-2.2px;
+    }
+    .auth-intro p{
+      max-width:500px;
+      margin:24px 0 0;
+      color:#cdd9e5;
+      font-size:16px;
+      line-height:1.65;
+    }
+    .flight-route{
+      position:relative;
+      width:min(430px,88%);
+      height:54px;
+      margin-top:38px;
+      border-top:1px dashed rgba(240,202,112,.66);
+    }
+    .flight-route::before,.flight-route::after{
+      content:"";
+      position:absolute;
+      top:-6px;
+      width:11px;
+      height:11px;
+      border:2px solid #f0ca70;
+      border-radius:50%;
+      background:#0a2139;
+    }
+    .flight-route::before{left:0}
+    .flight-route::after{right:0}
+    .route-code{
+      position:absolute;
+      top:13px;
+      color:#9eb0c2;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:1.8px;
+    }
+    .route-code:first-child{left:0}
+    .route-code:last-child{right:0}
+    .auth-card{
+      position:relative;
+      z-index:2;
+      width:min(480px,100%);
+      padding:36px;
+      border:1px solid rgba(240,202,112,.72);
+      border-top:4px solid #e4b84f;
+      border-radius:24px;
+      background:linear-gradient(145deg,rgba(13,39,65,.92),rgba(4,15,27,.97));
+      color:var(--white);
+      box-shadow:0 32px 90px rgba(0,0,0,.46),0 0 0 1px rgba(255,255,255,.04) inset;
+      -webkit-backdrop-filter:blur(18px);
+      backdrop-filter:blur(18px);
+    }
+    .auth-brand{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:46px;
+      line-height:1;
+    }
+    .auth-subbrand{
+      margin:8px 0 34px;
+      color:#d8b35e;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:6px;
+    }
+    .auth-card h1,
+    #loginForm > h1,
+    #passwordForm > h1{
+      margin:0 0 10px;
+      color:#ffffff!important;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:32px;
+      line-height:1.08;
+      text-shadow:0 2px 18px rgba(0,0,0,.32);
+    }
+    .auth-card p{margin:0 0 24px;color:#c7d0dc;font-size:15px;line-height:1.55}
+    .field{margin-top:16px}
+    .field label{
+      display:block;
+      margin-bottom:8px;
+      color:#f4dfaa;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+    .field input{
+      width:100%;
+      min-height:52px;
+      padding:13px 15px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:12px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.2)}
+    .primary-btn{
+      width:100%;
+      min-height:52px;
+      margin-top:20px;
+      padding:14px 18px;
+      border:1px solid var(--gold);
+      border-radius:12px;
+      background:linear-gradient(180deg,#edc65d,#d5a139);
+      color:var(--navy);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+    }
+    .primary-btn:disabled{cursor:wait;opacity:.7}
+    .link-btn{
+      width:100%;
+      margin-top:14px;
+      padding:8px;
+      border:0;
+      background:transparent;
+      color:#f4dfaa;
+      font-size:13px;
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .auth-message{min-height:21px;margin-top:14px;font-size:13px;line-height:1.45}
+    .auth-message.error{color:#ffb4ab}
+    .auth-message.success{color:#a7e5c6}
+    .auth-back{
+      margin-top:22px;
+      display:block;
+      color:#c7d0dc;
+      text-align:center;
+      font-size:13px;
+    }
+
+    main{
+      width:min(1320px,calc(100% - 42px));
+      margin:auto;
+      padding:46px 0 70px;
+    }
+    .hero{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:28px;
+      margin-bottom:28px;
+    }
+    .eyebrow{
+      margin-bottom:12px;
+      color:var(--gold-dark);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:3px;
+      text-transform:uppercase;
+    }
+    h1,h2{font-family:Georgia,"Times New Roman",serif;color:var(--navy)}
+    .hero h1{
+      margin:0;
+      font-size:clamp(42px,6vw,68px);
+      line-height:.98;
+      letter-spacing:-1.8px;
+    }
+    .hero p{max-width:690px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
+    .sync{
+      min-width:210px;
+      color:var(--muted);
+      text-align:right;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .sync strong{display:block;color:var(--navy);font-size:13px}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .stat{
+      min-height:124px;
+      padding:22px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.82);
+      box-shadow:var(--shadow);
+    }
+    .stat-label{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .stat-value{
+      margin-top:10px;
+      color:var(--navy);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:42px;
+      line-height:1;
+    }
+    .stat.confirmed{border-top:3px solid var(--green)}
+    .stat.declined{border-top:3px solid var(--red)}
+    .stat.pending{border-top:3px solid var(--gold)}
+    .stat.total{border-top:3px solid var(--navy)}
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.86);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .filters{
+      padding:18px;
+      display:grid;
+      grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(150px,.75fr)) auto;
+      gap:12px;
+      align-items:end;
+      border-bottom:1px solid var(--line);
+    }
+    .filter label{
+      display:block;
+      margin-bottom:7px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .filter input,.filter select{
+      width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .filter input:focus,.filter select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.15)}
+    .refresh-btn{
+      min-height:44px;
+      padding:10px 15px;
+      border:1px solid var(--gold);
+      border-radius:11px;
+      background:var(--navy);
+      color:var(--white);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .toolbar-row{
+      padding:13px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      border-bottom:1px solid var(--line);
+      background:#fbf8f2;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .check{display:flex;align-items:center;gap:9px}
+    .check input{width:17px;height:17px;accent-color:var(--navy)}
+
+    .table-wrap{overflow:auto}
+    table{width:100%;min-width:1080px;border-collapse:collapse}
+    th{
+      padding:14px 16px;
+      background:var(--navy);
+      color:#f1d898;
+      text-align:left;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    td{
+      padding:16px;
+      border-bottom:1px solid #ece4d8;
+      color:#344054;
+      font-size:13px;
+      line-height:1.45;
+      vertical-align:top;
+    }
+    tbody tr:hover{background:#fffcf7}
+    .student{color:var(--navy);font-weight:800}
+    .cell-title{color:var(--navy);font-weight:700}
+    .cell-sub{margin-top:3px;color:var(--muted);font-size:12px}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+    .badge.confirmed{color:var(--green);background:var(--green-soft)}
+    .badge.declined{color:var(--red);background:var(--red-soft)}
+    .badge.pending{color:var(--amber);background:var(--amber-soft)}
+    .reminder.sent{color:var(--green);font-weight:800}
+    .reminder.waiting{color:var(--muted)}
+    .empty,.loading,.error-box{
+      padding:54px 24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+    .error-box{color:var(--red)}
+    .mobile-list{display:none}
+    .privacy-note{
+      margin-top:18px;
+      padding:15px 17px;
+      border-left:3px solid var(--gold);
+      background:rgba(255,255,255,.5);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .privacy-note strong{color:var(--navy)}
+
+    @media(max-width:1050px){
+      .auth-shell{
+        grid-template-columns:1fr;
+        justify-items:center;
+        gap:28px;
+        padding-top:44px;
+        padding-bottom:44px;
+      }
+      .auth-intro{text-align:center}
+      .auth-intro-label{justify-content:center;margin-bottom:12px}
+      .auth-intro h2{max-width:none;font-size:clamp(38px,7vw,58px)}
+      .auth-intro p{margin:14px auto 0;font-size:14px}
+      .flight-route{height:30px;margin:24px auto 0}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .refresh-btn{width:100%}
+    }
+    @media(max-width:720px){
+      .header-inner,main{width:min(100% - 28px,1320px)}
+      .header-email{display:none}
+      .hero{align-items:flex-start;flex-direction:column}
+      .sync{text-align:left}
+      .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+      .stat{min-height:108px;padding:17px}
+      .stat-value{font-size:36px}
+      .filters{grid-template-columns:1fr}
+      .toolbar-row{align-items:flex-start;flex-direction:column}
+      .table-wrap{display:none}
+      .mobile-list{display:grid;gap:12px;padding:14px}
+      .session-card{
+        padding:17px;
+        border:1px solid var(--line);
+        border-radius:15px;
+        background:var(--white);
+      }
+      .session-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+      .session-card h2{margin:0;font:800 16px/1.3 Arial,sans-serif}
+      .session-card dl{margin:15px 0 0;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:12px}
+      .session-card dt{color:var(--muted)}
+      .session-card dd{margin:0;color:#344054}
+      .auth-shell{padding:18px}
+      .auth-intro{display:none}
+      .auth-card{padding:29px 22px}
+    }
+    @media(max-width:430px){
+      .back-link{display:none}
+      .brand{font-size:34px}
+      .subbrand{font-size:8px;letter-spacing:4.5px}
+      .stats{grid-template-columns:1fr 1fr}
+      .stat-label{font-size:9px}
+    }
+  </style>
+</head>
+<body>
+  <section class="auth-shell" id="authShell">
+    <div class="auth-intro" aria-hidden="true">
+      <div class="auth-intro-label">Control operacional</div>
+      <h2>Asistencia clara.<br />Decisiones a tiempo.</h2>
+      <p>Un punto único para consultar el estado de cada sesión VOA con precisión y trazabilidad.</p>
+      <div class="flight-route">
+        <span class="route-code">SESSION</span>
+        <span class="route-code">CONFIRMED</span>
+      </div>
+    </div>
+    <form class="auth-card" id="loginForm">
+      <div class="auth-brand">Veyra</div>
+      <div class="auth-subbrand">PILOT INTELLIGENCE</div>
+      <h1>Control VOA</h1>
+      <p>Inicia sesión con la cuenta administradora autorizada para consultar el estado de asistencia.</p>
+      <div class="field">
+        <label for="email">Correo autorizado</label>
+        <input id="email" type="email" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" required />
+      </div>
+      <button class="primary-btn" id="loginButton" type="submit">Ingresar al panel</button>
+      <button class="link-btn" id="resetButton" type="button">Restablecer contraseña</button>
+      <div class="auth-message" id="authMessage" role="alert" aria-live="polite"></div>
+      <a class="auth-back" href="./internal-access.html">Volver al espacio del instructor</a>
+    </form>
+
+    <form class="auth-card hidden" id="passwordForm">
+      <div class="auth-brand">Veyra</div>
+      <div class="auth-subbrand">PILOT INTELLIGENCE</div>
+      <h1>Define tu contraseña</h1>
+      <p>El enlace fue validado. Crea una contraseña de al menos ocho caracteres para completar el acceso.</p>
+      <div class="field">
+        <label for="newPassword">Nueva contraseña</label>
+        <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required />
+      </div>
+      <div class="field">
+        <label for="confirmPassword">Confirmar contraseña</label>
+        <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required />
+      </div>
+      <button class="primary-btn" id="passwordButton" type="submit">Guardar contraseña</button>
+      <div class="auth-message" id="passwordMessage" role="alert" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <div class="hidden" id="app">
+    <header>
+      <div class="header-inner">
+        <a class="logo" href="./internal-access.html" aria-label="Volver al espacio del instructor">
+          <div class="brand">Veyra</div>
+          <div class="subbrand">PILOT INTELLIGENCE</div>
+        </a>
+        <div class="header-actions">
+          <span class="header-email" id="sessionEmail"></span>
+          <a class="back-link" href="./internal-access.html">Espacio del instructor</a>
+          <button class="ghost-btn" id="logoutButton" type="button">Cerrar sesión</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Administración · Asistencia</div>
+          <h1>Control VOA</h1>
+          <p>Consulta confirmaciones, estudiantes que no pueden asistir y respuestas pendientes desde una sola vista protegida.</p>
+        </div>
+        <div class="sync" aria-live="polite">
+          <strong id="syncLabel">Preparando datos…</strong>
+          <span>Actualización automática cada minuto</span>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Resumen de asistencia">
+        <article class="stat total">
+          <div class="stat-label">Sesiones visibles</div>
+          <div class="stat-value" id="totalCount">0</div>
+        </article>
+        <article class="stat confirmed">
+          <div class="stat-label">Confirmadas</div>
+          <div class="stat-value" id="confirmedCount">0</div>
+        </article>
+        <article class="stat declined">
+          <div class="stat-label">No puede asistir</div>
+          <div class="stat-value" id="declinedCount">0</div>
+        </article>
+        <article class="stat pending">
+          <div class="stat-label">Pendientes</div>
+          <div class="stat-value" id="pendingCount">0</div>
+        </article>
+      </section>
+
+      <section class="panel" aria-label="Sesiones VOA">
+        <div class="filters">
+          <div class="filter">
+            <label for="searchInput">Buscar</label>
+            <input id="searchInput" type="search" placeholder="Estudiante, misión, equipo o lugar" />
+          </div>
+          <div class="filter">
+            <label for="dateFilter">Fecha</label>
+            <input id="dateFilter" type="date" />
+          </div>
+          <div class="filter">
+            <label for="instructorFilter">Instructor</label>
+            <select id="instructorFilter"><option value="">Todos</option></select>
+          </div>
+          <div class="filter">
+            <label for="statusFilter">Estado</label>
+            <select id="statusFilter">
+              <option value="">Todos</option>
+              <option value="confirmed">Confirmadas</option>
+              <option value="declined">No puede asistir</option>
+              <option value="pending">Pendientes</option>
+            </select>
+          </div>
+          <button class="refresh-btn" id="refreshButton" type="button">Actualizar</button>
+        </div>
+
+        <div class="toolbar-row">
+          <label class="check">
+            <input id="includePast" type="checkbox" />
+            <span>Incluir sesiones anteriores</span>
+          </label>
+          <span id="resultCount">0 sesiones</span>
+        </div>
+
+        <div id="dataState" class="loading">Cargando sesiones…</div>
+
+        <div class="table-wrap hidden" id="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Fecha y hora</th>
+                <th>Misión / equipo</th>
+                <th>Lugar</th>
+                <th>Instructor</th>
+                <th>Estado</th>
+                <th>Recordatorio</th>
+              </tr>
+            </thead>
+            <tbody id="sessionRows"></tbody>
+          </table>
+        </div>
+
+        <div class="mobile-list hidden" id="mobileList"></div>
+      </section>
+
+      <div class="privacy-note">
+        <strong>Vista protegida y de solo consulta.</strong> Este panel solicita únicamente los campos autorizados. No descarga teléfonos ni el texto de las respuestas.
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    "use strict";
+
+    const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,reminder_sent_at";
+    const BOGOTA_TZ = "America/Bogota";
+    const db = window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        })
+      : null;
+
+    const state = {
+      rows: [],
+      session: null,
+      passwordMode: false,
+      loading: false,
+      timer: null
+    };
+
+    const $ = function(id){ return document.getElementById(id); };
+
+    function normalize(value){
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function classifyStatus(value){
+      const text = normalize(value).replace(/[_-]+/g, " ");
+      if(!text || /pend|sin respuesta|waiting|no response/.test(text)) return "pending";
+      if(/no puede|no asist|rechaz|declin|cancel|unable|not confirm/.test(text)) return "declined";
+      if(/confirm|asistira|acept|yes/.test(text) || /(^|\s)si($|\s)/.test(text)) return "confirmed";
+      return "pending";
+    }
+
+    function statusLabel(status){
+      if(status === "confirmed") return "Confirmada";
+      if(status === "declined") return "No puede asistir";
+      return "Pendiente";
+    }
+
+    function escapeHtml(value){
+      return String(value == null ? "" : value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+    function dateKey(value){
+      if(!value) return "";
+      try{
+        return new Intl.DateTimeFormat("en-CA",{
+          timeZone:BOGOTA_TZ,year:"numeric",month:"2-digit",day:"2-digit"
+        }).format(new Date(value));
+      }catch(_error){
+        return "";
+      }
+    }
+
+    function formatDate(value){
+      if(!value) return "Sin fecha";
+      try{
+        return new Intl.DateTimeFormat("es-CO",{
+          timeZone:BOGOTA_TZ,
+          weekday:"short",
+          day:"2-digit",
+          month:"short",
+          year:"numeric"
+        }).format(new Date(value));
+      }catch(_error){
+        return "Fecha no disponible";
+      }
+    }
+
+    function formatTime(value){
+      if(!value) return "";
+      try{
+        return new Intl.DateTimeFormat("es-CO",{
+          timeZone:BOGOTA_TZ,
+          hour:"numeric",
+          minute:"2-digit",
+          hour12:true
+        }).format(new Date(value));
+      }catch(_error){
+        return "";
+      }
+    }
+
+    function formatRange(row){
+      const start = formatTime(row.session_start);
+      const end = formatTime(row.session_end);
+      return end ? start + " – " + end : start;
+    }
+
+    function setMessage(element,message,type){
+      element.textContent = message || "";
+      element.className = "auth-message" + (type ? " " + type : "");
+    }
+
+    function setAuthBusy(busy){
+      $("loginButton").disabled = busy;
+      $("resetButton").disabled = busy;
+      $("passwordButton").disabled = busy;
+    }
+
+    function isPasswordCallback(){
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/,""));
+      const query = new URLSearchParams(window.location.search);
+      const type = hash.get("type") || query.get("type");
+      return type === "invite" || type === "recovery";
+    }
+
+    function showLogin(){
+      $("app").classList.add("hidden");
+      $("authShell").classList.remove("hidden");
+      $("passwordForm").classList.add("hidden");
+      $("loginForm").classList.remove("hidden");
+    }
+
+    function showPasswordSetup(){
+      $("app").classList.add("hidden");
+      $("authShell").classList.remove("hidden");
+      $("loginForm").classList.add("hidden");
+      $("passwordForm").classList.remove("hidden");
+      window.setTimeout(function(){ $("newPassword").focus(); },50);
+    }
+
+    function showApp(session){
+      state.session = session;
+      $("authShell").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      $("sessionEmail").textContent = session && session.user ? session.user.email : "";
+      loadSessions();
+      if(state.timer) window.clearInterval(state.timer);
+      state.timer = window.setInterval(loadSessions,60000);
+    }
+
+    async function applySession(session){
+      if(!session){
+        state.session = null;
+        if(state.timer) window.clearInterval(state.timer);
+        state.timer = null;
+        showLogin();
+        return;
+      }
+      if(state.passwordMode){
+        showPasswordSetup();
+        return;
+      }
+      showApp(session);
+    }
+
+    $("loginForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db) return;
+      setMessage($("authMessage"),"");
+      setAuthBusy(true);
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const result = await db.auth.signInWithPassword({email:email,password:password});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("authMessage"),"No fue posible ingresar. Verifica el correo y la contraseña.","error");
+        return;
+      }
+      $("password").value = "";
+      await applySession(result.data.session);
+    });
+
+    $("resetButton").addEventListener("click",async function(){
+      if(!db) return;
+      const email = $("email").value.trim();
+      if(!email){
+        setMessage($("authMessage"),"Escribe primero el correo autorizado.","error");
+        $("email").focus();
+        return;
+      }
+      setAuthBusy(true);
+      const redirectTo = window.location.origin + window.location.pathname;
+      const result = await db.auth.resetPasswordForEmail(email,{redirectTo:redirectTo});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("authMessage"),"No fue posible enviar el enlace. Intenta nuevamente.","error");
+        return;
+      }
+      setMessage($("authMessage"),"Si el correo está autorizado, recibirás un enlace para definir una nueva contraseña.","success");
+    });
+
+    $("passwordForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db) return;
+      const first = $("newPassword").value;
+      const second = $("confirmPassword").value;
+      setMessage($("passwordMessage"),"");
+      if(first.length < 8){
+        setMessage($("passwordMessage"),"La contraseña debe tener al menos ocho caracteres.","error");
+        return;
+      }
+      if(first !== second){
+        setMessage($("passwordMessage"),"Las contraseñas no coinciden.","error");
+        return;
+      }
+      setAuthBusy(true);
+      const result = await db.auth.updateUser({password:first});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("passwordMessage"),"No fue posible guardar la contraseña. Solicita un enlace nuevo.","error");
+        return;
+      }
+      state.passwordMode = false;
+      window.history.replaceState({},document.title,window.location.pathname);
+      $("newPassword").value = "";
+      $("confirmPassword").value = "";
+      setMessage($("passwordMessage"),"Contraseña guardada correctamente.","success");
+      window.setTimeout(function(){ applySession(state.session); },500);
+    });
+
+    $("logoutButton").addEventListener("click",async function(){
+      if(!db) return;
+      if(state.timer) window.clearInterval(state.timer);
+      state.timer = null;
+      await db.auth.signOut();
+      state.rows = [];
+      showLogin();
+    });
+
+    function populateInstructors(rows){
+      const select = $("instructorFilter");
+      const current = select.value;
+      const names = Array.from(new Set(rows.map(function(row){
+        return String(row.instructor_name || "").trim();
+      }).filter(Boolean))).sort(function(a,b){ return a.localeCompare(b,"es"); });
+      select.innerHTML = '<option value="">Todos</option>';
+      names.forEach(function(name){
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+      if(names.indexOf(current) >= 0) select.value = current;
+    }
+
+    function filteredRows(){
+      const search = normalize($("searchInput").value);
+      const date = $("dateFilter").value;
+      const instructor = $("instructorFilter").value;
+      const status = $("statusFilter").value;
+
+      return state.rows.filter(function(row){
+        const rowStatus = classifyStatus(row.confirmation_status);
+        const haystack = normalize([
+          row.student_name,row.mission,row.equipment,row.location,row.instructor_name
+        ].join(" "));
+        if(search && haystack.indexOf(search) < 0) return false;
+        if(date && dateKey(row.session_start) !== date) return false;
+        if(instructor && String(row.instructor_name || "") !== instructor) return false;
+        if(status && rowStatus !== status) return false;
+        return true;
+      });
+    }
+
+    function updateStats(rows){
+      const counts = {confirmed:0,declined:0,pending:0};
+      rows.forEach(function(row){ counts[classifyStatus(row.confirmation_status)] += 1; });
+      $("totalCount").textContent = rows.length;
+      $("confirmedCount").textContent = counts.confirmed;
+      $("declinedCount").textContent = counts.declined;
+      $("pendingCount").textContent = counts.pending;
+      $("resultCount").textContent = rows.length + (rows.length === 1 ? " sesión" : " sesiones");
+    }
+
+    function rowHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      const mission = escapeHtml(row.mission || "Sin misión");
+      const equipment = escapeHtml(row.equipment || "Sin equipo");
+      const reminder = row.reminder_sent_at
+        ? '<span class="reminder sent">Enviado<br><span class="cell-sub">' + escapeHtml(formatDate(row.reminder_sent_at) + " · " + formatTime(row.reminder_sent_at)) + '</span></span>'
+        : '<span class="reminder waiting">Pendiente de envío</span>';
+
+      return '<tr>' +
+        '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
+        '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
+        '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
+        '<td>' + escapeHtml(row.location || "—") + '</td>' +
+        '<td>' + escapeHtml(row.instructor_name || "—") + '</td>' +
+        '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span></td>' +
+        '<td>' + reminder + '</td>' +
+      '</tr>';
+    }
+
+    function cardHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      return '<article class="session-card">' +
+        '<div class="session-card-top"><h2>' + escapeHtml(row.student_name || "Sin nombre") + '</h2><span class="badge ' + status + '">' + statusLabel(status) + '</span></div>' +
+        '<dl>' +
+          '<dt>Sesión</dt><dd>' + escapeHtml(formatDate(row.session_start) + " · " + formatRange(row)) + '</dd>' +
+          '<dt>Misión</dt><dd>' + escapeHtml(row.mission || "—") + '</dd>' +
+          '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
+          '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
+          '<dt>Instructor</dt><dd>' + escapeHtml(row.instructor_name || "—") + '</dd>' +
+          '<dt>Recordatorio</dt><dd>' + (row.reminder_sent_at ? "Enviado" : "Pendiente de envío") + '</dd>' +
+        '</dl>' +
+      '</article>';
+    }
+
+    function render(){
+      const rows = filteredRows();
+      updateStats(rows);
+
+      if(!rows.length){
+        $("dataState").className = "empty";
+        $("dataState").textContent = state.rows.length
+          ? "No hay sesiones que coincidan con estos filtros."
+          : "No hay sesiones disponibles en este rango.";
+        $("dataState").classList.remove("hidden");
+        $("tableWrap").classList.add("hidden");
+        $("mobileList").classList.add("hidden");
+        return;
+      }
+
+      $("sessionRows").innerHTML = rows.map(rowHtml).join("");
+      $("mobileList").innerHTML = rows.map(cardHtml).join("");
+      $("dataState").classList.add("hidden");
+      $("tableWrap").classList.remove("hidden");
+      $("mobileList").classList.remove("hidden");
+    }
+
+    async function loadSessions(){
+      if(!db || !state.session || state.loading) return;
+      state.loading = true;
+      $("refreshButton").disabled = true;
+      $("syncLabel").textContent = "Actualizando…";
+
+      let query = db
+        .from("voa_sessions")
+        .select(SELECT_FIELDS)
+        .order("session_start",{ascending:true})
+        .limit(1000);
+
+      if(!$("includePast").checked){
+        query = query.gte("session_end",new Date().toISOString());
+      }
+
+      const result = await query;
+      state.loading = false;
+      $("refreshButton").disabled = false;
+
+      if(result.error){
+        $("dataState").className = "error-box";
+        $("dataState").textContent = "No fue posible consultar las sesiones. Verifica que esta cuenta esté autorizada.";
+        $("dataState").classList.remove("hidden");
+        $("tableWrap").classList.add("hidden");
+        $("mobileList").classList.add("hidden");
+        $("syncLabel").textContent = "Sin conexión a los datos";
+        return;
+      }
+
+      state.rows = Array.isArray(result.data) ? result.data : [];
+      populateInstructors(state.rows);
+      render();
+      $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString());
+    }
+
+    ["searchInput","dateFilter","instructorFilter","statusFilter"].forEach(function(id){
+      $(id).addEventListener(id === "searchInput" ? "input" : "change",render);
+    });
+    $("includePast").addEventListener("change",loadSessions);
+    $("refreshButton").addEventListener("click",loadSessions);
+
+    state.passwordMode = isPasswordCallback();
+
+    if(!db){
+      setAuthBusy(true);
+      setMessage($("authMessage"),"No fue posible cargar el acceso seguro. Actualiza la página.","error");
+    }else{
+      db.auth.onAuthStateChange(function(event,session){
+        if(event === "PASSWORD_RECOVERY") state.passwordMode = true;
+        state.session = session;
+        window.setTimeout(function(){ applySession(session); },0);
+      });
+
+      (async function init(){
+        const result = await db.auth.getSession();
+        if(result.error){
+          setMessage($("authMessage"),"No fue posible comprobar la sesión.","error");
+          showLogin();
+          return;
+        }
+        state.session = result.data.session;
+        await applySession(result.data.session);
+      })();
+    }
+  </script>
+</body>
+</html>
