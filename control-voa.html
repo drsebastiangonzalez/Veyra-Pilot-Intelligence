@@ -595,6 +595,32 @@
     .message-state{display:block;min-width:132px}
     .message-state.sent{color:var(--green);font-weight:800}
     .message-state.waiting,.message-state.unavailable{color:var(--muted)}
+    .session-actions{
+      min-width:142px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:8px;
+    }
+    .edit-session-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid var(--gold);
+      border-radius:10px;
+      background:#fffaf0;
+      color:var(--navy);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .edit-session-btn:hover,.edit-session-btn:focus-visible{
+      background:var(--gold-soft);
+      box-shadow:0 0 0 3px rgba(215,166,58,.14);
+    }
+    .edit-session-btn:disabled{cursor:wait;opacity:.62}
     .send-whatsapp-btn{
       min-height:38px;
       padding:9px 12px;
@@ -746,6 +772,27 @@
     .create-message{min-height:21px;margin-top:15px;font-size:13px;font-weight:700;line-height:1.45}
     .create-message.error{color:var(--red)}
     .create-message.success{color:var(--green)}
+    .edit-summary{
+      margin-bottom:20px;
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px 20px;
+      border:1px solid var(--line);
+      border-left:4px solid var(--gold);
+      border-radius:12px;
+      background:var(--white);
+    }
+    .edit-summary span{
+      display:block;
+      margin-bottom:4px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .edit-summary strong{color:var(--navy);font-size:13px;line-height:1.35}
     .form-actions{
       margin-top:10px;
       display:flex;
@@ -823,7 +870,8 @@
       .session-card dl{margin:15px 0 0;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:12px}
       .session-card dt{color:var(--muted)}
       .session-card dd{margin:0;color:#344054}
-      .session-card .send-whatsapp-btn{width:100%;margin-top:15px}
+      .session-card .session-actions{width:100%;margin-top:8px}
+      .session-card .send-whatsapp-btn,.session-card .edit-session-btn{width:100%}
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
@@ -834,6 +882,7 @@
       .session-form{padding:20px}
       .session-form-grid{grid-template-columns:1fr;gap:15px}
       .session-field.span-2{grid-column:auto}
+      .edit-summary{grid-template-columns:1fr}
       .form-actions{flex-direction:column-reverse}
       .cancel-btn,.save-session-btn{width:100%}
     }
@@ -1082,6 +1131,62 @@
         </form>
       </section>
     </div>
+
+    <div class="modal-overlay hidden" id="editSessionModal" role="dialog" aria-modal="true" aria-labelledby="editSessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Programación VOA</div>
+            <h2 id="editSessionModalTitle">Editar sesión</h2>
+            <p>Corrige la programación antes de enviar la notificación al estudiante.</p>
+          </div>
+          <button class="modal-close" id="closeEditSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="editSessionForm" novalidate>
+          <div class="edit-summary">
+            <div><span>Estudiante</span><strong id="editSessionStudent">—</strong></div>
+            <div><span>Misión</span><strong id="editSessionMission">—</strong></div>
+          </div>
+
+          <div class="session-form-grid">
+            <div class="session-field">
+              <label for="editInstructor">Instructor</label>
+              <select id="editInstructor" required>
+                <option value="">Selecciona un instructor</option>
+              </select>
+            </div>
+            <div class="session-field">
+              <label for="editSessionDate">Fecha</label>
+              <input id="editSessionDate" type="date" required />
+            </div>
+            <div class="session-field">
+              <label for="editStartTime">Hora de inicio</label>
+              <input id="editStartTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="editEndTime">Hora de finalización</label>
+              <input id="editEndTime" type="time" step="300" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="editEquipment">Equipo</label>
+              <input id="editEquipment" type="text" maxlength="80" autocomplete="off" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="editLocation">Lugar</label>
+              <input id="editLocation" type="text" maxlength="120" autocomplete="off" required />
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> esta edición no envía WhatsApp. Después del primer envío, la sesión quedará bloqueada para conservar la trazabilidad.</div>
+          <div class="create-message" id="editSessionMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="cancelEditSessionButton" type="button">Cancelar</button>
+            <button class="save-session-btn" id="saveEditSessionButton" type="submit">Guardar cambios</button>
+          </div>
+        </form>
+      </section>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
@@ -1116,6 +1221,8 @@
       passwordMode: false,
       loading: false,
       creating: false,
+      updating: false,
+      editingSessionId: null,
       sendingSessionIds: new Set(),
       actionTimer: null,
       timer: null
@@ -1174,6 +1281,23 @@
       }
     }
 
+    function timeKey(value){
+      if(!value) return "";
+      try{
+        const parts = new Intl.DateTimeFormat("en-GB",{
+          timeZone:BOGOTA_TZ,
+          hour:"2-digit",
+          minute:"2-digit",
+          hourCycle:"h23"
+        }).formatToParts(new Date(value));
+        const hour = parts.find(function(part){ return part.type === "hour"; });
+        const minute = parts.find(function(part){ return part.type === "minute"; });
+        return hour && minute ? hour.value + ":" + minute.value : "";
+      }catch(_error){
+        return "";
+      }
+    }
+
     function formatDate(value){
       if(!value) return "Sin fecha";
       try{
@@ -1226,6 +1350,12 @@
       element.className = "create-message" + (type ? " " + type : "");
     }
 
+    function setEditSessionMessage(message,type){
+      const element = $("editSessionMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
     function setActionMessage(message,type){
       const element = $("actionMessage");
       if(state.actionTimer) window.clearTimeout(state.actionTimer);
@@ -1257,13 +1387,15 @@
       return date + "T" + time + ":00-05:00";
     }
 
-    function populateNewSessionInstructors(){
-      const select = $("newInstructor");
-      DEFAULT_INSTRUCTORS.forEach(function(name){
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
+    function populateSessionFormInstructors(){
+      ["newInstructor","editInstructor"].forEach(function(id){
+        const select = $(id);
+        DEFAULT_INSTRUCTORS.forEach(function(name){
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        });
       });
     }
 
@@ -1285,6 +1417,44 @@
       $("sessionModal").classList.add("hidden");
       document.body.classList.remove("modal-open");
       setCreateMessage("");
+    }
+
+    function openEditSessionModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || row.initial_message_sent_at || classifyStatus(row.confirmation_status) !== "pending"){
+        setActionMessage("Esta sesión ya no está disponible para editar.","error");
+        loadSessions();
+        return;
+      }
+
+      const instructor = canonicalInstructorName(row.instructor_name);
+      if(DEFAULT_INSTRUCTORS.indexOf(instructor) < 0){
+        setActionMessage("El instructor actual no está disponible en la lista autorizada.","error");
+        return;
+      }
+
+      state.editingSessionId = id;
+      $("editSessionStudent").textContent = row.student_name || "Sin nombre";
+      $("editSessionMission").textContent = row.mission || "Sin misión";
+      $("editInstructor").value = instructor;
+      $("editSessionDate").min = dateKey(new Date().toISOString());
+      $("editSessionDate").value = dateKey(row.session_start);
+      $("editStartTime").value = timeKey(row.session_start);
+      $("editEndTime").value = timeKey(row.session_end);
+      $("editEquipment").value = row.equipment || "";
+      $("editLocation").value = row.location || "";
+      setEditSessionMessage("");
+      $("editSessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeEditSessionModal(){
+      if(state.updating) return;
+      $("editSessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.editingSessionId = null;
+      setEditSessionMessage("");
     }
 
     function isPasswordCallback(){
@@ -1404,6 +1574,7 @@
       if(state.timer) window.clearInterval(state.timer);
       state.timer = null;
       closeSessionModal();
+      closeEditSessionModal();
       await db.auth.signOut();
       state.rows = [];
       showLogin();
@@ -1489,6 +1660,89 @@
       window.setTimeout(closeSessionModal,900);
     });
 
+    $("editSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.updating || !Number.isSafeInteger(state.editingSessionId)) return;
+
+      setEditSessionMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setEditSessionMessage("Completa todos los campos obligatorios.","error");
+        return;
+      }
+
+      const instructorName = canonicalInstructorName($("editInstructor").value);
+      const equipment = $("editEquipment").value.trim();
+      const location = $("editLocation").value.trim();
+      const sessionStart = bogotaIso($("editSessionDate").value,$("editStartTime").value);
+      const sessionEnd = bogotaIso($("editSessionDate").value,$("editEndTime").value);
+
+      if(!sessionStart || !sessionEnd || Date.parse(sessionEnd) <= Date.parse(sessionStart)){
+        setEditSessionMessage("La hora de finalización debe ser posterior a la hora de inicio.","error");
+        $("editEndTime").focus();
+        return;
+      }
+
+      state.updating = true;
+      $("saveEditSessionButton").disabled = true;
+      $("cancelEditSessionButton").disabled = true;
+      $("saveEditSessionButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-update-session",{
+        body:{
+          session_id:state.editingSessionId,
+          equipment:equipment,
+          location:location,
+          instructor_name:instructorName,
+          session_start:sessionStart,
+          session_end:sessionEnd
+        }
+      });
+
+      state.updating = false;
+      $("saveEditSessionButton").disabled = false;
+      $("cancelEditSessionButton").disabled = false;
+      $("saveEditSessionButton").textContent = "Guardar cambios";
+
+      if(result.error){
+        let code = "";
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            const details = await result.error.context.json();
+            code = details && details.code ? details.code : "";
+          }
+        }catch(_error){
+          code = "";
+        }
+
+        if(code === "LOCKED"){
+          setEditSessionMessage("La sesión ya fue enviada o cambió de estado y quedó bloqueada.","error");
+          await loadSessions();
+        }else if(code === "DUPLICATE"){
+          setEditSessionMessage("Ya existe otra sesión para este estudiante en la misma fecha y hora.","error");
+        }else if(code === "NOT_FOUND"){
+          setEditSessionMessage("La sesión ya no existe o no está disponible.","error");
+          await loadSessions();
+        }else if(code === "INVALID_INPUT"){
+          setEditSessionMessage("Revisa los datos de la sesión e intenta nuevamente.","error");
+        }else{
+          setEditSessionMessage("No fue posible guardar los cambios. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.updated !== true){
+        setEditSessionMessage("La función no confirmó la actualización. Pulsa Actualizar antes de repetir.","error");
+        await loadSessions();
+        return;
+      }
+
+      setEditSessionMessage("Sesión actualizada correctamente. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeEditSessionModal,900);
+    });
+
     function populateInstructors(rows){
       const select = $("instructorFilter");
       const current = select.value;
@@ -1567,21 +1821,29 @@
       if(row.initial_message_sent_at){
         return '<span class="message-state sent">Enviado<br><span class="cell-sub">' +
           escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
-          '</span></span>';
+          '</span><br><span class="cell-sub">Edición bloqueada</span></span>';
       }
 
       if(classifyStatus(row.confirmation_status) !== "pending"){
         return '<span class="message-state unavailable">No disponible</span>';
       }
 
+      const id = Number(row.id);
+      const editing = state.updating && state.editingSessionId === id;
+      const editButton = '<button class="edit-session-btn" type="button" data-edit-session="' +
+        escapeHtml(row.id) + '"' + (editing ? ' disabled' : '') + '>' +
+        (editing ? 'Guardando…' : 'Editar sesión') + '</button>';
+
       if(Date.parse(row.session_end) <= Date.now()){
-        return '<span class="message-state unavailable">Sesión finalizada</span>';
+        return '<div class="session-actions">' + editButton +
+          '<span class="message-state unavailable">Sesión finalizada</span></div>';
       }
 
-      const sending = state.sendingSessionIds.has(Number(row.id));
-      return '<button class="send-whatsapp-btn" type="button" data-send-session="' +
+      const sending = state.sendingSessionIds.has(id);
+      const sendButton = '<button class="send-whatsapp-btn" type="button" data-send-session="' +
         escapeHtml(row.id) + '"' + (sending ? ' disabled' : '') + '>' +
         (sending ? 'Enviando…' : 'Enviar WhatsApp') + '</button>';
+      return '<div class="session-actions">' + editButton + sendButton + '</div>';
     }
 
     function rowHtml(row){
@@ -1686,7 +1948,12 @@
       await loadSessions();
     }
 
-    function handleSendButton(event){
+    function handleSessionAction(event){
+      const editButton = event.target.closest("[data-edit-session]");
+      if(editButton){
+        openEditSessionModal(editButton.getAttribute("data-edit-session"));
+        return;
+      }
       const button = event.target.closest("[data-send-session]");
       if(!button) return;
       sendWhatsAppForSession(button.getAttribute("data-send-session"));
@@ -1766,19 +2033,25 @@
       render();
       $("tableWrap").scrollIntoView({behavior:"smooth",block:"start"});
     });
-    $("sessionRows").addEventListener("click",handleSendButton);
-    $("mobileList").addEventListener("click",handleSendButton);
+    $("sessionRows").addEventListener("click",handleSessionAction);
+    $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
     $("closeSessionModal").addEventListener("click",closeSessionModal);
     $("cancelSessionButton").addEventListener("click",closeSessionModal);
     $("sessionModal").addEventListener("click",function(event){
       if(event.target === $("sessionModal")) closeSessionModal();
     });
+    $("closeEditSessionModal").addEventListener("click",closeEditSessionModal);
+    $("cancelEditSessionButton").addEventListener("click",closeEditSessionModal);
+    $("editSessionModal").addEventListener("click",function(event){
+      if(event.target === $("editSessionModal")) closeEditSessionModal();
+    });
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
+      if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
     });
 
-    populateNewSessionInstructors();
+    populateSessionFormInstructors();
 
     state.passwordMode = isPasswordCallback();
 
