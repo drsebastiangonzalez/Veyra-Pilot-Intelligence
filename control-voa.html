@@ -643,6 +643,25 @@
       box-shadow:0 0 0 3px rgba(215,166,58,.14);
     }
     .edit-session-btn:disabled{cursor:wait;opacity:.62}
+    .history-session-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid #98a2b3;
+      border-radius:10px;
+      background:#f8f9fb;
+      color:#344054;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .history-session-btn:hover,.history-session-btn:focus-visible{
+      border-color:var(--navy);
+      background:#eef1f5;
+      box-shadow:0 0 0 3px rgba(7,17,31,.09);
+    }
     .cancel-session-action-btn{
       min-height:36px;
       padding:8px 11px;
@@ -889,6 +908,65 @@
     .confirm-cancellation-btn:hover,.confirm-cancellation-btn:focus-visible{background:#912018}
     .cancellation-detail{margin-top:7px;max-width:220px;color:#667085;font-size:11px;line-height:1.4}
 
+    .history-card{width:min(760px,100%)}
+    .history-body{padding:22px 26px 28px}
+    .history-session-summary{
+      margin-bottom:20px;
+      padding:15px 17px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px 20px;
+      border:1px solid var(--line);
+      border-left:4px solid var(--gold);
+      border-radius:13px;
+      background:var(--white);
+    }
+    .history-session-summary span{
+      display:block;
+      margin-bottom:4px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .history-session-summary strong{color:var(--navy);font-size:13px;line-height:1.4}
+    .history-order-note{margin:0 0 14px;color:var(--muted);font-size:11px}
+    .history-timeline{position:relative;padding-left:28px}
+    .history-timeline::before{
+      content:"";
+      position:absolute;
+      top:9px;
+      bottom:9px;
+      left:8px;
+      width:2px;
+      background:#e4ded3;
+    }
+    .history-event{position:relative;margin-bottom:14px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;background:var(--white)}
+    .history-event:last-child{margin-bottom:0}
+    .history-event::before{
+      content:"";
+      position:absolute;
+      top:18px;
+      left:-27px;
+      width:12px;
+      height:12px;
+      border:3px solid var(--cream-light);
+      border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 0 1px #d8c7a5;
+    }
+    .history-event.student::before{background:var(--green)}
+    .history-event.system::before{background:#667085}
+    .history-event-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    .history-event-title{color:var(--navy);font-size:13px;font-weight:900;line-height:1.35}
+    .history-event-time{flex:0 0 auto;color:var(--muted);font-size:11px;font-weight:700;text-align:right;line-height:1.4}
+    .history-event-actor{margin-top:5px;color:#667085;font-size:11px;line-height:1.4}
+    .history-change-list{margin:11px 0 0;padding:10px 12px;border-radius:9px;background:#f8f6f1;color:#475467;font-size:11px;line-height:1.55}
+    .history-change-list div + div{margin-top:4px}
+    .history-change-list strong{color:var(--navy)}
+    .history-empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
+
     .directory-card{width:min(1080px,100%)}
     .directory-body{padding:22px 26px 26px}
     .directory-summary{
@@ -1085,7 +1163,7 @@
       .session-card dt{color:var(--muted)}
       .session-card dd{margin:0;color:#344054}
       .session-card .session-actions{width:100%;margin-top:8px}
-      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .cancel-session-action-btn{width:100%}
+      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .history-session-btn,.session-card .cancel-session-action-btn{width:100%}
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
@@ -1099,6 +1177,9 @@
       .edit-summary{grid-template-columns:1fr}
       .form-actions{flex-direction:column-reverse}
       .cancel-btn,.save-session-btn{width:100%}
+      .history-session-summary{grid-template-columns:1fr}
+      .history-event-top{display:block}
+      .history-event-time{margin-top:5px;text-align:left}
       .directory-body{padding:16px}
       .directory-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
       .directory-toolbar{grid-template-columns:1fr}
@@ -1471,6 +1552,32 @@
       </section>
     </div>
 
+    <div class="modal-overlay hidden" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+      <section class="modal-card history-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Trazabilidad</div>
+            <h2 id="historyModalTitle">Historial de la sesión</h2>
+            <p>Consulta los eventos comprobables y los cambios registrados sin modificar la sesión.</p>
+          </div>
+          <button class="modal-close" id="closeHistoryModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="history-body">
+          <div class="history-session-summary">
+            <div><span>Estudiante</span><strong id="historyStudent">—</strong></div>
+            <div><span>Misión</span><strong id="historyMission">—</strong></div>
+            <div><span>Fecha y hora</span><strong id="historySchedule">—</strong></div>
+            <div><span>Estado actual</span><strong id="historyCurrentStatus">—</strong></div>
+          </div>
+          <p class="history-order-note">Eventos ordenados del más reciente al más antiguo.</p>
+          <div class="history-timeline" id="historyTimeline">
+            <div class="history-empty">Cargando historial…</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <div class="modal-overlay hidden" id="directoryModal" role="dialog" aria-modal="true" aria-labelledby="directoryModalTitle">
       <section class="modal-card directory-card">
         <div class="modal-header">
@@ -1541,6 +1648,7 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
+    const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const DEFAULT_INSTRUCTORS = [
       "Cap. García",
       "Cap. González",
@@ -1563,6 +1671,7 @@
     const state = {
       rows: [],
       students: [],
+      historyRows: [],
       session: null,
       passwordMode: false,
       loading: false,
@@ -1573,6 +1682,7 @@
       studentSaving: false,
       editingSessionId: null,
       cancellingSessionId: null,
+      historySessionId: null,
       editingStudentId: null,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
@@ -2056,6 +2166,97 @@
       document.body.classList.remove("modal-open");
       state.cancellingSessionId = null;
       setCancelSessionMessage("");
+    }
+
+    function historyValue(field,value){
+      if(value == null || value === "") return "—";
+      if(field === "session_start" || field === "session_end"){
+        return formatDate(value) + " · " + formatTime(value);
+      }
+      if(field === "instructor_name") return canonicalInstructorName(value) || "—";
+      return String(value);
+    }
+
+    function historyDetailsHtml(event){
+      const details = event && event.details && typeof event.details === "object" ? event.details : {};
+      if(event.event_type === "session_updated"){
+        const before = details.before && typeof details.before === "object" ? details.before : {};
+        const after = details.after && typeof details.after === "object" ? details.after : {};
+        const fields = [
+          ["session_start","Inicio"],
+          ["session_end","Finalización"],
+          ["equipment","Equipo"],
+          ["location","Lugar"],
+          ["instructor_name","Instructor"]
+        ];
+        const changes = fields.filter(function(item){
+          return String(before[item[0]] == null ? "" : before[item[0]]) !== String(after[item[0]] == null ? "" : after[item[0]]);
+        }).map(function(item){
+          return '<div><strong>' + escapeHtml(item[1]) + ':</strong> ' +
+            escapeHtml(historyValue(item[0],before[item[0]])) + ' → ' +
+            escapeHtml(historyValue(item[0],after[item[0]])) + '</div>';
+        });
+        return changes.length ? '<div class="history-change-list">' + changes.join("") + '</div>' : "";
+      }
+
+      if(event.event_type === "cancelled" && details.reason){
+        return '<div class="history-change-list"><div><strong>Motivo:</strong> ' + escapeHtml(details.reason) + '</div></div>';
+      }
+
+      if(event.event_type === "created"){
+        const createdDetails = [];
+        if(details.equipment) createdDetails.push('<div><strong>Equipo:</strong> ' + escapeHtml(details.equipment) + '</div>');
+        if(details.location) createdDetails.push('<div><strong>Lugar:</strong> ' + escapeHtml(details.location) + '</div>');
+        if(details.instructor_name) createdDetails.push('<div><strong>Instructor:</strong> ' + escapeHtml(canonicalInstructorName(details.instructor_name)) + '</div>');
+        return createdDetails.length ? '<div class="history-change-list">' + createdDetails.join("") + '</div>' : "";
+      }
+
+      return "";
+    }
+
+    function historyEventHtml(event){
+      const actorType = ["admin","student","system"].indexOf(event.actor_type) >= 0 ? event.actor_type : "system";
+      return '<article class="history-event ' + escapeHtml(actorType) + '">' +
+        '<div class="history-event-top"><div class="history-event-title">' + escapeHtml(event.summary || "Evento registrado") + '</div>' +
+        '<div class="history-event-time">' + escapeHtml(formatDate(event.event_at) + " · " + formatTime(event.event_at)) + '</div></div>' +
+        '<div class="history-event-actor">Responsable: ' + escapeHtml(event.actor_label || "Control VOA") + '</div>' +
+        historyDetailsHtml(event) +
+      '</article>';
+    }
+
+    function renderHistory(sessionId){
+      const id = Number(sessionId);
+      const events = state.historyRows.filter(function(item){
+        return Number(item.session_id) === id;
+      }).sort(function(a,b){
+        return Date.parse(b.event_at) - Date.parse(a.event_at) || Number(b.id) - Number(a.id);
+      });
+      $("historyTimeline").innerHTML = events.length
+        ? events.map(historyEventHtml).join("")
+        : '<div class="history-empty">No hay eventos históricos disponibles para esta sesión.</div>';
+    }
+
+    function openHistoryModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row){
+        setActionMessage("La sesión ya no está disponible. Pulsa Actualizar.","error");
+        return;
+      }
+      state.historySessionId = id;
+      $("historyStudent").textContent = row.student_name || "Sin nombre";
+      $("historyMission").textContent = row.mission || "Sin misión";
+      $("historySchedule").textContent = formatDate(row.session_start) + " · " + formatRange(row);
+      $("historyCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status));
+      renderHistory(id);
+      $("historyModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeHistoryModal(){
+      $("historyModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.historySessionId = null;
     }
 
     function isPasswordCallback(){
@@ -2584,21 +2785,27 @@
         (cancelling ? 'Cancelando…' : 'Cancelar sesión') + '</button>';
     }
 
+    function historyButtonHtml(row){
+      return '<button class="history-session-btn" type="button" data-history-session="' +
+        escapeHtml(row.id) + '">Ver historial</button>';
+    }
+
     function messageActionHtml(row){
       const status = classifyStatus(row.confirmation_status);
+      const historyButton = historyButtonHtml(row);
       if(status === "cancelled"){
-        return '<span class="message-state unavailable">No disponible<br><span class="cell-sub">Sesión cancelada</span></span>';
+        return '<div class="session-actions"><span class="message-state unavailable">No disponible<br><span class="cell-sub">Sesión cancelada</span></span>' + historyButton + '</div>';
       }
 
       const cancelButton = cancelActionButtonHtml(row);
       if(row.initial_message_sent_at){
         return '<div class="session-actions"><span class="message-state sent">Enviado<br><span class="cell-sub">' +
           escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
-          '</span><br><span class="cell-sub">Edición bloqueada</span></span>' + cancelButton + '</div>';
+          '</span><br><span class="cell-sub">Edición bloqueada</span></span>' + historyButton + cancelButton + '</div>';
       }
 
       if(status !== "pending"){
-        return '<div class="session-actions"><span class="message-state unavailable">No disponible</span>' + cancelButton + '</div>';
+        return '<div class="session-actions"><span class="message-state unavailable">No disponible</span>' + historyButton + cancelButton + '</div>';
       }
 
       const id = Number(row.id);
@@ -2609,14 +2816,14 @@
 
       if(Date.parse(row.session_end) <= Date.now()){
         return '<div class="session-actions">' + editButton +
-          '<span class="message-state unavailable">Sesión finalizada</span></div>';
+          '<span class="message-state unavailable">Sesión finalizada</span>' + historyButton + '</div>';
       }
 
       const sending = state.sendingSessionIds.has(id);
       const sendButton = '<button class="send-whatsapp-btn" type="button" data-send-session="' +
         escapeHtml(row.id) + '"' + (sending ? ' disabled' : '') + '>' +
         (sending ? 'Enviando…' : 'Enviar WhatsApp') + '</button>';
-      return '<div class="session-actions">' + editButton + sendButton + cancelButton + '</div>';
+      return '<div class="session-actions">' + editButton + sendButton + historyButton + cancelButton + '</div>';
     }
 
     function cancellationDetailHtml(row){
@@ -2734,6 +2941,11 @@
     }
 
     function handleSessionAction(event){
+      const historyButton = event.target.closest("[data-history-session]");
+      if(historyButton){
+        openHistoryModal(historyButton.getAttribute("data-history-session"));
+        return;
+      }
       const editButton = event.target.closest("[data-edit-session]");
       if(editButton){
         openEditSessionModal(editButton.getAttribute("data-edit-session"));
@@ -2788,11 +3000,20 @@
         query = query.gte("session_end",new Date().toISOString());
       }
 
-      const result = await query;
+      const historyQuery = db
+        .from("voa_session_history")
+        .select(HISTORY_FIELDS)
+        .order("event_at",{ascending:false})
+        .order("id",{ascending:false})
+        .limit(5000);
+
+      const results = await Promise.all([query,historyQuery]);
+      const result = results[0];
+      const historyResult = results[1];
       state.loading = false;
       $("refreshButton").disabled = false;
 
-      if(result.error){
+      if(result.error || historyResult.error){
         $("declinedAlert").classList.add("hidden");
         $("dataState").className = "error-box";
         $("dataState").textContent = "No fue posible consultar las sesiones. Verifica que esta cuenta esté autorizada.";
@@ -2804,6 +3025,7 @@
       }
 
       state.rows = Array.isArray(result.data) ? result.data : [];
+      state.historyRows = Array.isArray(historyResult.data) ? historyResult.data : [];
       populateInstructors(state.rows);
       render();
       $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString());
@@ -2873,6 +3095,10 @@
     $("cancelSessionModal").addEventListener("click",function(event){
       if(event.target === $("cancelSessionModal")) closeCancelSessionModal();
     });
+    $("closeHistoryModal").addEventListener("click",closeHistoryModal);
+    $("historyModal").addEventListener("click",function(event){
+      if(event.target === $("historyModal")) closeHistoryModal();
+    });
     $("closeDirectoryModal").addEventListener("click",closeDirectoryModal);
     $("directoryModal").addEventListener("click",function(event){
       if(event.target === $("directoryModal")) closeDirectoryModal();
@@ -2889,6 +3115,7 @@
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
       if(event.key === "Escape" && !$("cancelSessionModal").classList.contains("hidden")) closeCancelSessionModal();
+      if(event.key === "Escape" && !$("historyModal").classList.contains("hidden")) closeHistoryModal();
       if(event.key === "Escape" && !$("directoryModal").classList.contains("hidden")) closeDirectoryModal();
     });
 
