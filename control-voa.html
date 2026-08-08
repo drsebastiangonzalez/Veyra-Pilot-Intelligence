@@ -560,6 +560,8 @@
       position:fixed;
       z-index:60;
       inset:0;
+      height:100vh;
+      height:100dvh;
       padding:22px;
       display:grid;
       place-items:center;
@@ -569,6 +571,7 @@
     .modal-card{
       width:min(900px,100%);
       max-height:calc(100vh - 44px);
+      max-height:calc(100dvh - 44px);
       overflow:auto;
       border:1px solid var(--gold-soft);
       border-top:4px solid var(--gold);
@@ -619,6 +622,7 @@
     .session-field input,.session-field select{
       width:100%;
       min-width:0;
+      max-width:100%;
       min-height:48px;
       padding:11px 13px;
       border:1px solid var(--line);
@@ -626,6 +630,15 @@
       outline:0;
       background:var(--white);
       color:var(--navy);
+    }
+    .session-field input[type="date"],
+    .session-field input[type="time"]{
+      display:block;
+      inline-size:100%;
+      min-inline-size:0;
+      max-inline-size:100%;
+      -webkit-appearance:none;
+      appearance:none;
     }
     .session-field input:focus,.session-field select:focus{
       border-color:var(--gold);
@@ -664,6 +677,15 @@
     .save-session-btn:disabled{cursor:wait;opacity:.65}
 
     @media(max-width:1050px){
+      .modal-overlay{
+        place-items:start center;
+        overflow:hidden;
+      }
+      .modal-card{
+        max-height:calc(100vh - 44px);
+        max-height:calc(100dvh - 44px);
+      }
+      .session-form-grid{column-gap:28px}
       .auth-shell{
         grid-template-columns:1fr;
         justify-items:center;
