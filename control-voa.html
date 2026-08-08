@@ -348,6 +348,29 @@
       line-height:1.45;
     }
     .sync strong{display:block;color:var(--navy);font-size:13px}
+    .hero-actions{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:14px;
+    }
+    .new-session-btn{
+      min-height:46px;
+      padding:12px 19px;
+      border:1px solid var(--gold);
+      border-radius:12px;
+      background:var(--navy);
+      color:var(--white);
+      box-shadow:0 10px 24px rgba(7,17,31,.14);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .new-session-btn:hover,.new-session-btn:focus-visible{
+      background:var(--navy-soft);
+      box-shadow:0 0 0 3px rgba(215,166,58,.18),0 10px 24px rgba(7,17,31,.14);
+    }
 
     .stats{
       display:grid;
@@ -532,6 +555,114 @@
     }
     .privacy-note strong{color:var(--navy)}
 
+    body.modal-open{overflow:hidden}
+    .modal-overlay{
+      position:fixed;
+      z-index:60;
+      inset:0;
+      padding:22px;
+      display:grid;
+      place-items:center;
+      background:rgba(3,10,19,.72);
+      backdrop-filter:blur(7px);
+    }
+    .modal-card{
+      width:min(900px,100%);
+      max-height:calc(100vh - 44px);
+      overflow:auto;
+      border:1px solid var(--gold-soft);
+      border-top:4px solid var(--gold);
+      border-radius:22px;
+      background:var(--cream-light);
+      box-shadow:0 30px 90px rgba(0,0,0,.34);
+    }
+    .modal-header{
+      padding:24px 26px 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:24px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(135deg,#fff,#f8f0e3);
+    }
+    .modal-header h2{margin:3px 0 0;font-size:30px;line-height:1}
+    .modal-header p{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .modal-close{
+      flex:0 0 auto;
+      width:42px;
+      height:42px;
+      border:1px solid var(--line);
+      border-radius:50%;
+      background:var(--white);
+      color:var(--navy);
+      font-size:24px;
+      line-height:1;
+    }
+    .modal-close:hover,.modal-close:focus-visible{border-color:var(--gold);background:#fffaf0}
+    .session-form{padding:24px 26px 26px}
+    .session-form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px 20px;
+    }
+    .session-field{min-width:0}
+    .session-field.span-2{grid-column:1 / -1}
+    .session-field label{
+      display:block;
+      margin-bottom:7px;
+      color:var(--navy);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1.15px;
+      text-transform:uppercase;
+    }
+    .session-field input,.session-field select{
+      width:100%;
+      min-width:0;
+      min-height:48px;
+      padding:11px 13px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .session-field input:focus,.session-field select:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.16);
+    }
+    .field-hint{display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.4}
+    .create-note{
+      margin-top:20px;
+      padding:13px 15px;
+      border-left:3px solid var(--gold);
+      background:#fff7df;
+      color:#6f5012;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .create-message{min-height:21px;margin-top:15px;font-size:13px;font-weight:700;line-height:1.45}
+    .create-message.error{color:var(--red)}
+    .create-message.success{color:var(--green)}
+    .form-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+    }
+    .cancel-btn,.save-session-btn{
+      min-height:46px;
+      padding:12px 18px;
+      border-radius:11px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .cancel-btn{border:1px solid var(--line);background:var(--white);color:var(--navy)}
+    .save-session-btn{border:1px solid var(--gold);background:var(--navy);color:var(--white)}
+    .save-session-btn:disabled{cursor:wait;opacity:.65}
+
     @media(max-width:1050px){
       .auth-shell{
         grid-template-columns:1fr;
@@ -553,7 +684,9 @@
       .header-inner,main{width:min(100% - 28px,1320px)}
       .header-email{display:none}
       .hero{align-items:flex-start;flex-direction:column}
+      .hero-actions{width:100%;align-items:flex-start}
       .sync{text-align:left}
+      .new-session-btn{width:100%}
       .stats{grid-template-columns:repeat(2,1fr);gap:10px}
       .stat{min-height:108px;padding:17px}
       .stat-value{font-size:36px}
@@ -575,6 +708,15 @@
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
+      .modal-overlay{padding:10px}
+      .modal-card{max-height:calc(100vh - 20px);border-radius:17px}
+      .modal-header{padding:20px}
+      .modal-header h2{font-size:27px}
+      .session-form{padding:20px}
+      .session-form-grid{grid-template-columns:1fr;gap:15px}
+      .session-field.span-2{grid-column:auto}
+      .form-actions{flex-direction:column-reverse}
+      .cancel-btn,.save-session-btn{width:100%}
     }
     @media(max-width:430px){
       .back-link{display:none}
@@ -653,11 +795,14 @@
         <div>
           <div class="eyebrow">Administración · Asistencia</div>
           <h1>Control VOA</h1>
-          <p>Consulta confirmaciones, estudiantes que no pueden asistir y respuestas pendientes desde una sola vista protegida.</p>
+          <p>Consulta confirmaciones, crea sesiones y controla las respuestas de asistencia desde una sola vista protegida.</p>
         </div>
-        <div class="sync" aria-live="polite">
-          <strong id="syncLabel">Preparando datos…</strong>
-          <span>Actualización automática cada minuto</span>
+        <div class="hero-actions">
+          <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
+          <div class="sync" aria-live="polite">
+            <strong id="syncLabel">Preparando datos…</strong>
+            <span>Actualización automática cada minuto</span>
+          </div>
         </div>
       </section>
 
@@ -737,12 +882,76 @@
       </section>
 
       <div class="privacy-note">
-        <strong>Vista protegida y de solo consulta.</strong> Este panel solicita únicamente los campos autorizados. No descarga teléfonos ni el texto de las respuestas.
+        <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos no se descargan ni se muestran en el listado.
       </div>
     </main>
+
+    <div class="modal-overlay hidden" id="sessionModal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Programación VOA</div>
+            <h2 id="sessionModalTitle">Nueva sesión</h2>
+            <p>Completa todos los datos que aparecerán en la notificación del estudiante.</p>
+          </div>
+          <button class="modal-close" id="closeSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="newSessionForm" novalidate>
+          <div class="session-form-grid">
+            <div class="session-field">
+              <label for="newStudentName">Estudiante</label>
+              <input id="newStudentName" type="text" maxlength="120" autocomplete="off" autocapitalize="words" required />
+            </div>
+            <div class="session-field">
+              <label for="newStudentPhone">Celular con indicativo</label>
+              <input id="newStudentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" required />
+              <span class="field-hint">Formato Colombia: +57 seguido de los 10 dígitos.</span>
+            </div>
+            <div class="session-field">
+              <label for="newMission">Misión</label>
+              <input id="newMission" type="text" maxlength="60" placeholder="MES M8" autocomplete="off" required />
+            </div>
+            <div class="session-field">
+              <label for="newInstructor">Instructor</label>
+              <select id="newInstructor" required>
+                <option value="">Selecciona un instructor</option>
+              </select>
+            </div>
+            <div class="session-field">
+              <label for="newSessionDate">Fecha</label>
+              <input id="newSessionDate" type="date" required />
+            </div>
+            <div class="session-field">
+              <label for="newStartTime">Hora de inicio</label>
+              <input id="newStartTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="newEndTime">Hora de finalización</label>
+              <input id="newEndTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="newEquipment">Equipo</label>
+              <input id="newEquipment" type="text" maxlength="80" value="SR20 ATD" autocomplete="off" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="newLocation">Lugar</label>
+              <input id="newLocation" type="text" maxlength="120" value="Hangar Guaymaral" autocomplete="off" required />
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> guardar la sesión no envía WhatsApp. El mensaje se enviará después desde el control correspondiente.</div>
+          <div class="create-message" id="createMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="cancelSessionButton" type="button">Cancelar</button>
+            <button class="save-session-btn" id="saveSessionButton" type="submit">Guardar sesión</button>
+          </div>
+        </form>
+      </section>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
   <script>
     "use strict";
 
@@ -773,6 +982,7 @@
       session: null,
       passwordMode: false,
       loading: false,
+      creating: false,
       timer: null
     };
 
@@ -873,6 +1083,56 @@
       $("loginButton").disabled = busy;
       $("resetButton").disabled = busy;
       $("passwordButton").disabled = busy;
+    }
+
+    function setCreateMessage(message,type){
+      const element = $("createMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function normalizeColombiaPhone(value){
+      let digits = String(value || "").replace(/\D/g,"");
+      if(digits.length === 10 && digits.charAt(0) === "3") digits = "57" + digits;
+      if(digits.length === 12 && digits.indexOf("57") === 0 && digits.charAt(2) === "3"){
+        return "+" + digits;
+      }
+      return "";
+    }
+
+    function bogotaIso(date,time){
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return "";
+      return date + "T" + time + ":00-05:00";
+    }
+
+    function populateNewSessionInstructors(){
+      const select = $("newInstructor");
+      DEFAULT_INSTRUCTORS.forEach(function(name){
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+    }
+
+    function openSessionModal(){
+      const today = dateKey(new Date().toISOString());
+      $("newSessionForm").reset();
+      $("newEquipment").value = "SR20 ATD";
+      $("newLocation").value = "Hangar Guaymaral";
+      $("newSessionDate").min = today;
+      $("newSessionDate").value = today;
+      setCreateMessage("");
+      $("sessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      window.setTimeout(function(){ $("newStudentName").focus(); },50);
+    }
+
+    function closeSessionModal(){
+      if(state.creating) return;
+      $("sessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      setCreateMessage("");
     }
 
     function isPasswordCallback(){
@@ -991,9 +1251,90 @@
       if(!db) return;
       if(state.timer) window.clearInterval(state.timer);
       state.timer = null;
+      closeSessionModal();
       await db.auth.signOut();
       state.rows = [];
       showLogin();
+    });
+
+    $("newSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.creating) return;
+
+      setCreateMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setCreateMessage("Completa todos los campos obligatorios.","error");
+        return;
+      }
+
+      const studentName = $("newStudentName").value.trim();
+      const studentPhone = normalizeColombiaPhone($("newStudentPhone").value);
+      const mission = $("newMission").value.trim();
+      const instructorName = canonicalInstructorName($("newInstructor").value);
+      const equipment = $("newEquipment").value.trim();
+      const location = $("newLocation").value.trim();
+      const sessionStart = bogotaIso($("newSessionDate").value,$("newStartTime").value);
+      const sessionEnd = bogotaIso($("newSessionDate").value,$("newEndTime").value);
+
+      if(!studentPhone){
+        setCreateMessage("El celular debe tener el formato +57 y 10 dígitos.","error");
+        $("newStudentPhone").focus();
+        return;
+      }
+      if(!sessionStart || !sessionEnd || Date.parse(sessionEnd) <= Date.parse(sessionStart)){
+        setCreateMessage("La hora de finalización debe ser posterior a la hora de inicio.","error");
+        $("newEndTime").focus();
+        return;
+      }
+
+      state.creating = true;
+      $("saveSessionButton").disabled = true;
+      $("cancelSessionButton").disabled = true;
+      $("saveSessionButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-create-session",{
+        body:{
+          student_name:studentName,
+          student_phone:studentPhone,
+          mission:mission,
+          equipment:equipment,
+          location:location,
+          instructor_name:instructorName,
+          session_start:sessionStart,
+          session_end:sessionEnd
+        }
+      });
+
+      state.creating = false;
+      $("saveSessionButton").disabled = false;
+      $("cancelSessionButton").disabled = false;
+      $("saveSessionButton").textContent = "Guardar sesión";
+
+      if(result.error){
+        let code = "";
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            const details = await result.error.context.json();
+            code = details && details.code ? details.code : "";
+          }
+        }catch(_error){
+          code = "";
+        }
+        if(code === "DUPLICATE"){
+          setCreateMessage("Ya existe una sesión para este estudiante en la misma fecha y hora.","error");
+        }else if(code === "INVALID_INPUT"){
+          setCreateMessage("Revisa los datos de la sesión e intenta nuevamente.","error");
+        }else{
+          setCreateMessage("No fue posible guardar la sesión. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      setCreateMessage("Sesión creada correctamente. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeSessionModal,900);
     });
 
     function populateInstructors(rows){
@@ -1138,6 +1479,17 @@
     });
     $("includePast").addEventListener("change",loadSessions);
     $("refreshButton").addEventListener("click",loadSessions);
+    $("newSessionButton").addEventListener("click",openSessionModal);
+    $("closeSessionModal").addEventListener("click",closeSessionModal);
+    $("cancelSessionButton").addEventListener("click",closeSessionModal);
+    $("sessionModal").addEventListener("click",function(event){
+      if(event.target === $("sessionModal")) closeSessionModal();
+    });
+    document.addEventListener("keydown",function(event){
+      if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
+    });
+
+    populateNewSessionInstructors();
 
     state.passwordMode = isPasswordCallback();
 
