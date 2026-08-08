@@ -392,7 +392,7 @@
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-columns:repeat(5,minmax(0,1fr));
       gap:14px;
       margin-bottom:18px;
     }
@@ -421,6 +421,7 @@
     .stat.confirmed{border-top:3px solid var(--green)}
     .stat.declined{border-top:3px solid var(--red)}
     .stat.pending{border-top:3px solid var(--gold)}
+    .stat.cancelled{border-top:3px solid #667085}
     .stat.total{border-top:3px solid var(--navy)}
 
     .attendance-alert{
@@ -591,6 +592,8 @@
     tbody tr:hover{background:#fffcf7}
     tbody tr.declined-row{background:#fff8f6;box-shadow:inset 4px 0 0 var(--red)}
     tbody tr.declined-row:hover{background:#fff1ee}
+    tbody tr.cancelled-row{background:#f7f8fa;box-shadow:inset 4px 0 0 #667085}
+    tbody tr.cancelled-row:hover{background:#f1f3f6}
     .student{color:var(--navy);font-weight:800}
     .cell-title{color:var(--navy);font-weight:700}
     .cell-sub{margin-top:3px;color:var(--muted);font-size:12px}
@@ -608,6 +611,7 @@
     .badge.confirmed{color:var(--green);background:var(--green-soft)}
     .badge.declined{color:var(--red);background:var(--red-soft)}
     .badge.pending{color:var(--amber);background:var(--amber-soft)}
+    .badge.cancelled{color:#475467;background:#eaecf0}
     .reminder.sent{color:var(--green);font-weight:800}
     .reminder.waiting{color:var(--muted)}
     .message-state{display:block;min-width:132px}
@@ -639,6 +643,25 @@
       box-shadow:0 0 0 3px rgba(215,166,58,.14);
     }
     .edit-session-btn:disabled{cursor:wait;opacity:.62}
+    .cancel-session-action-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid #d92d20;
+      border-radius:10px;
+      background:#fff7f5;
+      color:#b42318;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .cancel-session-action-btn:hover,.cancel-session-action-btn:focus-visible{
+      background:var(--red-soft);
+      box-shadow:0 0 0 3px rgba(180,35,24,.12);
+    }
+    .cancel-session-action-btn:disabled{cursor:wait;opacity:.62}
     .send-whatsapp-btn{
       min-height:38px;
       padding:9px 12px;
@@ -752,7 +775,7 @@
       letter-spacing:1.15px;
       text-transform:uppercase;
     }
-    .session-field input,.session-field select{
+    .session-field input,.session-field select,.session-field textarea{
       width:100%;
       min-width:0;
       max-width:100%;
@@ -764,6 +787,7 @@
       background:var(--white);
       color:var(--navy);
     }
+    .session-field textarea{min-height:108px;resize:vertical;line-height:1.45}
     .session-field input[type="date"],
     .session-field input[type="time"]{
       display:block;
@@ -773,7 +797,7 @@
       -webkit-appearance:none;
       appearance:none;
     }
-    .session-field input:focus,.session-field select:focus{
+    .session-field input:focus,.session-field select:focus,.session-field textarea:focus{
       border-color:var(--gold);
       box-shadow:0 0 0 3px rgba(215,166,58,.16);
     }
@@ -861,6 +885,9 @@
     .cancel-btn{border:1px solid var(--line);background:var(--white);color:var(--navy)}
     .save-session-btn{border:1px solid var(--gold);background:var(--navy);color:var(--white)}
     .save-session-btn:disabled{cursor:wait;opacity:.65}
+    .confirm-cancellation-btn{border-color:#d92d20;background:#b42318}
+    .confirm-cancellation-btn:hover,.confirm-cancellation-btn:focus-visible{background:#912018}
+    .cancellation-detail{margin-top:7px;max-width:220px;color:#667085;font-size:11px;line-height:1.4}
 
     .directory-card{width:min(1080px,100%)}
     .directory-body{padding:22px 26px 26px}
@@ -1047,13 +1074,18 @@
         border-left:5px solid var(--red);
         background:#fff8f6;
       }
+      .session-card.cancelled-card{
+        border-color:#cfd4dc;
+        border-left:5px solid #667085;
+        background:#f7f8fa;
+      }
       .session-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
       .session-card h2{margin:0;font:800 16px/1.3 Arial,sans-serif}
       .session-card dl{margin:15px 0 0;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:12px}
       .session-card dt{color:var(--muted)}
       .session-card dd{margin:0;color:#344054}
       .session-card .session-actions{width:100%;margin-top:8px}
-      .session-card .send-whatsapp-btn,.session-card .edit-session-btn{width:100%}
+      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .cancel-session-action-btn{width:100%}
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
@@ -1184,6 +1216,10 @@
           <div class="stat-label">Pendientes</div>
           <div class="stat-value" id="pendingCount">0</div>
         </article>
+        <article class="stat cancelled">
+          <div class="stat-label">Canceladas</div>
+          <div class="stat-value" id="cancelledCount">0</div>
+        </article>
       </section>
 
       <section class="attendance-alert hidden" id="declinedAlert" role="alert" aria-live="polite">
@@ -1218,6 +1254,7 @@
               <option value="confirmed">Confirmadas</option>
               <option value="declined">No puede asistir</option>
               <option value="pending">Pendientes</option>
+              <option value="cancelled">Canceladas</option>
             </select>
           </div>
           <button class="refresh-btn" id="refreshButton" type="button">Actualizar</button>
@@ -1385,6 +1422,55 @@
       </section>
     </div>
 
+    <div class="modal-overlay hidden" id="cancelSessionModal" role="dialog" aria-modal="true" aria-labelledby="cancelSessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Historial</div>
+            <h2 id="cancelSessionModalTitle">Cancelar sesión</h2>
+            <p>La sesión permanecerá visible con el motivo, la fecha y la cuenta que registró la cancelación.</p>
+          </div>
+          <button class="modal-close" id="closeCancelSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="cancelSessionForm" novalidate>
+          <div class="edit-summary">
+            <div><span>Estudiante</span><strong id="cancelSessionStudent">—</strong></div>
+            <div><span>Misión</span><strong id="cancelSessionMission">—</strong></div>
+            <div><span>Fecha y hora</span><strong id="cancelSessionSchedule">—</strong></div>
+            <div><span>Estado actual</span><strong id="cancelSessionCurrentStatus">—</strong></div>
+          </div>
+
+          <div class="session-form-grid">
+            <div class="session-field span-2">
+              <label for="cancellationReasonCategory">Motivo</label>
+              <select id="cancellationReasonCategory" required>
+                <option value="">Selecciona un motivo</option>
+                <option value="Solicitud del estudiante">Solicitud del estudiante</option>
+                <option value="Cambio de programación">Cambio de programación</option>
+                <option value="Instructor no disponible">Instructor no disponible</option>
+                <option value="Equipo o simulador no disponible">Equipo o simulador no disponible</option>
+                <option value="Condiciones operacionales">Condiciones operacionales</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="session-field span-2">
+              <label for="cancellationReasonDetails">Detalle adicional</label>
+              <textarea id="cancellationReasonDetails" maxlength="300" placeholder="Opcional, excepto cuando seleccionas Otro"></textarea>
+              <span class="field-hint">No incluyas datos médicos ni información sensible.</span>
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> cancelar no elimina el registro y no envía WhatsApp. Si el estudiante ya fue notificado, deberás informarle por el canal correspondiente.</div>
+          <div class="create-message" id="cancelSessionMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="keepSessionButton" type="button">Conservar sesión</button>
+            <button class="save-session-btn confirm-cancellation-btn" id="confirmCancellationButton" type="submit">Confirmar cancelación</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
     <div class="modal-overlay hidden" id="directoryModal" role="dialog" aria-modal="true" aria-labelledby="directoryModalTitle">
       <section class="modal-card directory-card">
         <div class="modal-header">
@@ -1453,7 +1539,7 @@
 
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
-    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const DEFAULT_INSTRUCTORS = [
       "Cap. García",
@@ -1482,9 +1568,11 @@
       loading: false,
       creating: false,
       updating: false,
+      cancelling: false,
       studentsLoading: false,
       studentSaving: false,
       editingSessionId: null,
+      cancellingSessionId: null,
       editingStudentId: null,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
@@ -1513,8 +1601,9 @@
 
     function classifyStatus(value){
       const text = normalize(value).replace(/[_-]+/g, " ");
+      if(/cancel/.test(text)) return "cancelled";
       if(!text || /pend|sin respuesta|waiting|no response/.test(text)) return "pending";
-      if(/no puede|no asist|rechaz|declin|cancel|unable|not confirm/.test(text)) return "declined";
+      if(/no puede|no asist|rechaz|declin|unable|not confirm/.test(text)) return "declined";
       if(/confirm|asistira|acept|yes/.test(text) || /(^|\s)si($|\s)/.test(text)) return "confirmed";
       return "pending";
     }
@@ -1522,6 +1611,7 @@
     function statusLabel(status){
       if(status === "confirmed") return "Confirmada";
       if(status === "declined") return "No puede asistir";
+      if(status === "cancelled") return "Cancelada";
       return "Pendiente";
     }
 
@@ -1616,6 +1706,12 @@
 
     function setEditSessionMessage(message,type){
       const element = $("editSessionMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setCancelSessionMessage(message,type){
+      const element = $("cancelSessionMessage");
       element.textContent = message || "";
       element.className = "create-message" + (type ? " " + type : "");
     }
@@ -1929,6 +2025,39 @@
       setEditSessionMessage("");
     }
 
+    function openCancelSessionModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || classifyStatus(row.confirmation_status) === "cancelled"){
+        setActionMessage("Esta sesión ya no está disponible para cancelar.","error");
+        loadSessions();
+        return;
+      }
+      if(Date.parse(row.session_end) <= Date.now()){
+        setActionMessage("Una sesión finalizada no puede marcarse como cancelada.","error");
+        return;
+      }
+
+      state.cancellingSessionId = id;
+      $("cancelSessionForm").reset();
+      $("cancelSessionStudent").textContent = row.student_name || "Sin nombre";
+      $("cancelSessionMission").textContent = row.mission || "Sin misión";
+      $("cancelSessionSchedule").textContent = formatDate(row.session_start) + " · " + formatRange(row);
+      $("cancelSessionCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status));
+      setCancelSessionMessage("");
+      $("cancelSessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      window.setTimeout(function(){ $("cancellationReasonCategory").focus(); },50);
+    }
+
+    function closeCancelSessionModal(){
+      if(state.cancelling) return;
+      $("cancelSessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.cancellingSessionId = null;
+      setCancelSessionMessage("");
+    }
+
     function isPasswordCallback(){
       const hash = new URLSearchParams(window.location.hash.replace(/^#/,""));
       const query = new URLSearchParams(window.location.search);
@@ -2048,6 +2177,7 @@
       state.timer = null;
       closeSessionModal();
       closeEditSessionModal();
+      closeCancelSessionModal();
       closeDirectoryModal();
       await db.auth.signOut();
       state.rows = [];
@@ -2300,6 +2430,75 @@
       window.setTimeout(closeEditSessionModal,900);
     });
 
+    $("cancelSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.cancelling || !Number.isSafeInteger(state.cancellingSessionId)) return;
+
+      setCancelSessionMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setCancelSessionMessage("Selecciona el motivo de la cancelación.","error");
+        return;
+      }
+
+      const reasonCategory = $("cancellationReasonCategory").value.trim();
+      const reasonDetails = $("cancellationReasonDetails").value.trim();
+      if(reasonCategory === "Otro" && !reasonDetails){
+        setCancelSessionMessage("Escribe el detalle cuando seleccionas Otro.","error");
+        $("cancellationReasonDetails").focus();
+        return;
+      }
+
+      state.cancelling = true;
+      $("confirmCancellationButton").disabled = true;
+      $("keepSessionButton").disabled = true;
+      $("confirmCancellationButton").textContent = "Cancelando…";
+
+      const result = await db.functions.invoke("voa-cancel-session",{
+        body:{
+          session_id:state.cancellingSessionId,
+          reason_category:reasonCategory,
+          reason_details:reasonDetails
+        }
+      });
+
+      state.cancelling = false;
+      $("confirmCancellationButton").disabled = false;
+      $("keepSessionButton").disabled = false;
+      $("confirmCancellationButton").textContent = "Confirmar cancelación";
+
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        const code = details && details.code ? details.code : "";
+        if(code === "ALREADY_CANCELLED"){
+          setCancelSessionMessage("La sesión ya estaba cancelada. Se actualizó el panel.","error");
+          await loadSessions();
+        }else if(code === "FINISHED"){
+          setCancelSessionMessage("Una sesión finalizada no puede marcarse como cancelada.","error");
+          await loadSessions();
+        }else if(code === "NOT_FOUND"){
+          setCancelSessionMessage("La sesión ya no existe o no está disponible.","error");
+          await loadSessions();
+        }else if(code === "INVALID_INPUT"){
+          setCancelSessionMessage("Revisa el motivo de la cancelación.","error");
+        }else{
+          setCancelSessionMessage("No fue posible cancelar la sesión. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.cancelled !== true){
+        setCancelSessionMessage("La función no confirmó la cancelación. Pulsa Actualizar antes de repetir.","error");
+        await loadSessions();
+        return;
+      }
+
+      setCancelSessionMessage("Sesión cancelada y conservada en el historial. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeCancelSessionModal,1100);
+    });
+
     function populateInstructors(rows){
       const select = $("instructorFilter");
       const current = select.value;
@@ -2336,12 +2535,13 @@
     }
 
     function updateStats(rows){
-      const counts = {confirmed:0,declined:0,pending:0};
+      const counts = {confirmed:0,declined:0,pending:0,cancelled:0};
       rows.forEach(function(row){ counts[classifyStatus(row.confirmation_status)] += 1; });
       $("totalCount").textContent = rows.length;
       $("confirmedCount").textContent = counts.confirmed;
       $("declinedCount").textContent = counts.declined;
       $("pendingCount").textContent = counts.pending;
+      $("cancelledCount").textContent = counts.cancelled;
       $("resultCount").textContent = rows.length + (rows.length === 1 ? " sesión" : " sesiones");
     }
 
@@ -2374,15 +2574,31 @@
       alertBox.classList.remove("hidden");
     }
 
+    function cancelActionButtonHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      if(status === "cancelled" || Date.parse(row.session_end) <= Date.now()) return "";
+      const id = Number(row.id);
+      const cancelling = state.cancelling && state.cancellingSessionId === id;
+      return '<button class="cancel-session-action-btn" type="button" data-cancel-session="' +
+        escapeHtml(row.id) + '"' + (cancelling ? ' disabled' : '') + '>' +
+        (cancelling ? 'Cancelando…' : 'Cancelar sesión') + '</button>';
+    }
+
     function messageActionHtml(row){
-      if(row.initial_message_sent_at){
-        return '<span class="message-state sent">Enviado<br><span class="cell-sub">' +
-          escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
-          '</span><br><span class="cell-sub">Edición bloqueada</span></span>';
+      const status = classifyStatus(row.confirmation_status);
+      if(status === "cancelled"){
+        return '<span class="message-state unavailable">No disponible<br><span class="cell-sub">Sesión cancelada</span></span>';
       }
 
-      if(classifyStatus(row.confirmation_status) !== "pending"){
-        return '<span class="message-state unavailable">No disponible</span>';
+      const cancelButton = cancelActionButtonHtml(row);
+      if(row.initial_message_sent_at){
+        return '<div class="session-actions"><span class="message-state sent">Enviado<br><span class="cell-sub">' +
+          escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
+          '</span><br><span class="cell-sub">Edición bloqueada</span></span>' + cancelButton + '</div>';
+      }
+
+      if(status !== "pending"){
+        return '<div class="session-actions"><span class="message-state unavailable">No disponible</span>' + cancelButton + '</div>';
       }
 
       const id = Number(row.id);
@@ -2400,25 +2616,36 @@
       const sendButton = '<button class="send-whatsapp-btn" type="button" data-send-session="' +
         escapeHtml(row.id) + '"' + (sending ? ' disabled' : '') + '>' +
         (sending ? 'Enviando…' : 'Enviar WhatsApp') + '</button>';
-      return '<div class="session-actions">' + editButton + sendButton + '</div>';
+      return '<div class="session-actions">' + editButton + sendButton + cancelButton + '</div>';
+    }
+
+    function cancellationDetailHtml(row){
+      if(classifyStatus(row.confirmation_status) !== "cancelled") return "";
+      const parts = [];
+      if(row.cancellation_reason) parts.push(row.cancellation_reason);
+      if(row.cancelled_at) parts.push(formatDate(row.cancelled_at) + " · " + formatTime(row.cancelled_at));
+      if(row.cancelled_by) parts.push(row.cancelled_by);
+      return parts.length ? '<div class="cancellation-detail">' + escapeHtml(parts.join(" · ")) + '</div>' : "";
     }
 
     function rowHtml(row){
       const status = classifyStatus(row.confirmation_status);
       const mission = escapeHtml(row.mission || "Sin misión");
       const equipment = escapeHtml(row.equipment || "Sin equipo");
-      const reminder = row.reminder_sent_at
+      const reminder = status === "cancelled"
+        ? '<span class="reminder waiting">No aplica</span>'
+        : row.reminder_sent_at
         ? '<span class="reminder sent">Enviado<br><span class="cell-sub">' + escapeHtml(formatDate(row.reminder_sent_at) + " · " + formatTime(row.reminder_sent_at)) + '</span></span>'
         : '<span class="reminder waiting">Pendiente de envío</span>';
       const messageAction = messageActionHtml(row);
 
-      return '<tr class="' + (status === "declined" ? "declined-row" : "") + '">' +
+      return '<tr class="' + (status === "declined" ? "declined-row" : (status === "cancelled" ? "cancelled-row" : "")) + '">' +
         '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
         '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
         '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
         '<td>' + escapeHtml(row.location || "—") + '</td>' +
         '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
-        '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span></td>' +
+        '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span>' + cancellationDetailHtml(row) + '</td>' +
         '<td>' + messageAction + '</td>' +
         '<td>' + reminder + '</td>' +
       '</tr>';
@@ -2426,7 +2653,7 @@
 
     function cardHtml(row){
       const status = classifyStatus(row.confirmation_status);
-      return '<article class="session-card' + (status === "declined" ? " declined-card" : "") + '">' +
+      return '<article class="session-card' + (status === "declined" ? " declined-card" : (status === "cancelled" ? " cancelled-card" : "")) + '">' +
         '<div class="session-card-top"><h2>' + escapeHtml(row.student_name || "Sin nombre") + '</h2><span class="badge ' + status + '">' + statusLabel(status) + '</span></div>' +
         '<dl>' +
           '<dt>Sesión</dt><dd>' + escapeHtml(formatDate(row.session_start) + " · " + formatRange(row)) + '</dd>' +
@@ -2434,8 +2661,9 @@
           '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
           '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
           '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
+          (status === "cancelled" ? '<dt>Cancelación</dt><dd>' + cancellationDetailHtml(row) + '</dd>' : '') +
           '<dt>WhatsApp</dt><dd>' + messageActionHtml(row) + '</dd>' +
-          '<dt>Recordatorio</dt><dd>' + (row.reminder_sent_at ? "Enviado" : "Pendiente de envío") + '</dd>' +
+          '<dt>Recordatorio</dt><dd>' + (status === "cancelled" ? "No aplica" : (row.reminder_sent_at ? "Enviado" : "Pendiente de envío")) + '</dd>' +
         '</dl>' +
       '</article>';
     }
@@ -2509,6 +2737,11 @@
       const editButton = event.target.closest("[data-edit-session]");
       if(editButton){
         openEditSessionModal(editButton.getAttribute("data-edit-session"));
+        return;
+      }
+      const cancelButton = event.target.closest("[data-cancel-session]");
+      if(cancelButton){
+        openCancelSessionModal(cancelButton.getAttribute("data-cancel-session"));
         return;
       }
       const button = event.target.closest("[data-send-session]");
@@ -2635,6 +2868,11 @@
     $("editSessionModal").addEventListener("click",function(event){
       if(event.target === $("editSessionModal")) closeEditSessionModal();
     });
+    $("closeCancelSessionModal").addEventListener("click",closeCancelSessionModal);
+    $("keepSessionButton").addEventListener("click",closeCancelSessionModal);
+    $("cancelSessionModal").addEventListener("click",function(event){
+      if(event.target === $("cancelSessionModal")) closeCancelSessionModal();
+    });
     $("closeDirectoryModal").addEventListener("click",closeDirectoryModal);
     $("directoryModal").addEventListener("click",function(event){
       if(event.target === $("directoryModal")) closeDirectoryModal();
@@ -2650,6 +2888,7 @@
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
+      if(event.key === "Escape" && !$("cancelSessionModal").classList.contains("hidden")) closeCancelSessionModal();
       if(event.key === "Escape" && !$("directoryModal").classList.contains("hidden")) closeDirectoryModal();
     });
 
