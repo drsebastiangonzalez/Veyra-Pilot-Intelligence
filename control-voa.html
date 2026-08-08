@@ -354,6 +354,7 @@
       align-items:flex-end;
       gap:14px;
     }
+    .hero-button-row{display:flex;align-items:center;justify-content:flex-end;gap:10px}
     .new-session-btn{
       min-height:46px;
       padding:12px 19px;
@@ -370,6 +371,23 @@
     .new-session-btn:hover,.new-session-btn:focus-visible{
       background:var(--navy-soft);
       box-shadow:0 0 0 3px rgba(215,166,58,.18),0 10px 24px rgba(7,17,31,.14);
+    }
+    .directory-btn{
+      min-height:46px;
+      padding:12px 19px;
+      border:1px solid var(--navy);
+      border-radius:12px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .directory-btn:hover,.directory-btn:focus-visible{
+      border-color:var(--gold);
+      background:#fffaf0;
+      box-shadow:0 0 0 3px rgba(215,166,58,.14);
     }
 
     .stats{
@@ -759,6 +777,38 @@
       border-color:var(--gold);
       box-shadow:0 0 0 3px rgba(215,166,58,.16);
     }
+    .session-field input[readonly]{background:#f4f1eb;color:#475467}
+    .student-picker{position:relative}
+    .student-suggestions{
+      position:absolute;
+      z-index:12;
+      top:calc(100% + 6px);
+      right:0;
+      left:0;
+      max-height:255px;
+      overflow:auto;
+      border:1px solid var(--gold-soft);
+      border-radius:12px;
+      background:var(--white);
+      box-shadow:0 18px 38px rgba(7,17,31,.18);
+    }
+    .student-suggestion{
+      width:100%;
+      padding:12px 13px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      border:0;
+      border-bottom:1px solid #eee7db;
+      background:var(--white);
+      color:var(--navy);
+      text-align:left;
+    }
+    .student-suggestion:last-child{border-bottom:0}
+    .student-suggestion:hover,.student-suggestion:focus-visible{background:#fff8e8}
+    .student-suggestion strong{font-size:12px;line-height:1.35}
+    .student-suggestion span{flex:0 0 auto;color:var(--muted);font-size:11px}
     .field-hint{display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.4}
     .create-note{
       margin-top:20px;
@@ -812,6 +862,137 @@
     .save-session-btn{border:1px solid var(--gold);background:var(--navy);color:var(--white)}
     .save-session-btn:disabled{cursor:wait;opacity:.65}
 
+    .directory-card{width:min(1080px,100%)}
+    .directory-body{padding:22px 26px 26px}
+    .directory-summary{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .directory-stat{
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--white);
+    }
+    .directory-stat span{
+      display:block;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+    }
+    .directory-stat strong{display:block;margin-top:5px;color:var(--navy);font-size:23px}
+    .directory-toolbar{
+      display:grid;
+      grid-template-columns:minmax(240px,1fr) 190px auto;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .directory-toolbar input,.directory-toolbar select{
+      width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .directory-toolbar input:focus,.directory-toolbar select:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.15);
+    }
+    .student-editor{
+      margin-bottom:15px;
+      padding:16px;
+      border:1px solid var(--gold-soft);
+      border-left:4px solid var(--gold);
+      border-radius:13px;
+      background:#fffaf0;
+    }
+    .student-editor h3{margin:0 0 14px;color:var(--navy);font:700 20px/1.1 Georgia,serif}
+    .student-editor-grid{
+      display:grid;
+      grid-template-columns:minmax(240px,1.35fr) minmax(220px,1fr) auto;
+      gap:12px;
+      align-items:end;
+    }
+    .student-active-check{
+      min-height:48px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:12px;
+      font-weight:800;
+    }
+    .student-active-check input{width:17px;height:17px;accent-color:var(--navy)}
+    .student-list{
+      max-height:min(52vh,520px);
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--white);
+    }
+    .student-list-head,.student-row{
+      display:grid;
+      grid-template-columns:minmax(260px,1.35fr) minmax(170px,.85fr) 130px 105px 82px;
+      gap:12px;
+      align-items:center;
+    }
+    .student-list-head{
+      position:sticky;
+      z-index:2;
+      top:0;
+      padding:11px 14px;
+      background:var(--navy);
+      color:#f1d898;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.9px;
+      text-transform:uppercase;
+    }
+    .student-row{padding:12px 14px;border-bottom:1px solid #eee7db;font-size:12px}
+    .student-row:last-child{border-bottom:0}
+    .student-row:hover{background:#fffcf7}
+    .student-row.inactive{background:#f7f7f6;color:#7b8491}
+    .student-name{min-width:0;color:var(--navy);font-weight:800;line-height:1.35}
+    .student-source{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:400}
+    .student-phone{font-variant-numeric:tabular-nums;white-space:nowrap}
+    .contact-badge,.active-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:6px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .contact-badge.verified,.active-badge.active{color:var(--green);background:var(--green-soft)}
+    .contact-badge.needs_review{color:var(--amber);background:var(--amber-soft)}
+    .contact-badge.missing,.active-badge.inactive{color:var(--red);background:var(--red-soft)}
+    .student-edit-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+    .student-edit-btn:hover,.student-edit-btn:focus-visible{border-color:var(--gold);background:#fff8e8}
+    .directory-empty{padding:34px 20px;color:var(--muted);text-align:center;font-size:13px}
+
     @media(max-width:1050px){
       .modal-overlay{
         place-items:start center;
@@ -844,7 +1025,8 @@
       .hero{align-items:flex-start;flex-direction:column}
       .hero-actions{width:100%;align-items:flex-start}
       .sync{text-align:left}
-      .new-session-btn{width:100%}
+      .hero-button-row{width:100%;display:grid;grid-template-columns:1fr 1fr}
+      .new-session-btn,.directory-btn{width:100%}
       .stats{grid-template-columns:repeat(2,1fr);gap:10px}
       .stat{min-height:108px;padding:17px}
       .stat-value{font-size:36px}
@@ -885,6 +1067,14 @@
       .edit-summary{grid-template-columns:1fr}
       .form-actions{flex-direction:column-reverse}
       .cancel-btn,.save-session-btn{width:100%}
+      .directory-body{padding:16px}
+      .directory-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .directory-toolbar{grid-template-columns:1fr}
+      .student-editor-grid{grid-template-columns:1fr}
+      .student-list-head{display:none}
+      .student-row{grid-template-columns:1fr auto;gap:8px 12px}
+      .student-row > :nth-child(2),.student-row > :nth-child(3),.student-row > :nth-child(4){grid-column:1}
+      .student-row > :last-child{grid-column:2;grid-row:1 / span 2}
     }
     @media(max-width:430px){
       .back-link{display:none}
@@ -966,7 +1156,10 @@
           <p>Consulta confirmaciones, crea sesiones y controla las respuestas de asistencia desde una sola vista protegida.</p>
         </div>
         <div class="hero-actions">
-          <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
+          <div class="hero-button-row">
+            <button class="directory-btn" id="directoryButton" type="button">Directorio</button>
+            <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
+          </div>
           <div class="sync" aria-live="polite">
             <strong id="syncLabel">Preparando datos…</strong>
             <span>Actualización automática cada minuto</span>
@@ -1064,7 +1257,7 @@
       <div class="action-message hidden" id="actionMessage" role="status" aria-live="polite"></div>
 
       <div class="privacy-note">
-        <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos no se descargan ni se muestran en el listado.
+        <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos solo se muestran dentro del directorio y del formulario de programación.
       </div>
     </main>
 
@@ -1083,12 +1276,16 @@
           <div class="session-form-grid">
             <div class="session-field">
               <label for="newStudentName">Estudiante</label>
-              <input id="newStudentName" type="text" maxlength="120" autocomplete="off" autocapitalize="words" required />
+              <div class="student-picker">
+                <input id="newStudentName" type="search" maxlength="120" placeholder="Busca por nombre" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="newStudentSuggestions" required />
+                <div class="student-suggestions hidden" id="newStudentSuggestions" role="listbox"></div>
+              </div>
+              <span class="field-hint">Selecciona un estudiante activo con celular verificado.</span>
             </div>
             <div class="session-field">
               <label for="newStudentPhone">Celular con indicativo</label>
-              <input id="newStudentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" required />
-              <span class="field-hint">Formato Colombia: +57 seguido de los 10 dígitos.</span>
+              <input id="newStudentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="Se completa automáticamente" autocomplete="off" readonly required />
+              <span class="field-hint">El número proviene del directorio protegido.</span>
             </div>
             <div class="session-field">
               <label for="newMission">Misión</label>
@@ -1187,6 +1384,67 @@
         </form>
       </section>
     </div>
+
+    <div class="modal-overlay hidden" id="directoryModal" role="dialog" aria-modal="true" aria-labelledby="directoryModalTitle">
+      <section class="modal-card directory-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Datos protegidos</div>
+            <h2 id="directoryModalTitle">Directorio de estudiantes</h2>
+            <p>Consulta los contactos, corrige datos pendientes y controla quiénes están activos para programación.</p>
+          </div>
+          <button class="modal-close" id="closeDirectoryModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="directory-body">
+          <div class="directory-summary" aria-label="Resumen del directorio">
+            <div class="directory-stat"><span>Total</span><strong id="studentTotalCount">0</strong></div>
+            <div class="directory-stat"><span>Activos</span><strong id="studentActiveCount">0</strong></div>
+            <div class="directory-stat"><span>Contactos listos</span><strong id="studentVerifiedCount">0</strong></div>
+            <div class="directory-stat"><span>Datos pendientes</span><strong id="studentPendingDataCount">0</strong></div>
+          </div>
+
+          <div class="directory-toolbar">
+            <input id="studentSearchInput" type="search" placeholder="Buscar estudiante o celular" autocomplete="off" aria-label="Buscar estudiante" />
+            <select id="studentStatusFilter" aria-label="Filtrar estudiantes">
+              <option value="">Todos los estudiantes</option>
+              <option value="active">Solo activos</option>
+              <option value="inactive">Solo inactivos</option>
+              <option value="needs_data">Datos pendientes</option>
+            </select>
+            <button class="new-session-btn" id="addStudentButton" type="button">+ Nuevo estudiante</button>
+          </div>
+
+          <form class="student-editor hidden" id="studentForm" novalidate>
+            <h3 id="studentFormTitle">Nuevo estudiante</h3>
+            <div class="student-editor-grid">
+              <div class="session-field">
+                <label for="studentFullName">Nombre completo</label>
+                <input id="studentFullName" type="text" maxlength="160" autocomplete="off" autocapitalize="words" required />
+              </div>
+              <div class="session-field">
+                <label for="studentPhone">Celular con indicativo</label>
+                <input id="studentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" />
+                <span class="field-hint">Puede dejarse vacío hasta verificarlo.</span>
+              </div>
+              <label class="student-active-check">
+                <input id="studentActive" type="checkbox" checked />
+                <span>Estudiante activo</span>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="cancel-btn" id="cancelStudentButton" type="button">Cancelar</button>
+              <button class="save-session-btn" id="saveStudentButton" type="submit">Guardar estudiante</button>
+            </div>
+          </form>
+
+          <div class="create-message" id="directoryMessage" role="alert" aria-live="polite"></div>
+          <div class="student-list" id="studentList">
+            <div class="directory-empty">Cargando directorio…</div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
@@ -1196,6 +1454,7 @@
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at";
+    const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const DEFAULT_INSTRUCTORS = [
       "Cap. García",
       "Cap. González",
@@ -1217,12 +1476,17 @@
 
     const state = {
       rows: [],
+      students: [],
       session: null,
       passwordMode: false,
       loading: false,
       creating: false,
       updating: false,
+      studentsLoading: false,
+      studentSaving: false,
       editingSessionId: null,
+      editingStudentId: null,
+      selectedStudentId: null,
       sendingSessionIds: new Set(),
       actionTimer: null,
       timer: null
@@ -1356,6 +1620,12 @@
       element.className = "create-message" + (type ? " " + type : "");
     }
 
+    function setDirectoryMessage(message,type){
+      const element = $("directoryMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
     function setActionMessage(message,type){
       const element = $("actionMessage");
       if(state.actionTimer) window.clearTimeout(state.actionTimer);
@@ -1373,13 +1643,24 @@
       },8000);
     }
 
-    function normalizeColombiaPhone(value){
+    function normalizePhone(value){
       let digits = String(value || "").replace(/\D/g,"");
       if(digits.length === 10 && digits.charAt(0) === "3") digits = "57" + digits;
-      if(digits.length === 12 && digits.indexOf("57") === 0 && digits.charAt(2) === "3"){
+      if(digits.length >= 8 && digits.length <= 15 && digits.charAt(0) !== "0"){
         return "+" + digits;
       }
       return "";
+    }
+
+    async function functionErrorDetails(error){
+      try{
+        if(error && error.context && typeof error.context.json === "function"){
+          return await error.context.json();
+        }
+      }catch(_error){
+        return null;
+      }
+      return null;
     }
 
     function bogotaIso(date,time){
@@ -1399,9 +1680,200 @@
       });
     }
 
-    function openSessionModal(){
+    function availableStudents(){
+      return state.students.filter(function(student){
+        return student.active === true &&
+          student.phone_status === "verified" &&
+          Boolean(student.phone_e164);
+      });
+    }
+
+    function sourceLabel(value){
+      if(value === "directorio_aeronova") return "Directorio Aeronova";
+      if(value === "sesion_voa") return "Sesión VOA";
+      return "Registro manual";
+    }
+
+    function contactStatusLabel(value){
+      if(value === "verified") return "Listo";
+      if(value === "needs_review") return "Verificar";
+      return "Sin celular";
+    }
+
+    function clearStudentSelection(){
+      state.selectedStudentId = null;
+      $("newStudentPhone").value = "";
+      $("newStudentName").removeAttribute("data-student-id");
+    }
+
+    function selectStudent(studentId){
+      const id = Number(studentId);
+      const student = state.students.find(function(item){ return Number(item.id) === id; });
+      if(!student || !student.active || student.phone_status !== "verified" || !student.phone_e164){
+        clearStudentSelection();
+        setCreateMessage("Este estudiante no está disponible para programar hasta verificar sus datos.","error");
+        return;
+      }
+      state.selectedStudentId = id;
+      $("newStudentName").value = student.full_name || "";
+      $("newStudentName").setAttribute("data-student-id",String(id));
+      $("newStudentPhone").value = student.phone_e164 || "";
+      $("newStudentSuggestions").classList.add("hidden");
+      $("newStudentName").setAttribute("aria-expanded","false");
+      setCreateMessage("");
+    }
+
+    function renderStudentSuggestions(){
+      const query = normalize($("newStudentName").value);
+      const suggestions = $("newStudentSuggestions");
+      if(!query){
+        suggestions.classList.add("hidden");
+        $("newStudentName").setAttribute("aria-expanded","false");
+        return;
+      }
+
+      const matches = availableStudents().filter(function(student){
+        return normalize(student.full_name).indexOf(query) >= 0;
+      }).slice(0,10);
+
+      if(!matches.length){
+        suggestions.innerHTML = '<div class="directory-empty">No hay coincidencias con contacto verificado.</div>';
+      }else{
+        suggestions.innerHTML = matches.map(function(student){
+          return '<button class="student-suggestion" type="button" role="option" data-student-select="' +
+            escapeHtml(student.id) + '"><strong>' + escapeHtml(student.full_name) +
+            '</strong><span>' + escapeHtml(student.phone_e164) + '</span></button>';
+        }).join("");
+      }
+      suggestions.classList.remove("hidden");
+      $("newStudentName").setAttribute("aria-expanded","true");
+    }
+
+    function filteredStudents(){
+      const search = normalize($("studentSearchInput").value);
+      const filter = $("studentStatusFilter").value;
+      return state.students.filter(function(student){
+        const haystack = normalize([student.full_name,student.phone_e164,student.notes].join(" "));
+        if(search && haystack.indexOf(search) < 0) return false;
+        if(filter === "active" && !student.active) return false;
+        if(filter === "inactive" && student.active) return false;
+        if(filter === "needs_data" && student.phone_status === "verified") return false;
+        return true;
+      });
+    }
+
+    function renderDirectory(){
+      const all = state.students;
+      const rows = filteredStudents();
+      $("studentTotalCount").textContent = all.length;
+      $("studentActiveCount").textContent = all.filter(function(item){ return item.active; }).length;
+      $("studentVerifiedCount").textContent = all.filter(function(item){ return item.phone_status === "verified"; }).length;
+      $("studentPendingDataCount").textContent = all.filter(function(item){ return item.phone_status !== "verified"; }).length;
+
+      if(!rows.length){
+        $("studentList").innerHTML = '<div class="directory-empty">No hay estudiantes que coincidan con este filtro.</div>';
+        return;
+      }
+
+      const head = '<div class="student-list-head"><span>Estudiante</span><span>Celular</span><span>Contacto</span><span>Estado</span><span>Acción</span></div>';
+      const body = rows.map(function(student){
+        const phoneStatus = student.phone_status || "missing";
+        const sourceText = sourceLabel(student.source) + (student.notes ? " · " + student.notes : "");
+        return '<div class="student-row' + (student.active ? '' : ' inactive') + '">' +
+          '<div class="student-name">' + escapeHtml(student.full_name || "Sin nombre") +
+            '<span class="student-source">' + escapeHtml(sourceText) + '</span></div>' +
+          '<div class="student-phone">' + escapeHtml(student.phone_e164 || "Pendiente") + '</div>' +
+          '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(contactStatusLabel(phoneStatus)) + '</span>' +
+          '<span class="active-badge ' + (student.active ? 'active' : 'inactive') + '">' + (student.active ? 'Activo' : 'Inactivo') + '</span>' +
+          '<button class="student-edit-btn" type="button" data-edit-student="' + escapeHtml(student.id) + '">Editar</button>' +
+        '</div>';
+      }).join("");
+      $("studentList").innerHTML = head + body;
+    }
+
+    async function loadStudents(force){
+      if(!db || !state.session || state.studentsLoading) return false;
+      if(!force && state.students.length) return true;
+      state.studentsLoading = true;
+
+      const result = await db
+        .from("voa_students")
+        .select(STUDENT_FIELDS)
+        .order("full_name",{ascending:true})
+        .limit(1000);
+
+      state.studentsLoading = false;
+      if(result.error){
+        setDirectoryMessage("No fue posible consultar el directorio. Verifica que la cuenta siga autorizada.","error");
+        $("studentList").innerHTML = '<div class="directory-empty">Directorio no disponible.</div>';
+        return false;
+      }
+
+      state.students = Array.isArray(result.data) ? result.data : [];
+      if(state.selectedStudentId){
+        const selected = state.students.find(function(item){ return Number(item.id) === Number(state.selectedStudentId); });
+        if(!selected || !selected.active || selected.phone_status !== "verified") clearStudentSelection();
+      }
+      renderDirectory();
+      return true;
+    }
+
+    async function openDirectoryModal(){
+      $("directoryModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      $("studentSearchInput").value = "";
+      $("studentStatusFilter").value = "";
+      setDirectoryMessage("");
+      closeStudentEditor();
+      if(!state.students.length){
+        $("studentList").innerHTML = '<div class="directory-empty">Cargando directorio…</div>';
+      }else{
+        renderDirectory();
+      }
+      await loadStudents(false);
+    }
+
+    function closeDirectoryModal(){
+      if(state.studentSaving) return;
+      $("directoryModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      closeStudentEditor();
+      setDirectoryMessage("");
+    }
+
+    function openStudentEditor(studentId){
+      const id = Number(studentId);
+      const student = state.students.find(function(item){ return Number(item.id) === id; });
+      state.editingStudentId = student ? id : null;
+      $("studentForm").reset();
+      $("studentActive").checked = true;
+      $("studentFormTitle").textContent = student ? "Editar estudiante" : "Nuevo estudiante";
+      $("studentFullName").value = student ? (student.full_name || "") : "";
+      $("studentPhone").value = student ? (student.phone_e164 || "") : "";
+      $("studentActive").checked = student ? Boolean(student.active) : true;
+      $("studentForm").classList.remove("hidden");
+      setDirectoryMessage("");
+      window.setTimeout(function(){ $("studentFullName").focus(); },50);
+    }
+
+    function closeStudentEditor(){
+      if(state.studentSaving) return;
+      state.editingStudentId = null;
+      $("studentForm").classList.add("hidden");
+      $("studentForm").reset();
+    }
+
+    async function openSessionModal(){
+      const studentsReady = await loadStudents(false);
+      if(!studentsReady){
+        setActionMessage("No fue posible abrir Nueva sesión porque el directorio no está disponible.","error");
+        return;
+      }
       const today = dateKey(new Date().toISOString());
       $("newSessionForm").reset();
+      clearStudentSelection();
+      $("newStudentSuggestions").classList.add("hidden");
+      $("newStudentName").setAttribute("aria-expanded","false");
       $("newEquipment").value = "SR20 ATD";
       $("newLocation").value = "Hangar Guaymaral";
       $("newSessionDate").min = today;
@@ -1485,6 +1957,7 @@
       $("app").classList.remove("hidden");
       $("sessionEmail").textContent = session && session.user ? session.user.email : "";
       loadSessions();
+      loadStudents(false);
       if(state.timer) window.clearInterval(state.timer);
       state.timer = window.setInterval(loadSessions,60000);
     }
@@ -1575,8 +2048,10 @@
       state.timer = null;
       closeSessionModal();
       closeEditSessionModal();
+      closeDirectoryModal();
       await db.auth.signOut();
       state.rows = [];
+      state.students = [];
       showLogin();
     });
 
@@ -1592,8 +2067,24 @@
         return;
       }
 
-      const studentName = $("newStudentName").value.trim();
-      const studentPhone = normalizeColombiaPhone($("newStudentPhone").value);
+      const selectedStudent = state.students.find(function(item){
+        return Number(item.id) === Number(state.selectedStudentId);
+      });
+      if(
+        !selectedStudent ||
+        !selectedStudent.active ||
+        selectedStudent.phone_status !== "verified" ||
+        !selectedStudent.phone_e164 ||
+        normalize($("newStudentName").value) !== normalize(selectedStudent.full_name)
+      ){
+        clearStudentSelection();
+        setCreateMessage("Selecciona un estudiante de la lista del directorio.","error");
+        $("newStudentName").focus();
+        return;
+      }
+
+      const studentName = selectedStudent.full_name;
+      const studentPhone = normalizePhone(selectedStudent.phone_e164);
       const mission = $("newMission").value.trim();
       const instructorName = canonicalInstructorName($("newInstructor").value);
       const equipment = $("newEquipment").value.trim();
@@ -1602,8 +2093,8 @@
       const sessionEnd = bogotaIso($("newSessionDate").value,$("newEndTime").value);
 
       if(!studentPhone){
-        setCreateMessage("El celular debe tener el formato +57 y 10 dígitos.","error");
-        $("newStudentPhone").focus();
+        setCreateMessage("El celular del directorio no tiene un formato válido.","error");
+        $("newStudentName").focus();
         return;
       }
       if(!sessionStart || !sessionEnd || Date.parse(sessionEnd) <= Date.parse(sessionStart)){
@@ -1658,6 +2149,72 @@
       setCreateMessage("Sesión creada correctamente. No se envió ningún WhatsApp.","success");
       await loadSessions();
       window.setTimeout(closeSessionModal,900);
+    });
+
+    $("studentForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.studentSaving) return;
+
+      setDirectoryMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setDirectoryMessage("Escribe el nombre completo del estudiante.","error");
+        return;
+      }
+
+      const phoneRaw = $("studentPhone").value.trim();
+      if(phoneRaw && !normalizePhone(phoneRaw)){
+        setDirectoryMessage("El celular debe incluir un indicativo válido, por ejemplo +57.","error");
+        $("studentPhone").focus();
+        return;
+      }
+
+      state.studentSaving = true;
+      $("saveStudentButton").disabled = true;
+      $("cancelStudentButton").disabled = true;
+      $("saveStudentButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-manage-student",{
+        body:{
+          action:Number.isSafeInteger(state.editingStudentId) ? "update" : "create",
+          student_id:state.editingStudentId,
+          full_name:$("studentFullName").value.trim(),
+          phone:phoneRaw,
+          active:$("studentActive").checked
+        }
+      });
+
+      state.studentSaving = false;
+      $("saveStudentButton").disabled = false;
+      $("cancelStudentButton").disabled = false;
+      $("saveStudentButton").textContent = "Guardar estudiante";
+
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        const code = details && details.code ? details.code : "";
+        if(code === "DUPLICATE_NAME"){
+          setDirectoryMessage("Ya existe un estudiante con ese nombre.","error");
+        }else if(code === "DUPLICATE_PHONE"){
+          setDirectoryMessage("Ese celular ya pertenece a " + (details.existing_name || "otro estudiante") + ".","error");
+        }else if(code === "INVALID_INPUT"){
+          setDirectoryMessage("Revisa el nombre y el celular antes de guardar.","error");
+        }else if(code === "NOT_FOUND"){
+          setDirectoryMessage("El registro ya no existe. Actualiza el directorio.","error");
+        }else{
+          setDirectoryMessage("No fue posible guardar el estudiante. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.saved !== true){
+        setDirectoryMessage("La función no confirmó el cambio. Actualiza antes de repetir.","error");
+        return;
+      }
+
+      closeStudentEditor();
+      await loadStudents(true);
+      setDirectoryMessage("Estudiante guardado correctamente.","success");
     });
 
     $("editSessionForm").addEventListener("submit",async function(event){
@@ -2023,7 +2580,10 @@
       $(id).addEventListener(id === "searchInput" ? "input" : "change",render);
     });
     $("includePast").addEventListener("change",loadSessions);
-    $("refreshButton").addEventListener("click",loadSessions);
+    $("refreshButton").addEventListener("click",function(){
+      loadSessions();
+      loadStudents(true);
+    });
     $("showDeclinedButton").addEventListener("click",function(){
       const viewingDeclinedOnly = $("statusFilter").value === "declined";
       $("searchInput").value = "";
@@ -2036,6 +2596,35 @@
     $("sessionRows").addEventListener("click",handleSessionAction);
     $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
+    $("directoryButton").addEventListener("click",openDirectoryModal);
+    $("newStudentName").addEventListener("input",function(){
+      if(
+        state.selectedStudentId &&
+        normalize(this.value) !== normalize((state.students.find(function(item){
+          return Number(item.id) === Number(state.selectedStudentId);
+        }) || {}).full_name)
+      ){
+        clearStudentSelection();
+      }
+      renderStudentSuggestions();
+    });
+    $("newStudentName").addEventListener("focus",renderStudentSuggestions);
+    $("newStudentName").addEventListener("blur",function(){
+      window.setTimeout(function(){
+        $("newStudentSuggestions").classList.add("hidden");
+        $("newStudentName").setAttribute("aria-expanded","false");
+      },150);
+    });
+    $("newStudentSuggestions").addEventListener("pointerdown",function(event){
+      const button = event.target.closest("[data-student-select]");
+      if(!button) return;
+      event.preventDefault();
+      selectStudent(button.getAttribute("data-student-select"));
+    });
+    $("newStudentSuggestions").addEventListener("click",function(event){
+      const button = event.target.closest("[data-student-select]");
+      if(button) selectStudent(button.getAttribute("data-student-select"));
+    });
     $("closeSessionModal").addEventListener("click",closeSessionModal);
     $("cancelSessionButton").addEventListener("click",closeSessionModal);
     $("sessionModal").addEventListener("click",function(event){
@@ -2046,9 +2635,22 @@
     $("editSessionModal").addEventListener("click",function(event){
       if(event.target === $("editSessionModal")) closeEditSessionModal();
     });
+    $("closeDirectoryModal").addEventListener("click",closeDirectoryModal);
+    $("directoryModal").addEventListener("click",function(event){
+      if(event.target === $("directoryModal")) closeDirectoryModal();
+    });
+    $("studentSearchInput").addEventListener("input",renderDirectory);
+    $("studentStatusFilter").addEventListener("change",renderDirectory);
+    $("addStudentButton").addEventListener("click",function(){ openStudentEditor(null); });
+    $("cancelStudentButton").addEventListener("click",closeStudentEditor);
+    $("studentList").addEventListener("click",function(event){
+      const button = event.target.closest("[data-edit-student]");
+      if(button) openStudentEditor(button.getAttribute("data-edit-student"));
+    });
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
+      if(event.key === "Escape" && !$("directoryModal").classList.contains("hidden")) closeDirectoryModal();
     });
 
     populateSessionFormInstructors();
