@@ -392,8 +392,8 @@
     .filters{
       padding:18px;
       display:grid;
-      grid-template-columns:minmax(220px,1.5fr) minmax(132px,.52fr) minmax(180px,.82fr) minmax(150px,.7fr) auto;
-      column-gap:16px;
+      grid-template-columns:minmax(260px,1.55fr) 160px minmax(240px,.9fr) minmax(170px,.72fr) auto;
+      column-gap:26px;
       row-gap:12px;
       align-items:end;
       border-bottom:1px solid var(--line);
@@ -419,6 +419,30 @@
       outline:0;
       background:var(--white);
       color:var(--navy);
+    }
+    #dateFilter{
+      display:block;
+      width:160px!important;
+      inline-size:160px!important;
+      min-inline-size:0!important;
+      max-width:160px!important;
+      max-inline-size:160px!important;
+      overflow:hidden;
+      padding-inline:10px 7px;
+      font-size:13px;
+    }
+    #dateFilter::-webkit-date-and-time-value{
+      min-width:0;
+      text-align:left;
+    }
+    #dateFilter::-webkit-datetime-edit{
+      min-width:0;
+      overflow:hidden;
+    }
+    #instructorFilter{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
     .filter input:focus,.filter select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.15)}
     .refresh-btn{
@@ -662,11 +686,11 @@
             <label for="searchInput">Buscar</label>
             <input id="searchInput" type="search" placeholder="Estudiante, misión, equipo o lugar" />
           </div>
-          <div class="filter">
+          <div class="filter filter--date">
             <label for="dateFilter">Fecha</label>
             <input id="dateFilter" type="date" />
           </div>
-          <div class="filter">
+          <div class="filter filter--instructor">
             <label for="instructorFilter">Instructor</label>
             <select id="instructorFilter"><option value="">Todos</option></select>
           </div>
@@ -730,7 +754,6 @@
       "Cap. González",
       "Cap. Gutiérrez",
       "Cap. Sabogal",
-      "Cap. Sebastián González",
       "Cap. Vargas",
       "Cap. Vega"
     ];
@@ -761,6 +784,15 @@
         .replace(/[\u0300-\u036f]/g, "")
         .trim()
         .toLowerCase();
+    }
+
+    function canonicalInstructorName(value){
+      const name = String(value || "").trim();
+      const key = normalize(name).replace(/\./g,"").replace(/\s+/g," ");
+      if(key === "cap sebastian gonzalez" || key === "capitan sebastian gonzalez"){
+        return "Cap. González";
+      }
+      return name;
     }
 
     function classifyStatus(value){
@@ -968,7 +1000,7 @@
       const select = $("instructorFilter");
       const current = select.value;
       const names = Array.from(new Set(DEFAULT_INSTRUCTORS.concat(rows.map(function(row){
-        return String(row.instructor_name || "").trim();
+        return canonicalInstructorName(row.instructor_name);
       }).filter(Boolean)))).sort(function(a,b){ return a.localeCompare(b,"es"); });
       select.innerHTML = '<option value="">Todos</option>';
       names.forEach(function(name){
@@ -993,7 +1025,7 @@
         ].join(" "));
         if(search && haystack.indexOf(search) < 0) return false;
         if(date && dateKey(row.session_start) !== date) return false;
-        if(instructor && String(row.instructor_name || "") !== instructor) return false;
+        if(instructor && canonicalInstructorName(row.instructor_name) !== instructor) return false;
         if(status && rowStatus !== status) return false;
         return true;
       });
@@ -1022,7 +1054,7 @@
         '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
         '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
         '<td>' + escapeHtml(row.location || "—") + '</td>' +
-        '<td>' + escapeHtml(row.instructor_name || "—") + '</td>' +
+        '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
         '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span></td>' +
         '<td>' + reminder + '</td>' +
       '</tr>';
@@ -1037,7 +1069,7 @@
           '<dt>Misión</dt><dd>' + escapeHtml(row.mission || "—") + '</dd>' +
           '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
           '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
-          '<dt>Instructor</dt><dd>' + escapeHtml(row.instructor_name || "—") + '</dd>' +
+          '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
           '<dt>Recordatorio</dt><dd>' + (row.reminder_sent_at ? "Enviado" : "Pendiente de envío") + '</dd>' +
         '</dl>' +
       '</article>';
