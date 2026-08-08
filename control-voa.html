@@ -495,7 +495,7 @@
     .check input{width:17px;height:17px;accent-color:var(--navy)}
 
     .table-wrap{overflow:auto}
-    table{width:100%;min-width:1080px;border-collapse:collapse}
+    table{width:100%;min-width:1240px;border-collapse:collapse}
     th{
       padding:14px 16px;
       background:var(--navy);
@@ -535,6 +535,38 @@
     .badge.pending{color:var(--amber);background:var(--amber-soft)}
     .reminder.sent{color:var(--green);font-weight:800}
     .reminder.waiting{color:var(--muted)}
+    .message-state{display:block;min-width:132px}
+    .message-state.sent{color:var(--green);font-weight:800}
+    .message-state.waiting,.message-state.unavailable{color:var(--muted)}
+    .send-whatsapp-btn{
+      min-height:38px;
+      padding:9px 12px;
+      border:1px solid #0a8f5a;
+      border-radius:10px;
+      background:var(--green);
+      color:var(--white);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .send-whatsapp-btn:hover,.send-whatsapp-btn:focus-visible{
+      background:#06663f;
+      box-shadow:0 0 0 3px rgba(8,119,75,.14);
+    }
+    .send-whatsapp-btn:disabled{cursor:wait;opacity:.62}
+    .action-message{
+      margin:14px 18px 0;
+      padding:12px 14px;
+      border-radius:11px;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.45;
+    }
+    .action-message.success{border:1px solid #a8ddc4;background:var(--green-soft);color:var(--green)}
+    .action-message.error{border:1px solid #ffc5bf;background:var(--red-soft);color:var(--red)}
     .empty,.loading,.error-box{
       padding:54px 24px;
       text-align:center;
@@ -727,6 +759,7 @@
       .session-card dl{margin:15px 0 0;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:12px}
       .session-card dt{color:var(--muted)}
       .session-card dd{margin:0;color:#344054}
+      .session-card .send-whatsapp-btn{width:100%;margin-top:15px}
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
@@ -893,6 +926,7 @@
                 <th>Lugar</th>
                 <th>Instructor</th>
                 <th>Estado</th>
+                <th>Mensaje WhatsApp</th>
                 <th>Recordatorio</th>
               </tr>
             </thead>
@@ -902,6 +936,8 @@
 
         <div class="mobile-list hidden" id="mobileList"></div>
       </section>
+
+      <div class="action-message hidden" id="actionMessage" role="status" aria-live="polite"></div>
 
       <div class="privacy-note">
         <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos no se descargan ni se muestran en el listado.
@@ -979,7 +1015,7 @@
 
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
-    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,reminder_sent_at";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at";
     const DEFAULT_INSTRUCTORS = [
       "Cap. García",
       "Cap. González",
@@ -1005,6 +1041,8 @@
       passwordMode: false,
       loading: false,
       creating: false,
+      sendingSessionIds: new Set(),
+      actionTimer: null,
       timer: null
     };
 
@@ -1111,6 +1149,23 @@
       const element = $("createMessage");
       element.textContent = message || "";
       element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setActionMessage(message,type){
+      const element = $("actionMessage");
+      if(state.actionTimer) window.clearTimeout(state.actionTimer);
+      state.actionTimer = null;
+      element.textContent = message || "";
+      element.className = "action-message" + (type ? " " + type : "");
+      if(!message){
+        element.classList.add("hidden");
+        return;
+      }
+      element.classList.remove("hidden");
+      state.actionTimer = window.setTimeout(function(){
+        element.classList.add("hidden");
+        state.actionTimer = null;
+      },8000);
     }
 
     function normalizeColombiaPhone(value){
@@ -1404,6 +1459,27 @@
       $("resultCount").textContent = rows.length + (rows.length === 1 ? " sesión" : " sesiones");
     }
 
+    function messageActionHtml(row){
+      if(row.initial_message_sent_at){
+        return '<span class="message-state sent">Enviado<br><span class="cell-sub">' +
+          escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
+          '</span></span>';
+      }
+
+      if(classifyStatus(row.confirmation_status) !== "pending"){
+        return '<span class="message-state unavailable">No disponible</span>';
+      }
+
+      if(Date.parse(row.session_end) <= Date.now()){
+        return '<span class="message-state unavailable">Sesión finalizada</span>';
+      }
+
+      const sending = state.sendingSessionIds.has(Number(row.id));
+      return '<button class="send-whatsapp-btn" type="button" data-send-session="' +
+        escapeHtml(row.id) + '"' + (sending ? ' disabled' : '') + '>' +
+        (sending ? 'Enviando…' : 'Enviar WhatsApp') + '</button>';
+    }
+
     function rowHtml(row){
       const status = classifyStatus(row.confirmation_status);
       const mission = escapeHtml(row.mission || "Sin misión");
@@ -1411,6 +1487,7 @@
       const reminder = row.reminder_sent_at
         ? '<span class="reminder sent">Enviado<br><span class="cell-sub">' + escapeHtml(formatDate(row.reminder_sent_at) + " · " + formatTime(row.reminder_sent_at)) + '</span></span>'
         : '<span class="reminder waiting">Pendiente de envío</span>';
+      const messageAction = messageActionHtml(row);
 
       return '<tr>' +
         '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
@@ -1419,6 +1496,7 @@
         '<td>' + escapeHtml(row.location || "—") + '</td>' +
         '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
         '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span></td>' +
+        '<td>' + messageAction + '</td>' +
         '<td>' + reminder + '</td>' +
       '</tr>';
     }
@@ -1433,9 +1511,81 @@
           '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
           '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
           '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
+          '<dt>WhatsApp</dt><dd>' + messageActionHtml(row) + '</dd>' +
           '<dt>Recordatorio</dt><dd>' + (row.reminder_sent_at ? "Enviado" : "Pendiente de envío") + '</dd>' +
         '</dl>' +
       '</article>';
+    }
+
+    async function sendWhatsAppForSession(sessionId){
+      const id = Number(sessionId);
+      if(!db || !state.session || !Number.isSafeInteger(id) || state.sendingSessionIds.has(id)) return;
+
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || row.initial_message_sent_at || classifyStatus(row.confirmation_status) !== "pending"){
+        setActionMessage("Esta sesión ya no está disponible para enviar el mensaje inicial.","error");
+        await loadSessions();
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "¿Enviar el WhatsApp de asistencia?\n\n" +
+        "Estudiante: " + (row.student_name || "Sin nombre") + "\n" +
+        "Misión: " + (row.mission || "Sin misión") + "\n" +
+        "Sesión: " + formatDate(row.session_start) + " · " + formatRange(row) + "\n\n" +
+        "El mensaje se enviará inmediatamente y no debe repetirse."
+      );
+      if(!confirmed) return;
+
+      state.sendingSessionIds.add(id);
+      setActionMessage("Enviando WhatsApp a " + (row.student_name || "el estudiante") + "…","");
+      render();
+
+      const result = await db.functions.invoke("voa-send-attendance-message",{
+        body:{session_id:id}
+      });
+
+      state.sendingSessionIds.delete(id);
+
+      if(result.error){
+        let details = null;
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            details = await result.error.context.json();
+          }
+        }catch(_error){
+          details = null;
+        }
+
+        if(details && details.duplicate_prevented){
+          setActionMessage("El mensaje no se repitió: esta sesión ya había sido enviada.","error");
+          await loadSessions();
+        }else if(details && details.code === "UNAUTHORIZED"){
+          setActionMessage("La cuenta actual no está autorizada para enviar WhatsApp.","error");
+          render();
+        }else{
+          setActionMessage("No fue posible enviar el WhatsApp. No vuelvas a pulsar hasta revisar el estado.","error");
+          await loadSessions();
+        }
+        return;
+      }
+
+      if(!result.data || result.data.sent !== true){
+        setActionMessage("La función no confirmó el envío. Actualiza antes de intentarlo nuevamente.","error");
+        await loadSessions();
+        return;
+      }
+
+      row.initial_message_sent_at = result.data.sent_at || new Date().toISOString();
+      setActionMessage("WhatsApp enviado correctamente a " + (row.student_name || "el estudiante") + ".","success");
+      render();
+      await loadSessions();
+    }
+
+    function handleSendButton(event){
+      const button = event.target.closest("[data-send-session]");
+      if(!button) return;
+      sendWhatsAppForSession(button.getAttribute("data-send-session"));
     }
 
     function render(){
@@ -1501,6 +1651,8 @@
     });
     $("includePast").addEventListener("change",loadSessions);
     $("refreshButton").addEventListener("click",loadSessions);
+    $("sessionRows").addEventListener("click",handleSendButton);
+    $("mobileList").addEventListener("click",handleSendButton);
     $("newSessionButton").addEventListener("click",openSessionModal);
     $("closeSessionModal").addEventListener("click",closeSessionModal);
     $("cancelSessionButton").addEventListener("click",closeSessionModal);
