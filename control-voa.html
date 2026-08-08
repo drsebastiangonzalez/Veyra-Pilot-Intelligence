@@ -1536,9 +1536,14 @@
 
     function updateDeclinedAlert(rows){
       const alertBox = $("declinedAlert");
+      const alertButton = $("showDeclinedButton");
       const declinedRows = rows.filter(function(row){
         return classifyStatus(row.confirmation_status) === "declined";
       });
+
+      const viewingDeclinedOnly = $("statusFilter").value === "declined";
+      alertButton.textContent = viewingDeclinedOnly ? "Ver todas" : "Ver sesiones";
+      alertButton.setAttribute("aria-pressed",viewingDeclinedOnly ? "true" : "false");
 
       if(!declinedRows.length){
         alertBox.classList.add("hidden");
@@ -1753,10 +1758,11 @@
     $("includePast").addEventListener("change",loadSessions);
     $("refreshButton").addEventListener("click",loadSessions);
     $("showDeclinedButton").addEventListener("click",function(){
+      const viewingDeclinedOnly = $("statusFilter").value === "declined";
       $("searchInput").value = "";
       $("dateFilter").value = "";
       $("instructorFilter").value = "";
-      $("statusFilter").value = "declined";
+      $("statusFilter").value = viewingDeclinedOnly ? "" : "declined";
       render();
       $("tableWrap").scrollIntoView({behavior:"smooth",block:"start"});
     });
