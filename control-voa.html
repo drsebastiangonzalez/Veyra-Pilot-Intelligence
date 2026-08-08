@@ -405,6 +405,61 @@
     .stat.pending{border-top:3px solid var(--gold)}
     .stat.total{border-top:3px solid var(--navy)}
 
+    .attendance-alert{
+      margin-bottom:18px;
+      padding:17px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      border:1px solid #f4b8b1;
+      border-left:5px solid var(--red);
+      border-radius:15px;
+      background:linear-gradient(135deg,#fff7f5,var(--red-soft));
+      box-shadow:0 12px 28px rgba(180,35,24,.08);
+      color:#7a271a;
+    }
+    .attendance-alert-copy{display:flex;align-items:flex-start;gap:13px;min-width:0}
+    .attendance-alert-icon{
+      flex:0 0 34px;
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--red);
+      color:var(--white);
+      font-size:18px;
+      font-weight:900;
+    }
+    .attendance-alert strong{
+      display:block;
+      margin-bottom:4px;
+      color:var(--red);
+      font-size:12px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .attendance-alert p{margin:0;font-size:13px;line-height:1.45}
+    .attendance-alert-btn{
+      flex:0 0 auto;
+      min-height:40px;
+      padding:10px 14px;
+      border:1px solid var(--red);
+      border-radius:10px;
+      background:var(--red);
+      color:var(--white);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .attendance-alert-btn:hover,.attendance-alert-btn:focus-visible{
+      background:#8f1d14;
+      box-shadow:0 0 0 3px rgba(180,35,24,.14);
+    }
+
     .panel{
       border:1px solid var(--line);
       border-radius:20px;
@@ -516,6 +571,8 @@
       vertical-align:top;
     }
     tbody tr:hover{background:#fffcf7}
+    tbody tr.declined-row{background:#fff8f6;box-shadow:inset 4px 0 0 var(--red)}
+    tbody tr.declined-row:hover{background:#fff1ee}
     .student{color:var(--navy);font-weight:800}
     .cell-title{color:var(--navy);font-weight:700}
     .cell-sub{margin-top:3px;color:var(--muted);font-size:12px}
@@ -744,6 +801,8 @@
       .stats{grid-template-columns:repeat(2,1fr);gap:10px}
       .stat{min-height:108px;padding:17px}
       .stat-value{font-size:36px}
+      .attendance-alert{align-items:stretch;flex-direction:column;gap:14px}
+      .attendance-alert-btn{width:100%}
       .filters{grid-template-columns:1fr}
       .toolbar-row{align-items:flex-start;flex-direction:column}
       .table-wrap{display:none}
@@ -753,6 +812,11 @@
         border:1px solid var(--line);
         border-radius:15px;
         background:var(--white);
+      }
+      .session-card.declined-card{
+        border-color:#f4b8b1;
+        border-left:5px solid var(--red);
+        background:#fff8f6;
       }
       .session-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
       .session-card h2{margin:0;font:800 16px/1.3 Arial,sans-serif}
@@ -878,6 +942,17 @@
           <div class="stat-label">Pendientes</div>
           <div class="stat-value" id="pendingCount">0</div>
         </article>
+      </section>
+
+      <section class="attendance-alert hidden" id="declinedAlert" role="alert" aria-live="polite">
+        <div class="attendance-alert-copy">
+          <span class="attendance-alert-icon" aria-hidden="true">!</span>
+          <div>
+            <strong>Reprogramación requerida</strong>
+            <p id="declinedAlertText"></p>
+          </div>
+        </div>
+        <button class="attendance-alert-btn" id="showDeclinedButton" type="button">Ver sesiones</button>
       </section>
 
       <section class="panel" aria-label="Sesiones VOA">
@@ -1459,6 +1534,30 @@
       $("resultCount").textContent = rows.length + (rows.length === 1 ? " sesión" : " sesiones");
     }
 
+    function updateDeclinedAlert(rows){
+      const alertBox = $("declinedAlert");
+      const declinedRows = rows.filter(function(row){
+        return classifyStatus(row.confirmation_status) === "declined";
+      });
+
+      if(!declinedRows.length){
+        alertBox.classList.add("hidden");
+        $("declinedAlertText").textContent = "";
+        return;
+      }
+
+      if(declinedRows.length === 1){
+        const row = declinedRows[0];
+        $("declinedAlertText").textContent =
+          (row.student_name || "Un estudiante") + " indicó que no puede asistir a " +
+          (row.mission || "su sesión") + " del " + formatDate(row.session_start) + ".";
+      }else{
+        $("declinedAlertText").textContent = declinedRows.length +
+          " sesiones requieren revisión para gestionar su reprogramación.";
+      }
+      alertBox.classList.remove("hidden");
+    }
+
     function messageActionHtml(row){
       if(row.initial_message_sent_at){
         return '<span class="message-state sent">Enviado<br><span class="cell-sub">' +
@@ -1489,7 +1588,7 @@
         : '<span class="reminder waiting">Pendiente de envío</span>';
       const messageAction = messageActionHtml(row);
 
-      return '<tr>' +
+      return '<tr class="' + (status === "declined" ? "declined-row" : "") + '">' +
         '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
         '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
         '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
@@ -1503,7 +1602,7 @@
 
     function cardHtml(row){
       const status = classifyStatus(row.confirmation_status);
-      return '<article class="session-card">' +
+      return '<article class="session-card' + (status === "declined" ? " declined-card" : "") + '">' +
         '<div class="session-card-top"><h2>' + escapeHtml(row.student_name || "Sin nombre") + '</h2><span class="badge ' + status + '">' + statusLabel(status) + '</span></div>' +
         '<dl>' +
           '<dt>Sesión</dt><dd>' + escapeHtml(formatDate(row.session_start) + " · " + formatRange(row)) + '</dd>' +
@@ -1591,6 +1690,7 @@
     function render(){
       const rows = filteredRows();
       updateStats(rows);
+      updateDeclinedAlert(state.rows);
 
       if(!rows.length){
         $("dataState").className = "empty";
@@ -1631,6 +1731,7 @@
       $("refreshButton").disabled = false;
 
       if(result.error){
+        $("declinedAlert").classList.add("hidden");
         $("dataState").className = "error-box";
         $("dataState").textContent = "No fue posible consultar las sesiones. Verifica que esta cuenta esté autorizada.";
         $("dataState").classList.remove("hidden");
@@ -1651,6 +1752,14 @@
     });
     $("includePast").addEventListener("change",loadSessions);
     $("refreshButton").addEventListener("click",loadSessions);
+    $("showDeclinedButton").addEventListener("click",function(){
+      $("searchInput").value = "";
+      $("dateFilter").value = "";
+      $("instructorFilter").value = "";
+      $("statusFilter").value = "declined";
+      render();
+      $("tableWrap").scrollIntoView({behavior:"smooth",block:"start"});
+    });
     $("sessionRows").addEventListener("click",handleSendButton);
     $("mobileList").addEventListener("click",handleSendButton);
     $("newSessionButton").addEventListener("click",openSessionModal);
