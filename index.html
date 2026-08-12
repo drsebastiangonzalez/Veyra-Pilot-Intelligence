@@ -1999,7 +1999,26 @@ const DASHBOARD_PASSWORD = 'VEYRA2026';
 const SUPABASE_URL = 'https://japjyiccjwnhbfpwqtti.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs';
 function parseProgram(course){const c=String(course||'').trim(); if(!c)return ''; if(c.startsWith('Adición'))return 'Adición al equipo'; if(c.startsWith('Convalidación'))return 'Convalidación'; return c.split(/\s+/)[0]||'';}
-function officialSubject(category, question){const c=String(category||'').toLowerCase(); const q=String(question||'').toLowerCase(); if(c.includes('meteorolog')||q.includes('metar')||q.includes('taf')||q.includes('visibilidad')||q.includes('viento')||q.includes('nube')||q.includes('qnh'))return 'Meteorología'; if(c.includes('combustible')||q.includes('combustible')||q.includes('reserva')||q.includes('peso')||q.includes('balance')||q.includes('despegue')||q.includes('aterrizaje')||q.includes('distancia'))return 'Performance'; if(c.includes('aerodinam')||q.includes('sustentacion')||q.includes('sustentación')||q.includes('perdida')||q.includes('pérdida')||q.includes('angulo de ataque')||q.includes('viraje')||q.includes('factor de carga'))return 'Aerodinámica'; if(c.includes('poh')||c.includes('caps')||c.includes('generalidades')||q.includes('caps')||q.includes('sr20')||q.includes('vne')||q.includes('flaps')||q.includes('ahrs')||q.includes('bateria')||q.includes('batería'))return 'Adaptación a la aeronave'; if(c.includes('emergencias')||c.includes('memory')||c.includes('fom')||c.includes('sop')||q.includes('memory')||q.includes('procedimiento')||q.includes('go-around')||q.includes('motor'))return 'Procedimientos'; if(c.includes('radio')||q.includes('comunic')||q.includes('fraseolog')||q.includes('colacion'))return 'Radio comunicaciones'; return 'Procedimientos';}
+function normalizeLabel(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();}
+function canonicalInstructor(value){const raw=String(value||'').trim().replace(/\s+/g,' ');const key=normalizeLabel(raw);if(key.includes('vega'))return 'José Vega';if(key.includes('sabogal'))return 'Juan Sabogal';if(key.includes('gonzalez'))return 'Sebastián González';return raw||'Sin dato';}
+function officialSubject(category, question){
+  const c=normalizeLabel(category);
+  const q=normalizeLabel(question);
+  if(c.includes('memory')||c.includes('emergenc'))return 'Memory Items / Emergencias';
+  if(c.includes('adaptacion')||c.includes('poh sr20')||c.includes('generalidades sr20')||c.includes('caps'))return 'Adaptación a la aeronave';
+  if(c==='performance'||c.includes('aproximacion')||c.includes('go-around')||c.includes('go around'))return 'Performance';
+  if(c.includes('aerodinam'))return 'Aerodinámica';
+  if(c.includes('radio'))return 'Radio comunicaciones';
+  if(c==='meteorologia')return 'Meteorología';
+  if(c.includes('combustible')&&c.includes('meteorolog')){
+    if(q.includes('metar')||q.includes('taf')||q.includes('visibilidad')||q.includes('viento')||q.includes('nube')||q.includes('qnh')||q.includes('sigmet')||q.includes('temperatura')||q.includes('presion'))return 'Meteorología';
+    return 'Performance';
+  }
+  if(c.includes('meteorolog')||q.includes('metar')||q.includes('taf')||q.includes('visibilidad')||q.includes('viento')||q.includes('nube')||q.includes('qnh')||q.includes('sigmet'))return 'Meteorología';
+  if(c.includes('performance')||c.includes('combustible')||q.includes('combustible')||q.includes('reserva')||q.includes('peso')||q.includes('balance')||q.includes('distancia de despegue')||q.includes('distancia de aterrizaje'))return 'Performance';
+  if(c.includes('fom')||c.includes('sop')||c.includes('rac')||c.includes('reglament')||c.includes('procedimiento'))return 'Procedimientos';
+  return 'Procedimientos';
+}
 function normalizeSubjectRows(rows){const map={};(rows||[]).forEach(w=>{const sub=officialSubject(w.category||'', w.question||''); map[sub]??={category:sub,correct:0,total:0,score:0}; map[sub].correct+=Number(w.correct||0); map[sub].total+=Number(w.total||0);}); return Object.values(map).map(v=>({...v,score:v.total?Math.round(100*v.correct/v.total):0})).sort((a,b)=>a.score-b.score);}
 function sendSupportEmail(){const n=document.getElementById('helpName').value.trim(); const c=document.getElementById('helpContact').value.trim(); const m=document.getElementById('helpMessage').value.trim(); if(!n||!c||!m){alert('Completa nombre, contacto y mensaje.');return;} const subject=encodeURIComponent('Solicitud de soporte - Veyra Pilot Intelligence'); const body=encodeURIComponent(`Nombre: ${n}\nContacto: ${c}\n\nMensaje:\n${m}`); window.location.href=`mailto:veyrapilotintelligence@gmail.com?subject=${subject}&body=${body}`;}
 let currentQuestions=[], currentMeta={}, timerInterval=null, remainingSeconds=0, lastDashboardRows=[];
@@ -2042,12 +2061,12 @@ async function loadAttemptsOnline(){const r=await fetch(SUPABASE_URL+'/rest/v1/e
 function showDashboard(){showScreen('dashboard'); if(sessionStorage.getItem('veyra_dashboard_ok')==='1'){document.getElementById('dashboardLock').style.display='none';document.getElementById('dashboardContent').style.display='block';renderDashboard(true);}else{document.getElementById('dashboardLock').style.display='block';document.getElementById('dashboardContent').style.display='none';}}
 function unlockDashboard(){if(document.getElementById('dashboardPassword').value===DASHBOARD_PASSWORD){sessionStorage.setItem('veyra_dashboard_ok','1');showDashboard();}else alert('Clave incorrecta');}
 function getLocalAttempts(){return JSON.parse(localStorage.getItem('veyra_attempts')||localStorage.getItem('aeroassess_attempts')||'[]');}
-function normalizeRemote(rows){return rows.map(r=>{const course=r.course||'';return {id:r.id,date:r.created_at,name:r.student_name,program:parseProgram(course),course,instructor:r.instructor||'',score:Number(r.score||0),correct:r.correct_count,total:r.total_questions,timeSeconds:r.time_used_seconds,criticalOk:r.critical_passed,pass:(Number(r.score)>=75 && r.critical_passed!==false),weak_topics:normalizeSubjectRows(r.weak_topics||[]),failed_questions:enrichAnswers(r.failed_questions||[]),answer_detail:enrichAnswers(r.answer_detail||[])};});}
+function normalizeRemote(rows){return rows.map(r=>{const course=r.course||'';return {id:r.id,date:r.created_at,name:r.student_name,program:parseProgram(course),course,instructor:canonicalInstructor(r.instructor),score:Number(r.score||0),correct:r.correct_count,total:r.total_questions,timeSeconds:r.time_used_seconds,criticalOk:r.critical_passed,pass:(Number(r.score)>=75 && r.critical_passed!==false),weak_topics:normalizeSubjectRows(r.weak_topics||[]),failed_questions:enrichAnswers(r.failed_questions||[]),answer_detail:enrichAnswers(r.answer_detail||[])};});}
 async function renderDashboard(force){
   const source=document.getElementById('filterSource')?.value||'remote'; let attempts=[]; let status='';
   if(source==='remote'){try{attempts=normalizeRemote(await loadAttemptsOnline()); status='Fuente: Supabase · datos online';}catch(e){attempts=getLocalAttempts(); status='No se pudo cargar Supabase; mostrando respaldo local.';}} else {attempts=getLocalAttempts();status='Fuente: datos locales del navegador';}
   const fn=(document.getElementById('filterStudent')?.value||'').toLowerCase(); const fp=(document.getElementById('filterProgram')?.value||'all'); const fc=(document.getElementById('filterCourse')?.value||'').toLowerCase(); const fi=(document.getElementById('filterInstructor')?.value||'').toLowerCase(); const fs=document.getElementById('filterStatus')?.value||'all';
-  attempts=attempts.map(a=>({...a,program:a.program||parseProgram(a.course)}));
+  attempts=attempts.map(a=>({...a,program:a.program||parseProgram(a.course),instructor:canonicalInstructor(a.instructor)}));
   attempts=attempts.filter(a=>(!fn||String(a.name||'').toLowerCase().includes(fn))&&(fp==='all'||String(a.program)===fp)&&(!fc||String(a.course).toLowerCase().includes(fc))&&(!fi||String(a.instructor).toLowerCase().includes(fi))&&(fs==='all'||(fs==='pass'&&a.pass)||(fs==='fail'&&!a.pass)));
   lastDashboardRows=attempts;
   const avg=attempts.length?Math.round(attempts.reduce((s,a)=>s+a.score,0)/attempts.length):0; const passRate=attempts.length?Math.round(100*attempts.filter(a=>a.pass).length/attempts.length):0; const fails=attempts.filter(a=>!a.pass).length; const critFails=attempts.filter(a=>a.criticalOk===false).length; const avgTime=attempts.length?Math.round(attempts.reduce((s,a)=>s+(Number(a.timeSeconds)||0),0)/attempts.length):0;
@@ -3055,3 +3074,4 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- Veyra v2.9.6 Internal Access safety linked -->
 </html>
+
