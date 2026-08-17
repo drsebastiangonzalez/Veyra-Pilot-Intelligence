@@ -1,0 +1,3195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Veyra | Control VOA</title>
+  <style>
+    :root{
+      --navy:#07111f;
+      --navy-soft:#10233d;
+      --cream:#f7f1e8;
+      --cream-light:#fcfaf6;
+      --gold:#d7a63a;
+      --gold-dark:#b98017;
+      --gold-soft:#ead7b5;
+      --text:#101828;
+      --muted:#667085;
+      --line:#dfd5c6;
+      --white:#fff;
+      --green:#08774b;
+      --green-soft:#e9f7f0;
+      --red:#b42318;
+      --red-soft:#fff0ee;
+      --amber:#986b12;
+      --amber-soft:#fff7df;
+      --shadow:0 18px 48px rgba(7,17,31,.08);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(7,17,31,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(7,17,31,.025) 1px,transparent 1px),
+        radial-gradient(circle at 92% 0%,rgba(215,166,58,.14),transparent 29rem),
+        linear-gradient(180deg,var(--cream-light),var(--cream));
+      background-size:46px 46px,46px 46px,auto,auto;
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      color:var(--white);
+      background:rgba(7,17,31,.98);
+      border-bottom:2px solid var(--gold);
+      backdrop-filter:blur(14px);
+    }
+    .header-inner{
+      width:min(1320px,calc(100% - 42px));
+      min-height:88px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:22px;
+    }
+    .logo{color:inherit;text-decoration:none}
+    .brand{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:38px;
+      line-height:.9;
+      letter-spacing:-1px;
+    }
+    .subbrand{
+      margin-top:8px;
+      color:#d8b35e;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:6px;
+    }
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .header-email{
+      max-width:280px;
+      overflow:hidden;
+      color:#c7d0dc;
+      font-size:12px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .ghost-btn,.back-link{
+      min-height:40px;
+      padding:10px 14px;
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:999px;
+      background:transparent;
+      color:var(--white);
+      text-decoration:none;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .ghost-btn:hover,.ghost-btn:focus-visible,.back-link:hover,.back-link:focus-visible{
+      border-color:var(--gold);
+      background:rgba(255,255,255,.07);
+    }
+
+    .auth-shell{
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+      min-height:100vh;
+      padding:clamp(28px,5vw,76px);
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) minmax(380px,480px);
+      align-items:center;
+      gap:clamp(44px,7vw,110px);
+      background:
+        radial-gradient(circle at 88% 4%,rgba(227,181,74,.30),transparent 24rem),
+        radial-gradient(circle at 4% 94%,rgba(48,112,166,.36),transparent 34rem),
+        linear-gradient(118deg,#06101d 0%,#0b2845 48%,#071522 100%);
+    }
+    .auth-shell::before{
+      content:"";
+      position:absolute;
+      z-index:-2;
+      inset:-10%;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+      background-size:64px 64px;
+      transform:perspective(720px) rotateX(58deg) rotateZ(-8deg) scale(1.35);
+      transform-origin:center bottom;
+      -webkit-mask-image:linear-gradient(180deg,transparent 5%,#000 52%,transparent 96%);
+      mask-image:linear-gradient(180deg,transparent 5%,#000 52%,transparent 96%);
+    }
+    .auth-shell::after{
+      content:"VOA";
+      position:absolute;
+      z-index:-1;
+      right:-.04em;
+      bottom:-.21em;
+      color:rgba(255,255,255,.055);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(210px,35vw,560px);
+      font-weight:700;
+      letter-spacing:-.09em;
+      line-height:1;
+      pointer-events:none;
+    }
+    .auth-intro{
+      position:relative;
+      z-index:1;
+      width:min(610px,100%);
+      color:var(--white);
+    }
+    .auth-intro-label{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:22px;
+      color:#f0ca70;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:3.2px;
+      text-transform:uppercase;
+    }
+    .auth-intro-label::before{
+      content:"";
+      width:44px;
+      height:2px;
+      background:var(--gold);
+    }
+    .auth-intro h2{
+      max-width:560px;
+      margin:0;
+      color:var(--white);
+      font-size:clamp(48px,6vw,84px);
+      font-weight:400;
+      line-height:.98;
+      letter-spacing:-2.2px;
+    }
+    .auth-intro p{
+      max-width:500px;
+      margin:24px 0 0;
+      color:#cdd9e5;
+      font-size:16px;
+      line-height:1.65;
+    }
+    .flight-route{
+      position:relative;
+      width:min(430px,88%);
+      height:54px;
+      margin-top:38px;
+      border-top:1px dashed rgba(240,202,112,.66);
+    }
+    .flight-route::before,.flight-route::after{
+      content:"";
+      position:absolute;
+      top:-6px;
+      width:11px;
+      height:11px;
+      border:2px solid #f0ca70;
+      border-radius:50%;
+      background:#0a2139;
+    }
+    .flight-route::before{left:0}
+    .flight-route::after{right:0}
+    .route-code{
+      position:absolute;
+      top:13px;
+      color:#9eb0c2;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:1.8px;
+    }
+    .route-code:first-child{left:0}
+    .route-code:last-child{right:0}
+    .auth-card{
+      position:relative;
+      z-index:2;
+      width:min(480px,100%);
+      padding:36px;
+      border:1px solid rgba(240,202,112,.72);
+      border-top:4px solid #e4b84f;
+      border-radius:24px;
+      background:linear-gradient(145deg,rgba(13,39,65,.92),rgba(4,15,27,.97));
+      color:var(--white);
+      box-shadow:0 32px 90px rgba(0,0,0,.46),0 0 0 1px rgba(255,255,255,.04) inset;
+      -webkit-backdrop-filter:blur(18px);
+      backdrop-filter:blur(18px);
+    }
+    .auth-brand{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:46px;
+      line-height:1;
+    }
+    .auth-subbrand{
+      margin:8px 0 34px;
+      color:#d8b35e;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:6px;
+    }
+    .auth-card h1,
+    #loginForm > h1,
+    #passwordForm > h1{
+      margin:0 0 10px;
+      color:#ffffff!important;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:32px;
+      line-height:1.08;
+      text-shadow:0 2px 18px rgba(0,0,0,.32);
+    }
+    .auth-card p{margin:0 0 24px;color:#c7d0dc;font-size:15px;line-height:1.55}
+    .field{margin-top:16px}
+    .field label{
+      display:block;
+      margin-bottom:8px;
+      color:#f4dfaa;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+    .field input{
+      width:100%;
+      min-height:52px;
+      padding:13px 15px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:12px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.2)}
+    .primary-btn{
+      width:100%;
+      min-height:52px;
+      margin-top:20px;
+      padding:14px 18px;
+      border:1px solid var(--gold);
+      border-radius:12px;
+      background:linear-gradient(180deg,#edc65d,#d5a139);
+      color:var(--navy);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+    }
+    .primary-btn:disabled{cursor:wait;opacity:.7}
+    .link-btn{
+      width:100%;
+      margin-top:14px;
+      padding:8px;
+      border:0;
+      background:transparent;
+      color:#f4dfaa;
+      font-size:13px;
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .auth-message{min-height:21px;margin-top:14px;font-size:13px;line-height:1.45}
+    .auth-message.error{color:#ffb4ab}
+    .auth-message.success{color:#a7e5c6}
+    .auth-back{
+      margin-top:22px;
+      display:block;
+      color:#c7d0dc;
+      text-align:center;
+      font-size:13px;
+    }
+
+    main{
+      width:min(1320px,calc(100% - 42px));
+      margin:auto;
+      padding:46px 0 70px;
+    }
+    .hero{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:28px;
+      margin-bottom:28px;
+    }
+    .eyebrow{
+      margin-bottom:12px;
+      color:var(--gold-dark);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:3px;
+      text-transform:uppercase;
+    }
+    h1,h2{font-family:Georgia,"Times New Roman",serif;color:var(--navy)}
+    .hero h1{
+      margin:0;
+      font-size:clamp(42px,6vw,68px);
+      line-height:.98;
+      letter-spacing:-1.8px;
+    }
+    .hero p{max-width:690px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
+    .sync{
+      min-width:210px;
+      color:var(--muted);
+      text-align:right;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .sync strong{display:block;color:var(--navy);font-size:13px}
+    .hero-actions{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:14px;
+    }
+    .hero-button-row{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+    .new-session-btn{
+      min-height:46px;
+      padding:12px 19px;
+      border:1px solid var(--gold);
+      border-radius:12px;
+      background:var(--navy);
+      color:var(--white);
+      box-shadow:0 10px 24px rgba(7,17,31,.14);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .new-session-btn:hover,.new-session-btn:focus-visible{
+      background:var(--navy-soft);
+      box-shadow:0 0 0 3px rgba(215,166,58,.18),0 10px 24px rgba(7,17,31,.14);
+    }
+    .directory-btn{
+      min-height:46px;
+      padding:12px 19px;
+      border:1px solid var(--navy);
+      border-radius:12px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .directory-btn:hover,.directory-btn:focus-visible{
+      border-color:var(--gold);
+      background:#fffaf0;
+      box-shadow:0 0 0 3px rgba(215,166,58,.14);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .stat{
+      min-height:124px;
+      padding:22px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.82);
+      box-shadow:var(--shadow);
+    }
+    .stat-label{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .stat-value{
+      margin-top:10px;
+      color:var(--navy);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:42px;
+      line-height:1;
+    }
+    .stat.confirmed{border-top:3px solid var(--green)}
+    .stat.declined{border-top:3px solid var(--red)}
+    .stat.pending{border-top:3px solid var(--gold)}
+    .stat.cancelled{border-top:3px solid #667085}
+    .stat.total{border-top:3px solid var(--navy)}
+
+    .attendance-alert{
+      margin-bottom:18px;
+      padding:17px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      border:1px solid #f4b8b1;
+      border-left:5px solid var(--red);
+      border-radius:15px;
+      background:linear-gradient(135deg,#fff7f5,var(--red-soft));
+      box-shadow:0 12px 28px rgba(180,35,24,.08);
+      color:#7a271a;
+    }
+    .attendance-alert-copy{display:flex;align-items:flex-start;gap:13px;min-width:0}
+    .attendance-alert-icon{
+      flex:0 0 34px;
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--red);
+      color:var(--white);
+      font-size:18px;
+      font-weight:900;
+    }
+    .attendance-alert strong{
+      display:block;
+      margin-bottom:4px;
+      color:var(--red);
+      font-size:12px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .attendance-alert p{margin:0;font-size:13px;line-height:1.45}
+    .attendance-alert-btn{
+      flex:0 0 auto;
+      min-height:40px;
+      padding:10px 14px;
+      border:1px solid var(--red);
+      border-radius:10px;
+      background:var(--red);
+      color:var(--white);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .attendance-alert-btn:hover,.attendance-alert-btn:focus-visible{
+      background:#8f1d14;
+      box-shadow:0 0 0 3px rgba(180,35,24,.14);
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.86);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .filters{
+      padding:18px;
+      display:grid;
+      grid-template-columns:minmax(260px,1.55fr) 160px minmax(240px,.9fr) minmax(170px,.72fr) auto;
+      column-gap:26px;
+      row-gap:12px;
+      align-items:end;
+      border-bottom:1px solid var(--line);
+    }
+    .filter{min-width:0}
+    .filter label{
+      display:block;
+      margin-bottom:7px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .filter input,.filter select{
+      width:100%;
+      min-width:0;
+      max-width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    #dateFilter{
+      display:block;
+      width:160px!important;
+      inline-size:160px!important;
+      min-inline-size:0!important;
+      max-width:160px!important;
+      max-inline-size:160px!important;
+      overflow:hidden;
+      padding-inline:10px 7px;
+      font-size:13px;
+    }
+    #dateFilter::-webkit-date-and-time-value{
+      min-width:0;
+      text-align:left;
+    }
+    #dateFilter::-webkit-datetime-edit{
+      min-width:0;
+      overflow:hidden;
+    }
+    #instructorFilter{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .filter input:focus,.filter select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.15)}
+    .refresh-btn{
+      min-height:44px;
+      padding:10px 15px;
+      border:1px solid var(--gold);
+      border-radius:11px;
+      background:var(--navy);
+      color:var(--white);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .toolbar-row{
+      padding:13px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      border-bottom:1px solid var(--line);
+      background:#fbf8f2;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .check{display:flex;align-items:center;gap:9px}
+    .check input{width:17px;height:17px;accent-color:var(--navy)}
+
+    .table-wrap{overflow:auto}
+    table{width:100%;min-width:1420px;border-collapse:collapse}
+    th{
+      padding:14px 16px;
+      background:var(--navy);
+      color:#f1d898;
+      text-align:left;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    td{
+      padding:16px;
+      border-bottom:1px solid #ece4d8;
+      color:#344054;
+      font-size:13px;
+      line-height:1.45;
+      vertical-align:top;
+    }
+    tbody tr:hover{background:#fffcf7}
+    tbody tr.declined-row{background:#fff8f6;box-shadow:inset 4px 0 0 var(--red)}
+    tbody tr.declined-row:hover{background:#fff1ee}
+    tbody tr.cancelled-row{background:#f7f8fa;box-shadow:inset 4px 0 0 #667085}
+    tbody tr.cancelled-row:hover{background:#f1f3f6}
+    .student{color:var(--navy);font-weight:800}
+    .cell-title{color:var(--navy);font-weight:700}
+    .cell-sub{margin-top:3px;color:var(--muted);font-size:12px}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+    .badge.confirmed{color:var(--green);background:var(--green-soft)}
+    .badge.declined{color:var(--red);background:var(--red-soft)}
+    .badge.pending{color:var(--amber);background:var(--amber-soft)}
+    .badge.cancelled{color:#475467;background:#eaecf0}
+    .reminder.sent{color:var(--green);font-weight:800}
+    .reminder.waiting{color:var(--muted)}
+    .message-state{display:block;min-width:132px}
+    .message-state.sent{color:var(--green);font-weight:800}
+    .message-state.waiting,.message-state.unavailable{color:var(--muted)}
+    .session-actions{
+      min-width:142px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:8px;
+    }
+    .edit-session-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid var(--gold);
+      border-radius:10px;
+      background:#fffaf0;
+      color:var(--navy);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .edit-session-btn:hover,.edit-session-btn:focus-visible{
+      background:var(--gold-soft);
+      box-shadow:0 0 0 3px rgba(215,166,58,.14);
+    }
+    .edit-session-btn:disabled{cursor:wait;opacity:.62}
+    .history-session-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid #98a2b3;
+      border-radius:10px;
+      background:#f8f9fb;
+      color:#344054;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .history-session-btn:hover,.history-session-btn:focus-visible{
+      border-color:var(--navy);
+      background:#eef1f5;
+      box-shadow:0 0 0 3px rgba(7,17,31,.09);
+    }
+    .cancel-session-action-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border:1px solid #d92d20;
+      border-radius:10px;
+      background:#fff7f5;
+      color:#b42318;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .cancel-session-action-btn:hover,.cancel-session-action-btn:focus-visible{
+      background:var(--red-soft);
+      box-shadow:0 0 0 3px rgba(180,35,24,.12);
+    }
+    .cancel-session-action-btn:disabled{cursor:wait;opacity:.62}
+    .send-whatsapp-btn{
+      min-height:38px;
+      padding:9px 12px;
+      border:1px solid #0a8f5a;
+      border-radius:10px;
+      background:var(--green);
+      color:var(--white);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.65px;
+      line-height:1.2;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .send-whatsapp-btn:hover,.send-whatsapp-btn:focus-visible{
+      background:#06663f;
+      box-shadow:0 0 0 3px rgba(8,119,75,.14);
+    }
+    .send-whatsapp-btn:disabled{cursor:wait;opacity:.62}
+    .action-message{
+      margin:14px 18px 0;
+      padding:12px 14px;
+      border-radius:11px;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.45;
+    }
+    .action-message.success{border:1px solid #a8ddc4;background:var(--green-soft);color:var(--green)}
+    .action-message.error{border:1px solid #ffc5bf;background:var(--red-soft);color:var(--red)}
+    .empty,.loading,.error-box{
+      padding:54px 24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+    .error-box{color:var(--red)}
+    .mobile-list{display:none}
+    .privacy-note{
+      margin-top:18px;
+      padding:15px 17px;
+      border-left:3px solid var(--gold);
+      background:rgba(255,255,255,.5);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .privacy-note strong{color:var(--navy)}
+
+    body.modal-open{overflow:hidden}
+    .modal-overlay{
+      position:fixed;
+      z-index:60;
+      inset:0;
+      height:100vh;
+      height:100dvh;
+      padding:22px;
+      display:grid;
+      place-items:center;
+      background:rgba(3,10,19,.72);
+      backdrop-filter:blur(7px);
+    }
+    .modal-card{
+      width:min(900px,100%);
+      max-height:calc(100vh - 44px);
+      max-height:calc(100dvh - 44px);
+      overflow:auto;
+      border:1px solid var(--gold-soft);
+      border-top:4px solid var(--gold);
+      border-radius:22px;
+      background:var(--cream-light);
+      box-shadow:0 30px 90px rgba(0,0,0,.34);
+    }
+    .modal-header{
+      padding:24px 26px 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:24px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(135deg,#fff,#f8f0e3);
+    }
+    .modal-header h2{margin:3px 0 0;font-size:30px;line-height:1}
+    .modal-header p{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    .modal-close{
+      flex:0 0 auto;
+      width:42px;
+      height:42px;
+      border:1px solid var(--line);
+      border-radius:50%;
+      background:var(--white);
+      color:var(--navy);
+      font-size:24px;
+      line-height:1;
+    }
+    .modal-close:hover,.modal-close:focus-visible{border-color:var(--gold);background:#fffaf0}
+    .session-form{padding:24px 26px 26px}
+    .session-form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px 20px;
+    }
+    .session-field{min-width:0}
+    .session-field.span-2{grid-column:1 / -1}
+    .session-field label{
+      display:block;
+      margin-bottom:7px;
+      color:var(--navy);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:1.15px;
+      text-transform:uppercase;
+    }
+    .session-field input,.session-field select,.session-field textarea{
+      width:100%;
+      min-width:0;
+      max-width:100%;
+      min-height:48px;
+      padding:11px 13px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .session-field textarea{min-height:108px;resize:vertical;line-height:1.45}
+    .session-field input[type="date"],
+    .session-field input[type="time"]{
+      display:block;
+      inline-size:100%;
+      min-inline-size:0;
+      max-inline-size:100%;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .session-field input:focus,.session-field select:focus,.session-field textarea:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.16);
+    }
+    .session-field input[readonly]{background:#f4f1eb;color:#475467}
+    .student-picker{position:relative}
+    .student-suggestions{
+      position:absolute;
+      z-index:12;
+      top:calc(100% + 6px);
+      right:0;
+      left:0;
+      max-height:255px;
+      overflow:auto;
+      border:1px solid var(--gold-soft);
+      border-radius:12px;
+      background:var(--white);
+      box-shadow:0 18px 38px rgba(7,17,31,.18);
+    }
+    .student-suggestion{
+      width:100%;
+      padding:12px 13px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      border:0;
+      border-bottom:1px solid #eee7db;
+      background:var(--white);
+      color:var(--navy);
+      text-align:left;
+    }
+    .student-suggestion:last-child{border-bottom:0}
+    .student-suggestion:hover,.student-suggestion:focus-visible{background:#fff8e8}
+    .student-suggestion strong{font-size:12px;line-height:1.35}
+    .student-suggestion span{flex:0 0 auto;color:var(--muted);font-size:11px}
+    .field-hint{display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.4}
+    .create-note{
+      margin-top:20px;
+      padding:13px 15px;
+      border-left:3px solid var(--gold);
+      background:#fff7df;
+      color:#6f5012;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .create-message{min-height:21px;margin-top:15px;font-size:13px;font-weight:700;line-height:1.45}
+    .create-message.error{color:var(--red)}
+    .create-message.success{color:var(--green)}
+    .edit-summary{
+      margin-bottom:20px;
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px 20px;
+      border:1px solid var(--line);
+      border-left:4px solid var(--gold);
+      border-radius:12px;
+      background:var(--white);
+    }
+    .edit-summary span{
+      display:block;
+      margin-bottom:4px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .edit-summary strong{color:var(--navy);font-size:13px;line-height:1.35}
+    .form-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+    }
+    .cancel-btn,.save-session-btn{
+      min-height:46px;
+      padding:12px 18px;
+      border-radius:11px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .cancel-btn{border:1px solid var(--line);background:var(--white);color:var(--navy)}
+    .save-session-btn{border:1px solid var(--gold);background:var(--navy);color:var(--white)}
+    .save-session-btn:disabled{cursor:wait;opacity:.65}
+    .confirm-cancellation-btn{border-color:#d92d20;background:#b42318}
+    .confirm-cancellation-btn:hover,.confirm-cancellation-btn:focus-visible{background:#912018}
+    .cancellation-detail{margin-top:7px;max-width:220px;color:#667085;font-size:11px;line-height:1.4}
+    .absence-reason{
+      max-width:270px;
+      color:#344054;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .absence-reason strong{display:block;margin-bottom:4px;color:var(--navy);font-size:11px}
+    .absence-reason.received{
+      padding:9px 10px;
+      border-left:3px solid var(--green);
+      border-radius:8px;
+      background:var(--green-soft);
+    }
+    .absence-reason.waiting{
+      padding:9px 10px;
+      border-left:3px solid var(--gold);
+      border-radius:8px;
+      background:var(--amber-soft);
+      color:#6f5012;
+    }
+    .absence-reason.not-requested{color:var(--red);font-weight:700}
+    .absence-reason.not-applicable{color:var(--muted)}
+
+    .history-card{width:min(760px,100%)}
+    .history-body{padding:22px 26px 28px}
+    .history-session-summary{
+      margin-bottom:20px;
+      padding:15px 17px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px 20px;
+      border:1px solid var(--line);
+      border-left:4px solid var(--gold);
+      border-radius:13px;
+      background:var(--white);
+    }
+    .history-session-summary span{
+      display:block;
+      margin-bottom:4px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .history-session-summary strong{color:var(--navy);font-size:13px;line-height:1.4}
+    .history-order-note{margin:0 0 14px;color:var(--muted);font-size:11px}
+    .history-timeline{position:relative;padding-left:28px}
+    .history-timeline::before{
+      content:"";
+      position:absolute;
+      top:9px;
+      bottom:9px;
+      left:8px;
+      width:2px;
+      background:#e4ded3;
+    }
+    .history-event{position:relative;margin-bottom:14px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;background:var(--white)}
+    .history-event:last-child{margin-bottom:0}
+    .history-event::before{
+      content:"";
+      position:absolute;
+      top:18px;
+      left:-27px;
+      width:12px;
+      height:12px;
+      border:3px solid var(--cream-light);
+      border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 0 1px #d8c7a5;
+    }
+    .history-event.student::before{background:var(--green)}
+    .history-event.system::before{background:#667085}
+    .history-event-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    .history-event-title{color:var(--navy);font-size:13px;font-weight:900;line-height:1.35}
+    .history-event-time{flex:0 0 auto;color:var(--muted);font-size:11px;font-weight:700;text-align:right;line-height:1.4}
+    .history-event-actor{margin-top:5px;color:#667085;font-size:11px;line-height:1.4}
+    .history-change-list{margin:11px 0 0;padding:10px 12px;border-radius:9px;background:#f8f6f1;color:#475467;font-size:11px;line-height:1.55}
+    .history-change-list div + div{margin-top:4px}
+    .history-change-list strong{color:var(--navy)}
+    .history-empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
+
+    .directory-card{width:min(1080px,100%)}
+    .directory-body{padding:22px 26px 26px}
+    .directory-summary{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .directory-stat{
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--white);
+    }
+    .directory-stat span{
+      display:block;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+    }
+    .directory-stat strong{display:block;margin-top:5px;color:var(--navy);font-size:23px}
+    .directory-toolbar{
+      display:grid;
+      grid-template-columns:minmax(240px,1fr) 190px auto;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .directory-toolbar input,.directory-toolbar select{
+      width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .directory-toolbar input:focus,.directory-toolbar select:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.15);
+    }
+    .student-editor{
+      margin-bottom:15px;
+      padding:16px;
+      border:1px solid var(--gold-soft);
+      border-left:4px solid var(--gold);
+      border-radius:13px;
+      background:#fffaf0;
+    }
+    .student-editor h3{margin:0 0 14px;color:var(--navy);font:700 20px/1.1 Georgia,serif}
+    .student-editor-grid{
+      display:grid;
+      grid-template-columns:minmax(240px,1.35fr) minmax(220px,1fr) auto;
+      gap:12px;
+      align-items:end;
+    }
+    .student-active-check{
+      min-height:48px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:12px;
+      font-weight:800;
+    }
+    .student-active-check input{width:17px;height:17px;accent-color:var(--navy)}
+    .student-list{
+      max-height:min(52vh,520px);
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--white);
+    }
+    .student-list-head,.student-row{
+      display:grid;
+      grid-template-columns:minmax(260px,1.35fr) minmax(170px,.85fr) 130px 105px 82px;
+      gap:12px;
+      align-items:center;
+    }
+    .student-list-head{
+      position:sticky;
+      z-index:2;
+      top:0;
+      padding:11px 14px;
+      background:var(--navy);
+      color:#f1d898;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.9px;
+      text-transform:uppercase;
+    }
+    .student-row{padding:12px 14px;border-bottom:1px solid #eee7db;font-size:12px}
+    .student-row:last-child{border-bottom:0}
+    .student-row:hover{background:#fffcf7}
+    .student-row.inactive{background:#f7f7f6;color:#7b8491}
+    .student-name{min-width:0;color:var(--navy);font-weight:800;line-height:1.35}
+    .student-source{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:400}
+    .student-phone{font-variant-numeric:tabular-nums;white-space:nowrap}
+    .contact-badge,.active-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:6px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .contact-badge.verified,.active-badge.active{color:var(--green);background:var(--green-soft)}
+    .contact-badge.needs_review{color:var(--amber);background:var(--amber-soft)}
+    .contact-badge.missing,.active-badge.inactive{color:var(--red);background:var(--red-soft)}
+    .student-edit-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+    .student-edit-btn:hover,.student-edit-btn:focus-visible{border-color:var(--gold);background:#fff8e8}
+    .directory-empty{padding:34px 20px;color:var(--muted);text-align:center;font-size:13px}
+
+    @media(max-width:1050px){
+      .modal-overlay{
+        place-items:start center;
+        overflow:hidden;
+      }
+      .modal-card{
+        max-height:calc(100vh - 44px);
+        max-height:calc(100dvh - 44px);
+      }
+      .session-form-grid{column-gap:28px}
+      .auth-shell{
+        grid-template-columns:1fr;
+        justify-items:center;
+        gap:28px;
+        padding-top:44px;
+        padding-bottom:44px;
+      }
+      .auth-intro{text-align:center}
+      .auth-intro-label{justify-content:center;margin-bottom:12px}
+      .auth-intro h2{max-width:none;font-size:clamp(38px,7vw,58px)}
+      .auth-intro p{margin:14px auto 0;font-size:14px}
+      .flight-route{height:30px;margin:24px auto 0}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .refresh-btn{width:100%}
+    }
+    @media(max-width:720px){
+      .header-inner,main{width:min(100% - 28px,1320px)}
+      .header-email{display:none}
+      .hero{align-items:flex-start;flex-direction:column}
+      .hero-actions{width:100%;align-items:flex-start}
+      .sync{text-align:left}
+      .hero-button-row{width:100%;display:grid;grid-template-columns:1fr 1fr}
+      .new-session-btn,.directory-btn{width:100%}
+      .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+      .stat{min-height:108px;padding:17px}
+      .stat-value{font-size:36px}
+      .attendance-alert{align-items:stretch;flex-direction:column;gap:14px}
+      .attendance-alert-btn{width:100%}
+      .filters{grid-template-columns:1fr}
+      .toolbar-row{align-items:flex-start;flex-direction:column}
+      .table-wrap{display:none}
+      .mobile-list{display:grid;gap:12px;padding:14px}
+      .session-card{
+        padding:17px;
+        border:1px solid var(--line);
+        border-radius:15px;
+        background:var(--white);
+      }
+      .session-card.declined-card{
+        border-color:#f4b8b1;
+        border-left:5px solid var(--red);
+        background:#fff8f6;
+      }
+      .session-card.cancelled-card{
+        border-color:#cfd4dc;
+        border-left:5px solid #667085;
+        background:#f7f8fa;
+      }
+      .session-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+      .session-card h2{margin:0;font:800 16px/1.3 Arial,sans-serif}
+      .session-card dl{margin:15px 0 0;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:12px}
+      .session-card dt{color:var(--muted)}
+      .session-card dd{margin:0;color:#344054}
+      .session-card .session-actions{width:100%;margin-top:8px}
+      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .history-session-btn,.session-card .cancel-session-action-btn{width:100%}
+      .auth-shell{padding:18px}
+      .auth-intro{display:none}
+      .auth-card{padding:29px 22px}
+      .modal-overlay{padding:10px}
+      .modal-card{max-height:calc(100vh - 20px);border-radius:17px}
+      .modal-header{padding:20px}
+      .modal-header h2{font-size:27px}
+      .session-form{padding:20px}
+      .session-form-grid{grid-template-columns:1fr;gap:15px}
+      .session-field.span-2{grid-column:auto}
+      .edit-summary{grid-template-columns:1fr}
+      .form-actions{flex-direction:column-reverse}
+      .cancel-btn,.save-session-btn{width:100%}
+      .history-session-summary{grid-template-columns:1fr}
+      .history-event-top{display:block}
+      .history-event-time{margin-top:5px;text-align:left}
+      .directory-body{padding:16px}
+      .directory-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .directory-toolbar{grid-template-columns:1fr}
+      .student-editor-grid{grid-template-columns:1fr}
+      .student-list-head{display:none}
+      .student-row{grid-template-columns:1fr auto;gap:8px 12px}
+      .student-row > :nth-child(2),.student-row > :nth-child(3),.student-row > :nth-child(4){grid-column:1}
+      .student-row > :last-child{grid-column:2;grid-row:1 / span 2}
+    }
+    @media(max-width:430px){
+      .back-link{display:none}
+      .brand{font-size:34px}
+      .subbrand{font-size:8px;letter-spacing:4.5px}
+      .stats{grid-template-columns:1fr 1fr}
+      .stat-label{font-size:9px}
+    }
+  </style>
+</head>
+<body>
+  <section class="auth-shell" id="authShell">
+    <div class="auth-intro" aria-hidden="true">
+      <div class="auth-intro-label">Control operacional</div>
+      <h2>Asistencia clara.<br />Decisiones a tiempo.</h2>
+      <p>Un punto único para consultar el estado de cada sesión VOA con precisión y trazabilidad.</p>
+      <div class="flight-route">
+        <span class="route-code">SESSION</span>
+        <span class="route-code">CONFIRMED</span>
+      </div>
+    </div>
+    <form class="auth-card" id="loginForm">
+      <div class="auth-brand">Veyra</div>
+      <div class="auth-subbrand">PILOT INTELLIGENCE</div>
+      <h1>Control VOA</h1>
+      <p>Inicia sesión con la cuenta administradora autorizada para consultar el estado de asistencia.</p>
+      <div class="field">
+        <label for="email">Correo autorizado</label>
+        <input id="email" type="email" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" required />
+      </div>
+      <button class="primary-btn" id="loginButton" type="submit">Ingresar al panel</button>
+      <button class="link-btn" id="resetButton" type="button">Restablecer contraseña</button>
+      <div class="auth-message" id="authMessage" role="alert" aria-live="polite"></div>
+      <a class="auth-back" href="./internal-access.html">Volver al espacio del instructor</a>
+    </form>
+
+    <form class="auth-card hidden" id="passwordForm">
+      <div class="auth-brand">Veyra</div>
+      <div class="auth-subbrand">PILOT INTELLIGENCE</div>
+      <h1>Define tu contraseña</h1>
+      <p>El enlace fue validado. Crea una contraseña de al menos ocho caracteres para completar el acceso.</p>
+      <div class="field">
+        <label for="newPassword">Nueva contraseña</label>
+        <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required />
+      </div>
+      <div class="field">
+        <label for="confirmPassword">Confirmar contraseña</label>
+        <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required />
+      </div>
+      <button class="primary-btn" id="passwordButton" type="submit">Guardar contraseña</button>
+      <div class="auth-message" id="passwordMessage" role="alert" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <div class="hidden" id="app">
+    <header>
+      <div class="header-inner">
+        <a class="logo" href="./internal-access.html" aria-label="Volver al espacio del instructor">
+          <div class="brand">Veyra</div>
+          <div class="subbrand">PILOT INTELLIGENCE</div>
+        </a>
+        <div class="header-actions">
+          <span class="header-email" id="sessionEmail"></span>
+          <a class="back-link" href="./internal-access.html">Espacio del instructor</a>
+          <button class="ghost-btn" id="logoutButton" type="button">Cerrar sesión</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Administración · Asistencia</div>
+          <h1>Control VOA</h1>
+          <p>Consulta confirmaciones, crea sesiones y controla las respuestas de asistencia desde una sola vista protegida.</p>
+        </div>
+        <div class="hero-actions">
+          <div class="hero-button-row">
+            <button class="directory-btn" id="directoryButton" type="button">Directorio</button>
+            <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
+          </div>
+          <div class="sync" aria-live="polite">
+            <strong id="syncLabel">Preparando datos…</strong>
+            <span>Actualización automática cada minuto</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Resumen de asistencia">
+        <article class="stat total">
+          <div class="stat-label">Sesiones visibles</div>
+          <div class="stat-value" id="totalCount">0</div>
+        </article>
+        <article class="stat confirmed">
+          <div class="stat-label">Confirmadas</div>
+          <div class="stat-value" id="confirmedCount">0</div>
+        </article>
+        <article class="stat declined">
+          <div class="stat-label">No puede asistir</div>
+          <div class="stat-value" id="declinedCount">0</div>
+        </article>
+        <article class="stat pending">
+          <div class="stat-label">Pendientes</div>
+          <div class="stat-value" id="pendingCount">0</div>
+        </article>
+        <article class="stat cancelled">
+          <div class="stat-label">Canceladas</div>
+          <div class="stat-value" id="cancelledCount">0</div>
+        </article>
+      </section>
+
+      <section class="attendance-alert hidden" id="declinedAlert" role="alert" aria-live="polite">
+        <div class="attendance-alert-copy">
+          <span class="attendance-alert-icon" aria-hidden="true">!</span>
+          <div>
+            <strong>Reprogramación requerida</strong>
+            <p id="declinedAlertText"></p>
+          </div>
+        </div>
+        <button class="attendance-alert-btn" id="showDeclinedButton" type="button">Ver sesiones</button>
+      </section>
+
+      <section class="panel" aria-label="Sesiones VOA">
+        <div class="filters">
+          <div class="filter">
+            <label for="searchInput">Buscar</label>
+            <input id="searchInput" type="search" placeholder="Estudiante, misión, equipo o lugar" />
+          </div>
+          <div class="filter filter--date">
+            <label for="dateFilter">Fecha</label>
+            <input id="dateFilter" type="date" />
+          </div>
+          <div class="filter filter--instructor">
+            <label for="instructorFilter">Instructor</label>
+            <select id="instructorFilter"><option value="">Todos</option></select>
+          </div>
+          <div class="filter">
+            <label for="statusFilter">Estado</label>
+            <select id="statusFilter">
+              <option value="">Todos</option>
+              <option value="confirmed">Confirmadas</option>
+              <option value="declined">No puede asistir</option>
+              <option value="pending">Pendientes</option>
+              <option value="cancelled">Canceladas</option>
+            </select>
+          </div>
+          <button class="refresh-btn" id="refreshButton" type="button">Actualizar</button>
+        </div>
+
+        <div class="toolbar-row">
+          <label class="check">
+            <input id="includePast" type="checkbox" />
+            <span>Incluir sesiones anteriores</span>
+          </label>
+          <span id="resultCount">0 sesiones</span>
+        </div>
+
+        <div id="dataState" class="loading">Cargando sesiones…</div>
+
+        <div class="table-wrap hidden" id="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Fecha y hora</th>
+                <th>Misión / equipo</th>
+                <th>Lugar</th>
+                <th>Instructor</th>
+                <th>Estado</th>
+                <th>Motivo de inasistencia</th>
+                <th>Mensaje WhatsApp</th>
+                <th>Recordatorio</th>
+              </tr>
+            </thead>
+            <tbody id="sessionRows"></tbody>
+          </table>
+        </div>
+
+        <div class="mobile-list hidden" id="mobileList"></div>
+      </section>
+
+      <div class="action-message hidden" id="actionMessage" role="status" aria-live="polite"></div>
+
+      <div class="privacy-note">
+        <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos solo se muestran dentro del directorio y del formulario de programación.
+      </div>
+    </main>
+
+    <div class="modal-overlay hidden" id="sessionModal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Programación VOA</div>
+            <h2 id="sessionModalTitle">Nueva sesión</h2>
+            <p>Completa todos los datos que aparecerán en la notificación del estudiante.</p>
+          </div>
+          <button class="modal-close" id="closeSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="newSessionForm" novalidate>
+          <div class="session-form-grid">
+            <div class="session-field">
+              <label for="newStudentName">Estudiante</label>
+              <div class="student-picker">
+                <input id="newStudentName" type="search" maxlength="120" placeholder="Busca por nombre" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="newStudentSuggestions" required />
+                <div class="student-suggestions hidden" id="newStudentSuggestions" role="listbox"></div>
+              </div>
+              <span class="field-hint">Selecciona un estudiante activo con celular verificado.</span>
+            </div>
+            <div class="session-field">
+              <label for="newStudentPhone">Celular con indicativo</label>
+              <input id="newStudentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="Se completa automáticamente" autocomplete="off" readonly required />
+              <span class="field-hint">El número proviene del directorio protegido.</span>
+            </div>
+            <div class="session-field">
+              <label for="newMission">Misión</label>
+              <input id="newMission" type="text" maxlength="60" placeholder="MES M8" autocomplete="off" required />
+            </div>
+            <div class="session-field">
+              <label for="newInstructor">Instructor</label>
+              <select id="newInstructor" required>
+                <option value="">Selecciona un instructor</option>
+              </select>
+            </div>
+            <div class="session-field">
+              <label for="newSessionDate">Fecha</label>
+              <input id="newSessionDate" type="date" required />
+            </div>
+            <div class="session-field">
+              <label for="newStartTime">Hora de inicio</label>
+              <input id="newStartTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="newEndTime">Hora de finalización</label>
+              <input id="newEndTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="newEquipment">Equipo</label>
+              <input id="newEquipment" type="text" maxlength="80" value="SR20 ATD" autocomplete="off" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="newLocation">Lugar</label>
+              <input id="newLocation" type="text" maxlength="120" value="Hangar Guaymaral" autocomplete="off" required />
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> guardar la sesión no envía WhatsApp. El mensaje se enviará después desde el control correspondiente.</div>
+          <div class="create-message" id="createMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="cancelSessionButton" type="button">Cancelar</button>
+            <button class="save-session-btn" id="saveSessionButton" type="submit">Guardar sesión</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-overlay hidden" id="editSessionModal" role="dialog" aria-modal="true" aria-labelledby="editSessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Programación VOA</div>
+            <h2 id="editSessionModalTitle">Editar sesión</h2>
+            <p>Corrige la programación antes de enviar la notificación al estudiante.</p>
+          </div>
+          <button class="modal-close" id="closeEditSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="editSessionForm" novalidate>
+          <div class="edit-summary">
+            <div><span>Estudiante</span><strong id="editSessionStudent">—</strong></div>
+            <div><span>Misión</span><strong id="editSessionMission">—</strong></div>
+          </div>
+
+          <div class="session-form-grid">
+            <div class="session-field">
+              <label for="editInstructor">Instructor</label>
+              <select id="editInstructor" required>
+                <option value="">Selecciona un instructor</option>
+              </select>
+            </div>
+            <div class="session-field">
+              <label for="editSessionDate">Fecha</label>
+              <input id="editSessionDate" type="date" required />
+            </div>
+            <div class="session-field">
+              <label for="editStartTime">Hora de inicio</label>
+              <input id="editStartTime" type="time" step="300" required />
+            </div>
+            <div class="session-field">
+              <label for="editEndTime">Hora de finalización</label>
+              <input id="editEndTime" type="time" step="300" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="editEquipment">Equipo</label>
+              <input id="editEquipment" type="text" maxlength="80" autocomplete="off" required />
+            </div>
+            <div class="session-field span-2">
+              <label for="editLocation">Lugar</label>
+              <input id="editLocation" type="text" maxlength="120" autocomplete="off" required />
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> esta edición no envía WhatsApp. Después del primer envío, la sesión quedará bloqueada para conservar la trazabilidad.</div>
+          <div class="create-message" id="editSessionMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="cancelEditSessionButton" type="button">Cancelar</button>
+            <button class="save-session-btn" id="saveEditSessionButton" type="submit">Guardar cambios</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-overlay hidden" id="cancelSessionModal" role="dialog" aria-modal="true" aria-labelledby="cancelSessionModalTitle">
+      <section class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Historial</div>
+            <h2 id="cancelSessionModalTitle">Cancelar sesión</h2>
+            <p>La sesión permanecerá visible con el motivo, la fecha y la cuenta que registró la cancelación.</p>
+          </div>
+          <button class="modal-close" id="closeCancelSessionModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form class="session-form" id="cancelSessionForm" novalidate>
+          <div class="edit-summary">
+            <div><span>Estudiante</span><strong id="cancelSessionStudent">—</strong></div>
+            <div><span>Misión</span><strong id="cancelSessionMission">—</strong></div>
+            <div><span>Fecha y hora</span><strong id="cancelSessionSchedule">—</strong></div>
+            <div><span>Estado actual</span><strong id="cancelSessionCurrentStatus">—</strong></div>
+          </div>
+
+          <div class="session-form-grid">
+            <div class="session-field span-2">
+              <label for="cancellationReasonCategory">Motivo</label>
+              <select id="cancellationReasonCategory" required>
+                <option value="">Selecciona un motivo</option>
+                <option value="Solicitud del estudiante">Solicitud del estudiante</option>
+                <option value="Cambio de programación">Cambio de programación</option>
+                <option value="Instructor no disponible">Instructor no disponible</option>
+                <option value="Equipo o simulador no disponible">Equipo o simulador no disponible</option>
+                <option value="Condiciones operacionales">Condiciones operacionales</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="session-field span-2">
+              <label for="cancellationReasonDetails">Detalle adicional</label>
+              <textarea id="cancellationReasonDetails" maxlength="300" placeholder="Opcional, excepto cuando seleccionas Otro"></textarea>
+              <span class="field-hint">No incluyas datos médicos ni información sensible.</span>
+            </div>
+          </div>
+
+          <div class="create-note"><strong>Importante:</strong> cancelar no elimina el registro y no envía WhatsApp. Si el estudiante ya fue notificado, deberás informarle por el canal correspondiente.</div>
+          <div class="create-message" id="cancelSessionMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="cancel-btn" id="keepSessionButton" type="button">Conservar sesión</button>
+            <button class="save-session-btn confirm-cancellation-btn" id="confirmCancellationButton" type="submit">Confirmar cancelación</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-overlay hidden" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+      <section class="modal-card history-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Trazabilidad</div>
+            <h2 id="historyModalTitle">Historial de la sesión</h2>
+            <p>Consulta los eventos comprobables y los cambios registrados sin modificar la sesión.</p>
+          </div>
+          <button class="modal-close" id="closeHistoryModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="history-body">
+          <div class="history-session-summary">
+            <div><span>Estudiante</span><strong id="historyStudent">—</strong></div>
+            <div><span>Misión</span><strong id="historyMission">—</strong></div>
+            <div><span>Fecha y hora</span><strong id="historySchedule">—</strong></div>
+            <div><span>Estado actual</span><strong id="historyCurrentStatus">—</strong></div>
+          </div>
+          <p class="history-order-note">Eventos ordenados del más reciente al más antiguo.</p>
+          <div class="history-timeline" id="historyTimeline">
+            <div class="history-empty">Cargando historial…</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-overlay hidden" id="directoryModal" role="dialog" aria-modal="true" aria-labelledby="directoryModalTitle">
+      <section class="modal-card directory-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Datos protegidos</div>
+            <h2 id="directoryModalTitle">Directorio de estudiantes</h2>
+            <p>Consulta los contactos, corrige datos pendientes y controla quiénes están activos para programación.</p>
+          </div>
+          <button class="modal-close" id="closeDirectoryModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="directory-body">
+          <div class="directory-summary" aria-label="Resumen del directorio">
+            <div class="directory-stat"><span>Total</span><strong id="studentTotalCount">0</strong></div>
+            <div class="directory-stat"><span>Activos</span><strong id="studentActiveCount">0</strong></div>
+            <div class="directory-stat"><span>Contactos listos</span><strong id="studentVerifiedCount">0</strong></div>
+            <div class="directory-stat"><span>Datos pendientes</span><strong id="studentPendingDataCount">0</strong></div>
+          </div>
+
+          <div class="directory-toolbar">
+            <input id="studentSearchInput" type="search" placeholder="Buscar estudiante o celular" autocomplete="off" aria-label="Buscar estudiante" />
+            <select id="studentStatusFilter" aria-label="Filtrar estudiantes">
+              <option value="">Todos los estudiantes</option>
+              <option value="active">Solo activos</option>
+              <option value="inactive">Solo inactivos</option>
+              <option value="needs_data">Datos pendientes</option>
+            </select>
+            <button class="new-session-btn" id="addStudentButton" type="button">+ Nuevo estudiante</button>
+          </div>
+
+          <form class="student-editor hidden" id="studentForm" novalidate>
+            <h3 id="studentFormTitle">Nuevo estudiante</h3>
+            <div class="student-editor-grid">
+              <div class="session-field">
+                <label for="studentFullName">Nombre completo</label>
+                <input id="studentFullName" type="text" maxlength="160" autocomplete="off" autocapitalize="words" required />
+              </div>
+              <div class="session-field">
+                <label for="studentPhone">Celular con indicativo</label>
+                <input id="studentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" />
+                <span class="field-hint">Puede dejarse vacío hasta verificarlo.</span>
+              </div>
+              <label class="student-active-check">
+                <input id="studentActive" type="checkbox" checked />
+                <span>Estudiante activo</span>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="cancel-btn" id="cancelStudentButton" type="button">Cancelar</button>
+              <button class="save-session-btn" id="saveStudentButton" type="submit">Guardar estudiante</button>
+            </div>
+          </form>
+
+          <div class="create-message" id="directoryMessage" role="alert" aria-live="polite"></div>
+          <div class="student-list" id="studentList">
+            <div class="directory-empty">Cargando directorio…</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
+  <script>
+    "use strict";
+
+    const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
+    const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
+    const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
+    const DEFAULT_INSTRUCTORS = [
+      "Cap. García",
+      "Cap. González",
+      "Cap. Gutiérrez",
+      "Cap. Sabogal",
+      "Cap. Vargas",
+      "Cap. Vega"
+    ];
+    const BOGOTA_TZ = "America/Bogota";
+    const db = window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        })
+      : null;
+
+    const state = {
+      rows: [],
+      students: [],
+      historyRows: [],
+      session: null,
+      passwordMode: false,
+      loading: false,
+      creating: false,
+      updating: false,
+      cancelling: false,
+      studentsLoading: false,
+      studentSaving: false,
+      editingSessionId: null,
+      cancellingSessionId: null,
+      historySessionId: null,
+      editingStudentId: null,
+      selectedStudentId: null,
+      sendingSessionIds: new Set(),
+      actionTimer: null,
+      timer: null
+    };
+
+    const $ = function(id){ return document.getElementById(id); };
+
+    function normalize(value){
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function canonicalInstructorName(value){
+      const name = String(value || "").trim();
+      const key = normalize(name).replace(/\./g,"").replace(/\s+/g," ");
+      if(key === "cap sebastian gonzalez" || key === "capitan sebastian gonzalez"){
+        return "Cap. González";
+      }
+      return name;
+    }
+
+    function classifyStatus(value){
+      const text = normalize(value).replace(/[_-]+/g, " ");
+      if(/cancel/.test(text)) return "cancelled";
+      if(!text || /pend|sin respuesta|waiting|no response/.test(text)) return "pending";
+      if(/no puede|no asist|rechaz|declin|unable|not confirm/.test(text)) return "declined";
+      if(/confirm|asistira|acept|yes/.test(text) || /(^|\s)si($|\s)/.test(text)) return "confirmed";
+      return "pending";
+    }
+
+    function statusLabel(status){
+      if(status === "confirmed") return "Confirmada";
+      if(status === "declined") return "No puede asistir";
+      if(status === "cancelled") return "Cancelada";
+      return "Pendiente";
+    }
+
+    function escapeHtml(value){
+      return String(value == null ? "" : value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+    function dateKey(value){
+      if(!value) return "";
+      try{
+        return new Intl.DateTimeFormat("en-CA",{
+          timeZone:BOGOTA_TZ,year:"numeric",month:"2-digit",day:"2-digit"
+        }).format(new Date(value));
+      }catch(_error){
+        return "";
+      }
+    }
+
+    function timeKey(value){
+      if(!value) return "";
+      try{
+        const parts = new Intl.DateTimeFormat("en-GB",{
+          timeZone:BOGOTA_TZ,
+          hour:"2-digit",
+          minute:"2-digit",
+          hourCycle:"h23"
+        }).formatToParts(new Date(value));
+        const hour = parts.find(function(part){ return part.type === "hour"; });
+        const minute = parts.find(function(part){ return part.type === "minute"; });
+        return hour && minute ? hour.value + ":" + minute.value : "";
+      }catch(_error){
+        return "";
+      }
+    }
+
+    function formatDate(value){
+      if(!value) return "Sin fecha";
+      try{
+        return new Intl.DateTimeFormat("es-CO",{
+          timeZone:BOGOTA_TZ,
+          weekday:"short",
+          day:"2-digit",
+          month:"short",
+          year:"numeric"
+        }).format(new Date(value));
+      }catch(_error){
+        return "Fecha no disponible";
+      }
+    }
+
+    function formatTime(value){
+      if(!value) return "";
+      try{
+        return new Intl.DateTimeFormat("es-CO",{
+          timeZone:BOGOTA_TZ,
+          hour:"numeric",
+          minute:"2-digit",
+          hour12:true
+        }).format(new Date(value));
+      }catch(_error){
+        return "";
+      }
+    }
+
+    function formatRange(row){
+      const start = formatTime(row.session_start);
+      const end = formatTime(row.session_end);
+      return end ? start + " – " + end : start;
+    }
+
+    function setMessage(element,message,type){
+      element.textContent = message || "";
+      element.className = "auth-message" + (type ? " " + type : "");
+    }
+
+    function setAuthBusy(busy){
+      $("loginButton").disabled = busy;
+      $("resetButton").disabled = busy;
+      $("passwordButton").disabled = busy;
+    }
+
+    function setCreateMessage(message,type){
+      const element = $("createMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setEditSessionMessage(message,type){
+      const element = $("editSessionMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setCancelSessionMessage(message,type){
+      const element = $("cancelSessionMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setDirectoryMessage(message,type){
+      const element = $("directoryMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function setActionMessage(message,type){
+      const element = $("actionMessage");
+      if(state.actionTimer) window.clearTimeout(state.actionTimer);
+      state.actionTimer = null;
+      element.textContent = message || "";
+      element.className = "action-message" + (type ? " " + type : "");
+      if(!message){
+        element.classList.add("hidden");
+        return;
+      }
+      element.classList.remove("hidden");
+      state.actionTimer = window.setTimeout(function(){
+        element.classList.add("hidden");
+        state.actionTimer = null;
+      },8000);
+    }
+
+    function normalizePhone(value){
+      let digits = String(value || "").replace(/\D/g,"");
+      if(digits.length === 10 && digits.charAt(0) === "3") digits = "57" + digits;
+      if(digits.length >= 8 && digits.length <= 15 && digits.charAt(0) !== "0"){
+        return "+" + digits;
+      }
+      return "";
+    }
+
+    async function functionErrorDetails(error){
+      try{
+        if(error && error.context && typeof error.context.json === "function"){
+          return await error.context.json();
+        }
+      }catch(_error){
+        return null;
+      }
+      return null;
+    }
+
+    function bogotaIso(date,time){
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return "";
+      return date + "T" + time + ":00-05:00";
+    }
+
+    function populateSessionFormInstructors(){
+      ["newInstructor","editInstructor"].forEach(function(id){
+        const select = $(id);
+        DEFAULT_INSTRUCTORS.forEach(function(name){
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        });
+      });
+    }
+
+    function availableStudents(){
+      return state.students.filter(function(student){
+        return student.active === true &&
+          student.phone_status === "verified" &&
+          Boolean(student.phone_e164);
+      });
+    }
+
+    function sourceLabel(value){
+      if(value === "directorio_aeronova") return "Directorio Aeronova";
+      if(value === "sesion_voa") return "Sesión VOA";
+      return "Registro manual";
+    }
+
+    function contactStatusLabel(value){
+      if(value === "verified") return "Listo";
+      if(value === "needs_review") return "Verificar";
+      return "Sin celular";
+    }
+
+    function clearStudentSelection(){
+      state.selectedStudentId = null;
+      $("newStudentPhone").value = "";
+      $("newStudentName").removeAttribute("data-student-id");
+    }
+
+    function selectStudent(studentId){
+      const id = Number(studentId);
+      const student = state.students.find(function(item){ return Number(item.id) === id; });
+      if(!student || !student.active || student.phone_status !== "verified" || !student.phone_e164){
+        clearStudentSelection();
+        setCreateMessage("Este estudiante no está disponible para programar hasta verificar sus datos.","error");
+        return;
+      }
+      state.selectedStudentId = id;
+      $("newStudentName").value = student.full_name || "";
+      $("newStudentName").setAttribute("data-student-id",String(id));
+      $("newStudentPhone").value = student.phone_e164 || "";
+      $("newStudentSuggestions").classList.add("hidden");
+      $("newStudentName").setAttribute("aria-expanded","false");
+      setCreateMessage("");
+    }
+
+    function renderStudentSuggestions(){
+      const query = normalize($("newStudentName").value);
+      const suggestions = $("newStudentSuggestions");
+      if(!query){
+        suggestions.classList.add("hidden");
+        $("newStudentName").setAttribute("aria-expanded","false");
+        return;
+      }
+
+      const matches = availableStudents().filter(function(student){
+        return normalize(student.full_name).indexOf(query) >= 0;
+      }).slice(0,10);
+
+      if(!matches.length){
+        suggestions.innerHTML = '<div class="directory-empty">No hay coincidencias con contacto verificado.</div>';
+      }else{
+        suggestions.innerHTML = matches.map(function(student){
+          return '<button class="student-suggestion" type="button" role="option" data-student-select="' +
+            escapeHtml(student.id) + '"><strong>' + escapeHtml(student.full_name) +
+            '</strong><span>' + escapeHtml(student.phone_e164) + '</span></button>';
+        }).join("");
+      }
+      suggestions.classList.remove("hidden");
+      $("newStudentName").setAttribute("aria-expanded","true");
+    }
+
+    function filteredStudents(){
+      const search = normalize($("studentSearchInput").value);
+      const filter = $("studentStatusFilter").value;
+      return state.students.filter(function(student){
+        const haystack = normalize([student.full_name,student.phone_e164,student.notes].join(" "));
+        if(search && haystack.indexOf(search) < 0) return false;
+        if(filter === "active" && !student.active) return false;
+        if(filter === "inactive" && student.active) return false;
+        if(filter === "needs_data" && student.phone_status === "verified") return false;
+        return true;
+      });
+    }
+
+    function renderDirectory(){
+      const all = state.students;
+      const rows = filteredStudents();
+      $("studentTotalCount").textContent = all.length;
+      $("studentActiveCount").textContent = all.filter(function(item){ return item.active; }).length;
+      $("studentVerifiedCount").textContent = all.filter(function(item){ return item.phone_status === "verified"; }).length;
+      $("studentPendingDataCount").textContent = all.filter(function(item){ return item.phone_status !== "verified"; }).length;
+
+      if(!rows.length){
+        $("studentList").innerHTML = '<div class="directory-empty">No hay estudiantes que coincidan con este filtro.</div>';
+        return;
+      }
+
+      const head = '<div class="student-list-head"><span>Estudiante</span><span>Celular</span><span>Contacto</span><span>Estado</span><span>Acción</span></div>';
+      const body = rows.map(function(student){
+        const phoneStatus = student.phone_status || "missing";
+        const sourceText = sourceLabel(student.source) + (student.notes ? " · " + student.notes : "");
+        return '<div class="student-row' + (student.active ? '' : ' inactive') + '">' +
+          '<div class="student-name">' + escapeHtml(student.full_name || "Sin nombre") +
+            '<span class="student-source">' + escapeHtml(sourceText) + '</span></div>' +
+          '<div class="student-phone">' + escapeHtml(student.phone_e164 || "Pendiente") + '</div>' +
+          '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(contactStatusLabel(phoneStatus)) + '</span>' +
+          '<span class="active-badge ' + (student.active ? 'active' : 'inactive') + '">' + (student.active ? 'Activo' : 'Inactivo') + '</span>' +
+          '<button class="student-edit-btn" type="button" data-edit-student="' + escapeHtml(student.id) + '">Editar</button>' +
+        '</div>';
+      }).join("");
+      $("studentList").innerHTML = head + body;
+    }
+
+    async function loadStudents(force){
+      if(!db || !state.session || state.studentsLoading) return false;
+      if(!force && state.students.length) return true;
+      state.studentsLoading = true;
+
+      const result = await db
+        .from("voa_students")
+        .select(STUDENT_FIELDS)
+        .order("full_name",{ascending:true})
+        .limit(1000);
+
+      state.studentsLoading = false;
+      if(result.error){
+        setDirectoryMessage("No fue posible consultar el directorio. Verifica que la cuenta siga autorizada.","error");
+        $("studentList").innerHTML = '<div class="directory-empty">Directorio no disponible.</div>';
+        return false;
+      }
+
+      state.students = Array.isArray(result.data) ? result.data : [];
+      if(state.selectedStudentId){
+        const selected = state.students.find(function(item){ return Number(item.id) === Number(state.selectedStudentId); });
+        if(!selected || !selected.active || selected.phone_status !== "verified") clearStudentSelection();
+      }
+      renderDirectory();
+      return true;
+    }
+
+    async function openDirectoryModal(){
+      $("directoryModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      $("studentSearchInput").value = "";
+      $("studentStatusFilter").value = "";
+      setDirectoryMessage("");
+      closeStudentEditor();
+      if(!state.students.length){
+        $("studentList").innerHTML = '<div class="directory-empty">Cargando directorio…</div>';
+      }else{
+        renderDirectory();
+      }
+      await loadStudents(false);
+    }
+
+    function closeDirectoryModal(){
+      if(state.studentSaving) return;
+      $("directoryModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      closeStudentEditor();
+      setDirectoryMessage("");
+    }
+
+    function openStudentEditor(studentId){
+      const id = Number(studentId);
+      const student = state.students.find(function(item){ return Number(item.id) === id; });
+      state.editingStudentId = student ? id : null;
+      $("studentForm").reset();
+      $("studentActive").checked = true;
+      $("studentFormTitle").textContent = student ? "Editar estudiante" : "Nuevo estudiante";
+      $("studentFullName").value = student ? (student.full_name || "") : "";
+      $("studentPhone").value = student ? (student.phone_e164 || "") : "";
+      $("studentActive").checked = student ? Boolean(student.active) : true;
+      $("studentForm").classList.remove("hidden");
+      setDirectoryMessage("");
+      window.setTimeout(function(){ $("studentFullName").focus(); },50);
+    }
+
+    function closeStudentEditor(){
+      if(state.studentSaving) return;
+      state.editingStudentId = null;
+      $("studentForm").classList.add("hidden");
+      $("studentForm").reset();
+    }
+
+    async function openSessionModal(){
+      const studentsReady = await loadStudents(false);
+      if(!studentsReady){
+        setActionMessage("No fue posible abrir Nueva sesión porque el directorio no está disponible.","error");
+        return;
+      }
+      const today = dateKey(new Date().toISOString());
+      $("newSessionForm").reset();
+      clearStudentSelection();
+      $("newStudentSuggestions").classList.add("hidden");
+      $("newStudentName").setAttribute("aria-expanded","false");
+      $("newEquipment").value = "SR20 ATD";
+      $("newLocation").value = "Hangar Guaymaral";
+      $("newSessionDate").min = today;
+      $("newSessionDate").value = today;
+      setCreateMessage("");
+      $("sessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      window.setTimeout(function(){ $("newStudentName").focus(); },50);
+    }
+
+    function closeSessionModal(){
+      if(state.creating) return;
+      $("sessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      setCreateMessage("");
+    }
+
+    function openEditSessionModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || row.initial_message_sent_at || classifyStatus(row.confirmation_status) !== "pending"){
+        setActionMessage("Esta sesión ya no está disponible para editar.","error");
+        loadSessions();
+        return;
+      }
+
+      const instructor = canonicalInstructorName(row.instructor_name);
+      if(DEFAULT_INSTRUCTORS.indexOf(instructor) < 0){
+        setActionMessage("El instructor actual no está disponible en la lista autorizada.","error");
+        return;
+      }
+
+      state.editingSessionId = id;
+      $("editSessionStudent").textContent = row.student_name || "Sin nombre";
+      $("editSessionMission").textContent = row.mission || "Sin misión";
+      $("editInstructor").value = instructor;
+      $("editSessionDate").min = dateKey(new Date().toISOString());
+      $("editSessionDate").value = dateKey(row.session_start);
+      $("editStartTime").value = timeKey(row.session_start);
+      $("editEndTime").value = timeKey(row.session_end);
+      $("editEquipment").value = row.equipment || "";
+      $("editLocation").value = row.location || "";
+      setEditSessionMessage("");
+      $("editSessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeEditSessionModal(){
+      if(state.updating) return;
+      $("editSessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.editingSessionId = null;
+      setEditSessionMessage("");
+    }
+
+    function openCancelSessionModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || classifyStatus(row.confirmation_status) === "cancelled"){
+        setActionMessage("Esta sesión ya no está disponible para cancelar.","error");
+        loadSessions();
+        return;
+      }
+      if(Date.parse(row.session_end) <= Date.now()){
+        setActionMessage("Una sesión finalizada no puede marcarse como cancelada.","error");
+        return;
+      }
+
+      state.cancellingSessionId = id;
+      $("cancelSessionForm").reset();
+      $("cancelSessionStudent").textContent = row.student_name || "Sin nombre";
+      $("cancelSessionMission").textContent = row.mission || "Sin misión";
+      $("cancelSessionSchedule").textContent = formatDate(row.session_start) + " · " + formatRange(row);
+      $("cancelSessionCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status));
+      setCancelSessionMessage("");
+      $("cancelSessionModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      window.setTimeout(function(){ $("cancellationReasonCategory").focus(); },50);
+    }
+
+    function closeCancelSessionModal(){
+      if(state.cancelling) return;
+      $("cancelSessionModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.cancellingSessionId = null;
+      setCancelSessionMessage("");
+    }
+
+    function historyValue(field,value){
+      if(value == null || value === "") return "—";
+      if(field === "session_start" || field === "session_end"){
+        return formatDate(value) + " · " + formatTime(value);
+      }
+      if(field === "instructor_name") return canonicalInstructorName(value) || "—";
+      return String(value);
+    }
+
+    function historyDetailsHtml(event){
+      const details = event && event.details && typeof event.details === "object" ? event.details : {};
+      if(event.event_type === "session_updated"){
+        const before = details.before && typeof details.before === "object" ? details.before : {};
+        const after = details.after && typeof details.after === "object" ? details.after : {};
+        const fields = [
+          ["session_start","Inicio"],
+          ["session_end","Finalización"],
+          ["equipment","Equipo"],
+          ["location","Lugar"],
+          ["instructor_name","Instructor"]
+        ];
+        const changes = fields.filter(function(item){
+          return String(before[item[0]] == null ? "" : before[item[0]]) !== String(after[item[0]] == null ? "" : after[item[0]]);
+        }).map(function(item){
+          return '<div><strong>' + escapeHtml(item[1]) + ':</strong> ' +
+            escapeHtml(historyValue(item[0],before[item[0]])) + ' → ' +
+            escapeHtml(historyValue(item[0],after[item[0]])) + '</div>';
+        });
+        return changes.length ? '<div class="history-change-list">' + changes.join("") + '</div>' : "";
+      }
+
+      if(event.event_type === "cancelled" && details.reason){
+        return '<div class="history-change-list"><div><strong>Motivo:</strong> ' + escapeHtml(details.reason) + '</div></div>';
+      }
+
+      if(event.event_type === "created"){
+        const createdDetails = [];
+        if(details.equipment) createdDetails.push('<div><strong>Equipo:</strong> ' + escapeHtml(details.equipment) + '</div>');
+        if(details.location) createdDetails.push('<div><strong>Lugar:</strong> ' + escapeHtml(details.location) + '</div>');
+        if(details.instructor_name) createdDetails.push('<div><strong>Instructor:</strong> ' + escapeHtml(canonicalInstructorName(details.instructor_name)) + '</div>');
+        return createdDetails.length ? '<div class="history-change-list">' + createdDetails.join("") + '</div>' : "";
+      }
+
+      return "";
+    }
+
+    function historyEventHtml(event){
+      const actorType = ["admin","student","system"].indexOf(event.actor_type) >= 0 ? event.actor_type : "system";
+      return '<article class="history-event ' + escapeHtml(actorType) + '">' +
+        '<div class="history-event-top"><div class="history-event-title">' + escapeHtml(event.summary || "Evento registrado") + '</div>' +
+        '<div class="history-event-time">' + escapeHtml(formatDate(event.event_at) + " · " + formatTime(event.event_at)) + '</div></div>' +
+        '<div class="history-event-actor">Responsable: ' + escapeHtml(event.actor_label || "Control VOA") + '</div>' +
+        historyDetailsHtml(event) +
+      '</article>';
+    }
+
+    function renderHistory(sessionId){
+      const id = Number(sessionId);
+      const events = state.historyRows.filter(function(item){
+        return Number(item.session_id) === id;
+      }).sort(function(a,b){
+        return Date.parse(b.event_at) - Date.parse(a.event_at) || Number(b.id) - Number(a.id);
+      });
+      $("historyTimeline").innerHTML = events.length
+        ? events.map(historyEventHtml).join("")
+        : '<div class="history-empty">No hay eventos históricos disponibles para esta sesión.</div>';
+    }
+
+    function openHistoryModal(sessionId){
+      const id = Number(sessionId);
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row){
+        setActionMessage("La sesión ya no está disponible. Pulsa Actualizar.","error");
+        return;
+      }
+      state.historySessionId = id;
+      $("historyStudent").textContent = row.student_name || "Sin nombre";
+      $("historyMission").textContent = row.mission || "Sin misión";
+      $("historySchedule").textContent = formatDate(row.session_start) + " · " + formatRange(row);
+      $("historyCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status));
+      renderHistory(id);
+      $("historyModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeHistoryModal(){
+      $("historyModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.historySessionId = null;
+    }
+
+    function isPasswordCallback(){
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/,""));
+      const query = new URLSearchParams(window.location.search);
+      const type = hash.get("type") || query.get("type");
+      return type === "invite" || type === "recovery";
+    }
+
+    function showLogin(){
+      $("app").classList.add("hidden");
+      $("authShell").classList.remove("hidden");
+      $("passwordForm").classList.add("hidden");
+      $("loginForm").classList.remove("hidden");
+    }
+
+    function showPasswordSetup(){
+      $("app").classList.add("hidden");
+      $("authShell").classList.remove("hidden");
+      $("loginForm").classList.add("hidden");
+      $("passwordForm").classList.remove("hidden");
+      window.setTimeout(function(){ $("newPassword").focus(); },50);
+    }
+
+    function showApp(session){
+      state.session = session;
+      $("authShell").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      $("sessionEmail").textContent = session && session.user ? session.user.email : "";
+      loadSessions();
+      loadStudents(false);
+      if(state.timer) window.clearInterval(state.timer);
+      state.timer = window.setInterval(loadSessions,60000);
+    }
+
+    async function applySession(session){
+      if(!session){
+        state.session = null;
+        if(state.timer) window.clearInterval(state.timer);
+        state.timer = null;
+        showLogin();
+        return;
+      }
+      if(state.passwordMode){
+        showPasswordSetup();
+        return;
+      }
+      showApp(session);
+    }
+
+    $("loginForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db) return;
+      setMessage($("authMessage"),"");
+      setAuthBusy(true);
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const result = await db.auth.signInWithPassword({email:email,password:password});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("authMessage"),"No fue posible ingresar. Verifica el correo y la contraseña.","error");
+        return;
+      }
+      $("password").value = "";
+      await applySession(result.data.session);
+    });
+
+    $("resetButton").addEventListener("click",async function(){
+      if(!db) return;
+      const email = $("email").value.trim();
+      if(!email){
+        setMessage($("authMessage"),"Escribe primero el correo autorizado.","error");
+        $("email").focus();
+        return;
+      }
+      setAuthBusy(true);
+      const redirectTo = window.location.origin + window.location.pathname;
+      const result = await db.auth.resetPasswordForEmail(email,{redirectTo:redirectTo});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("authMessage"),"No fue posible enviar el enlace. Intenta nuevamente.","error");
+        return;
+      }
+      setMessage($("authMessage"),"Si el correo está autorizado, recibirás un enlace para definir una nueva contraseña.","success");
+    });
+
+    $("passwordForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db) return;
+      const first = $("newPassword").value;
+      const second = $("confirmPassword").value;
+      setMessage($("passwordMessage"),"");
+      if(first.length < 8){
+        setMessage($("passwordMessage"),"La contraseña debe tener al menos ocho caracteres.","error");
+        return;
+      }
+      if(first !== second){
+        setMessage($("passwordMessage"),"Las contraseñas no coinciden.","error");
+        return;
+      }
+      setAuthBusy(true);
+      const result = await db.auth.updateUser({password:first});
+      setAuthBusy(false);
+      if(result.error){
+        setMessage($("passwordMessage"),"No fue posible guardar la contraseña. Solicita un enlace nuevo.","error");
+        return;
+      }
+      state.passwordMode = false;
+      window.history.replaceState({},document.title,window.location.pathname);
+      $("newPassword").value = "";
+      $("confirmPassword").value = "";
+      setMessage($("passwordMessage"),"Contraseña guardada correctamente.","success");
+      window.setTimeout(function(){ applySession(state.session); },500);
+    });
+
+    $("logoutButton").addEventListener("click",async function(){
+      if(!db) return;
+      if(state.timer) window.clearInterval(state.timer);
+      state.timer = null;
+      closeSessionModal();
+      closeEditSessionModal();
+      closeCancelSessionModal();
+      closeDirectoryModal();
+      await db.auth.signOut();
+      state.rows = [];
+      state.students = [];
+      showLogin();
+    });
+
+    $("newSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.creating) return;
+
+      setCreateMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setCreateMessage("Completa todos los campos obligatorios.","error");
+        return;
+      }
+
+      const selectedStudent = state.students.find(function(item){
+        return Number(item.id) === Number(state.selectedStudentId);
+      });
+      if(
+        !selectedStudent ||
+        !selectedStudent.active ||
+        selectedStudent.phone_status !== "verified" ||
+        !selectedStudent.phone_e164 ||
+        normalize($("newStudentName").value) !== normalize(selectedStudent.full_name)
+      ){
+        clearStudentSelection();
+        setCreateMessage("Selecciona un estudiante de la lista del directorio.","error");
+        $("newStudentName").focus();
+        return;
+      }
+
+      const studentName = selectedStudent.full_name;
+      const studentPhone = normalizePhone(selectedStudent.phone_e164);
+      const mission = $("newMission").value.trim();
+      const instructorName = canonicalInstructorName($("newInstructor").value);
+      const equipment = $("newEquipment").value.trim();
+      const location = $("newLocation").value.trim();
+      const sessionStart = bogotaIso($("newSessionDate").value,$("newStartTime").value);
+      const sessionEnd = bogotaIso($("newSessionDate").value,$("newEndTime").value);
+
+      if(!studentPhone){
+        setCreateMessage("El celular del directorio no tiene un formato válido.","error");
+        $("newStudentName").focus();
+        return;
+      }
+      if(!sessionStart || !sessionEnd || Date.parse(sessionEnd) <= Date.parse(sessionStart)){
+        setCreateMessage("La hora de finalización debe ser posterior a la hora de inicio.","error");
+        $("newEndTime").focus();
+        return;
+      }
+
+      state.creating = true;
+      $("saveSessionButton").disabled = true;
+      $("cancelSessionButton").disabled = true;
+      $("saveSessionButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-create-session",{
+        body:{
+          student_name:studentName,
+          student_phone:studentPhone,
+          mission:mission,
+          equipment:equipment,
+          location:location,
+          instructor_name:instructorName,
+          session_start:sessionStart,
+          session_end:sessionEnd
+        }
+      });
+
+      state.creating = false;
+      $("saveSessionButton").disabled = false;
+      $("cancelSessionButton").disabled = false;
+      $("saveSessionButton").textContent = "Guardar sesión";
+
+      if(result.error){
+        let code = "";
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            const details = await result.error.context.json();
+            code = details && details.code ? details.code : "";
+          }
+        }catch(_error){
+          code = "";
+        }
+        if(code === "DUPLICATE"){
+          setCreateMessage("Ya existe una sesión para este estudiante en la misma fecha y hora.","error");
+        }else if(code === "INVALID_INPUT"){
+          setCreateMessage("Revisa los datos de la sesión e intenta nuevamente.","error");
+        }else{
+          setCreateMessage("No fue posible guardar la sesión. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      setCreateMessage("Sesión creada correctamente. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeSessionModal,900);
+    });
+
+    $("studentForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.studentSaving) return;
+
+      setDirectoryMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setDirectoryMessage("Escribe el nombre completo del estudiante.","error");
+        return;
+      }
+
+      const phoneRaw = $("studentPhone").value.trim();
+      if(phoneRaw && !normalizePhone(phoneRaw)){
+        setDirectoryMessage("El celular debe incluir un indicativo válido, por ejemplo +57.","error");
+        $("studentPhone").focus();
+        return;
+      }
+
+      state.studentSaving = true;
+      $("saveStudentButton").disabled = true;
+      $("cancelStudentButton").disabled = true;
+      $("saveStudentButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-manage-student",{
+        body:{
+          action:Number.isSafeInteger(state.editingStudentId) ? "update" : "create",
+          student_id:state.editingStudentId,
+          full_name:$("studentFullName").value.trim(),
+          phone:phoneRaw,
+          active:$("studentActive").checked
+        }
+      });
+
+      state.studentSaving = false;
+      $("saveStudentButton").disabled = false;
+      $("cancelStudentButton").disabled = false;
+      $("saveStudentButton").textContent = "Guardar estudiante";
+
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        const code = details && details.code ? details.code : "";
+        if(code === "DUPLICATE_NAME"){
+          setDirectoryMessage("Ya existe un estudiante con ese nombre.","error");
+        }else if(code === "DUPLICATE_PHONE"){
+          setDirectoryMessage("Ese celular ya pertenece a " + (details.existing_name || "otro estudiante") + ".","error");
+        }else if(code === "INVALID_INPUT"){
+          setDirectoryMessage("Revisa el nombre y el celular antes de guardar.","error");
+        }else if(code === "NOT_FOUND"){
+          setDirectoryMessage("El registro ya no existe. Actualiza el directorio.","error");
+        }else{
+          setDirectoryMessage("No fue posible guardar el estudiante. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.saved !== true){
+        setDirectoryMessage("La función no confirmó el cambio. Actualiza antes de repetir.","error");
+        return;
+      }
+
+      closeStudentEditor();
+      await loadStudents(true);
+      setDirectoryMessage("Estudiante guardado correctamente.","success");
+    });
+
+    $("editSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.updating || !Number.isSafeInteger(state.editingSessionId)) return;
+
+      setEditSessionMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setEditSessionMessage("Completa todos los campos obligatorios.","error");
+        return;
+      }
+
+      const instructorName = canonicalInstructorName($("editInstructor").value);
+      const equipment = $("editEquipment").value.trim();
+      const location = $("editLocation").value.trim();
+      const sessionStart = bogotaIso($("editSessionDate").value,$("editStartTime").value);
+      const sessionEnd = bogotaIso($("editSessionDate").value,$("editEndTime").value);
+
+      if(!sessionStart || !sessionEnd || Date.parse(sessionEnd) <= Date.parse(sessionStart)){
+        setEditSessionMessage("La hora de finalización debe ser posterior a la hora de inicio.","error");
+        $("editEndTime").focus();
+        return;
+      }
+
+      state.updating = true;
+      $("saveEditSessionButton").disabled = true;
+      $("cancelEditSessionButton").disabled = true;
+      $("saveEditSessionButton").textContent = "Guardando…";
+
+      const result = await db.functions.invoke("voa-update-session",{
+        body:{
+          session_id:state.editingSessionId,
+          equipment:equipment,
+          location:location,
+          instructor_name:instructorName,
+          session_start:sessionStart,
+          session_end:sessionEnd
+        }
+      });
+
+      state.updating = false;
+      $("saveEditSessionButton").disabled = false;
+      $("cancelEditSessionButton").disabled = false;
+      $("saveEditSessionButton").textContent = "Guardar cambios";
+
+      if(result.error){
+        let code = "";
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            const details = await result.error.context.json();
+            code = details && details.code ? details.code : "";
+          }
+        }catch(_error){
+          code = "";
+        }
+
+        if(code === "LOCKED"){
+          setEditSessionMessage("La sesión ya fue enviada o cambió de estado y quedó bloqueada.","error");
+          await loadSessions();
+        }else if(code === "DUPLICATE"){
+          setEditSessionMessage("Ya existe otra sesión para este estudiante en la misma fecha y hora.","error");
+        }else if(code === "NOT_FOUND"){
+          setEditSessionMessage("La sesión ya no existe o no está disponible.","error");
+          await loadSessions();
+        }else if(code === "INVALID_INPUT"){
+          setEditSessionMessage("Revisa los datos de la sesión e intenta nuevamente.","error");
+        }else{
+          setEditSessionMessage("No fue posible guardar los cambios. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.updated !== true){
+        setEditSessionMessage("La función no confirmó la actualización. Pulsa Actualizar antes de repetir.","error");
+        await loadSessions();
+        return;
+      }
+
+      setEditSessionMessage("Sesión actualizada correctamente. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeEditSessionModal,900);
+    });
+
+    $("cancelSessionForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.cancelling || !Number.isSafeInteger(state.cancellingSessionId)) return;
+
+      setCancelSessionMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setCancelSessionMessage("Selecciona el motivo de la cancelación.","error");
+        return;
+      }
+
+      const reasonCategory = $("cancellationReasonCategory").value.trim();
+      const reasonDetails = $("cancellationReasonDetails").value.trim();
+      if(reasonCategory === "Otro" && !reasonDetails){
+        setCancelSessionMessage("Escribe el detalle cuando seleccionas Otro.","error");
+        $("cancellationReasonDetails").focus();
+        return;
+      }
+
+      state.cancelling = true;
+      $("confirmCancellationButton").disabled = true;
+      $("keepSessionButton").disabled = true;
+      $("confirmCancellationButton").textContent = "Cancelando…";
+
+      const result = await db.functions.invoke("voa-cancel-session",{
+        body:{
+          session_id:state.cancellingSessionId,
+          reason_category:reasonCategory,
+          reason_details:reasonDetails
+        }
+      });
+
+      state.cancelling = false;
+      $("confirmCancellationButton").disabled = false;
+      $("keepSessionButton").disabled = false;
+      $("confirmCancellationButton").textContent = "Confirmar cancelación";
+
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        const code = details && details.code ? details.code : "";
+        if(code === "ALREADY_CANCELLED"){
+          setCancelSessionMessage("La sesión ya estaba cancelada. Se actualizó el panel.","error");
+          await loadSessions();
+        }else if(code === "FINISHED"){
+          setCancelSessionMessage("Una sesión finalizada no puede marcarse como cancelada.","error");
+          await loadSessions();
+        }else if(code === "NOT_FOUND"){
+          setCancelSessionMessage("La sesión ya no existe o no está disponible.","error");
+          await loadSessions();
+        }else if(code === "INVALID_INPUT"){
+          setCancelSessionMessage("Revisa el motivo de la cancelación.","error");
+        }else{
+          setCancelSessionMessage("No fue posible cancelar la sesión. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      if(!result.data || result.data.cancelled !== true){
+        setCancelSessionMessage("La función no confirmó la cancelación. Pulsa Actualizar antes de repetir.","error");
+        await loadSessions();
+        return;
+      }
+
+      setCancelSessionMessage("Sesión cancelada y conservada en el historial. No se envió ningún WhatsApp.","success");
+      await loadSessions();
+      window.setTimeout(closeCancelSessionModal,1100);
+    });
+
+    function populateInstructors(rows){
+      const select = $("instructorFilter");
+      const current = select.value;
+      const names = Array.from(new Set(DEFAULT_INSTRUCTORS.concat(rows.map(function(row){
+        return canonicalInstructorName(row.instructor_name);
+      }).filter(Boolean)))).sort(function(a,b){ return a.localeCompare(b,"es"); });
+      select.innerHTML = '<option value="">Todos</option>';
+      names.forEach(function(name){
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+      if(names.indexOf(current) >= 0) select.value = current;
+    }
+
+    function filteredRows(){
+      const search = normalize($("searchInput").value);
+      const date = $("dateFilter").value;
+      const instructor = $("instructorFilter").value;
+      const status = $("statusFilter").value;
+
+      return state.rows.filter(function(row){
+        const rowStatus = classifyStatus(row.confirmation_status);
+        const haystack = normalize([
+          row.student_name,row.mission,row.equipment,row.location,row.instructor_name,row.response_text
+        ].join(" "));
+        if(search && haystack.indexOf(search) < 0) return false;
+        if(date && dateKey(row.session_start) !== date) return false;
+        if(instructor && canonicalInstructorName(row.instructor_name) !== instructor) return false;
+        if(status && rowStatus !== status) return false;
+        return true;
+      });
+    }
+
+    function updateStats(rows){
+      const counts = {confirmed:0,declined:0,pending:0,cancelled:0};
+      rows.forEach(function(row){ counts[classifyStatus(row.confirmation_status)] += 1; });
+      $("totalCount").textContent = rows.length;
+      $("confirmedCount").textContent = counts.confirmed;
+      $("declinedCount").textContent = counts.declined;
+      $("pendingCount").textContent = counts.pending;
+      $("cancelledCount").textContent = counts.cancelled;
+      $("resultCount").textContent = rows.length + (rows.length === 1 ? " sesión" : " sesiones");
+    }
+
+    function updateDeclinedAlert(rows){
+      const alertBox = $("declinedAlert");
+      const alertButton = $("showDeclinedButton");
+      const declinedRows = rows.filter(function(row){
+        return classifyStatus(row.confirmation_status) === "declined";
+      });
+
+      const viewingDeclinedOnly = $("statusFilter").value === "declined";
+      alertButton.textContent = viewingDeclinedOnly ? "Ver todas" : "Ver sesiones";
+      alertButton.setAttribute("aria-pressed",viewingDeclinedOnly ? "true" : "false");
+
+      if(!declinedRows.length){
+        alertBox.classList.add("hidden");
+        $("declinedAlertText").textContent = "";
+        return;
+      }
+
+      if(declinedRows.length === 1){
+        const row = declinedRows[0];
+        $("declinedAlertText").textContent =
+          (row.student_name || "Un estudiante") + " indicó que no puede asistir a " +
+          (row.mission || "su sesión") + " del " + formatDate(row.session_start) + ".";
+      }else{
+        $("declinedAlertText").textContent = declinedRows.length +
+          " sesiones requieren revisión para gestionar su reprogramación.";
+      }
+      alertBox.classList.remove("hidden");
+    }
+
+    function cancelActionButtonHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      if(status === "cancelled" || Date.parse(row.session_end) <= Date.now()) return "";
+      const id = Number(row.id);
+      const cancelling = state.cancelling && state.cancellingSessionId === id;
+      return '<button class="cancel-session-action-btn" type="button" data-cancel-session="' +
+        escapeHtml(row.id) + '"' + (cancelling ? ' disabled' : '') + '>' +
+        (cancelling ? 'Cancelando…' : 'Cancelar sesión') + '</button>';
+    }
+
+    function historyButtonHtml(row){
+      return '<button class="history-session-btn" type="button" data-history-session="' +
+        escapeHtml(row.id) + '">Ver historial</button>';
+    }
+
+    function messageActionHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      const historyButton = historyButtonHtml(row);
+      if(status === "cancelled"){
+        return '<div class="session-actions"><span class="message-state unavailable">No disponible<br><span class="cell-sub">Sesión cancelada</span></span>' + historyButton + '</div>';
+      }
+
+      const cancelButton = cancelActionButtonHtml(row);
+      if(row.initial_message_sent_at){
+        return '<div class="session-actions"><span class="message-state sent">Enviado<br><span class="cell-sub">' +
+          escapeHtml(formatDate(row.initial_message_sent_at) + " · " + formatTime(row.initial_message_sent_at)) +
+          '</span><br><span class="cell-sub">Edición bloqueada</span></span>' + historyButton + cancelButton + '</div>';
+      }
+
+      if(status !== "pending"){
+        return '<div class="session-actions"><span class="message-state unavailable">No disponible</span>' + historyButton + cancelButton + '</div>';
+      }
+
+      const id = Number(row.id);
+      const editing = state.updating && state.editingSessionId === id;
+      const editButton = '<button class="edit-session-btn" type="button" data-edit-session="' +
+        escapeHtml(row.id) + '"' + (editing ? ' disabled' : '') + '>' +
+        (editing ? 'Guardando…' : 'Editar sesión') + '</button>';
+
+      if(Date.parse(row.session_end) <= Date.now()){
+        return '<div class="session-actions">' + editButton +
+          '<span class="message-state unavailable">Sesión finalizada</span>' + historyButton + '</div>';
+      }
+
+      const sending = state.sendingSessionIds.has(id);
+      const sendButton = '<button class="send-whatsapp-btn" type="button" data-send-session="' +
+        escapeHtml(row.id) + '"' + (sending ? ' disabled' : '') + '>' +
+        (sending ? 'Enviando…' : 'Enviar WhatsApp') + '</button>';
+      return '<div class="session-actions">' + editButton + sendButton + historyButton + cancelButton + '</div>';
+    }
+
+    function cancellationDetailHtml(row){
+      if(classifyStatus(row.confirmation_status) !== "cancelled") return "";
+      const parts = [];
+      if(row.cancellation_reason) parts.push(row.cancellation_reason);
+      if(row.cancelled_at) parts.push(formatDate(row.cancelled_at) + " · " + formatTime(row.cancelled_at));
+      if(row.cancelled_by) parts.push(row.cancelled_by);
+      return parts.length ? '<div class="cancellation-detail">' + escapeHtml(parts.join(" · ")) + '</div>' : "";
+    }
+
+    function absenceReasonHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      if(status !== "declined"){
+        return '<div class="absence-reason not-applicable">No aplica</div>';
+      }
+      if(row.response_text && row.absence_reason_received_at){
+        return '<div class="absence-reason received"><strong>Motivo recibido</strong>' +
+          escapeHtml(row.response_text) +
+          '<div class="cell-sub">' +
+          escapeHtml(formatDate(row.absence_reason_received_at) + " · " + formatTime(row.absence_reason_received_at)) +
+          '</div></div>';
+      }
+      if(row.absence_reason_requested_at){
+        return '<div class="absence-reason waiting"><strong>Esperando respuesta</strong>' +
+          '<div class="cell-sub">Solicitado ' +
+          escapeHtml(formatDate(row.absence_reason_requested_at) + " · " + formatTime(row.absence_reason_requested_at)) +
+          '</div></div>';
+      }
+      return '<div class="absence-reason not-requested">Solicitud no enviada</div>';
+    }
+
+    function rowHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      const mission = escapeHtml(row.mission || "Sin misión");
+      const equipment = escapeHtml(row.equipment || "Sin equipo");
+      const reminder = status === "cancelled"
+        ? '<span class="reminder waiting">No aplica</span>'
+        : row.reminder_sent_at
+        ? '<span class="reminder sent">Enviado<br><span class="cell-sub">' + escapeHtml(formatDate(row.reminder_sent_at) + " · " + formatTime(row.reminder_sent_at)) + '</span></span>'
+        : '<span class="reminder waiting">Pendiente de envío</span>';
+      const messageAction = messageActionHtml(row);
+
+      return '<tr class="' + (status === "declined" ? "declined-row" : (status === "cancelled" ? "cancelled-row" : "")) + '">' +
+        '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
+        '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
+        '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
+        '<td>' + escapeHtml(row.location || "—") + '</td>' +
+        '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
+        '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span>' + cancellationDetailHtml(row) + '</td>' +
+        '<td>' + absenceReasonHtml(row) + '</td>' +
+        '<td>' + messageAction + '</td>' +
+        '<td>' + reminder + '</td>' +
+      '</tr>';
+    }
+
+    function cardHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      return '<article class="session-card' + (status === "declined" ? " declined-card" : (status === "cancelled" ? " cancelled-card" : "")) + '">' +
+        '<div class="session-card-top"><h2>' + escapeHtml(row.student_name || "Sin nombre") + '</h2><span class="badge ' + status + '">' + statusLabel(status) + '</span></div>' +
+        '<dl>' +
+          '<dt>Sesión</dt><dd>' + escapeHtml(formatDate(row.session_start) + " · " + formatRange(row)) + '</dd>' +
+          '<dt>Misión</dt><dd>' + escapeHtml(row.mission || "—") + '</dd>' +
+          '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
+          '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
+          '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
+          (status === "cancelled" ? '<dt>Cancelación</dt><dd>' + cancellationDetailHtml(row) + '</dd>' : '') +
+          '<dt>Motivo de inasistencia</dt><dd>' + absenceReasonHtml(row) + '</dd>' +
+          '<dt>WhatsApp</dt><dd>' + messageActionHtml(row) + '</dd>' +
+          '<dt>Recordatorio</dt><dd>' + (status === "cancelled" ? "No aplica" : (row.reminder_sent_at ? "Enviado" : "Pendiente de envío")) + '</dd>' +
+        '</dl>' +
+      '</article>';
+    }
+
+    async function sendWhatsAppForSession(sessionId){
+      const id = Number(sessionId);
+      if(!db || !state.session || !Number.isSafeInteger(id) || state.sendingSessionIds.has(id)) return;
+
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || row.initial_message_sent_at || classifyStatus(row.confirmation_status) !== "pending"){
+        setActionMessage("Esta sesión ya no está disponible para enviar el mensaje inicial.","error");
+        await loadSessions();
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "¿Enviar el WhatsApp de asistencia?\n\n" +
+        "Estudiante: " + (row.student_name || "Sin nombre") + "\n" +
+        "Misión: " + (row.mission || "Sin misión") + "\n" +
+        "Sesión: " + formatDate(row.session_start) + " · " + formatRange(row) + "\n\n" +
+        "El mensaje se enviará inmediatamente y no debe repetirse."
+      );
+      if(!confirmed) return;
+
+      state.sendingSessionIds.add(id);
+      setActionMessage("Enviando WhatsApp a " + (row.student_name || "el estudiante") + "…","");
+      render();
+
+      const result = await db.functions.invoke("voa-send-attendance-message",{
+        body:{session_id:id}
+      });
+
+      state.sendingSessionIds.delete(id);
+
+      if(result.error){
+        let details = null;
+        try{
+          if(result.error.context && typeof result.error.context.json === "function"){
+            details = await result.error.context.json();
+          }
+        }catch(_error){
+          details = null;
+        }
+
+        if(details && details.duplicate_prevented){
+          setActionMessage("El mensaje no se repitió: esta sesión ya había sido enviada.","error");
+          await loadSessions();
+        }else if(details && details.code === "UNAUTHORIZED"){
+          setActionMessage("La cuenta actual no está autorizada para enviar WhatsApp.","error");
+          render();
+        }else{
+          setActionMessage("No fue posible enviar el WhatsApp. No vuelvas a pulsar hasta revisar el estado.","error");
+          await loadSessions();
+        }
+        return;
+      }
+
+      if(!result.data || result.data.sent !== true){
+        setActionMessage("La función no confirmó el envío. Actualiza antes de intentarlo nuevamente.","error");
+        await loadSessions();
+        return;
+      }
+
+      row.initial_message_sent_at = result.data.sent_at || new Date().toISOString();
+      setActionMessage("WhatsApp enviado correctamente a " + (row.student_name || "el estudiante") + ".","success");
+      render();
+      await loadSessions();
+    }
+
+    function handleSessionAction(event){
+      const historyButton = event.target.closest("[data-history-session]");
+      if(historyButton){
+        openHistoryModal(historyButton.getAttribute("data-history-session"));
+        return;
+      }
+      const editButton = event.target.closest("[data-edit-session]");
+      if(editButton){
+        openEditSessionModal(editButton.getAttribute("data-edit-session"));
+        return;
+      }
+      const cancelButton = event.target.closest("[data-cancel-session]");
+      if(cancelButton){
+        openCancelSessionModal(cancelButton.getAttribute("data-cancel-session"));
+        return;
+      }
+      const button = event.target.closest("[data-send-session]");
+      if(!button) return;
+      sendWhatsAppForSession(button.getAttribute("data-send-session"));
+    }
+
+    function render(){
+      const rows = filteredRows();
+      updateStats(rows);
+      updateDeclinedAlert(state.rows);
+
+      if(!rows.length){
+        $("dataState").className = "empty";
+        $("dataState").textContent = state.rows.length
+          ? "No hay sesiones que coincidan con estos filtros."
+          : "No hay sesiones disponibles en este rango.";
+        $("dataState").classList.remove("hidden");
+        $("tableWrap").classList.add("hidden");
+        $("mobileList").classList.add("hidden");
+        return;
+      }
+
+      $("sessionRows").innerHTML = rows.map(rowHtml).join("");
+      $("mobileList").innerHTML = rows.map(cardHtml).join("");
+      $("dataState").classList.add("hidden");
+      $("tableWrap").classList.remove("hidden");
+      $("mobileList").classList.remove("hidden");
+    }
+
+    async function loadSessions(){
+      if(!db || !state.session || state.loading) return;
+      state.loading = true;
+      $("refreshButton").disabled = true;
+      $("syncLabel").textContent = "Actualizando…";
+
+      let query = db
+        .from("voa_sessions")
+        .select(SELECT_FIELDS)
+        .order("session_start",{ascending:true})
+        .limit(1000);
+
+      if(!$("includePast").checked){
+        query = query.gte("session_end",new Date().toISOString());
+      }
+
+      const historyQuery = db
+        .from("voa_session_history")
+        .select(HISTORY_FIELDS)
+        .order("event_at",{ascending:false})
+        .order("id",{ascending:false})
+        .limit(5000);
+
+      const results = await Promise.all([query,historyQuery]);
+      const result = results[0];
+      const historyResult = results[1];
+      state.loading = false;
+      $("refreshButton").disabled = false;
+
+      if(result.error || historyResult.error){
+        $("declinedAlert").classList.add("hidden");
+        $("dataState").className = "error-box";
+        $("dataState").textContent = "No fue posible consultar las sesiones. Verifica que esta cuenta esté autorizada.";
+        $("dataState").classList.remove("hidden");
+        $("tableWrap").classList.add("hidden");
+        $("mobileList").classList.add("hidden");
+        $("syncLabel").textContent = "Sin conexión a los datos";
+        return;
+      }
+
+      state.rows = Array.isArray(result.data) ? result.data : [];
+      state.historyRows = Array.isArray(historyResult.data) ? historyResult.data : [];
+      populateInstructors(state.rows);
+      render();
+      $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString());
+    }
+
+    ["searchInput","dateFilter","instructorFilter","statusFilter"].forEach(function(id){
+      $(id).addEventListener(id === "searchInput" ? "input" : "change",render);
+    });
+    $("includePast").addEventListener("change",loadSessions);
+    $("refreshButton").addEventListener("click",function(){
+      loadSessions();
+      loadStudents(true);
+    });
+    $("showDeclinedButton").addEventListener("click",function(){
+      const viewingDeclinedOnly = $("statusFilter").value === "declined";
+      $("searchInput").value = "";
+      $("dateFilter").value = "";
+      $("instructorFilter").value = "";
+      $("statusFilter").value = viewingDeclinedOnly ? "" : "declined";
+      render();
+      $("tableWrap").scrollIntoView({behavior:"smooth",block:"start"});
+    });
+    $("sessionRows").addEventListener("click",handleSessionAction);
+    $("mobileList").addEventListener("click",handleSessionAction);
+    $("newSessionButton").addEventListener("click",openSessionModal);
+    $("directoryButton").addEventListener("click",openDirectoryModal);
+    $("newStudentName").addEventListener("input",function(){
+      if(
+        state.selectedStudentId &&
+        normalize(this.value) !== normalize((state.students.find(function(item){
+          return Number(item.id) === Number(state.selectedStudentId);
+        }) || {}).full_name)
+      ){
+        clearStudentSelection();
+      }
+      renderStudentSuggestions();
+    });
+    $("newStudentName").addEventListener("focus",renderStudentSuggestions);
+    $("newStudentName").addEventListener("blur",function(){
+      window.setTimeout(function(){
+        $("newStudentSuggestions").classList.add("hidden");
+        $("newStudentName").setAttribute("aria-expanded","false");
+      },150);
+    });
+    $("newStudentSuggestions").addEventListener("pointerdown",function(event){
+      const button = event.target.closest("[data-student-select]");
+      if(!button) return;
+      event.preventDefault();
+      selectStudent(button.getAttribute("data-student-select"));
+    });
+    $("newStudentSuggestions").addEventListener("click",function(event){
+      const button = event.target.closest("[data-student-select]");
+      if(button) selectStudent(button.getAttribute("data-student-select"));
+    });
+    $("closeSessionModal").addEventListener("click",closeSessionModal);
+    $("cancelSessionButton").addEventListener("click",closeSessionModal);
+    $("sessionModal").addEventListener("click",function(event){
+      if(event.target === $("sessionModal")) closeSessionModal();
+    });
+    $("closeEditSessionModal").addEventListener("click",closeEditSessionModal);
+    $("cancelEditSessionButton").addEventListener("click",closeEditSessionModal);
+    $("editSessionModal").addEventListener("click",function(event){
+      if(event.target === $("editSessionModal")) closeEditSessionModal();
+    });
+    $("closeCancelSessionModal").addEventListener("click",closeCancelSessionModal);
+    $("keepSessionButton").addEventListener("click",closeCancelSessionModal);
+    $("cancelSessionModal").addEventListener("click",function(event){
+      if(event.target === $("cancelSessionModal")) closeCancelSessionModal();
+    });
+    $("closeHistoryModal").addEventListener("click",closeHistoryModal);
+    $("historyModal").addEventListener("click",function(event){
+      if(event.target === $("historyModal")) closeHistoryModal();
+    });
+    $("closeDirectoryModal").addEventListener("click",closeDirectoryModal);
+    $("directoryModal").addEventListener("click",function(event){
+      if(event.target === $("directoryModal")) closeDirectoryModal();
+    });
+    $("studentSearchInput").addEventListener("input",renderDirectory);
+    $("studentStatusFilter").addEventListener("change",renderDirectory);
+    $("addStudentButton").addEventListener("click",function(){ openStudentEditor(null); });
+    $("cancelStudentButton").addEventListener("click",closeStudentEditor);
+    $("studentList").addEventListener("click",function(event){
+      const button = event.target.closest("[data-edit-student]");
+      if(button) openStudentEditor(button.getAttribute("data-edit-student"));
+    });
+    document.addEventListener("keydown",function(event){
+      if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
+      if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
+      if(event.key === "Escape" && !$("cancelSessionModal").classList.contains("hidden")) closeCancelSessionModal();
+      if(event.key === "Escape" && !$("historyModal").classList.contains("hidden")) closeHistoryModal();
+      if(event.key === "Escape" && !$("directoryModal").classList.contains("hidden")) closeDirectoryModal();
+    });
+
+    populateSessionFormInstructors();
+
+    state.passwordMode = isPasswordCallback();
+
+    if(!db){
+      setAuthBusy(true);
+      setMessage($("authMessage"),"No fue posible cargar el acceso seguro. Actualiza la página.","error");
+    }else{
+      db.auth.onAuthStateChange(function(event,session){
+        if(event === "PASSWORD_RECOVERY") state.passwordMode = true;
+        state.session = session;
+        window.setTimeout(function(){ applySession(session); },0);
+      });
+
+      (async function init(){
+        const result = await db.auth.getSession();
+        if(result.error){
+          setMessage($("authMessage"),"No fue posible comprobar la sesión.","error");
+          showLogin();
+          return;
+        }
+        state.session = result.data.session;
+        await applySession(result.data.session);
+      })();
+    }
+  </script>
+</body>
+</html>
