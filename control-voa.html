@@ -569,7 +569,7 @@
     .check input{width:17px;height:17px;accent-color:var(--navy)}
 
     .table-wrap{overflow:auto}
-    table{width:100%;min-width:1240px;border-collapse:collapse}
+    table{width:100%;min-width:1420px;border-collapse:collapse}
     th{
       padding:14px 16px;
       background:var(--navy);
@@ -907,6 +907,28 @@
     .confirm-cancellation-btn{border-color:#d92d20;background:#b42318}
     .confirm-cancellation-btn:hover,.confirm-cancellation-btn:focus-visible{background:#912018}
     .cancellation-detail{margin-top:7px;max-width:220px;color:#667085;font-size:11px;line-height:1.4}
+    .absence-reason{
+      max-width:270px;
+      color:#344054;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .absence-reason strong{display:block;margin-bottom:4px;color:var(--navy);font-size:11px}
+    .absence-reason.received{
+      padding:9px 10px;
+      border-left:3px solid var(--green);
+      border-radius:8px;
+      background:var(--green-soft);
+    }
+    .absence-reason.waiting{
+      padding:9px 10px;
+      border-left:3px solid var(--gold);
+      border-radius:8px;
+      background:var(--amber-soft);
+      color:#6f5012;
+    }
+    .absence-reason.not-requested{color:var(--red);font-weight:700}
+    .absence-reason.not-applicable{color:var(--muted)}
 
     .history-card{width:min(760px,100%)}
     .history-body{padding:22px 26px 28px}
@@ -1361,6 +1383,7 @@
                 <th>Lugar</th>
                 <th>Instructor</th>
                 <th>Estado</th>
+                <th>Motivo de inasistencia</th>
                 <th>Mensaje WhatsApp</th>
                 <th>Recordatorio</th>
               </tr>
@@ -1646,7 +1669,7 @@
 
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
-    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const DEFAULT_INSTRUCTORS = [
@@ -2725,7 +2748,7 @@
       return state.rows.filter(function(row){
         const rowStatus = classifyStatus(row.confirmation_status);
         const haystack = normalize([
-          row.student_name,row.mission,row.equipment,row.location,row.instructor_name
+          row.student_name,row.mission,row.equipment,row.location,row.instructor_name,row.response_text
         ].join(" "));
         if(search && haystack.indexOf(search) < 0) return false;
         if(date && dateKey(row.session_start) !== date) return false;
@@ -2835,6 +2858,27 @@
       return parts.length ? '<div class="cancellation-detail">' + escapeHtml(parts.join(" · ")) + '</div>' : "";
     }
 
+    function absenceReasonHtml(row){
+      const status = classifyStatus(row.confirmation_status);
+      if(status !== "declined"){
+        return '<div class="absence-reason not-applicable">No aplica</div>';
+      }
+      if(row.response_text && row.absence_reason_received_at){
+        return '<div class="absence-reason received"><strong>Motivo recibido</strong>' +
+          escapeHtml(row.response_text) +
+          '<div class="cell-sub">' +
+          escapeHtml(formatDate(row.absence_reason_received_at) + " · " + formatTime(row.absence_reason_received_at)) +
+          '</div></div>';
+      }
+      if(row.absence_reason_requested_at){
+        return '<div class="absence-reason waiting"><strong>Esperando respuesta</strong>' +
+          '<div class="cell-sub">Solicitado ' +
+          escapeHtml(formatDate(row.absence_reason_requested_at) + " · " + formatTime(row.absence_reason_requested_at)) +
+          '</div></div>';
+      }
+      return '<div class="absence-reason not-requested">Solicitud no enviada</div>';
+    }
+
     function rowHtml(row){
       const status = classifyStatus(row.confirmation_status);
       const mission = escapeHtml(row.mission || "Sin misión");
@@ -2853,6 +2897,7 @@
         '<td>' + escapeHtml(row.location || "—") + '</td>' +
         '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
         '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span>' + cancellationDetailHtml(row) + '</td>' +
+        '<td>' + absenceReasonHtml(row) + '</td>' +
         '<td>' + messageAction + '</td>' +
         '<td>' + reminder + '</td>' +
       '</tr>';
@@ -2869,6 +2914,7 @@
           '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
           '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
           (status === "cancelled" ? '<dt>Cancelación</dt><dd>' + cancellationDetailHtml(row) + '</dd>' : '') +
+          '<dt>Motivo de inasistencia</dt><dd>' + absenceReasonHtml(row) + '</dd>' +
           '<dt>WhatsApp</dt><dd>' + messageActionHtml(row) + '</dd>' +
           '<dt>Recordatorio</dt><dd>' + (status === "cancelled" ? "No aplica" : (row.reminder_sent_at ? "Enviado" : "Pendiente de envío")) + '</dd>' +
         '</dl>' +
