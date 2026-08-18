@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Veyra | Mission Briefs</title>
+  <style>
+    :root{
+      --navy:#07111f;--navy-soft:#10233d;--cream:#f7f1e8;--paper:#fffdf9;
+      --gold:#d7a63a;--gold-soft:#ead7b5;--text:#101828;--muted:#667085;
+      --line:#dfd5c6;--green:#08774b;--green-soft:#e9f7f0;--red:#b42318;
+      --red-soft:#fff0ee;--amber:#986b12;--amber-soft:#fff7df;
+      --shadow:0 18px 48px rgba(7,17,31,.08)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;color:var(--text);font-family:Arial,Helvetica,sans-serif;background:linear-gradient(rgba(7,17,31,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(7,17,31,.025) 1px,transparent 1px),radial-gradient(circle at 92% 0%,rgba(215,166,58,.16),transparent 30rem),linear-gradient(180deg,#fcfaf6,var(--cream));background-size:46px 46px,46px 46px,auto,auto}
+    button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+    header{position:sticky;top:0;z-index:10;border-bottom:2px solid var(--gold);background:rgba(7,17,31,.98);color:#fff}
+    .header-inner{width:min(1380px,calc(100% - 42px));min-height:88px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .logo{color:#fff;text-decoration:none}.brand{font:38px/.9 Georgia,"Times New Roman",serif;letter-spacing:-1px}.subbrand{margin-top:8px;color:#d8b35e;font-size:9px;font-weight:800;letter-spacing:6px}
+    .header-actions{display:flex;align-items:center;gap:10px}.header-email{max-width:270px;overflow:hidden;color:#c7d0dc;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+    .header-btn{min-height:40px;padding:10px 14px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:transparent;color:#fff;text-decoration:none;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+    .header-btn:hover,.header-btn:focus-visible{border-color:var(--gold);background:rgba(255,255,255,.07)}
+    main{width:min(1380px,calc(100% - 42px));margin:0 auto;padding:38px 0 70px}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:22px}.eyebrow{margin-bottom:13px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}.hero h1{margin:0;color:var(--navy);font:clamp(46px,6vw,76px)/.95 Georgia,"Times New Roman",serif;letter-spacing:-2px}.hero p{max-width:760px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
+    .phase{min-width:230px;padding:17px 18px;border:1px solid var(--gold-soft);border-radius:15px;background:#fff8e8;color:#6f5012;font-size:12px;line-height:1.5}.phase strong{display:block;color:var(--navy);font-size:12px;letter-spacing:.8px;text-transform:uppercase}
+    .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.metric{padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.86);box-shadow:var(--shadow)}.metric span{color:var(--muted);font-size:10px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase}.metric strong{display:block;margin-top:7px;color:var(--navy);font:40px/1 Georgia,"Times New Roman",serif}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(340px,.97fr);gap:18px;align-items:start}.panel{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.9);box-shadow:var(--shadow)}.panel-head{padding:22px 24px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f8f0e3)}.panel-head h2{margin:0;color:var(--navy);font:30px/1 Georgia,"Times New Roman",serif}.panel-head p{margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+    form{padding:24px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 18px}.field{min-width:0}.field.full{grid-column:1 / -1}.field label{display:block;margin-bottom:7px;color:var(--navy);font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.field input,.field textarea{width:100%;min-height:47px;padding:11px 13px;border:1px solid var(--line);border-radius:11px;outline:0;background:#fff;color:var(--navy)}.field textarea{min-height:102px;resize:vertical;line-height:1.45}.field input:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.16)}.field small{display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.35}
+    .challenge{grid-column:1 / -1;padding:16px;border:1px solid var(--gold-soft);border-radius:14px;background:#fffaf0}.challenge-title{margin-bottom:13px;color:var(--amber);font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}.challenge-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.challenge textarea{min-height:84px}
+    .active-check{grid-column:1 / -1;display:flex;align-items:flex-start;gap:10px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#fafafa;color:#344054;font-size:12px;line-height:1.4}.active-check input{width:18px;height:18px;margin:0;accent-color:var(--green)}
+    .form-message{min-height:20px;margin:17px 0 0;font-size:13px;font-weight:700}.form-message.error{color:var(--red)}.form-message.success{color:var(--green)}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.btn{min-height:44px;padding:11px 16px;border-radius:11px;font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.btn.secondary{border:1px solid var(--line);background:#fff;color:var(--navy)}.btn.primary{border:1px solid var(--gold);background:var(--navy);color:#fff}.btn:disabled{cursor:wait;opacity:.62}
+    .preview-wrap{position:sticky;top:108px}.preview{padding:24px}.phone{overflow:hidden;border:8px solid var(--navy);border-radius:28px;background:#efeae2;box-shadow:0 24px 55px rgba(7,17,31,.18)}.phone-top{padding:13px 18px;background:var(--navy);color:#fff;font-size:12px;font-weight:800}.bubble{margin:18px;padding:18px;border-radius:4px 16px 16px 16px;background:#fff;color:#213047;font-size:13px;line-height:1.55;white-space:pre-wrap}.bubble strong{color:var(--green)}.preview-note{margin:16px 0 0;padding:13px 14px;border-left:3px solid var(--gold);background:var(--amber-soft);color:#6f5012;font-size:11px;line-height:1.45}.answer-key{margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.answer-key h3{margin:0 0 12px;color:var(--navy);font-size:13px}.answer-key ol{margin:0;padding-left:20px;color:#475467;font-size:12px;line-height:1.5}.answer-key li+li{margin-top:8px}
+    .library{margin-top:18px}.library-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px}.library-toolbar .btn{flex:0 0 auto}.brief-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px}.brief-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.brief-card.inactive{background:#f7f8fa}.brief-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.brief-card h3{margin:0;color:var(--navy);font-size:17px}.brief-card p{margin:10px 0;color:#475467;font-size:12px;line-height:1.45}.brief-meta{color:var(--muted);font-size:10px;line-height:1.45}.pill{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;text-transform:uppercase}.pill.active{color:var(--green);background:var(--green-soft)}.pill.draft{color:var(--amber);background:var(--amber-soft)}.edit-brief{width:100%;margin-top:14px;min-height:36px;border:1px solid var(--navy);border-radius:9px;background:#fff;color:var(--navy);font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.empty{padding:42px 20px;color:var(--muted);text-align:center;font-size:13px}.loading{padding:42px 20px;color:var(--muted);text-align:center}.error-box{padding:24px;color:var(--red);background:var(--red-soft);font-size:13px;font-weight:700}.privacy{margin-top:18px;padding:16px 18px;border-left:4px solid var(--gold);background:rgba(255,255,255,.72);color:var(--muted);font-size:12px;line-height:1.5}
+    @media(max-width:1050px){.workspace{grid-template-columns:1fr}.preview-wrap{position:static}.brief-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:720px){.header-inner,main{width:min(100% - 28px,1380px)}.header-email{display:none}.hero{align-items:flex-start;flex-direction:column}.phase{width:100%}.summary{grid-template-columns:1fr}.form-grid,.challenge-grid{grid-template-columns:1fr}.field.full,.challenge,.active-check{grid-column:auto}.brief-list{grid-template-columns:1fr}.library-toolbar{align-items:flex-start;flex-direction:column}.form-actions{flex-direction:column-reverse}.form-actions .btn,.library-toolbar .btn{width:100%}.brand{font-size:32px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="./control-voa.html" aria-label="Volver a Control VOA"><div class="brand">Veyra</div><div class="subbrand">PILOT INTELLIGENCE</div></a>
+      <div class="header-actions"><span class="header-email" id="sessionEmail"></span><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">Veyra Mission Intelligence</div><h1>Mission Briefs</h1><p>Construye el briefing previo de cada misión con contenido aprobado: objetivo, puntos de atención y un reto de tres preguntas.</p></div>
+      <div class="phase"><strong>Fase 1 · Piloto seguro</strong>Biblioteca, edición y vista previa. Todavía no envía mensajes al estudiante.</div>
+    </section>
+
+    <section class="summary" aria-label="Resumen de briefings">
+      <article class="metric"><span>Briefings creados</span><strong id="briefCount">0</strong></article>
+      <article class="metric"><span>Activos</span><strong id="activeCount">0</strong></article>
+      <article class="metric"><span>Misiones próximas sin briefing</span><strong id="missingCount">0</strong></article>
+    </section>
+
+    <section class="workspace">
+      <article class="panel">
+        <div class="panel-head"><h2 id="editorTitle">Nuevo briefing</h2><p>El contenido se guarda como borrador hasta que marques la versión como activa.</p></div>
+        <form id="briefForm" novalidate>
+          <input id="briefId" type="hidden" />
+          <div class="form-grid">
+            <div class="field"><label for="missionCode">Código de misión</label><input id="missionCode" list="missionOptions" maxlength="60" placeholder="M8" autocomplete="off" required /><datalist id="missionOptions"></datalist><small>Usa el mismo código que aparece en Control VOA.</small></div>
+            <div class="field"><label for="briefTitle">Título del briefing</label><input id="briefTitle" maxlength="120" placeholder="Preparación de la misión" required /></div>
+            <div class="field full"><label for="objective">Objetivo</label><textarea id="objective" maxlength="600" placeholder="Describe qué debe comprender o preparar el estudiante antes de la sesión." required></textarea></div>
+            <div class="field full"><label for="focusPoints">Puntos de atención</label><textarea id="focusPoints" maxlength="1200" placeholder="Un punto por línea (máximo 5)" required></textarea><small>Incluye únicamente criterios validados por el instructor o el programa de entrenamiento.</small></div>
+            <section class="challenge"><div class="challenge-title">Reto previo · exactamente tres preguntas</div><div class="challenge-grid"><div class="field"><label for="question1">Pregunta 1</label><textarea id="question1" maxlength="300" required></textarea></div><div class="field"><label for="answer1">Respuesta esperada</label><textarea id="answer1" maxlength="500" required></textarea></div></div></section>
+            <section class="challenge"><div class="challenge-title">Pregunta 2</div><div class="challenge-grid"><div class="field"><label for="question2">Pregunta</label><textarea id="question2" maxlength="300" required></textarea></div><div class="field"><label for="answer2">Respuesta esperada</label><textarea id="answer2" maxlength="500" required></textarea></div></div></section>
+            <section class="challenge"><div class="challenge-title">Pregunta 3</div><div class="challenge-grid"><div class="field"><label for="question3">Pregunta</label><textarea id="question3" maxlength="300" required></textarea></div><div class="field"><label for="answer3">Respuesta esperada</label><textarea id="answer3" maxlength="500" required></textarea></div></div></section>
+            <label class="active-check"><input id="briefActive" type="checkbox" /><span><strong>Briefing activo.</strong> Quedará identificado como contenido aprobado para la futura automatización de WhatsApp.</span></label>
+          </div>
+          <div class="form-message" id="formMessage" role="alert" aria-live="polite"></div>
+          <div class="form-actions"><button class="btn secondary" id="clearButton" type="button">Limpiar</button><button class="btn primary" id="saveButton" type="submit">Guardar briefing</button></div>
+        </form>
+      </article>
+
+      <aside class="panel preview-wrap">
+        <div class="panel-head"><h2>Vista previa</h2><p>Así se organizará el contenido para el estudiante, sin mostrar las respuestas.</p></div>
+        <div class="preview"><div class="phone"><div class="phone-top">Veyra · Mission Brief</div><div class="bubble" id="studentPreview"></div></div><div class="preview-note"><strong>Control humano:</strong> Veyra organiza y entrega el contenido; la validación técnica sigue a cargo del instructor.</div><div class="answer-key"><h3>Clave interna del instructor</h3><ol id="answerKey"></ol></div></div>
+      </aside>
+    </section>
+
+    <section class="panel library">
+      <div class="panel-head library-toolbar"><div><h2>Biblioteca de misiones</h2><p>Selecciona un briefing para editarlo. Las versiones inactivas permanecen como borradores.</p></div><button class="btn secondary" id="newBriefButton" type="button">+ Nuevo briefing</button></div>
+      <div id="libraryState" class="loading">Consultando briefings…</div><div id="briefList" class="brief-list hidden"></div>
+    </section>
+    <div class="privacy"><strong>Vista protegida.</strong> Esta biblioteca no contiene números telefónicos y solo puede ser consultada o modificada por la cuenta administradora autorizada.</div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
+  <script>
+    "use strict";
+    const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const BRIEF_FIELDS="id,mission_code,mission_key,title,objective,focus_points,challenge_questions,active,created_at,updated_at,updated_by";
+    const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
+    const state={session:null,briefs:[],missions:[],saving:false};
+    const $=id=>document.getElementById(id);
+    const value=id=>$(id).value.trim();
+    const escapeHtml=input=>String(input??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    const missionKey=input=>String(input||"").trim().replace(/\s+/g," ").toUpperCase();
+    const lines=input=>String(input||"").split(/\r?\n/).map(item=>item.trim()).filter(Boolean);
+
+    function questionsFromForm(){return [1,2,3].map(number=>({prompt:value("question"+number),answer:value("answer"+number),explanation:""}));}
+    function setMessage(message,type){const el=$("formMessage");el.textContent=message||"";el.className="form-message"+(type?" "+type:"");}
+    function formatUpdated(value){if(!value)return "Sin fecha";try{return new Intl.DateTimeFormat("es-CO",{timeZone:"America/Bogota",dateStyle:"medium",timeStyle:"short"}).format(new Date(value));}catch(_error){return "Sin fecha";}}
+
+    function renderPreview(){
+      const mission=value("missionCode")||"Misión";
+      const title=value("briefTitle")||"Título pendiente";
+      const objective=value("objective")||"Agrega el objetivo de preparación.";
+      const focus=lines($("focusPoints").value);
+      const questions=questionsFromForm();
+      const focusText=focus.length?focus.map(item=>"• "+item).join("\n"):"• Agrega entre uno y cinco puntos de atención.";
+      const questionText=questions.map((item,index)=>(index+1)+". "+(item.prompt||"Pregunta pendiente")).join("\n");
+      $("studentPreview").textContent="✈️ Veyra Mission Brief\n\n"+mission+" · "+title+"\n\nObjetivo\n"+objective+"\n\nPuntos de atención\n"+focusText+"\n\nReto previo\n"+questionText+"\n\nLleva tus respuestas a la sesión.";
+      $("answerKey").innerHTML=questions.map(item=>"<li>"+escapeHtml(item.answer||"Respuesta pendiente")+"</li>").join("");
+    }
+
+    function resetForm(prefillMission=""){$("briefForm").reset();$("briefId").value="";$("missionCode").value=prefillMission;$("editorTitle").textContent="Nuevo briefing";setMessage("","");renderPreview();window.scrollTo({top:0,behavior:"smooth"});}
+
+    function fillForm(brief){
+      $("briefId").value=brief.id;$("missionCode").value=brief.mission_code||"";$("briefTitle").value=brief.title||"";$("objective").value=brief.objective||"";$("focusPoints").value=Array.isArray(brief.focus_points)?brief.focus_points.join("\n"):"";
+      const questions=Array.isArray(brief.challenge_questions)?brief.challenge_questions:[];
+      [1,2,3].forEach(number=>{const question=questions[number-1]||{};$("question"+number).value=question.prompt||"";$("answer"+number).value=question.answer||"";});
+      $("briefActive").checked=brief.active===true;$("editorTitle").textContent="Editar "+brief.mission_code;setMessage("","");renderPreview();window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function renderSummary(){
+      $("briefCount").textContent=state.briefs.length;$("activeCount").textContent=state.briefs.filter(item=>item.active).length;
+      const keys=new Set(state.briefs.map(item=>missionKey(item.mission_code)));$("missingCount").textContent=state.missions.filter(item=>!keys.has(missionKey(item))).length;
+    }
+
+    function renderMissionOptions(){const options=Array.from(new Set(state.missions.concat(state.briefs.map(item=>item.mission_code)).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"es",{numeric:true}));$("missionOptions").innerHTML=options.map(item=>'<option value="'+escapeHtml(item)+'"></option>').join("");}
+
+    function renderLibrary(){
+      const container=$("briefList"),status=$("libraryState");
+      if(!state.briefs.length){status.className="empty";status.textContent="Aún no hay briefings. Crea el primero usando una misión próxima.";status.classList.remove("hidden");container.classList.add("hidden");return;}
+      status.classList.add("hidden");container.innerHTML=state.briefs.map(brief=>'<article class="brief-card'+(brief.active?'':' inactive')+'"><div class="brief-card-top"><h3>'+escapeHtml(brief.mission_code)+' · '+escapeHtml(brief.title)+'</h3><span class="pill '+(brief.active?'active':'draft')+'">'+(brief.active?'Activo':'Borrador')+'</span></div><p>'+escapeHtml(brief.objective)+'</p><div class="brief-meta">Actualizado '+escapeHtml(formatUpdated(brief.updated_at))+'<br>'+escapeHtml(brief.updated_by||"")+'</div><button class="edit-brief" type="button" data-brief-id="'+escapeHtml(brief.id)+'">Editar y previsualizar</button></article>').join("");container.classList.remove("hidden");
+    }
+
+    async function loadData(){
+      if(!db||!state.session)return;
+      const results=await Promise.all([db.from("voa_mission_briefs").select(BRIEF_FIELDS).order("mission_key",{ascending:true}),db.from("voa_sessions").select("mission,session_end").gte("session_end",new Date().toISOString()).order("session_start",{ascending:true}).limit(1000)]);
+      if(results[0].error||results[1].error){$("libraryState").className="error-box";$("libraryState").textContent="No fue posible consultar la biblioteca. Verifica que la cuenta esté autorizada y que la actualización de base de datos esté aplicada.";return;}
+      state.briefs=Array.isArray(results[0].data)?results[0].data:[];state.missions=Array.from(new Set((results[1].data||[]).map(item=>String(item.mission||"").trim()).filter(Boolean)));
+      renderSummary();renderMissionOptions();renderLibrary();
+      const requested=new URLSearchParams(location.search).get("mission");if(requested){const existing=state.briefs.find(item=>missionKey(item.mission_code)===missionKey(requested));existing?fillForm(existing):resetForm(requested);}
+    }
+
+    $("briefForm").addEventListener("input",renderPreview);
+    $("briefForm").addEventListener("submit",async event=>{
+      event.preventDefault();if(state.saving||!db||!state.session)return;
+      const focus=lines($("focusPoints").value),questions=questionsFromForm();
+      if(!value("missionCode")||!value("briefTitle")||!value("objective")){setMessage("Completa la misión, el título y el objetivo.","error");return;}
+      if(focus.length<1||focus.length>5){setMessage("Incluye entre uno y cinco puntos de atención, uno por línea.","error");return;}
+      if(questions.some(item=>!item.prompt||!item.answer)){setMessage("Completa las tres preguntas y sus respuestas esperadas.","error");return;}
+      const duplicate=state.briefs.find(item=>missionKey(item.mission_code)===missionKey(value("missionCode"))&&String(item.id)!==String($("briefId").value));
+      if(duplicate){setMessage("Ya existe un briefing para esa misión. Ábrelo desde la biblioteca.","error");return;}
+      const payload={mission_code:value("missionCode"),mission_key:missionKey(value("missionCode")),title:value("briefTitle"),objective:value("objective"),focus_points:focus,challenge_questions:questions,active:$("briefActive").checked};
+      state.saving=true;$("saveButton").disabled=true;$("saveButton").textContent="Guardando…";setMessage("Guardando contenido aprobado…","");
+      const id=Number($("briefId").value);const result=Number.isSafeInteger(id)&&id>0?await db.from("voa_mission_briefs").update(payload).eq("id",id).select(BRIEF_FIELDS).single():await db.from("voa_mission_briefs").insert(payload).select(BRIEF_FIELDS).single();
+      state.saving=false;$("saveButton").disabled=false;$("saveButton").textContent="Guardar briefing";
+      if(result.error){setMessage("No fue posible guardar el briefing. Revisa los campos o la autorización de la cuenta.","error");return;}
+      setMessage("Briefing guardado correctamente. En esta fase todavía no se envía por WhatsApp.","success");$("briefId").value=result.data.id;$("editorTitle").textContent="Editar "+result.data.mission_code;await loadData();
+    });
+    $("briefList").addEventListener("click",event=>{const button=event.target.closest("[data-brief-id]");if(!button)return;const brief=state.briefs.find(item=>String(item.id)===button.getAttribute("data-brief-id"));if(brief)fillForm(brief);});
+    $("clearButton").addEventListener("click",()=>resetForm());$("newBriefButton").addEventListener("click",()=>resetForm());
+    $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
+    (async()=>{if(!db){$("libraryState").className="error-box";$("libraryState").textContent="No fue posible iniciar la conexión segura.";return;}const sessionResult=await db.auth.getSession();state.session=sessionResult.data.session;if(!state.session){location.replace("./control-voa.html");return;}$("sessionEmail").textContent=state.session.user?.email||"";renderPreview();await loadData();})();
+  </script>
+</body>
+</html>
