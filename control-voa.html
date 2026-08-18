@@ -662,6 +662,26 @@
       background:#eef1f5;
       box-shadow:0 0 0 3px rgba(7,17,31,.09);
     }
+    .manage-absence-btn{
+      width:100%;
+      min-height:36px;
+      margin-top:9px;
+      padding:8px 11px;
+      border:1px solid var(--green);
+      border-radius:10px;
+      background:var(--green);
+      color:var(--white);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.55px;
+      line-height:1.25;
+      text-transform:uppercase;
+    }
+    .manage-absence-btn:hover,.manage-absence-btn:focus-visible{
+      background:#06663f;
+      box-shadow:0 0 0 3px rgba(8,119,75,.14);
+    }
+    .manage-absence-btn:disabled{cursor:wait;opacity:.62}
     .cancel-session-action-btn{
       min-height:36px;
       padding:8px 11px;
@@ -929,6 +949,16 @@
     }
     .absence-reason.not-requested{color:var(--red);font-weight:700}
     .absence-reason.not-applicable{color:var(--muted)}
+    .absence-management{
+      margin-top:9px;
+      padding-top:8px;
+      border-top:1px solid rgba(8,119,75,.2);
+      color:#475467;
+      font-size:11px;
+      line-height:1.45;
+    }
+    .absence-management strong{margin-bottom:2px;color:var(--green)}
+    .absence-management.pending strong{color:#8a6116}
 
     .history-card{width:min(760px,100%)}
     .history-body{padding:22px 26px 28px}
@@ -1185,7 +1215,7 @@
       .session-card dt{color:var(--muted)}
       .session-card dd{margin:0;color:#344054}
       .session-card .session-actions{width:100%;margin-top:8px}
-      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .history-session-btn,.session-card .cancel-session-action-btn{width:100%}
+      .session-card .send-whatsapp-btn,.session-card .edit-session-btn,.session-card .history-session-btn,.session-card .cancel-session-action-btn,.session-card .manage-absence-btn{width:100%}
       .auth-shell{padding:18px}
       .auth-intro{display:none}
       .auth-card{padding:29px 22px}
@@ -1329,7 +1359,7 @@
         <div class="attendance-alert-copy">
           <span class="attendance-alert-icon" aria-hidden="true">!</span>
           <div>
-            <strong>Reprogramación requerida</strong>
+            <strong>Novedad pendiente de gestión</strong>
             <p id="declinedAlertText"></p>
           </div>
         </div>
@@ -1356,6 +1386,8 @@
               <option value="">Todos</option>
               <option value="confirmed">Confirmadas</option>
               <option value="declined">No puede asistir</option>
+              <option value="management_pending">Novedad pendiente</option>
+              <option value="management_completed">Novedad gestionada</option>
               <option value="pending">Pendientes</option>
               <option value="cancelled">Canceladas</option>
             </select>
@@ -1669,7 +1701,7 @@
 
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
-    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
+    const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,absence_managed_at,absence_managed_by,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const DEFAULT_INSTRUCTORS = [
@@ -1709,6 +1741,7 @@
       editingStudentId: null,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
+      managingSessionIds: new Set(),
       actionTimer: null,
       timer: null
     };
@@ -1746,6 +1779,30 @@
       if(status === "declined") return "No puede asistir";
       if(status === "cancelled") return "Cancelada";
       return "Pendiente";
+    }
+
+    function hasAbsenceReason(row){
+      return Boolean(row && row.absence_reason_received_at && String(row.response_text || "").trim());
+    }
+
+    function isAbsenceManagementPending(row){
+      return Boolean(
+        row &&
+        classifyStatus(row.confirmation_status) === "declined" &&
+        !row.cancelled_at &&
+        hasAbsenceReason(row) &&
+        !row.absence_managed_at
+      );
+    }
+
+    function isAbsenceManagementCompleted(row){
+      return Boolean(row && row.absence_managed_at && row.absence_managed_by);
+    }
+
+    function operationalStatusLabel(row){
+      if(isAbsenceManagementCompleted(row)) return "Novedad gestionada";
+      if(isAbsenceManagementPending(row)) return "Gestión pendiente";
+      return "";
     }
 
     function escapeHtml(value){
@@ -2226,6 +2283,10 @@
         return '<div class="history-change-list"><div><strong>Motivo:</strong> ' + escapeHtml(details.reason) + '</div></div>';
       }
 
+      if(event.event_type === "absence_management_completed"){
+        return '<div class="history-change-list"><div><strong>Alcance:</strong> Cierre del seguimiento operativo. No modifica ni reprograma la sesión.</div></div>';
+      }
+
       if(event.event_type === "created"){
         const createdDetails = [];
         if(details.equipment) createdDetails.push('<div><strong>Equipo:</strong> ' + escapeHtml(details.equipment) + '</div>');
@@ -2270,7 +2331,9 @@
       $("historyStudent").textContent = row.student_name || "Sin nombre";
       $("historyMission").textContent = row.mission || "Sin misión";
       $("historySchedule").textContent = formatDate(row.session_start) + " · " + formatRange(row);
-      $("historyCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status));
+      const operationalStatus = operationalStatusLabel(row);
+      $("historyCurrentStatus").textContent = statusLabel(classifyStatus(row.confirmation_status)) +
+        (operationalStatus ? " · " + operationalStatus : "");
       renderHistory(id);
       $("historyModal").classList.remove("hidden");
       document.body.classList.add("modal-open");
@@ -2753,7 +2816,9 @@
         if(search && haystack.indexOf(search) < 0) return false;
         if(date && dateKey(row.session_start) !== date) return false;
         if(instructor && canonicalInstructorName(row.instructor_name) !== instructor) return false;
-        if(status && rowStatus !== status) return false;
+        if(status === "management_pending" && !isAbsenceManagementPending(row)) return false;
+        if(status === "management_completed" && !isAbsenceManagementCompleted(row)) return false;
+        if(status && status !== "management_pending" && status !== "management_completed" && rowStatus !== status) return false;
         return true;
       });
     }
@@ -2773,11 +2838,11 @@
       const alertBox = $("declinedAlert");
       const alertButton = $("showDeclinedButton");
       const declinedRows = rows.filter(function(row){
-        return classifyStatus(row.confirmation_status) === "declined";
+        return isAbsenceManagementPending(row);
       });
 
-      const viewingDeclinedOnly = $("statusFilter").value === "declined";
-      alertButton.textContent = viewingDeclinedOnly ? "Ver todas" : "Ver sesiones";
+      const viewingDeclinedOnly = $("statusFilter").value === "management_pending";
+      alertButton.textContent = viewingDeclinedOnly ? "Ver todas" : "Ver novedades";
       alertButton.setAttribute("aria-pressed",viewingDeclinedOnly ? "true" : "false");
 
       if(!declinedRows.length){
@@ -2789,11 +2854,12 @@
       if(declinedRows.length === 1){
         const row = declinedRows[0];
         $("declinedAlertText").textContent =
-          (row.student_name || "Un estudiante") + " indicó que no puede asistir a " +
-          (row.mission || "su sesión") + " del " + formatDate(row.session_start) + ".";
+          "El motivo de " + (row.student_name || "un estudiante") + " para " +
+          (row.mission || "su sesión") + " del " + formatDate(row.session_start) +
+          " está pendiente de revisión por la persona responsable.";
       }else{
         $("declinedAlertText").textContent = declinedRows.length +
-          " sesiones requieren revisión para gestionar su reprogramación.";
+          " novedades de inasistencia están pendientes de revisión por la persona responsable.";
       }
       alertBox.classList.remove("hidden");
     }
@@ -2864,11 +2930,21 @@
         return '<div class="absence-reason not-applicable">No aplica</div>';
       }
       if(row.response_text && row.absence_reason_received_at){
+        const id = Number(row.id);
+        const managing = state.managingSessionIds.has(id);
+        const managementHtml = isAbsenceManagementCompleted(row)
+          ? '<div class="absence-management managed"><strong>Novedad gestionada</strong>' +
+              escapeHtml(formatDate(row.absence_managed_at) + " · " + formatTime(row.absence_managed_at)) +
+              '<div class="cell-sub">Responsable: ' + escapeHtml(row.absence_managed_by) + '</div></div>'
+          : '<div class="absence-management pending"><strong>Pendiente de gestión</strong>' +
+              '<button class="manage-absence-btn" type="button" data-manage-absence="' +
+              escapeHtml(row.id) + '"' + (managing ? ' disabled' : '') + '>' +
+              (managing ? 'Guardando…' : 'Marcar como gestionada') + '</button></div>';
         return '<div class="absence-reason received"><strong>Motivo recibido</strong>' +
           escapeHtml(row.response_text) +
           '<div class="cell-sub">' +
           escapeHtml(formatDate(row.absence_reason_received_at) + " · " + formatTime(row.absence_reason_received_at)) +
-          '</div></div>';
+          '</div>' + managementHtml + '</div>';
       }
       if(row.absence_reason_requested_at){
         return '<div class="absence-reason waiting"><strong>Esperando respuesta</strong>' +
@@ -2986,7 +3062,70 @@
       await loadSessions();
     }
 
+    async function markAbsenceManaged(sessionId){
+      const id = Number(sessionId);
+      if(!db || !state.session || !Number.isSafeInteger(id) || state.managingSessionIds.has(id)) return;
+
+      const row = state.rows.find(function(item){ return Number(item.id) === id; });
+      if(!row || !isAbsenceManagementPending(row)){
+        setActionMessage("La novedad ya fue gestionada o dejó de estar disponible.","error");
+        await loadSessions();
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "¿Marcar esta novedad como gestionada?\n\n" +
+        "Estudiante: " + (row.student_name || "Sin nombre") + "\n" +
+        "Misión: " + (row.mission || "Sin misión") + "\n" +
+        "Motivo: " + (row.response_text || "Sin motivo") + "\n\n" +
+        "Se registrarán tu cuenta, la fecha y la hora. Esta acción no reprograma ni cancela la sesión."
+      );
+      if(!confirmed) return;
+
+      state.managingSessionIds.add(id);
+      setActionMessage("Registrando el cierre operativo de la novedad…","");
+      render();
+
+      const result = await db.functions.invoke("voa-mark-absence-managed",{
+        body:{session_id:id}
+      });
+
+      state.managingSessionIds.delete(id);
+
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        const code = details && details.code ? details.code : "";
+        if(code === "ALREADY_MANAGED" || code === "LOCKED"){
+          setActionMessage("La novedad ya había sido gestionada. Se actualizó el panel.","error");
+        }else if(code === "NOT_READY"){
+          setActionMessage("La novedad todavía no tiene un motivo válido o cambió de estado.","error");
+        }else if(code === "NOT_FOUND"){
+          setActionMessage("La sesión ya no existe o no está disponible.","error");
+        }else if(code === "UNAUTHORIZED"){
+          setActionMessage("La cuenta actual no está autorizada para cerrar novedades.","error");
+        }else{
+          setActionMessage("No fue posible marcar la novedad como gestionada. No repitas la acción hasta actualizar.","error");
+        }
+        await loadSessions();
+        return;
+      }
+
+      if(!result.data || result.data.managed !== true){
+        setActionMessage("La función no confirmó el cierre. Actualiza antes de intentarlo nuevamente.","error");
+        await loadSessions();
+        return;
+      }
+
+      setActionMessage("Novedad marcada como gestionada y registrada en el historial. No se modificó la programación.","success");
+      await loadSessions();
+    }
+
     function handleSessionAction(event){
+      const manageButton = event.target.closest("[data-manage-absence]");
+      if(manageButton){
+        markAbsenceManaged(manageButton.getAttribute("data-manage-absence"));
+        return;
+      }
       const historyButton = event.target.closest("[data-history-session]");
       if(historyButton){
         openHistoryModal(historyButton.getAttribute("data-history-session"));
@@ -3086,11 +3225,11 @@
       loadStudents(true);
     });
     $("showDeclinedButton").addEventListener("click",function(){
-      const viewingDeclinedOnly = $("statusFilter").value === "declined";
+      const viewingDeclinedOnly = $("statusFilter").value === "management_pending";
       $("searchInput").value = "";
       $("dateFilter").value = "";
       $("instructorFilter").value = "";
-      $("statusFilter").value = viewingDeclinedOnly ? "" : "declined";
+      $("statusFilter").value = viewingDeclinedOnly ? "" : "management_pending";
       render();
       $("tableWrap").scrollIntoView({behavior:"smooth",block:"start"});
     });
