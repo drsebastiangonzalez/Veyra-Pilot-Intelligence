@@ -55,8 +55,8 @@
     .panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f8f0e3)}
     .panel-head h2{margin:0;color:var(--navy);font:30px/1 Georgia,"Times New Roman",serif}.panel-head p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
     .week-tag{flex:0 0 auto;padding:7px 10px;border:1px solid var(--gold-soft);border-radius:999px;background:#fffaf0;color:#765414;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}
-    .day-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:16px 18px;border-bottom:1px solid var(--line);background:#fff}
-    .day-tab{min-height:54px;padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#475467;font-size:10px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}
+    .day-tabs{display:flex;gap:8px;overflow-x:auto;padding:16px 18px;border-bottom:1px solid var(--line);background:#fff;scrollbar-width:thin;scroll-snap-type:x proximity}
+    .day-tab{flex:1 0 112px;min-height:54px;padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#475467;font-size:10px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;scroll-snap-align:start}
     .day-tab span{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:0;text-transform:none}
     .day-tab.active{border-color:var(--gold);background:var(--navy);color:#fff;box-shadow:0 7px 18px rgba(7,17,31,.15)}.day-tab.active span{color:#e8d5a7}
     .schedule-scroll{overflow-x:auto;padding:18px}
@@ -70,7 +70,7 @@
     .session-card.review{border-color:#e8ca7b;background:var(--amber-soft);color:#735314}.session-card.selected{border-color:var(--navy);box-shadow:0 0 0 3px rgba(7,17,31,.13)}
     .session-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.session-top strong{color:var(--navy);font-size:12px;line-height:1.25}.session-mission{padding:4px 6px;border-radius:999px;background:rgba(255,255,255,.72);font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
     .session-card small{display:block;margin-top:7px;font-size:9px;line-height:1.35}.session-card .reason{color:#475467}
-    .side-stack{display:grid;gap:18px}.detail-body,.rules-body,.sources-body{padding:20px}
+    .side-stack{display:grid;gap:18px;align-items:start}.detail-body,.rules-body,.sources-body{padding:20px}
     .decision{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px;border-radius:12px;background:var(--green-soft);color:var(--green);font-size:11px;font-weight:900;text-transform:uppercase}.decision.review{background:var(--amber-soft);color:var(--amber)}
     .decision-dot{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px rgba(8,119,75,.12)}
     .detail-title{margin:0;color:var(--navy);font:25px/1.08 Georgia,"Times New Roman",serif}.detail-sub{margin:7px 0 16px;color:var(--muted);font-size:12px;line-height:1.45}
@@ -83,9 +83,10 @@
     .blocked-row{background:#fff9f8}.blocked-note{color:var(--red);font-weight:800}
     .footnote{margin-top:18px;padding:17px 19px;border-left:4px solid var(--gold);background:rgba(255,255,255,.76);color:#667085;font-size:12px;line-height:1.55}.footnote strong{color:var(--navy)}
     .gate{min-height:100vh;display:grid;place-items:center;padding:30px;background:var(--navy);color:#fff;text-align:center}.gate-card{max-width:520px}.gate-mark{margin-bottom:14px;color:var(--gold);font:56px/1 Georgia,"Times New Roman",serif}.spinner{width:40px;height:40px;margin:24px auto 0;border:4px solid rgba(255,255,255,.18);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-    @media(max-width:1120px){.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.side-stack{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.draft-card{width:100%}.status-strip{align-items:flex-start;flex-direction:column}.present-btn{width:100%}}
-    @media(max-width:650px){.header-inner,main{width:min(100% - 28px,1440px)}.header-email{display:none}.brand{font-size:32px}.hero h1{font-size:44px}.hero p{font-size:15px}.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric{min-height:104px;padding:17px}.metric strong{font-size:34px}.day-tabs{grid-template-columns:repeat(5,132px);overflow-x:auto}.panel-head{align-items:flex-start;flex-direction:column}.week-tag{align-self:flex-start}}
+    @media(max-width:1400px){.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr) minmax(0,.9fr)}}
+    @media(max-width:1050px){.side-stack{grid-template-columns:1fr 1fr}.side-stack .panel:last-child{grid-column:1 / -1}}
+    @media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.side-stack{grid-template-columns:1fr}.side-stack .panel:last-child{grid-column:auto}.hero{align-items:flex-start;flex-direction:column}.draft-card{width:100%}.status-strip{align-items:flex-start;flex-direction:column}.present-btn{width:100%}}
+    @media(max-width:650px){.header-inner,main{width:min(100% - 28px,1440px)}.header-email{display:none}.brand{font-size:32px}.hero h1{font-size:44px}.hero p{font-size:15px}.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric{min-height:104px;padding:17px}.metric strong{font-size:34px}.day-tab{flex-basis:132px}.panel-head{align-items:flex-start;flex-direction:column}.week-tag{align-self:flex-start}}
     @media print{
       body{background:#fff}.header-actions,.present-btn,.day-tabs,.footnote{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(4,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}}
   </style>
@@ -105,8 +106,8 @@
 
     <main>
       <section class="hero">
-        <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta semanal que combina disponibilidad, secuencia de entrenamiento, vuelos y capacidad de los simuladores antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Borrador demostrativo</strong>Semana del 31 de agosto al 4 de septiembre de 2026. Datos ficticios para revisión y aprobación.</div>
+        <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta de programación que combina disponibilidad, secuencia de entrenamiento, vuelos y capacidad de los simuladores antes de pasar a programación real.</p></div>
+        <div class="draft-card"><strong>Previsualización para aprobación</strong>Programación del 28 de agosto al 6 de septiembre de 2026. Incluye datos demostrativos y confirmaciones protegidas para revisión.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -115,7 +116,7 @@
       </section>
 
       <section class="metrics" aria-label="Resumen de la propuesta">
-        <article class="metric"><span>Sesiones propuestas</span><strong id="proposalCount">0</strong></article>
+        <article class="metric"><span>Sesiones visualizadas</span><strong id="proposalCount">0</strong></article>
         <article class="metric"><span>Conflictos críticos</span><strong id="criticalCount">0</strong></article>
         <article class="metric warning"><span>Requieren revisión</span><strong id="reviewCount">0</strong></article>
         <article class="metric blocked"><span>Bloqueados PPA → PCA</span><strong id="blockedCount">0</strong></article>
@@ -148,7 +149,7 @@
 
       <section class="panel wide-panel">
         <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>La propuesta debe explicar la continuidad MES, los refuerzos y cualquier bloqueo antes de asignar un simulador.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
-        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante demo</th><th>Etapa</th><th>Último registro</th><th>Propuesta</th><th>Sede / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Último registro</th><th>Propuesta</th><th>Sede / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
       <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica y el diseño ya pueden presentarse. Para convertirla en programación operativa todavía deben conectarse el cronograma de vuelo, el documento de disponibilidades laborales y el registro de evaluaciones de Drive. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
@@ -168,11 +169,16 @@
     const escapeHtml=input=>String(input??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 
     const DAYS=[
+      {key:"2026-08-28",short:"Vie 28",long:"Viernes 28 de agosto"},
+      {key:"2026-08-29",short:"Sáb 29",long:"Sábado 29 de agosto"},
+      {key:"2026-08-30",short:"Dom 30",long:"Domingo 30 de agosto"},
       {key:"2026-08-31",short:"Lun 31",long:"Lunes 31 de agosto"},
       {key:"2026-09-01",short:"Mar 1",long:"Martes 1 de septiembre"},
       {key:"2026-09-02",short:"Mié 2",long:"Miércoles 2 de septiembre"},
       {key:"2026-09-03",short:"Jue 3",long:"Jueves 3 de septiembre"},
-      {key:"2026-09-04",short:"Vie 4",long:"Viernes 4 de septiembre"}
+      {key:"2026-09-04",short:"Vie 4",long:"Viernes 4 de septiembre"},
+      {key:"2026-09-05",short:"Sáb 5",long:"Sábado 5 de septiembre"},
+      {key:"2026-09-06",short:"Dom 6",long:"Domingo 6 de septiembre"}
     ];
     const SLOTS=["06:00","08:00","10:00","12:00","14:00","16:00"];
     const RESOURCES=[
@@ -210,6 +216,7 @@
       "Si el estudiante concentra varias actividades en Flandes, se procura mantenerlas en la misma sede y solo se alerta cuando la propuesta lo movería entre ciudades."
     ];
     const SOURCES=[
+      {key:"confirmed",name:"Programación confirmada",status:"Acceso protegido",loaded:false},
       {name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
       {name:"Disponibilidad laboral",status:"Por conectar",loaded:false},
       {name:"Registro de evaluaciones",status:"Por conectar",loaded:false},
@@ -217,7 +224,7 @@
       {name:"Recursos de simulador",status:"Configurados",loaded:true}
     ];
 
-    const state={day:DAYS[0].key,selected:"p6",results:new Map()};
+    const state={day:"2026-08-31",selected:"p6",results:new Map(),protectedLoaded:false,protectedKeys:new Set()};
 
     function minutes(value){const parts=String(value).split(":").map(Number);return parts[0]*60+parts[1];}
     function overlaps(aStart,aEnd,bStart,bEnd){return minutes(aStart)<minutes(bEnd)&&minutes(bStart)<minutes(aEnd);}
@@ -225,6 +232,70 @@
     function nextMission(code){const number=missionNumber(code);return number===null?null:"M"+(number+1);}
     function resourceById(id){return RESOURCES.find(item=>item.id===id);}
     function proposalById(id){return PROPOSALS.find(item=>item.id===id);}
+
+    function bogotaParts(value){
+      const parts=new Intl.DateTimeFormat("en-CA",{timeZone:BOGOTA_TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date(value));
+      const values=Object.fromEntries(parts.map(part=>[part.type,part.value]));
+      return {date:values.year+"-"+values.month+"-"+values.day,time:values.hour+":"+values.minute};
+    }
+
+    function mergeProtectedItems(rows){
+      const added=[];
+      (rows||[]).forEach(row=>{
+        const studentKey="protected-"+row.id;
+        const proposalId="confirmed-adjustment-"+row.id;
+        if(state.protectedKeys.has(studentKey)||proposalById(proposalId))return;
+        const start=bogotaParts(row.session_start),end=bogotaParts(row.session_end);
+        STUDENTS[studentKey]={
+          name:row.student_name,
+          stage:row.stage||"PPA",
+          last:row.last_record||"No informado",
+          works:true,
+          protected:true,
+          adjustmentConfirmed:true,
+          availability:{[start.date]:[[start.time,end.time]]},
+          flights:[]
+        };
+        PROPOSALS.push({
+          id:proposalId,
+          student:studentKey,
+          date:start.date,
+          start:start.time,
+          end:end.time,
+          resource:row.resource_key,
+          mission:row.mission,
+          type:"reasonable_adjustment",
+          reason:row.adjustment_label||"Ajuste razonable confirmado",
+          source:row.source_label||"Programación protegida"
+        });
+        state.protectedKeys.add(studentKey);
+        added.push(proposalId);
+      });
+      return added;
+    }
+
+    async function loadProtectedItems(){
+      const source=SOURCES.find(item=>item.key==="confirmed");
+      const response=await db.from("voa_schedule_preview_items")
+        .select("id,student_name,stage,last_record,mission,resource_key,session_start,session_end,confirmation_status,adjustment_label,source_label")
+        .eq("active",true)
+        .gte("session_start","2026-08-28T05:00:00Z")
+        .lt("session_start","2026-09-07T05:00:00Z")
+        .order("session_start",{ascending:true});
+      if(response.error){
+        if(source){source.status="No disponible";source.loaded=false;}
+        return [];
+      }
+      const added=mergeProtectedItems(response.data);
+      state.protectedLoaded=true;
+      if(source){source.status=response.data.length+" confirmadas";source.loaded=true;}
+      if(added.length){
+        const first=proposalById(added[0]);
+        state.day=first.date;
+        state.selected=first.id;
+      }
+      return added;
+    }
 
     function validateProposals(){
       const results=new Map();
@@ -255,7 +326,9 @@
         const dailyMinutes=PROPOSALS.filter(other=>other.student===proposal.student&&other.date===proposal.date).reduce((sum,item)=>sum+minutes(item.end)-minutes(item.start),0);
         if(dailyMinutes>360)errors.push("Supera el máximo de seis horas por día.");else checks.push("Carga diaria: "+dailyMinutes/60+" de 6 horas");
         if(student.ppaComplete&&!student.inspectorExam&&!student.pcaAuthorized&&/^PCA/i.test(proposal.mission))errors.push("Transición a PCA bloqueada hasta examen y autorización.");
-        if(proposal.type==="reinforcement"){
+        if(proposal.type==="reasonable_adjustment"){
+          checks.push("Confirmación por ajuste razonable registrada");
+        }else if(proposal.type==="reinforcement"){
           if(!student.reinforcement?.approved||student.reinforcement.mission!==proposal.mission)errors.push("El refuerzo no aparece solicitado o aprobado.");else checks.push("Refuerzo solicitado e identificado");
         }else{
           const expected=nextMission(latestMission[proposal.student]);
@@ -285,7 +358,7 @@
 
     function proposalCard(proposal){
       const student=STUDENTS[proposal.student],result=state.results.get(proposal.id);
-      const typeLabel=proposal.type==="reinforcement"?"Refuerzo":proposal.mission;
+      const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="reinforcement"?"Refuerzo":proposal.mission;
       return '<button class="session-card '+result.status+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small><small class="reason">'+escapeHtml(proposal.reason)+'</small></button>';
     }
 
@@ -309,12 +382,12 @@
       state.selected=proposal.id;
       const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource),result=state.results.get(proposal.id);
       const day=DAYS.find(item=>item.key===proposal.date);
-      const decision=result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
+      const decision=proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
       $("detailPanel").innerHTML=
         '<div class="decision '+(result.status==="review"?'review':'')+'"><span class="decision-dot"></span>'+escapeHtml(decision)+'</div>'+
         '<h3 class="detail-title">'+escapeHtml(student.name)+' · '+escapeHtml(proposal.mission)+'</h3>'+
-        '<p class="detail-sub">'+escapeHtml(proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial')+'</p>'+
+        '<p class="detail-sub">'+escapeHtml(proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial')+'</p>'+
         '<dl class="detail-list">'+
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
@@ -338,8 +411,9 @@
         const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:item.mission)).join(' → ')||'Sin propuesta';
         const locations=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.site).filter(Boolean))).join(' / ')||'—';
         const hasWorkAdjustment=student.works&&proposals.length;
+        const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
         const hasReview=proposals.some(item=>state.results.get(item.id)?.status==="review");
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">Ajuste laboral</span>':'')+'</td><td><span class="pill '+(hasReview?'review':'ready')+'">'+(hasReview?'Revisar sede':'Secuencia apta')+'</span></td></tr>';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">'+(confirmedAdjustment?'Ajuste razonable':'Ajuste laboral')+'</span>':'')+'</td><td><span class="pill '+(hasReview?'review':'ready')+'">'+(hasReview?'Revisar sede':confirmedAdjustment?'Confirmada':'Secuencia apta')+'</span></td></tr>';
       }).join("");
     }
 
@@ -367,12 +441,13 @@
     $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
 
     async function init(){
-      validateProposals();
-      if(IS_LOCAL){$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();return;}
+      if(IS_LOCAL){validateProposals();$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();return;}
       if(!db){$("gateMessage").textContent="No fue posible iniciar el acceso seguro.";return;}
       const result=await db.auth.getUser();
       if(result.error||!result.data.user){location.replace("./control-voa.html");return;}
       $("sessionEmail").textContent=result.data.user.email||"";
+      await loadProtectedItems();
+      validateProposals();
       $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();
     }
     init();
