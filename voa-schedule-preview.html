@@ -153,7 +153,7 @@
         <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Último registro</th><th>Propuesta</th><th>Sede / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
-      <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica y el diseño ya pueden presentarse. Para convertirla en programación operativa todavía deben conectarse el cronograma de vuelo, el documento de disponibilidades laborales y el registro de evaluaciones de Drive. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
+      <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica, el diseño, el cruce protegido con vuelos y los seis últimos registros de entrenamiento ya pueden presentarse. Para convertirla en programación operativa todavía deben automatizarse el documento de disponibilidades laborales y el registro de evaluaciones de Drive. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
     </main>
   </div>
 
@@ -225,14 +225,14 @@
     ];
     const SOURCES=[
       {key:"confirmed",name:"Programación SCS actual",status:"Acceso protegido",loaded:false},
-      {name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
+      {key:"flights",name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
       {name:"Disponibilidad laboral",status:"Por conectar",loaded:false},
-      {name:"Registro de evaluaciones",status:"Por conectar",loaded:false},
+      {name:"Registro de evaluaciones",status:"6 registros iniciales",loaded:true},
       {name:"Manual MES",status:"Regla incorporada",loaded:true},
       {name:"Recursos de simulador",status:"Configurados",loaded:true}
     ];
 
-    const state={week:0,selected:"p6",results:new Map(),protectedLoaded:false,protectedKeys:new Set()};
+    const state={week:0,selected:"p6",results:new Map(),protectedLoaded:false,protectedKeys:new Set(),flightKeys:new Set()};
 
     function minutes(value){const parts=String(value).split(":").map(Number);return parts[0]*60+parts[1];}
     function overlaps(aStart,aEnd,bStart,bEnd){return minutes(aStart)<minutes(bEnd)&&minutes(bStart)<minutes(aEnd);}
@@ -240,6 +240,7 @@
     function nextMission(code){const number=missionNumber(code);return number===null?null:"M"+(number+1);}
     function resourceById(id){return RESOURCES.find(item=>item.id===id);}
     function proposalById(id){return PROPOSALS.find(item=>item.id===id);}
+    function studentKeyForName(name){return "protected-student-"+String(name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function activeWeek(){return WEEKS[state.week]||WEEKS[0];}
     function weekIndexForDate(date){const index=WEEKS.findIndex(week=>week.days.some(day=>day.key===date));return index<0?0:index;}
     function sessionCountLabel(items){
@@ -261,7 +262,7 @@
       const added=[];
       (rows||[]).forEach(row=>{
         const isAdjustment=row.confirmation_status==="confirmed_adjustment";
-        const studentKey="protected-student-"+String(row.student_name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+        const studentKey=studentKeyForName(row.student_name);
         const proposalId="protected-session-"+row.id;
         if(state.protectedKeys.has(proposalId)||proposalById(proposalId))return;
         const start=bogotaParts(row.session_start),end=bogotaParts(row.session_end);
@@ -304,6 +305,30 @@
       return added;
     }
 
+    function mergeFlightBlocks(rows){
+      let merged=0;
+      (rows||[]).forEach(row=>{
+        const studentKey=studentKeyForName(row.student_name);
+        const student=STUDENTS[studentKey];
+        if(!student)return;
+        const start=bogotaParts(row.flight_start),end=bogotaParts(row.flight_end);
+        const flightKey=[studentKey,start.date,start.time,end.time].join("|");
+        if(state.flightKeys.has(flightKey))return;
+        student.flights=student.flights||[];
+        student.flights.push({
+          id:row.id,
+          date:start.date,
+          start:start.time,
+          end:end.time,
+          site:row.site||"Flandes",
+          source:row.source_label||"AMC · OCS ACTUAL"
+        });
+        state.flightKeys.add(flightKey);
+        merged+=1;
+      });
+      return merged;
+    }
+
     async function loadProtectedItems(){
       const source=SOURCES.find(item=>item.key==="confirmed");
       const response=await db.from("voa_schedule_preview_items")
@@ -325,6 +350,23 @@
         state.selected=first.id;
       }
       return added;
+    }
+
+    async function loadProtectedFlightBlocks(){
+      const source=SOURCES.find(item=>item.key==="flights");
+      const response=await db.from("voa_schedule_flight_blocks")
+        .select("id,student_name,flight_start,flight_end,site,source_label")
+        .eq("active",true)
+        .gte("flight_start","2026-08-25T05:00:00Z")
+        .lt("flight_start","2026-09-07T05:00:00Z")
+        .order("flight_start",{ascending:true});
+      if(response.error){
+        if(source){source.status="No disponible";source.loaded=false;}
+        return 0;
+      }
+      const merged=mergeFlightBlocks(response.data);
+      if(source){source.status=merged+" "+(merged===1?"bloque integrado":"bloques integrados");source.loaded=true;}
+      return merged;
     }
 
     function validateProposals(){
@@ -358,7 +400,20 @@
         if(student.ppaComplete&&!student.inspectorExam&&!student.pcaAuthorized&&/^PCA/i.test(proposal.mission))errors.push("Transición a PCA bloqueada hasta examen y autorización.");
         if(proposal.type==="reasonable_adjustment"){
           checks.push("Confirmación por ajuste razonable registrada");
+          if(missionNumber(latestMission[proposal.student])===null)warnings.push("El último registro no contiene un código MES; confirmar manualmente la secuencia de esta sesión.");
+          else checks.push("Último registro MES disponible: "+latestMission[proposal.student]);
         }else if(proposal.type==="scheduled"){
+          const expected=nextMission(latestMission[proposal.student]);
+          const scheduledNumber=missionNumber(proposal.mission);
+          if(scheduledNumber===null){
+            errors.push("La misión programada no está informada; no es posible verificar la secuencia MES.");
+          }else if(expected&&proposal.mission!==expected){
+            errors.push("Secuencia MES inconsistente: desde "+latestMission[proposal.student]+" se esperaba "+expected+", no "+proposal.mission+".");
+          }else{
+            if(expected)checks.push("Secuencia "+latestMission[proposal.student]+" → "+proposal.mission+" verificada");
+            else warnings.push("El último registro previo no contiene un código MES; confirmar manualmente que corresponde iniciar en "+proposal.mission+".");
+            latestMission[proposal.student]=proposal.mission;
+          }
           checks.push("Programación SCS registrada como restricción del cronograma");
         }else if(proposal.type==="reinforcement"){
           if(!student.reinforcement?.approved||student.reinforcement.mission!==proposal.mission)errors.push("El refuerzo no aparece solicitado o aprobado.");else checks.push("Refuerzo solicitado e identificado");
@@ -449,11 +504,15 @@
         }
         const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:item.mission)).join(' → ')||'Sin propuesta';
         const locations=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.site).filter(Boolean))).join(' / ')||'—';
+        const flightCount=(student.flights||[]).length;
         const hasWorkAdjustment=student.works&&proposals.length;
         const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
         const scheduleRegistered=student.scheduleRegistered&&proposals.length;
         const hasReview=proposals.some(item=>state.results.get(item.id)?.status==="review");
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">'+(confirmedAdjustment?'Ajuste razonable':'Ajuste laboral')+'</span>':'')+'</td><td><span class="pill '+(hasReview?'review':'ready')+'">'+(hasReview?'Revisar sede':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta')+'</span></td></tr>';
+        const hasBlocked=proposals.some(item=>state.results.get(item.id)?.status==="blocked");
+        const resultClass=hasBlocked?'blocked':hasReview?'review':'ready';
+        const resultLabel=hasBlocked?'Cruce detectado':hasReview?'Revisar sede':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">'+(confirmedAdjustment?'Ajuste razonable':'Ajuste laboral')+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span></td></tr>';
       }).join("");
     }
 
@@ -488,6 +547,7 @@
       if(result.error||!result.data.user){location.replace("./control-voa.html");return;}
       $("sessionEmail").textContent=result.data.user.email||"";
       await loadProtectedItems();
+      await loadProtectedFlightBlocks();
       validateProposals();
       $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();
     }
