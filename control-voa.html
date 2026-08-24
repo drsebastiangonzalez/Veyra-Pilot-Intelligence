@@ -354,7 +354,7 @@
       align-items:flex-end;
       gap:14px;
     }
-    .hero-button-row{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+    .hero-button-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px}
     .new-session-btn{
       min-height:46px;
       padding:12px 19px;
@@ -375,10 +375,14 @@
     .directory-btn{
       min-height:46px;
       padding:12px 19px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       border:1px solid var(--navy);
       border-radius:12px;
       background:var(--white);
       color:var(--navy);
+      text-decoration:none;
       font-size:11px;
       font-weight:900;
       letter-spacing:1.2px;
@@ -597,6 +601,14 @@
     .student{color:var(--navy);font-weight:800}
     .cell-title{color:var(--navy);font-weight:700}
     .cell-sub{margin-top:3px;color:var(--muted);font-size:12px}
+    .mission-brief-status{margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.mission-brief-status span,.mission-brief-status a,.mission-brief-status button{font-size:10px;font-weight:800;letter-spacing:.04em}
+.mission-brief-status span{display:inline-flex;align-items:center;border-radius:999px;padding:4px 7px}
+.mission-brief-status a,.mission-brief-status button{color:var(--navy);text-decoration:underline;text-underline-offset:2px}
+.mission-brief-status button{appearance:none;border:0;padding:0;background:transparent;cursor:pointer;font-family:inherit}
+    .mission-brief-status.active span{color:var(--green);background:var(--green-soft)}
+    .mission-brief-status.pending span{color:var(--amber);background:var(--amber-soft)}
+    .mission-brief-status.unavailable span{color:#475467;background:#eaecf0}
     .badge{
       display:inline-flex;
       align-items:center;
@@ -1233,6 +1245,7 @@
       .sync{text-align:left}
       .hero-button-row{width:100%;display:grid;grid-template-columns:1fr 1fr}
       .new-session-btn,.directory-btn{width:100%}
+      .mission-briefs-link,.schedule-preview-link{grid-column:auto}
       .stats{grid-template-columns:repeat(2,1fr);gap:10px}
       .stat{min-height:108px;padding:17px}
       .stat-value{font-size:36px}
@@ -1371,6 +1384,8 @@
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
+            <a class="directory-btn schedule-preview-link" href="./voa-schedule-preview.html">Cronograma</a>
+            <a class="directory-btn mission-briefs-link" href="./voa-mission-briefs.html">Mission Briefs</a>
             <button class="directory-btn" id="directoryButton" type="button">Directorio</button>
             <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
           </div>
@@ -1753,6 +1768,7 @@
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,absence_managed_at,absence_managed_by,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
+    const BRIEF_FIELDS = "id,mission_code,mission_key,title,active,public_token";
     const DEFAULT_INSTRUCTORS = [
       "Cap. García",
       "Cap. González",
@@ -1776,6 +1792,8 @@
       rows: [],
       students: [],
       historyRows: [],
+      briefsByMission: Object.create(null),
+      briefingsAvailable: true,
       session: null,
       passwordMode: false,
       loading: false,
@@ -3004,6 +3022,70 @@
       return '<div class="absence-reason not-requested">Solicitud no enviada</div>';
     }
 
+    function missionBriefKey(value){
+      return String(value || "").trim().replace(/\s+/g," ").toUpperCase();
+    }
+
+    function missionBriefFor(row){
+      return state.briefsByMission[missionBriefKey(row && row.mission)] || null;
+    }
+
+    function missionBriefUrl(row){
+      const code = String((row && row.mission) || "").trim();
+      return "./voa-mission-briefs.html?mission=" + encodeURIComponent(code);
+    }
+
+    function missionBriefStudentUrl(brief){
+      const token = String((brief && brief.public_token) || "").trim();
+      if(!token) return "";
+      return "./voa-mission-brief.html?t=" + encodeURIComponent(token);
+    }
+
+    async function copyText(value){
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      if(!copied) throw new Error("COPY_FAILED");
+    }
+
+    function missionBriefHtml(row){
+      const code = String((row && row.mission) || "").trim();
+      if(!code){
+        return '<div class="mission-brief-status unavailable"><span>Sin código de misión</span></div>';
+      }
+      if(!state.briefingsAvailable){
+        return '<div class="mission-brief-status unavailable"><span>Briefing no disponible</span></div>';
+      }
+      const brief = missionBriefFor(row);
+      const adminUrl = missionBriefUrl(row);
+      if(brief){
+        const studentUrl = missionBriefStudentUrl(brief);
+        if(!studentUrl){
+          return '<div class="mission-brief-status unavailable"><span>Publicación segura pendiente</span><a href="' +
+            escapeHtml(adminUrl) + '" aria-label="Abrir briefing de la misión ' + escapeHtml(code) +
+            '">Abrir briefing</a></div>';
+        }
+        return '<div class="mission-brief-status active"><span>Briefing activo</span><a href="' +
+          escapeHtml(studentUrl) + '" target="_blank" rel="noopener" aria-label="Abrir vista del estudiante para la misión ' +
+          escapeHtml(code) + '">Vista estudiante</a><button type="button" data-copy-brief-url="' +
+          escapeHtml(studentUrl) + '" aria-label="Copiar enlace seguro del briefing de la misión ' +
+          escapeHtml(code) + '">Copiar enlace</button></div>';
+      }
+      return '<div class="mission-brief-status pending"><span>Briefing pendiente</span><a href="' +
+        escapeHtml(adminUrl) + '" aria-label="Crear briefing para la misión ' + escapeHtml(code) +
+        '">Crear briefing</a></div>';
+    }
+
     function rowHtml(row){
       const status = classifyStatus(row.confirmation_status);
       const mission = escapeHtml(row.mission || "Sin misión");
@@ -3018,7 +3100,7 @@
       return '<tr class="' + (status === "declined" ? "declined-row" : (status === "cancelled" ? "cancelled-row" : "")) + '">' +
         '<td><div class="student">' + escapeHtml(row.student_name || "Sin nombre") + '</div></td>' +
         '<td><div class="cell-title">' + escapeHtml(formatDate(row.session_start)) + '</div><div class="cell-sub">' + escapeHtml(formatRange(row)) + '</div></td>' +
-        '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div></td>' +
+        '<td><div class="cell-title">' + mission + '</div><div class="cell-sub">' + equipment + '</div>' + missionBriefHtml(row) + '</td>' +
         '<td>' + escapeHtml(row.location || "—") + '</td>' +
         '<td>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</td>' +
         '<td><span class="badge ' + status + '">' + statusLabel(status) + '</span>' + cancellationDetailHtml(row) + '</td>' +
@@ -3036,6 +3118,7 @@
           '<dt>Sesión</dt><dd>' + escapeHtml(formatDate(row.session_start) + " · " + formatRange(row)) + '</dd>' +
           '<dt>Misión</dt><dd>' + escapeHtml(row.mission || "—") + '</dd>' +
           '<dt>Equipo</dt><dd>' + escapeHtml(row.equipment || "—") + '</dd>' +
+          '<dt>Mission Brief</dt><dd>' + missionBriefHtml(row) + '</dd>' +
           '<dt>Lugar</dt><dd>' + escapeHtml(row.location || "—") + '</dd>' +
           '<dt>Instructor</dt><dd>' + escapeHtml(canonicalInstructorName(row.instructor_name) || "—") + '</dd>' +
           (status === "cancelled" ? '<dt>Cancelación</dt><dd>' + cancellationDetailHtml(row) + '</dd>' : '') +
@@ -3170,6 +3253,20 @@
     }
 
     function handleSessionAction(event){
+      const copyBriefButton = event.target.closest("[data-copy-brief-url]");
+      if(copyBriefButton){
+        event.preventDefault();
+        const relativeUrl = copyBriefButton.getAttribute("data-copy-brief-url");
+        const absoluteUrl = new URL(relativeUrl, window.location.href).href;
+        copyText(absoluteUrl)
+          .then(function(){
+            setActionMessage("Enlace seguro del Mission Brief copiado.", "success");
+          })
+          .catch(function(){
+            setActionMessage("No fue posible copiar el enlace. Abre Vista estudiante y copia la dirección del navegador.", "error");
+          });
+        return;
+      }
       const manageButton = event.target.closest("[data-manage-absence]");
       if(manageButton){
         markAbsenceManaged(manageButton.getAttribute("data-manage-absence"));
@@ -3241,9 +3338,17 @@
         .order("id",{ascending:false})
         .limit(5000);
 
-      const results = await Promise.all([query,historyQuery]);
+      const briefQuery = db
+        .from("voa_mission_briefs")
+        .select(BRIEF_FIELDS)
+        .eq("active",true)
+        .order("mission_code",{ascending:true})
+        .limit(500);
+
+      const results = await Promise.all([query,historyQuery,briefQuery]);
       const result = results[0];
       const historyResult = results[1];
+      const briefingResult = results[2];
       state.loading = false;
       $("refreshButton").disabled = false;
 
@@ -3258,11 +3363,21 @@
         return;
       }
 
+      state.briefingsAvailable = !briefingResult.error;
+      state.briefsByMission = Object.create(null);
+      if(!briefingResult.error && Array.isArray(briefingResult.data)){
+        briefingResult.data.forEach(function(brief){
+          const key = missionBriefKey(brief.mission_code || brief.mission_key);
+          if(key) state.briefsByMission[key] = brief;
+        });
+      }
+
       state.rows = Array.isArray(result.data) ? result.data : [];
       state.historyRows = Array.isArray(historyResult.data) ? historyResult.data : [];
       populateInstructors(state.rows);
       render();
-      $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString());
+      $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString()) +
+        (briefingResult.error ? " · Briefings no disponibles" : "");
     }
 
     ["searchInput","dateFilter","instructorFilter","statusFilter"].forEach(function(id){
