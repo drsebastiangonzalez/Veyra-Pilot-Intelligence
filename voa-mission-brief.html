@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Veyra · Mission Brief</title>
+  <style>
+    :root {
+      --navy: #07111f;
+      --cream: #f7f1e8;
+      --paper: #fffdf9;
+      --gold: #c99a3d;
+      --gold-soft: #ead7b5;
+      --ink: #101827;
+      --muted: #667085;
+      --line: #dfd3c1;
+      --green: #087a55;
+      --red: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        linear-gradient(rgba(201, 154, 61, .07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 154, 61, .07) 1px, transparent 1px),
+        var(--cream);
+      background-size: 42px 42px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 26px clamp(22px, 5vw, 72px);
+      color: #fff;
+      background: var(--navy);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .brand-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 6vw, 60px);
+      line-height: .85;
+    }
+
+    .brand-tag {
+      margin-top: 14px;
+      color: #d8b35e;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 8px;
+    }
+
+    .secure-label {
+      color: #d9dee8;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1040px, calc(100% - 34px));
+      margin: 44px auto 70px;
+    }
+
+    .state-card,
+    .brief-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255, 253, 249, .96);
+      box-shadow: 0 20px 55px rgba(7, 17, 31, .10);
+    }
+
+    .state-card {
+      padding: 42px;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 22px;
+      border: 4px solid var(--gold-soft);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .state-card h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 7vw, 52px);
+    }
+
+    .state-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .brief-head {
+      padding: clamp(28px, 5vw, 54px);
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(201, 154, 61, .24), transparent 28%),
+        var(--navy);
+    }
+
+    .eyebrow {
+      margin-bottom: 16px;
+      color: #d8b35e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .mission-code {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(216, 179, 94, .65);
+      border-radius: 999px;
+      color: #f2d58e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .brief-head h1 {
+      max-width: 820px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 7vw, 68px);
+      font-weight: 500;
+      line-height: 1.02;
+    }
+
+    .brief-body {
+      display: grid;
+      gap: 34px;
+      padding: clamp(28px, 5vw, 54px);
+    }
+
+    .section-label {
+      margin: 0 0 12px;
+      color: #7c5b20;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .objective {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(23px, 3vw, 31px);
+      line-height: 1.42;
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .focus-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
+      align-items: start;
+      color: #344054;
+      font-size: 17px;
+      line-height: 1.48;
+    }
+
+    .focus-list li::before {
+      content: "✓";
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--green);
+      background: #e7f7f0;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .questions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .question-card {
+      min-height: 190px;
+      padding: 24px;
+      border: 1px solid var(--gold-soft);
+      border-radius: 20px;
+      background: #fffaf0;
+    }
+
+    .question-number {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 18px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+    }
+
+    .question-card p {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.48;
+    }
+
+    .student-note {
+      padding: 20px 22px;
+      border-left: 4px solid var(--gold);
+      border-radius: 0 14px 14px 0;
+      color: #59451f;
+      background: #fff4cf;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .privacy-note {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 760px) {
+      header { align-items: flex-start; }
+      .brand-tag { letter-spacing: 5px; }
+      .secure-label { max-width: 130px; font-size: 11px; }
+      main { margin-top: 24px; }
+      .questions { grid-template-columns: 1fr; }
+      .question-card { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/" aria-label="Ir al inicio de Veyra">
+      <div class="brand-name">Veyra</div>
+      <div class="brand-tag">PILOT INTELLIGENCE</div>
+    </a>
+    <div class="secure-label">Preparación de misión</div>
+  </header>
+
+  <main>
+    <section class="state-card" id="loadingState" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <h1>Preparando tu briefing</h1>
+      <p>Estamos consultando el contenido aprobado para tu sesión de simulador.</p>
+    </section>
+
+    <section class="state-card" id="errorState" hidden aria-live="assertive">
+      <h1>Briefing no disponible</h1>
+      <p id="errorMessage">Este enlace no es válido o el briefing todavía no está activo.</p>
+    </section>
+
+    <article class="brief-card" id="briefContent" hidden>
+      <div class="brief-head">
+        <div class="eyebrow">Veyra Mission Brief</div>
+        <div class="mission-code" id="missionCode"></div>
+        <h1 id="briefTitle"></h1>
+      </div>
+
+      <div class="brief-body">
+        <section>
+          <h2 class="section-label">Objetivo de preparación</h2>
+          <p class="objective" id="briefObjective"></p>
+        </section>
+
+        <section>
+          <h2 class="section-label">Puntos de atención</h2>
+          <ul class="focus-list" id="focusList"></ul>
+        </section>
+
+        <section>
+          <h2 class="section-label">Reto previo</h2>
+          <div class="questions" id="questionList"></div>
+        </section>
+
+        <div class="student-note">
+          Prepara tus respuestas y llévalas a la sesión de simulador. El instructor las revisará contigo durante el briefing.
+        </div>
+      </div>
+    </article>
+
+    <p class="privacy-note" id="privacyNote" hidden>
+      Este enlace contiene únicamente material de preparación. No incluye datos personales ni información interna del instructor.
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+      const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      const loadingState = document.getElementById("loadingState");
+      const errorState = document.getElementById("errorState");
+      const errorMessage = document.getElementById("errorMessage");
+      const briefContent = document.getElementById("briefContent");
+      const privacyNote = document.getElementById("privacyNote");
+
+      function showError(message) {
+        loadingState.hidden = true;
+        briefContent.hidden = true;
+        privacyNote.hidden = true;
+        errorMessage.textContent = message;
+        errorState.hidden = false;
+      }
+
+      function renderBrief(brief) {
+        const focusPoints = Array.isArray(brief.focus_points) ? brief.focus_points : [];
+        const questions = Array.isArray(brief.questions) ? brief.questions : [];
+
+        document.getElementById("missionCode").textContent = String(brief.mission_code || "Misión");
+        document.getElementById("briefTitle").textContent = String(brief.title || "Preparación de la misión");
+        document.getElementById("briefObjective").textContent = String(brief.objective || "");
+
+        const focusList = document.getElementById("focusList");
+        focusList.replaceChildren(...focusPoints.map((point) => {
+          const item = document.createElement("li");
+          item.textContent = String(point || "");
+          return item;
+        }));
+
+        const questionList = document.getElementById("questionList");
+        questionList.replaceChildren(...questions.map((prompt, index) => {
+          const card = document.createElement("article");
+          card.className = "question-card";
+
+          const number = document.createElement("div");
+          number.className = "question-number";
+          number.textContent = String(index + 1);
+
+          const text = document.createElement("p");
+          text.textContent = String(prompt || "");
+
+          card.append(number, text);
+          return card;
+        }));
+
+        loadingState.hidden = true;
+        errorState.hidden = true;
+        briefContent.hidden = false;
+        privacyNote.hidden = false;
+        document.title = `${brief.mission_code || "Misión"} · Veyra Mission Brief`;
+      }
+
+      async function loadBrief() {
+        const token = new URLSearchParams(window.location.search).get("t") || "";
+        if (!UUID_PATTERN.test(token)) {
+          showError("El enlace está incompleto o no es válido. Solicita al instructor un enlace actualizado.");
+          return;
+        }
+
+        if (!window.supabase || typeof window.supabase.createClient !== "function") {
+          showError("No fue posible conectar con Veyra. Revisa tu conexión e inténtalo nuevamente.");
+          return;
+        }
+
+        try {
+          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+          });
+          const { data, error } = await client.rpc("get_public_voa_mission_brief", { p_token: token });
+
+          if (error) throw error;
+          if (!data || typeof data !== "object") {
+            showError("Este briefing no está disponible. Puede estar inactivo o el enlace pudo haber cambiado.");
+            return;
+          }
+
+          renderBrief(data);
+        } catch (error) {
+          console.error("No fue posible cargar el Mission Brief.", error);
+          showError("No fue posible consultar el briefing. Revisa tu conexión e inténtalo nuevamente.");
+        }
+      }
+
+      loadBrief();
+    })();
+  </script>
+</body>
+</html>
