@@ -67,6 +67,7 @@
     .time-cell{display:flex;align-items:flex-start;justify-content:center;background:#fbfaf7;color:var(--navy);font-size:11px;font-weight:900}.time-cell span{display:block;margin-top:4px;color:var(--muted);font-size:9px;font-weight:700}
     .empty-slot{display:grid;place-items:center;color:#b0a99e;font-size:10px}.cell-stack{display:grid;gap:7px}.session-card{width:100%;min-height:90px;padding:10px;border:1px solid #b7dacb;border-radius:12px;background:var(--green-soft);color:#175b41;text-align:left;box-shadow:0 6px 15px rgba(7,17,31,.06)}
     .session-card:hover,.session-card:focus-visible{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.16),0 6px 15px rgba(7,17,31,.08)}
+    .session-card.scheduled{border-color:#b8cce8;background:#f0f6ff;color:#174f8a}
     .session-card.review{border-color:#e8ca7b;background:var(--amber-soft);color:#735314}.session-card.selected{border-color:var(--navy);box-shadow:0 0 0 3px rgba(7,17,31,.13)}
     .session-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}.session-top strong{color:var(--navy);font-size:11px;line-height:1.25}.session-mission{padding:4px 6px;border-radius:999px;background:rgba(255,255,255,.72);font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
     .session-card small{display:block;margin-top:7px;font-size:9px;line-height:1.35}.session-card .reason{color:#475467}
@@ -189,10 +190,10 @@
     ];
     const SLOTS=["06:00","08:00","10:00","12:00","14:00","16:00"];
     const RESOURCES=[
-      {id:"gym-sr20",site:"Guaymaral",label:"Guaymaral",equipment:"SR20"},
-      {id:"gym-sr22",site:"Guaymaral",label:"Guaymaral",equipment:"SR22"},
-      {id:"fla-sr20-1",site:"Flandes",label:"Flandes",equipment:"SR20 A"},
-      {id:"fla-sr20-2",site:"Flandes",label:"Flandes",equipment:"SR20 B"}
+      {id:"gym-sr20",site:"Guaymaral",label:"Guaymaral",equipment:"SR20 ATD",fullLabel:"Simulador SR20 ATD · Hangar Guaymaral"},
+      {id:"gym-sr22",site:"Guaymaral",label:"Guaymaral",equipment:"SR22T ATD",fullLabel:"Simulador SR22T ATD · Hangar Guaymaral"},
+      {id:"fla-sr20-1",site:"Flandes",label:"Flandes",equipment:"SR20 ATD 1S",fullLabel:"Simulador SR20 ATD 1S · Flandes"},
+      {id:"fla-sr20-2",site:"Flandes",label:"Flandes",equipment:"SR20 ATD 3S",fullLabel:"Simulador SR20 ATD 3S · Flandes"}
     ];
     const STUDENTS={
       a:{name:"Estudiante A",stage:"PPA",last:"M5",works:true,availability:{"2026-08-31":[["14:00","18:00"]]},flights:[]},
@@ -223,7 +224,7 @@
       "Si el estudiante concentra varias actividades en Flandes, se procura mantenerlas en la misma sede y solo se alerta cuando la propuesta lo movería entre ciudades."
     ];
     const SOURCES=[
-      {key:"confirmed",name:"Programación confirmada",status:"Acceso protegido",loaded:false},
+      {key:"confirmed",name:"Programación SCS actual",status:"Acceso protegido",loaded:false},
       {name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
       {name:"Disponibilidad laboral",status:"Por conectar",loaded:false},
       {name:"Registro de evaluaciones",status:"Por conectar",loaded:false},
@@ -241,6 +242,14 @@
     function proposalById(id){return PROPOSALS.find(item=>item.id===id);}
     function activeWeek(){return WEEKS[state.week]||WEEKS[0];}
     function weekIndexForDate(date){const index=WEEKS.findIndex(week=>week.days.some(day=>day.key===date));return index<0?0:index;}
+    function sessionCountLabel(items){
+      const registered=items.filter(item=>item.type==="scheduled"||item.type==="reasonable_adjustment").length;
+      const proposed=items.length-registered;
+      const labels=[];
+      if(registered)labels.push(registered+" "+(registered===1?"registrada":"registradas"));
+      if(proposed)labels.push(proposed+" "+(proposed===1?"propuesta":"propuestas"));
+      return labels.join(" · ")||"0 sesiones";
+    }
 
     function bogotaParts(value){
       const parts=new Intl.DateTimeFormat("en-CA",{timeZone:BOGOTA_TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date(value));
@@ -251,20 +260,32 @@
     function mergeProtectedItems(rows){
       const added=[];
       (rows||[]).forEach(row=>{
-        const studentKey="protected-"+row.id;
-        const proposalId="confirmed-adjustment-"+row.id;
-        if(state.protectedKeys.has(studentKey)||proposalById(proposalId))return;
+        const isAdjustment=row.confirmation_status==="confirmed_adjustment";
+        const studentKey="protected-student-"+String(row.student_name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+        const proposalId="protected-session-"+row.id;
+        if(state.protectedKeys.has(proposalId)||proposalById(proposalId))return;
         const start=bogotaParts(row.session_start),end=bogotaParts(row.session_end);
-        STUDENTS[studentKey]={
-          name:row.student_name,
-          stage:row.stage||"PPA",
-          last:row.last_record||"No informado",
-          works:true,
-          protected:true,
-          adjustmentConfirmed:true,
-          availability:{[start.date]:[[start.time,end.time]]},
-          flights:[]
-        };
+        if(!STUDENTS[studentKey]){
+          STUDENTS[studentKey]={
+            name:row.student_name,
+            stage:row.stage||"PPA",
+            last:row.last_record||"No informado",
+            works:isAdjustment,
+            protected:true,
+            adjustmentConfirmed:isAdjustment,
+            scheduleRegistered:!isAdjustment,
+            availability:isAdjustment?{[start.date]:[[start.time,end.time]]}:{},
+            flights:[]
+          };
+        }else{
+          STUDENTS[studentKey].scheduleRegistered=STUDENTS[studentKey].scheduleRegistered||!isAdjustment;
+          STUDENTS[studentKey].adjustmentConfirmed=STUDENTS[studentKey].adjustmentConfirmed||isAdjustment;
+          if(isAdjustment){
+            STUDENTS[studentKey].works=true;
+            STUDENTS[studentKey].availability[start.date]=STUDENTS[studentKey].availability[start.date]||[];
+            STUDENTS[studentKey].availability[start.date].push([start.time,end.time]);
+          }
+        }
         PROPOSALS.push({
           id:proposalId,
           student:studentKey,
@@ -273,11 +294,11 @@
           end:end.time,
           resource:row.resource_key,
           mission:row.mission,
-          type:"reasonable_adjustment",
-          reason:row.adjustment_label||"Ajuste razonable confirmado",
+          type:isAdjustment?"reasonable_adjustment":"scheduled",
+          reason:row.adjustment_label||(isAdjustment?"Ajuste razonable confirmado":"Programación SCS registrada"),
           source:row.source_label||"Programación protegida"
         });
-        state.protectedKeys.add(studentKey);
+        state.protectedKeys.add(proposalId);
         added.push(proposalId);
       });
       return added;
@@ -297,7 +318,7 @@
       }
       const added=mergeProtectedItems(response.data);
       state.protectedLoaded=true;
-      if(source){source.status=response.data.length+" confirmadas";source.loaded=true;}
+      if(source){source.status=response.data.length+" registradas";source.loaded=true;}
       if(added.length){
         const first=proposalById(added[0]);
         state.week=weekIndexForDate(first.date);
@@ -337,6 +358,8 @@
         if(student.ppaComplete&&!student.inspectorExam&&!student.pcaAuthorized&&/^PCA/i.test(proposal.mission))errors.push("Transición a PCA bloqueada hasta examen y autorización.");
         if(proposal.type==="reasonable_adjustment"){
           checks.push("Confirmación por ajuste razonable registrada");
+        }else if(proposal.type==="scheduled"){
+          checks.push("Programación SCS registrada como restricción del cronograma");
         }else if(proposal.type==="reinforcement"){
           if(!student.reinforcement?.approved||student.reinforcement.mission!==proposal.mission)errors.push("El refuerzo no aparece solicitado o aprobado.");else checks.push("Refuerzo solicitado e identificado");
         }else{
@@ -361,15 +384,15 @@
     function renderWeekTabs(){
       $("weekTabs").innerHTML=WEEKS.map((week,index)=>{
         const dates=new Set(week.days.map(day=>day.key));
-        const count=PROPOSALS.filter(item=>dates.has(item.date)).length;
-        return '<button class="week-tab'+(state.week===index?' active':'')+'" type="button" data-week="'+index+'">'+escapeHtml(week.label)+'<span>'+escapeHtml(week.range)+' · '+count+' '+(count===1?'sesión':'sesiones')+'</span></button>';
+        const items=PROPOSALS.filter(item=>dates.has(item.date));
+        return '<button class="week-tab'+(state.week===index?' active':'')+'" type="button" data-week="'+index+'">'+escapeHtml(week.label)+'<span>'+escapeHtml(week.range)+' · '+escapeHtml(sessionCountLabel(items))+'</span></button>';
       }).join("");
     }
 
     function proposalCard(proposal){
       const student=STUDENTS[proposal.student],result=state.results.get(proposal.id),resource=resourceById(proposal.resource);
-      const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="reinforcement"?"Refuerzo":proposal.mission;
-      return '<button class="session-card '+result.status+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small><small class="reason">'+escapeHtml(resource.label+' · '+resource.equipment)+'</small></button>';
+      const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
+      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small><small class="reason">'+escapeHtml(resource.fullLabel)+'</small></button>';
     }
 
     function renderGrid(){
@@ -377,8 +400,8 @@
       $("scheduleGrid").style.setProperty("--week-days",week.days.length);
       let html='<div class="grid-cell day-head"><strong>Hora</strong></div>';
       html+=week.days.map(day=>{
-        const count=PROPOSALS.filter(item=>item.date===day.key).length;
-        return '<div class="grid-cell day-head"><div><strong>'+escapeHtml(day.short)+'</strong><span>'+count+' '+(count===1?'sesión':'sesiones')+'</span></div></div>';
+        const items=PROPOSALS.filter(item=>item.date===day.key);
+        return '<div class="grid-cell day-head"><div><strong>'+escapeHtml(day.short)+'</strong><span>'+escapeHtml(sessionCountLabel(items))+'</span></div></div>';
       }).join("");
       SLOTS.forEach(start=>{
         const end=String(Number(start.slice(0,2))+2).padStart(2,"0")+":00";
@@ -398,16 +421,16 @@
       state.selected=proposal.id;
       const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource),result=state.results.get(proposal.id);
       const day=DAYS.find(item=>item.key===proposal.date);
-      const decision=proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
+      const decision=proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
       $("detailPanel").innerHTML=
         '<div class="decision '+(result.status==="review"?'review':'')+'"><span class="decision-dot"></span>'+escapeHtml(decision)+'</div>'+
         '<h3 class="detail-title">'+escapeHtml(student.name)+' · '+escapeHtml(proposal.mission)+'</h3>'+
-        '<p class="detail-sub">'+escapeHtml(proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial')+'</p>'+
+        '<p class="detail-sub">'+escapeHtml(proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="scheduled"?'Sesión registrada en la programación SCS':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial')+'</p>'+
         '<dl class="detail-list">'+
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
-          '<div class="detail-row"><dt>Recurso</dt><dd>'+escapeHtml(resource.label+' · '+resource.equipment)+'</dd></div>'+
+          '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource.fullLabel)+'</dd></div>'+
           '<div class="detail-row"><dt>Último registro</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+
           '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+
         '</dl>'+
@@ -428,8 +451,9 @@
         const locations=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.site).filter(Boolean))).join(' / ')||'—';
         const hasWorkAdjustment=student.works&&proposals.length;
         const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
+        const scheduleRegistered=student.scheduleRegistered&&proposals.length;
         const hasReview=proposals.some(item=>state.results.get(item.id)?.status==="review");
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">'+(confirmedAdjustment?'Ajuste razonable':'Ajuste laboral')+'</span>':'')+'</td><td><span class="pill '+(hasReview?'review':'ready')+'">'+(hasReview?'Revisar sede':confirmedAdjustment?'Confirmada':'Secuencia apta')+'</span></td></tr>';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+escapeHtml(locations)+(hasWorkAdjustment?'<br><span class="pill adjustment">'+(confirmedAdjustment?'Ajuste razonable':'Ajuste laboral')+'</span>':'')+'</td><td><span class="pill '+(hasReview?'review':'ready')+'">'+(hasReview?'Revisar sede':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta')+'</span></td></tr>';
       }).join("");
     }
 
