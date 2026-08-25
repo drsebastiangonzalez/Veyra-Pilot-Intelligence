@@ -190,7 +190,7 @@
         <div class="manual-field"><label for="manualInstructor">Instructor asignado</label><input id="manualInstructor" name="instructor" maxlength="150" placeholder="Puede quedar pendiente"></div>
         <div class="manual-field full"><label for="manualReason">Justificación</label><textarea id="manualReason" name="reason" maxlength="300" placeholder="Motivo de la propuesta o condición que debe revisar Programación" required></textarea></div>
       </div>
-      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Programación conserva la aprobación final.</p>
+      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Si el estudiante o la fecha no aparecen en el documento de disponibilidad, la propuesta podrá guardarse y quedará marcada como <strong>Disponibilidad pendiente</strong> para validación humana. Programación conserva la aprobación final.</p>
       <div class="manual-form-actions"><span class="manual-status" id="manualStatus" role="status"></span><button class="save-manual-btn" id="saveManualButton" type="submit">Guardar propuesta</button></div>
     </form>
   </dialog>
@@ -725,7 +725,8 @@
       if(validateAvailability){
         const availabilityStudent=student||{name:candidate.studentName,availability:{}};
         const availability=availabilityDecision(availabilityStudent,candidate);
-        if(!availability.valid)conflicts.push(availability.detail);
+        const availabilityIsUnknown=["missing","date"].includes(availability.kind);
+        if(!availability.valid&&!availabilityIsUnknown)conflicts.push(availability.detail);
       }
       const dailyMinutes=PROPOSALS.filter(item=>item.id!==excludeId&&item.date===candidate.date&&item.student===studentKey).reduce((total,item)=>total+minutes(item.end)-minutes(item.start),120);
       if(dailyMinutes>360)conflicts.push("La propuesta superaría el máximo de seis horas de simulador en el día.");
