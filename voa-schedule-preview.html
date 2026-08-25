@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-editor-20260824-2">
+  <meta name="veyra-build" content="schedule-availability-20260824-3">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -79,7 +79,7 @@
     .session-card.reasonable_adjustment.blocked{border-color:#efb5b0;background:var(--red-soft);color:#8f251d}
     .session-card.selected{border-color:var(--navy);box-shadow:0 0 0 3px rgba(7,17,31,.13)}
     .session-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}.session-top strong{color:var(--navy);font-size:11px;line-height:1.25}.session-mission{padding:4px 6px;border-radius:999px;background:rgba(255,255,255,.72);font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
-    .session-card small{display:block;margin-top:7px;font-size:9px;line-height:1.35}.session-alert{display:inline-flex!important;width:max-content;padding:4px 6px;border-radius:999px;background:#fff0c7;color:#805b0a;font-size:7px!important;font-weight:900;letter-spacing:.45px;text-transform:uppercase}.resource-line{padding:7px 8px;border:1px solid rgba(7,17,31,.1);border-radius:8px;background:rgba(255,255,255,.72);color:var(--navy)!important}.resource-line span{display:block;margin-bottom:2px;color:#667085;font-size:7px;font-weight:900;letter-spacing:.55px;text-transform:uppercase}.resource-line span.instructor-label{margin-top:6px;padding-top:6px;border-top:1px solid rgba(7,17,31,.08)}.resource-line strong{display:block;color:var(--navy);font-size:9px;line-height:1.25}.resource-line strong.pending-assignment{color:var(--amber)}
+    .session-card small{display:block;margin-top:7px;font-size:9px;line-height:1.35}.session-alert{display:inline-flex!important;width:max-content;padding:4px 6px;border-radius:999px;background:#fff0c7;color:#805b0a;font-size:7px!important;font-weight:900;letter-spacing:.45px;text-transform:uppercase}.resource-line{padding:7px 8px;border:1px solid rgba(7,17,31,.1);border-radius:8px;background:rgba(255,255,255,.72);color:var(--navy)!important}.resource-line span{display:block;margin-bottom:2px;color:#667085;font-size:7px;font-weight:900;letter-spacing:.55px;text-transform:uppercase}.resource-line span.instructor-label,.resource-line span.availability-label{margin-top:6px;padding-top:6px;border-top:1px solid rgba(7,17,31,.08)}.resource-line strong{display:block;color:var(--navy);font-size:9px;line-height:1.25}.resource-line strong.pending-assignment,.resource-line strong.pending-availability{color:var(--amber)}.resource-line strong.blocked-availability{color:var(--red)}
     .side-stack{display:grid;gap:18px;align-items:start}.detail-body,.rules-body,.sources-body{padding:20px}
     .decision{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px;border-radius:12px;background:var(--green-soft);color:var(--green);font-size:11px;font-weight:900;text-transform:uppercase}.decision.review{background:var(--amber-soft);color:var(--amber)}.decision.blocked{background:var(--red-soft);color:var(--red)}
     .decision-dot{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px rgba(8,119,75,.12)}
@@ -89,7 +89,7 @@
     .check-list{display:grid;gap:9px;margin:15px 0 0;padding:0;list-style:none}.check-list li{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;color:#475467;font-size:11px;line-height:1.4}.check-list li::before{content:"✓";display:grid;width:20px;height:20px;place-items:center;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:900}.check-list li.review::before{content:"!";background:var(--amber-soft);color:var(--amber)}
     .rule-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}.rule-list li{display:grid;grid-template-columns:29px 1fr;gap:10px;align-items:start;color:#475467;font-size:11px;line-height:1.42}.rule-number{display:grid;width:27px;height:27px;place-items:center;border:1px solid var(--gold-soft);border-radius:8px;background:#fffaf0;color:var(--amber);font-size:10px;font-weight:900}
     .source-list{display:grid;gap:9px}.source-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);color:#475467;font-size:11px}.source-row:last-child{border-bottom:0}.source-status{padding:5px 7px;border-radius:999px;background:#f2f4f7;color:#667085;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.source-status.loaded{background:var(--green-soft);color:var(--green)}
-    .wide-panel{margin-top:18px}.review-table-wrap{overflow-x:auto}.review-table{width:100%;min-width:1120px;border-collapse:collapse}.review-table th,.review-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:middle}.review-table th{background:#faf7f1;color:#667085;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.review-table td{color:#344054}.review-table strong{color:var(--navy)}.hours-cell strong{display:block}.hours-cell small,.active-note{display:block;margin-top:4px;color:#667085;line-height:1.35}.hours-cell .pending-hours{color:#8a6110;font-weight:800}
+    .wide-panel{margin-top:18px}.review-table-wrap{overflow-x:auto}.review-table{width:100%;min-width:1260px;border-collapse:collapse}.review-table th,.review-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:middle}.review-table th{background:#faf7f1;color:#667085;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.review-table td{color:#344054}.review-table strong{color:var(--navy)}.hours-cell strong{display:block}.hours-cell small,.active-note,.availability-cell small{display:block;margin-top:4px;color:#667085;line-height:1.35}.hours-cell .pending-hours{color:#8a6110;font-weight:800}.availability-cell.blocked{color:var(--red);font-weight:800}.availability-cell.ready{color:var(--green);font-weight:800}
     .pill{display:inline-flex;align-items:center;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.pill.ready{background:var(--green-soft);color:var(--green)}.pill.review{background:var(--amber-soft);color:var(--amber)}.pill.blocked{background:var(--red-soft);color:var(--red)}.pill.adjustment{background:var(--blue-soft);color:var(--blue)}
     .blocked-row{background:#fff9f8}.blocked-note{color:var(--red);font-weight:800}
     .footnote{margin-top:18px;padding:17px 19px;border-left:4px solid var(--gold);background:rgba(255,255,255,.76);color:#667085;font-size:12px;line-height:1.55}.footnote strong{color:var(--navy)}
@@ -121,7 +121,7 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Editor de sesiones activo · versión 2</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Selecciona una sesión para editarla o asignar el instructor informado por Programación.</div>
+        <div class="draft-card"><strong>Disponibilidad laboral conectada · versión 3</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las propuestas se contrastan con el documento de disponibilidad antes de pasar a revisión.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -164,10 +164,10 @@
 
       <section class="panel wide-panel">
         <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>La última misión registrada determina la continuidad MES. Las horas se controlan por separado y no permiten adelantar la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
-        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas registradas</th><th>Propuesta</th><th>Simulador</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas registradas</th><th>Propuesta</th><th>Simulador</th><th>Disponibilidad laboral</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
-      <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica, el diseño, el cruce protegido con vuelos y el progreso inicial de los estudiantes integrados ya pueden presentarse. La continuidad se calcula siempre desde la última misión registrada; las horas son un control independiente y pueden incluir repasos o repeticiones. El instructor debe ser informado por Programación: VOA no lo asigna y no considera lista una sesión que carezca de ese dato. Ningún estudiante se considera terminado únicamente por completar simuladores. Para convertirla en programación operativa todavía deben automatizarse el documento de disponibilidades laborales, el registro de evaluaciones de Drive y la actualización continua de horas de vuelo. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
+      <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica, el diseño, el cruce protegido con vuelos, el progreso inicial y el documento de disponibilidad laboral ya están integrados para revisión. La continuidad se calcula siempre desde la última misión registrada; las horas son un control independiente y pueden incluir repasos o repeticiones. El instructor debe ser informado por Programación: VOA no lo asigna y no considera lista una sesión que carezca de ese dato. Ningún estudiante se considera terminado únicamente por completar simuladores. Los cambios posteriores en disponibilidad deben actualizarse en la fuente protegida; todavía deben automatizarse el registro de evaluaciones de Drive y la actualización continua de horas de vuelo. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
     </main>
   </div>
 
@@ -186,7 +186,7 @@
         <div class="manual-field"><label for="manualInstructor">Instructor asignado</label><input id="manualInstructor" name="instructor" maxlength="150" placeholder="Puede quedar pendiente"></div>
         <div class="manual-field full"><label for="manualReason">Justificación</label><textarea id="manualReason" name="reason" maxlength="300" placeholder="Motivo de la propuesta o condición que debe revisar Programación" required></textarea></div>
       </div>
-      <p class="manual-help">Al guardar, Veyra revisará cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Programación conserva la aprobación final.</p>
+      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Programación conserva la aprobación final.</p>
       <div class="manual-form-actions"><span class="manual-status" id="manualStatus" role="status"></span><button class="save-manual-btn" id="saveManualButton" type="submit">Guardar propuesta</button></div>
     </form>
   </dialog>
@@ -234,6 +234,7 @@
     const RULES=[
       "El cronograma de vuelo prevalece: ningún bloque de simulador puede superponerse con un vuelo.",
       "Antes de asignar una sede se revisan los vuelos y las demás sesiones del estudiante para mantener continuidad geográfica.",
+      "Toda sesión debe quedar dentro de una disponibilidad documentada o de una confirmación excepcional registrada. La ausencia de información bloquea su aprobación.",
       "La jornada operativa es de 06:00 a 18:00 en bloques fijos de dos horas.",
       "Un estudiante no puede superar seis horas de simulador en el mismo día.",
       "La siguiente sesión se determina por la última misión registrada en la evaluación y por la secuencia MES de la etapa vigente, sea PPA o PCA. Las horas acumuladas no permiten saltar misiones.",
@@ -247,14 +248,14 @@
       {key:"confirmed",name:"Programación SCS actual",status:"Acceso protegido",loaded:false},
       {key:"manual",name:"Propuestas manuales",status:"Acceso protegido",loaded:false},
       {key:"flights",name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
-      {name:"Disponibilidad laboral",status:"Por conectar",loaded:false},
+      {key:"availability",name:"Disponibilidad laboral",status:"Acceso protegido",loaded:false},
       {key:"progress",name:"Progreso y horas de vuelo",status:"Acceso protegido",loaded:false},
       {key:"instructors",name:"Asignación de instructores",status:"Acceso protegido",loaded:false},
       {name:"Manual MES",status:"Regla incorporada",loaded:true},
       {name:"Recursos de simulador",status:"Configurados",loaded:true}
     ];
 
-    const state={week:0,selected:null,editingId:null,results:new Map(),protectedLoaded:false,protectedKeys:new Set(),flightKeys:new Set(),progressKeys:new Set(),directoryNames:[]};
+    const state={week:0,selected:null,editingId:null,results:new Map(),protectedLoaded:false,protectedKeys:new Set(),flightKeys:new Set(),progressKeys:new Set(),availabilityByName:new Map(),availabilityRecords:0,availabilityStudents:0,directoryNames:[]};
 
     function minutes(value){const parts=String(value).split(":").map(Number);return parts[0]*60+parts[1];}
     function overlaps(aStart,aEnd,bStart,bEnd){return minutes(aStart)<minutes(bEnd)&&minutes(bStart)<minutes(aEnd);}
@@ -266,6 +267,7 @@
     function instructorKey(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function instructorLabel(proposal){return instructorName(proposal)||"Por asignar por Programación";}
     function normalizedName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/\s+/g," ");}
+    function shortTime(value){return String(value||"").slice(0,5);}
     function studentEntryForName(value){return Object.entries(STUDENTS).find(([,student])=>normalizedName(student.name)===normalizedName(value))||null;}
     function studentKeyForName(name){return "protected-student-"+String(name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function numberOrNull(value){if(value===null||value===undefined||value==="")return null;const number=Number(value);return Number.isFinite(number)?number:null;}
@@ -285,6 +287,55 @@
       const parts=new Intl.DateTimeFormat("en-CA",{timeZone:BOGOTA_TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date(value));
       const values=Object.fromEntries(parts.map(part=>[part.type,part.value]));
       return {date:values.year+"-"+values.month+"-"+values.day,time:values.hour+":"+values.minute};
+    }
+
+    function availabilityForStudent(student){
+      return state.availabilityByName.get(normalizedName(student?.name))||null;
+    }
+
+    function availabilityDecision(student,proposal){
+      const confirmedWindows=student?.availability?.[proposal.date]||[];
+      const confirmed=proposal.confirmationStatus==="confirmed_adjustment"&&confirmedWindows.some(window=>minutes(proposal.start)>=minutes(window[0])&&minutes(proposal.end)<=minutes(window[1]));
+      if(confirmed){
+        return {valid:true,kind:"confirmed",short:"Confirmada para este bloque",detail:"Confirmación excepcional registrada para "+proposal.start+"–"+proposal.end};
+      }
+      const documented=availabilityForStudent(student);
+      if(!documented){
+        return {valid:false,kind:"missing",short:"No encontrada en el documento",detail:"No se encontró disponibilidad laboral documentada para este estudiante."};
+      }
+      if(documented.explicitUnavailable&&!Object.keys(documented.windows).length){
+        return {valid:false,kind:"unavailable",short:"Sin disponibilidad reportada",detail:"El documento registra al estudiante sin disponibilidad para el periodo informado."};
+      }
+      const windows=documented.windows[proposal.date]||[];
+      if(!windows.length){
+        return {valid:false,kind:"date",short:"No reportada para esta fecha",detail:"La fecha "+proposal.date+" no aparece entre las disponibilidades informadas por el estudiante."};
+      }
+      const allowed=windows.some(window=>minutes(proposal.start)>=minutes(window[0])&&minutes(proposal.end)<=minutes(window[1]));
+      const ranges=windows.map(window=>window[0]+"–"+window[1]).join(", ");
+      if(!allowed){
+        return {valid:false,kind:"time",short:"Fuera del horario "+ranges,detail:"La sesión queda fuera del horario documentado para esa fecha: "+ranges+"."};
+      }
+      return {valid:true,kind:"documented",short:"Documentada "+ranges,detail:"Disponibilidad documentada para esta fecha: "+ranges+".",source:documented.sourceLabel};
+    }
+
+    function mergeStudentAvailability(rows){
+      const grouped=new Map();
+      (rows||[]).forEach(row=>{
+        const key=normalizedName(row.student_name);
+        const entry=grouped.get(key)||{studentName:row.student_name,windows:{},explicitUnavailable:false,observations:[],sourceLabel:row.source_label||"DISPONIBILIDAD AGOSTO 2026 (NOC)"};
+        if(row.availability_status==="unavailable")entry.explicitUnavailable=true;
+        if(row.availability_status==="available"&&row.available_date){
+          const start=shortTime(row.start_time),end=shortTime(row.end_time);
+          entry.windows[row.available_date]=entry.windows[row.available_date]||[];
+          entry.windows[row.available_date].push([start,end]);
+        }
+        if(row.observation&&row.observation!=="-")entry.observations.push(row.observation);
+        grouped.set(key,entry);
+      });
+      state.availabilityByName=grouped;
+      state.availabilityRecords=(rows||[]).length;
+      state.availabilityStudents=grouped.size;
+      return {records:state.availabilityRecords,students:state.availabilityStudents,matched:Object.values(STUDENTS).filter(student=>grouped.has(normalizedName(student.name))).length};
     }
 
     function mergeProtectedItems(rows){
@@ -309,14 +360,14 @@
             protected:true,
             adjustmentConfirmed:isConfirmedAdjustment,
             scheduleRegistered:!isManual&&!isAdjustment,
-            availability:isAdjustment?{[start.date]:[[start.time,end.time]]}:{},
+            availability:isConfirmedAdjustment?{[start.date]:[[start.time,end.time]]}:{},
             flights:[]
           };
         }else{
           STUDENTS[studentKey].scheduleRegistered=STUDENTS[studentKey].scheduleRegistered||(!isManual&&!isAdjustment);
           STUDENTS[studentKey].adjustmentConfirmed=STUDENTS[studentKey].adjustmentConfirmed||isConfirmedAdjustment;
-          if(isAdjustment){
-            STUDENTS[studentKey].works=true;
+          if(isAdjustment)STUDENTS[studentKey].works=true;
+          if(isConfirmedAdjustment){
             STUDENTS[studentKey].availability[start.date]=STUDENTS[studentKey].availability[start.date]||[];
             STUDENTS[studentKey].availability[start.date].push([start.time,end.time]);
           }
@@ -456,6 +507,23 @@
       return merged;
     }
 
+    async function loadProtectedAvailability(){
+      const source=SOURCES.find(item=>item.key==="availability");
+      const response=await db.from("voa_student_availability")
+        .select("student_name,available_date,availability_status,start_time,end_time,observation,source_label")
+        .eq("active",true)
+        .order("student_name",{ascending:true})
+        .order("available_date",{ascending:true,nullsFirst:false});
+      if(response.error){
+        if(source){source.status="No disponible";source.loaded=false;}
+        state.availabilityByName=new Map();
+        return {records:0,students:0,matched:0};
+      }
+      const merged=mergeStudentAvailability(response.data);
+      if(source){source.status=merged.students+" "+(merged.students===1?"estudiante":"estudiantes");source.loaded=merged.students>0;}
+      return merged;
+    }
+
     function populateManualStudentOptions(){
       const names=new Set(state.directoryNames);
       Object.values(STUDENTS).forEach(student=>names.add(student.name));
@@ -531,16 +599,28 @@
 
     function syncManualStudent(){
       const entry=studentEntryForName($("manualStudent").value);
-      if(!entry){setManualStatus("Completa la última misión registrada con el documento de evaluación vigente.");return;}
+      if(!entry){
+        const documented=state.availabilityByName.get(normalizedName($("manualStudent").value));
+        if(documented?.explicitUnavailable)setManualStatus("El documento registra a este estudiante sin disponibilidad.","error");
+        else if(documented)setManualStatus("Disponibilidad localizada. Completa la última misión registrada con el documento de evaluación vigente.");
+        else setManualStatus("No se encontró disponibilidad para este estudiante. No podrá guardarse una propuesta hasta documentarla.","error");
+        return;
+      }
       const student=entry[1];
       const stageOption=Array.from($("manualStage").options).find(option=>option.value===student.stage);
       if(stageOption)$("manualStage").value=student.stage;
       $("manualLastRecord").value=student.last||"";
+      const documented=availabilityForStudent(student);
+      const documentedDates=documented?Object.entries(documented.windows).map(([date,windows])=>date.slice(8,10)+"/"+date.slice(5,7)+" "+windows.map(window=>window[0]+"–"+window[1]).join(", ")).join(" · "):"";
       if(student.reasonableAdjustment){
         $("manualType").value="manual_adjustment";
-        setManualStatus(student.adjustmentNote||"El estudiante tiene ajustes razonables; valida su disponibilidad específica.");
+        setManualStatus((student.adjustmentNote||"El estudiante tiene ajustes razonables.")+(documentedDates?" Disponibilidad: "+documentedDates:" Falta disponibilidad específica."),documentedDates?"":"error");
+      }else if(documented?.explicitUnavailable){
+        setManualStatus("El documento registra a este estudiante sin disponibilidad.","error");
+      }else if(documentedDates){
+        setManualStatus("Disponibilidad documentada: "+documentedDates);
       }else{
-        setManualStatus("No hay ajustes razonables registrados para este estudiante en las fuentes integradas.");
+        setManualStatus("No se encontró disponibilidad laboral para este estudiante. No podrá guardarse una propuesta.","error");
       }
     }
 
@@ -558,13 +638,18 @@
       return nextMission(latest);
     }
 
-    function manualProposalConflicts(candidate,studentKey,lastRecord,excludeId=null){
+    function manualProposalConflicts(candidate,studentKey,lastRecord,excludeId=null,validateAvailability=true){
       const student=STUDENTS[studentKey];
       const conflicts=[];
       if(PROPOSALS.some(item=>item.id!==excludeId&&item.date===candidate.date&&item.resource===candidate.resource&&overlaps(candidate.start,candidate.end,item.start,item.end)))conflicts.push("El simulador ya está ocupado en ese bloque.");
       if(PROPOSALS.some(item=>item.id!==excludeId&&item.date===candidate.date&&item.student===studentKey&&overlaps(candidate.start,candidate.end,item.start,item.end)))conflicts.push("El estudiante ya tiene otra sesión en ese bloque.");
       if(candidate.instructor&&PROPOSALS.some(item=>item.id!==excludeId&&item.date===candidate.date&&instructorKey(item.instructor)===instructorKey(candidate.instructor)&&overlaps(candidate.start,candidate.end,item.start,item.end)))conflicts.push("El instructor ya aparece asignado en ese horario.");
       if((student?.flights||[]).some(flight=>flight.date===candidate.date&&overlaps(candidate.start,candidate.end,flight.start,flight.end)))conflicts.push("Existe cruce con un vuelo registrado.");
+      if(validateAvailability){
+        const availabilityStudent=student||{name:candidate.studentName,availability:{}};
+        const availability=availabilityDecision(availabilityStudent,candidate);
+        if(!availability.valid)conflicts.push(availability.detail);
+      }
       const dailyMinutes=PROPOSALS.filter(item=>item.id!==excludeId&&item.date===candidate.date&&item.student===studentKey).reduce((total,item)=>total+minutes(item.end)-minutes(item.start),120);
       if(dailyMinutes>360)conflicts.push("La propuesta superaría el máximo de seis horas de simulador en el día.");
       if(candidate.confirmationStatus==="manual_standard"){
@@ -591,15 +676,15 @@
       const range=manualSessionRange(date,start);
       const existingEntry=studentEntryForName(studentName);
       const studentKey=existingEntry?.[0]||studentKeyForName(studentName);
-      const candidate={date,start,end:range.endTime,mission,resource,instructor,confirmationStatus};
-      const conflicts=manualProposalConflicts(candidate,studentKey,lastRecord,editingProposal?.id||null);
+      const candidate={date,start,end:range.endTime,mission,resource,instructor,confirmationStatus,studentName};
+      const scheduleChanged=!editingProposal||editingProposal.date!==date||editingProposal.start!==start||editingProposal.mission!==mission||editingProposal.resource!==resource||editingProposal.reason!==reason;
+      const conflicts=manualProposalConflicts(candidate,studentKey,lastRecord,editingProposal?.id||null,scheduleChanged);
       if(conflicts.length){setManualStatus(conflicts.join(" "),"error");return;}
       const saveButton=$("saveManualButton");
       saveButton.disabled=true;
       setManualStatus(editingProposal?"Guardando y verificando los cambios…":"Guardando y verificando la propuesta…");
       let response;
       if(editingProposal){
-        const scheduleChanged=editingProposal.date!==date||editingProposal.start!==start||editingProposal.mission!==mission||editingProposal.resource!==resource||editingProposal.reason!==reason;
         const changes={
           mission,
           resource_key:resource,
@@ -641,6 +726,7 @@
       }
       await loadProtectedItems();
       await loadProtectedStudentProgress();
+      await loadProtectedAvailability();
       validateProposals();
       renderAll();
       setManualStatus("Propuesta guardada para revisión.","success");
@@ -669,20 +755,18 @@
         else checks.push("Instructor asignado sin cruce en las sesiones registradas: "+assignedInstructor);
         const flightConflict=(student.flights||[]).some(flight=>flight.date===proposal.date&&overlaps(proposal.start,proposal.end,flight.start,flight.end));
         if(flightConflict)errors.push("Existe cruce con el cronograma de vuelo.");else checks.push("Sin cruce con vuelos registrados");
+        const availability=availabilityDecision(student,proposal);
+        if(!availability.valid)errors.push(availability.detail);
+        else checks.push(availability.kind==="confirmed"?"Disponibilidad confirmada excepcionalmente para este bloque":"Disponibilidad laboral documentada: "+availability.short.replace(/^Documentada\s*/,""));
         const flandesFlights=(student.flights||[]).filter(flight=>flight.date===proposal.date&&flight.site==="Flandes").length;
         const flandesSessions=PROPOSALS.filter(other=>other.student===proposal.student&&other.date===proposal.date&&resourceById(other.resource)?.site==="Flandes").length;
         const flandesActivities=flandesFlights+flandesSessions;
         if(flandesActivities>=2&&resource&&resource.site!=="Flandes")warnings.push("El estudiante concentra varias actividades en Flandes; revisar la sede para evitar traslados entre ciudades.");
         if(flandesActivities>=2&&resource&&resource.site==="Flandes")checks.push("Continuidad geográfica aplicada: "+flandesActivities+" actividades en Flandes");
-        if(student.works){
-          const windows=student.availability[proposal.date]||[];
-          const allowed=windows.some(window=>minutes(proposal.start)>=minutes(window[0])&&minutes(proposal.end)<=minutes(window[1]));
-          if(!allowed)errors.push("Fuera de la disponibilidad laboral informada.");else checks.push("Ajuste razonable de disponibilidad aplicado");
-        }
         const dailyMinutes=PROPOSALS.filter(other=>other.student===proposal.student&&other.date===proposal.date).reduce((sum,item)=>sum+minutes(item.end)-minutes(item.start),0);
         if(dailyMinutes>360)errors.push("Supera el máximo de seis horas por día.");else checks.push("Carga diaria: "+dailyMinutes/60+" de 6 horas");
-        if(proposal.manual)warnings.push("Propuesta manual no publicada: confirmar contra la última programación de vuelos y la disponibilidad vigente antes de aprobar.");
-        if(student.reasonableAdjustment)warnings.push(student.adjustmentNote||"El estudiante tiene ajustes razonables registrados; validar la disponibilidad específica antes de aprobar el horario.");
+        if(proposal.manual)warnings.push("Propuesta manual no publicada: Programación conserva la aprobación final y debe confirmar que las fuentes continúan vigentes.");
+        if(student.reasonableAdjustment&&availability.kind!=="confirmed")warnings.push(student.adjustmentNote||"El estudiante tiene ajustes razonables adicionales; revisar sus condiciones antes de aprobar el horario.");
         if(student.protected){
           const remaining=student.flightHours?.remaining;
           if(remaining===null||remaining===undefined)warnings.push("Las horas registradas todavía no están conciliadas. Este dato no modifica la secuencia definida desde "+student.last+".");
@@ -715,7 +799,7 @@
           latestMission[proposal.student]=proposal.mission;
         }
         checks.push("Sede asignada sin conflicto de recurso");
-        results.set(proposal.id,{errors,warnings,checks,status:errors.length?"blocked":warnings.length?"review":"ready"});
+        results.set(proposal.id,{errors,warnings,checks,availability,status:errors.length?"blocked":warnings.length?"review":"ready"});
       });
       state.results=results;
     }
@@ -739,11 +823,13 @@
 
     function proposalCard(proposal){
       const student=STUDENTS[proposal.student],result=state.results.get(proposal.id),resource=resourceById(proposal.resource);
+      const availability=result.availability||availabilityDecision(student,proposal);
       const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
       const onlyInstructorPending=result.warnings.length>0&&result.warnings.every(item=>item.startsWith("Instructor pendiente"));
       const alertLabel=result.status==="blocked"?"Corrección requerida":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
       const instructor=instructorName(proposal);
-      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource.cardLabel||resource.fullLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
+      const availabilityClass=availability.valid?'':'blocked-availability';
+      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource.cardLabel||resource.fullLabel)+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availability.short)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
     }
 
     function renderGrid(){
@@ -784,6 +870,7 @@
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
           '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource.fullLabel)+'</dd></div>'+
+          '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(result.availability.short)+'</dd></div>'+
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
           '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+
           '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+
@@ -803,11 +890,18 @@
       $("studentRows").innerHTML=Object.entries(STUDENTS).map(([id,student])=>{
         const proposals=studentProposalSummary(id);
         if(student.ppaComplete&&!student.inspectorExam&&!student.pcaAuthorized){
-          return '<tr class="blocked-row"><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td class="hours-cell">Por conciliar</td><td class="blocked-note">Sin programación PCA</td><td>—</td><td>—</td><td><span class="pill blocked">Bloqueado para PCA</span><br><small>Continúa activo en los demás requisitos aplicables</small></td></tr>';
+          return '<tr class="blocked-row"><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td class="hours-cell">Por conciliar</td><td class="blocked-note">Sin programación PCA</td><td>—</td><td>—</td><td>—</td><td><span class="pill blocked">Bloqueado para PCA</span><br><small>Continúa activo en los demás requisitos aplicables</small></td></tr>';
         }
         const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:item.mission)).join(' → ')||'Sin propuesta';
         const resources=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.cardLabel).filter(Boolean)));
         const resourcesHtml=resources.length?resources.map(item=>escapeHtml(item)).join('<br>'):'—';
+        const availabilityResults=proposals.map(item=>({date:item.date,decision:state.results.get(item.id)?.availability})).filter(item=>item.decision);
+        const availabilityBlocked=availabilityResults.some(item=>!item.decision.valid);
+        const availabilityLabels=Array.from(new Set(availabilityResults.map(item=>{
+          const day=DAYS.find(dayItem=>dayItem.key===item.date);
+          return (day?.short||item.date)+": "+item.decision.short;
+        })));
+        const availabilityHtml='<div class="availability-cell '+(availabilityBlocked?'blocked':'ready')+'">'+(availabilityLabels.length?availabilityLabels.map(item=>escapeHtml(item)).join('<br>'):'Sin propuesta')+'</div>';
         const instructors=Array.from(new Set(proposals.map(item=>instructorLabel(item))));
         const instructorsHtml=instructors.length?instructors.map(item=>escapeHtml(item)).join('<br>'):'—';
         const flightCount=(student.flights||[]).length;
@@ -822,7 +916,7 @@
         const resultLabel=hasBlocked?'Corrección requerida':hasReview?'Revisión requerida':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta';
         const activeNote=hours&&hours.remaining>0?'<small class="active-note">Continúa activo hasta completar MES y requisitos de etapa</small>':'';
         const adjustmentPill=confirmedAdjustment?'Ajuste confirmado':student.reasonableAdjustment?'Ajuste razonable':'Ajuste laboral';
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+availabilityHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
       }).join("");
     }
 
@@ -879,6 +973,7 @@
       if(result.error||!result.data.user){location.replace("./control-voa.html");return;}
       $("sessionEmail").textContent=result.data.user.email||"";
       await loadProtectedItems();
+      await loadProtectedAvailability();
       await loadProtectedStudentProgress();
       await loadProtectedFlightBlocks();
       await loadStudentDirectory();
