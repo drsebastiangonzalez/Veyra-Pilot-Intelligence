@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-jaimes-tuesday-only-20260824-6">
+  <meta name="veyra-build" content="schedule-soft-delete-20260824-7">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -48,6 +48,7 @@
     .present-btn{min-height:42px;padding:10px 15px;border:1px solid var(--navy);border-radius:11px;background:var(--navy);color:#fff;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
     .present-btn:hover,.present-btn:focus-visible{border-color:var(--gold);background:var(--navy-soft)}
     .manual-btn{min-height:42px;padding:10px 15px;border:1px solid var(--gold);border-radius:11px;background:#fffaf0;color:var(--navy);font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}.manual-btn:hover,.manual-btn:focus-visible{background:#fff1cd}
+    .delete-session-btn{min-height:42px;padding:10px 14px;border:1px solid #e49a93;border-radius:11px;background:#fff5f4;color:var(--red);font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.delete-session-btn:hover,.delete-session-btn:focus-visible{border-color:var(--red);background:var(--red-soft)}
     .metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:18px}
     .metric{min-height:116px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.86);box-shadow:var(--shadow)}
     .metric span{color:var(--muted);font-size:10px;font-weight:900;letter-spacing:1.05px;text-transform:uppercase}
@@ -88,7 +89,7 @@
     .decision-dot{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px rgba(8,119,75,.12)}
     .detail-title{margin:0;color:var(--navy);font:25px/1.08 Georgia,"Times New Roman",serif}.detail-sub{margin:7px 0 16px;color:var(--muted);font-size:12px;line-height:1.45}
     .detail-list{display:grid;gap:0;margin:0}.detail-row{display:grid;grid-template-columns:112px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:11px;line-height:1.4}.detail-row dt{color:var(--muted);font-weight:800}.detail-row dd{margin:0;color:#344054;font-weight:700}
-    .detail-actions{display:flex;gap:9px;margin-top:17px}.edit-session-btn{width:100%;min-height:42px;padding:10px 14px;border:1px solid var(--gold);border-radius:11px;background:#fffaf0;color:var(--navy);font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.edit-session-btn:hover,.edit-session-btn:focus-visible{background:#fff1cd}
+    .detail-actions{display:flex;gap:9px;margin-top:17px}.edit-session-btn{width:100%;min-height:42px;padding:10px 14px;border:1px solid var(--gold);border-radius:11px;background:#fffaf0;color:var(--navy);font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.edit-session-btn:hover,.edit-session-btn:focus-visible{background:#fff1cd}.detail-actions .delete-session-btn{width:100%}
     .check-list{display:grid;gap:9px;margin:15px 0 0;padding:0;list-style:none}.check-list li{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;color:#475467;font-size:11px;line-height:1.4}.check-list li::before{content:"✓";display:grid;width:20px;height:20px;place-items:center;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:900}.check-list li.review::before{content:"!";background:var(--amber-soft);color:var(--amber)}
     .rule-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}.rule-list li{display:grid;grid-template-columns:29px 1fr;gap:10px;align-items:start;color:#475467;font-size:11px;line-height:1.42}.rule-number{display:grid;width:27px;height:27px;place-items:center;border:1px solid var(--gold-soft);border-radius:8px;background:#fffaf0;color:var(--amber);font-size:10px;font-weight:900}
     .source-list{display:grid;gap:9px}.source-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);color:#475467;font-size:11px}.source-row:last-child{border-bottom:0}.source-status{padding:5px 7px;border-radius:999px;background:#f2f4f7;color:#667085;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.source-status.loaded{background:var(--green-soft);color:var(--green)}
@@ -105,7 +106,7 @@
     @media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.side-stack{grid-template-columns:1fr}.side-stack .panel:last-child{grid-column:auto}.hero{align-items:flex-start;flex-direction:column}.draft-card{width:100%}.status-strip{align-items:flex-start;flex-direction:column}.status-actions{width:100%}.status-actions button{flex:1}.manual-grid{grid-template-columns:1fr}.manual-field.full{grid-column:auto}}
     @media(max-width:650px){.header-inner,main{width:min(100% - 28px,1440px)}.header-email{display:none}.brand{font-size:32px}.hero h1{font-size:44px}.hero p{font-size:15px}.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric{min-height:104px;padding:17px}.metric strong{font-size:34px}.week-tabs{flex-direction:column}.panel-head{align-items:flex-start;flex-direction:column}.week-tag{align-self:flex-start}.status-actions{align-items:stretch;flex-direction:column}.manual-dialog-head,.manual-form{padding:18px}.manual-form-actions{align-items:stretch;flex-direction:column}.save-manual-btn{width:100%}}
     @media print{
-      body{background:#fff}.header-actions,.present-btn,.manual-btn,.manual-dialog,.edit-session-btn,.week-tabs,.footnote{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(5,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}}
+      body{background:#fff}.header-actions,.present-btn,.manual-btn,.delete-session-btn,.manual-dialog,.edit-session-btn,.week-tabs,.footnote{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(5,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}}
   </style>
 </head>
 <body>
@@ -124,12 +125,12 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Editor actualizado · versión 4</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las propuestas se contrastan con disponibilidad, vuelos y bloqueos operativos antes de pasar a revisión.</div>
+        <div class="draft-card"><strong>Editor con eliminación · versión 5</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las sesiones pueden editarse o retirarse de la previsualización conservando su historial.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
         <div class="status-copy"><span class="status-icon">!</span><div><strong>Propuesta — no publicada</strong>Esta pantalla no crea sesiones, no modifica la programación vigente y no envía notificaciones por WhatsApp.</div></div>
-        <div class="status-actions"><button class="manual-btn" id="editSelectedButton" type="button">Editar sesión seleccionada</button><button class="manual-btn" id="openManualButton" type="button">+ Nueva propuesta manual</button><button class="present-btn" id="printButton" type="button">Imprimir / presentar</button></div>
+        <div class="status-actions"><button class="manual-btn" id="editSelectedButton" type="button">Editar sesión seleccionada</button><button class="delete-session-btn" id="deleteSelectedButton" type="button">Eliminar sesión seleccionada</button><button class="manual-btn" id="openManualButton" type="button">+ Nueva propuesta manual</button><button class="present-btn" id="printButton" type="button">Imprimir / presentar</button></div>
       </section>
 
       <section class="metrics" aria-label="Resumen de la propuesta">
@@ -794,6 +795,31 @@
       window.setTimeout(closeManualDialog,650);
     }
 
+    async function removeProposal(proposal){
+      if(!proposal){alert("Selecciona primero una sesión del cronograma.");return;}
+      if(!db||!proposal.dbId){alert("Esta sesión no puede retirarse desde esta pantalla.");return;}
+      const student=STUDENTS[proposal.student];
+      const name=student?.name||"Estudiante";
+      const confirmed=window.confirm(
+        "¿Retirar de la previsualización la sesión de "+name+" · "+proposal.mission+" del "+proposal.date+" de "+proposal.start+" a "+proposal.end+"?\n\nEl registro no se borra de forma permanente y puede recuperarse."
+      );
+      if(!confirmed)return;
+      const response=await db.from("voa_schedule_preview_items")
+        .update({active:false,updated_at:new Date().toISOString()})
+        .eq("id",proposal.dbId)
+        .select("id")
+        .single();
+      if(response.error){alert("No fue posible eliminar la sesión: "+response.error.message);return;}
+      const index=PROPOSALS.findIndex(item=>item.id===proposal.id);
+      if(index>=0)PROPOSALS.splice(index,1);
+      state.protectedKeys.delete(proposal.id);
+      state.results.delete(proposal.id);
+      if(!PROPOSALS.some(item=>item.student===proposal.student))delete STUDENTS[proposal.student];
+      state.selected=null;
+      alert("La sesión fue retirada de la previsualización.");
+      location.reload();
+    }
+
     function validateProposals(){
       const results=new Map();
       const latestMission=Object.fromEntries(Object.entries(STUDENTS).map(([id,student])=>[id,student.last]));
@@ -954,7 +980,7 @@
           '<div class="detail-row"><dt>Ajustes razonables</dt><dd>'+escapeHtml(student.adjustmentConfirmed?"Confirmados para este bloque":student.reasonableAdjustment?(student.adjustmentNote||"Registrados · disponibilidad por validar"):"No registrados en las fuentes consultadas")+'</dd></div>'+
           '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+
         '</dl>'+
-        '<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button></div>'+
+        '<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>'+
         '<ul class="check-list">'+result.checks.map(item=>'<li>'+escapeHtml(item)+'</li>').join("")+issues.map(item=>'<li class="review">'+escapeHtml(item)+'</li>').join("")+'</ul>';
     }
 
@@ -1018,14 +1044,21 @@
       state.selected=button.dataset.proposal;renderGrid();renderDetail();
     });
     $("detailPanel").addEventListener("click",event=>{
-      const button=event.target.closest("[data-edit-proposal]");if(!button)return;
-      openEditDialog(proposalById(button.dataset.editProposal));
+      const editButton=event.target.closest("[data-edit-proposal]");
+      if(editButton){openEditDialog(proposalById(editButton.dataset.editProposal));return;}
+      const deleteButton=event.target.closest("[data-delete-proposal]");
+      if(deleteButton)removeProposal(proposalById(deleteButton.dataset.deleteProposal));
     });
     $("editSelectedButton").addEventListener("click",()=>{
       const dates=new Set(activeWeek().days.map(day=>day.key));
       const proposal=proposalById(state.selected)||PROPOSALS.find(item=>dates.has(item.date));
       if(!proposal){alert("Selecciona primero una sesión del cronograma.");return;}
       openEditDialog(proposal);
+    });
+    $("deleteSelectedButton").addEventListener("click",()=>{
+      const dates=new Set(activeWeek().days.map(day=>day.key));
+      const proposal=proposalById(state.selected)||PROPOSALS.find(item=>dates.has(item.date));
+      removeProposal(proposal);
     });
     $("openManualButton").addEventListener("click",()=>{
       setManualDefaults();
