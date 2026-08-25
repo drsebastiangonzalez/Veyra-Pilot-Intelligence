@@ -1238,6 +1238,22 @@
       text-transform:uppercase;
     }
     .instructor-preview-btn:hover,.instructor-preview-btn:focus-visible{background:#fbedbf}
+    .instructor-send-btn{
+      min-height:34px;
+      padding:7px 11px;
+      border:1px solid var(--gold);
+      border-radius:9px;
+      background:var(--navy);
+      color:var(--white);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.45px;
+      text-transform:uppercase;
+    }
+    .instructor-send-btn.manual{background:var(--white);color:var(--green);border-color:#9fd8be}
+    .instructor-send-btn:hover,.instructor-send-btn:focus-visible{background:#13243a}
+    .instructor-send-btn.manual:hover,.instructor-send-btn.manual:focus-visible{background:var(--green-soft)}
+    .instructor-send-btn:disabled{cursor:not-allowed;opacity:.48}
     .notification-badge{
       display:inline-flex;
       width:max-content;
@@ -1277,6 +1293,20 @@
       font-size:11px;
       line-height:1.45;
     }
+    .summary-delivery{
+      margin-top:11px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#f7f8fa;
+      color:#475467;
+      font-size:11px;
+      font-weight:800;
+      line-height:1.45;
+    }
+    .summary-delivery.success{border-color:#a8ddc4;background:var(--green-soft);color:var(--green)}
+    .summary-delivery.error{border-color:#ffc5bf;background:var(--red-soft);color:var(--red)}
+    .summary-delivery.pending{border-color:#ead18c;background:var(--amber-soft);color:#6f5012}
 
     @media(max-width:1400px){
       .table-wrap{display:none}
@@ -1939,10 +1969,10 @@
               </label>
               <label class="student-active-check">
                 <input id="instructorNotificationEnabled" type="checkbox" />
-                <span>Preparar notificaciones</span>
+                <span>Habilitar notificaciones</span>
               </label>
             </div>
-            <div class="create-note"><strong>Fase segura:</strong> esta opción solo deja el contacto listo. Todavía no envía WhatsApp ni modifica la programación.</div>
+            <div class="create-note"><strong>Control explícito:</strong> habilitar el contacto no envía nada por sí solo. El resumen se comparte únicamente al pulsar “Abrir WhatsApp” o “Enviar WhatsApp”.</div>
             <div class="form-actions">
               <button class="cancel-btn" id="cancelInstructorButton" type="button">Cancelar</button>
               <button class="save-session-btn" id="saveInstructorButton" type="submit">Guardar instructor</button>
@@ -1963,11 +1993,14 @@
               <div class="instructor-actions">
                 <input id="instructorSummaryDate" type="date" aria-label="Fecha del resumen" />
                 <button class="instructor-preview-btn" id="refreshInstructorSummaryButton" type="button">Actualizar vista</button>
+                <button class="instructor-send-btn manual" id="openInstructorWhatsAppButton" type="button" disabled>Abrir WhatsApp</button>
+                <button class="instructor-send-btn" id="sendInstructorSummaryButton" type="button" disabled>Enviar WhatsApp</button>
                 <button class="student-edit-btn" id="copyInstructorSummaryButton" type="button">Copiar</button>
               </div>
             </div>
             <pre class="summary-message" id="instructorSummaryMessage">Selecciona un instructor para preparar el resumen.</pre>
-            <div class="summary-safety-note"><strong>Sin envío:</strong> la vista previa no crea mensajes, no reprograma sesiones y no comparte el motivo de una inasistencia.</div>
+            <div class="summary-delivery" id="instructorSummaryDelivery">Aún no se ha consultado el estado de envío.</div>
+            <div class="summary-safety-note"><strong>Privacidad:</strong> el resumen solo contiene información operativa. Nunca comparte el motivo de una inasistencia y Veyra no reprograma sesiones.</div>
           </section>
         </div>
       </section>
@@ -1984,6 +2017,7 @@
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const INSTRUCTOR_FIELDS = "id,full_name,normalized_name,phone_e164,phone_status,active,notification_enabled,summary_time,timezone,source,updated_at";
     const INSTRUCTOR_SUMMARY_FIELDS = "id,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,cancelled_at";
+    const INSTRUCTOR_NOTIFICATION_FIELDS = "id,target_date,message_type,delivery_status,template_name,whatsapp_message_id,accepted_at,sent_at,delivered_at,read_at,failed_at,error_code,error_message,created_at,updated_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const BRIEF_FIELDS = "id,mission_code,mission_key,title,active,public_token";
     const DEFAULT_INSTRUCTORS = [
@@ -2028,6 +2062,9 @@
       editingStudentId: null,
       editingInstructorId: null,
       summaryInstructorId: null,
+      summaryRows: [],
+      summaryNotification: null,
+      instructorSummarySending: false,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
       managingSessionIds: new Set(),
@@ -2065,7 +2102,7 @@
       const text = normalize(value).replace(/[_-]+/g, " ");
       if(/cancel/.test(text)) return "cancelled";
       if(!text || /pend|sin respuesta|waiting|no response/.test(text)) return "pending";
-      if(/no puede|no asist|rechaz|declin|unable|not confirm/.test(text)) return "declined";
+      if(/no puede|no asist|rechaz|declin|unable|not confirm|no confirm|sin confirm/.test(text)) return "declined";
       if(/confirm|asistira|acept|yes/.test(text) || /(^|\s)si($|\s)/.test(text)) return "confirmed";
       return "pending";
     }
@@ -2501,7 +2538,7 @@
             '<span class="student-source">Resumen previsto: ' + escapeHtml(summaryTime) + ' · Hora Bogotá</span></div>' +
           '<div class="student-phone">' + escapeHtml(instructor.phone_e164 || "Pendiente") + '</div>' +
           '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(instructorContactStatusLabel(phoneStatus)) + '</span>' +
-          '<span class="notification-badge ' + (ready ? 'ready' : 'off') + '">' + (ready ? 'Preparada' : 'Desactivada') + '</span>' +
+          '<span class="notification-badge ' + (ready ? 'ready' : 'off') + '">' + (ready ? 'Habilitada' : 'Desactivada') + '</span>' +
           '<div class="instructor-actions">' +
             '<button class="instructor-preview-btn" type="button" data-preview-instructor="' + escapeHtml(instructor.id) + '">Vista previa</button>' +
             '<button class="student-edit-btn" type="button" data-edit-instructor="' + escapeHtml(instructor.id) + '">Editar</button>' +
@@ -2543,6 +2580,9 @@
       $("instructorSummaryDate").value = dateKey(new Date(Date.now() + 86400000).toISOString());
       $("instructorSummaryPreview").classList.add("hidden");
       state.summaryInstructorId = null;
+      state.summaryRows = [];
+      state.summaryNotification = null;
+      state.instructorSummarySending = false;
       setInstructorDirectoryMessage("");
       closeInstructorEditor();
       if(!state.instructors.length){
@@ -2559,6 +2599,9 @@
       document.body.classList.remove("modal-open");
       closeInstructorEditor();
       state.summaryInstructorId = null;
+      state.summaryRows = [];
+      state.summaryNotification = null;
+      state.instructorSummarySending = false;
       $("instructorSummaryPreview").classList.add("hidden");
       setInstructorDirectoryMessage("");
     }
@@ -2636,6 +2679,84 @@
         "Información operativa. Cualquier cambio lo gestiona Programación; Veyra no reprograma.";
     }
 
+    function instructorReadyForNotification(instructor){
+      return Boolean(
+        instructor &&
+        instructor.active &&
+        instructor.notification_enabled &&
+        instructor.phone_status === "verified" &&
+        normalizePhone(instructor.phone_e164)
+      );
+    }
+
+    function instructorNotificationStatusLabel(value){
+      if(value === "queued") return "En cola";
+      if(value === "accepted") return "Aceptado por WhatsApp";
+      if(value === "sent") return "Enviado";
+      if(value === "delivered") return "Entregado";
+      if(value === "read") return "Leído";
+      if(value === "failed") return "Falló";
+      if(value === "cancelled") return "Cancelado";
+      return "Sin envío";
+    }
+
+    function instructorNotificationTime(notification){
+      if(!notification) return "";
+      return formatTime(
+        notification.read_at ||
+        notification.delivered_at ||
+        notification.sent_at ||
+        notification.accepted_at ||
+        notification.failed_at ||
+        notification.updated_at ||
+        notification.created_at
+      );
+    }
+
+    function renderInstructorSummaryControls(instructor,rows,notification){
+      const hasRows = Array.isArray(rows) && rows.length > 0;
+      const ready = instructorReadyForNotification(instructor);
+      const busy = state.instructorSummarySending;
+      const manualButton = $("openInstructorWhatsAppButton");
+      const sendButton = $("sendInstructorSummaryButton");
+      const delivery = $("instructorSummaryDelivery");
+
+      manualButton.disabled = busy || !ready || !hasRows;
+      sendButton.disabled = busy || !ready || !hasRows;
+      sendButton.textContent = busy ? "Enviando…" : "Enviar WhatsApp";
+      delivery.className = "summary-delivery";
+
+      if(!ready){
+        delivery.classList.add("error");
+        delivery.textContent = "El instructor debe estar activo, tener número verificado y notificaciones habilitadas.";
+        return;
+      }
+      if(!hasRows){
+        delivery.textContent = "No hay sesiones asignadas a este instructor en la fecha seleccionada.";
+        return;
+      }
+      if(!notification){
+        delivery.textContent = "Sin envío automático para esta fecha. Puedes abrir WhatsApp manualmente o usar la plantilla aprobada.";
+        return;
+      }
+
+      const status = String(notification.delivery_status || "");
+      const time = instructorNotificationTime(notification);
+      if(["accepted","sent","delivered","read"].indexOf(status) >= 0){
+        delivery.classList.add("success");
+      }else if(status === "failed" || status === "cancelled"){
+        delivery.classList.add("error");
+      }else{
+        delivery.classList.add("pending");
+      }
+
+      delivery.textContent = instructorNotificationStatusLabel(status) +
+        (time ? " · " + time : "") +
+        (status === "failed" && notification.error_code
+          ? " · Código " + notification.error_code
+          : "");
+    }
+
     async function previewInstructorSummary(instructorId){
       const id = Number(instructorId || state.summaryInstructorId);
       const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
@@ -2646,31 +2767,130 @@
       }
 
       state.summaryInstructorId = id;
+      state.summaryRows = [];
+      state.summaryNotification = null;
       $("instructorSummaryPreview").classList.remove("hidden");
       $("instructorSummaryTitle").textContent = "Resumen para " + instructor.full_name;
       $("instructorSummaryMessage").textContent = "Consultando sesiones…";
+      renderInstructorSummaryControls(instructor,[],null);
       $("instructorSummaryPreview").scrollIntoView({behavior:"smooth",block:"nearest"});
 
       const nextDate = nextCalendarDate(targetDate);
-      const result = await db
-        .from("voa_sessions")
-        .select(INSTRUCTOR_SUMMARY_FIELDS)
-        .gte("session_start",targetDate + "T00:00:00-05:00")
-        .lt("session_start",nextDate + "T00:00:00-05:00")
-        .order("session_start",{ascending:true})
-        .limit(500);
+      const results = await Promise.all([
+        db
+          .from("voa_sessions")
+          .select(INSTRUCTOR_SUMMARY_FIELDS)
+          .gte("session_start",targetDate + "T00:00:00-05:00")
+          .lt("session_start",nextDate + "T00:00:00-05:00")
+          .order("session_start",{ascending:true})
+          .limit(500),
+        db
+          .from("voa_instructor_notifications")
+          .select(INSTRUCTOR_NOTIFICATION_FIELDS)
+          .eq("instructor_id",id)
+          .eq("target_date",targetDate)
+          .eq("message_type","daily_summary")
+          .order("created_at",{ascending:false})
+          .limit(1)
+          .maybeSingle()
+      ]);
+      const result = results[0];
+      const notificationResult = results[1];
 
       if(result.error){
         $("instructorSummaryMessage").textContent = "No fue posible consultar las sesiones para esta fecha.";
+        renderInstructorSummaryControls(instructor,[],null);
         setInstructorDirectoryMessage("La vista previa no pudo cargarse.","error");
         return;
       }
 
       const rows = (Array.isArray(result.data) ? result.data : []).filter(function(row){
-        return instructorKey(row.instructor_name) === instructor.normalized_name;
+        return instructorKey(row.instructor_name) === instructorKey(instructor.normalized_name || instructor.full_name);
       });
+      state.summaryRows = rows;
+      state.summaryNotification = notificationResult.error ? null : notificationResult.data;
       $("instructorSummaryMessage").textContent = buildInstructorSummary(instructor,rows,targetDate);
-      setInstructorDirectoryMessage("");
+      renderInstructorSummaryControls(instructor,rows,state.summaryNotification);
+      if(notificationResult.error){
+        setInstructorDirectoryMessage("El resumen está listo, pero no fue posible consultar su trazabilidad de envío.","error");
+      }else{
+        setInstructorDirectoryMessage("");
+      }
+    }
+
+    function openInstructorWhatsApp(){
+      const instructor = state.instructors.find(function(item){
+        return Number(item.id) === Number(state.summaryInstructorId);
+      });
+      const message = $("instructorSummaryMessage").textContent.trim();
+      const phone = instructor ? normalizePhone(instructor.phone_e164).replace(/\D/g,"") : "";
+      if(!instructorReadyForNotification(instructor) || !state.summaryRows.length || !phone){
+        setInstructorDirectoryMessage("Verifica el contacto y carga al menos una sesión antes de abrir WhatsApp.","error");
+        return;
+      }
+      const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+      const opened = window.open(url,"_blank","noopener,noreferrer");
+      if(!opened) window.location.href = url;
+      setInstructorDirectoryMessage("WhatsApp abierto con el resumen preparado. Revisa y pulsa Enviar allí.","success");
+    }
+
+    async function sendInstructorSummary(){
+      const id = Number(state.summaryInstructorId);
+      const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
+      const targetDate = $("instructorSummaryDate").value;
+      if(!db || !state.session || state.instructorSummarySending) return;
+      if(!instructorReadyForNotification(instructor) || !targetDate || !state.summaryRows.length){
+        setInstructorDirectoryMessage("El instructor, la fecha y las sesiones deben estar listos antes de enviar.","error");
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "¿Enviar ahora el resumen por WhatsApp?\n\n" +
+        "Instructor: " + instructor.full_name + "\n" +
+        "Fecha del resumen: " + summaryDateLabel(targetDate) + "\n" +
+        "Sesiones: " + state.summaryRows.length + "\n\n" +
+        "Veyra evitará duplicar un resumen idéntico."
+      );
+      if(!confirmed) return;
+
+      state.instructorSummarySending = true;
+      renderInstructorSummaryControls(instructor,state.summaryRows,state.summaryNotification);
+      setInstructorDirectoryMessage("Solicitando el envío seguro por WhatsApp…","");
+
+      const result = await db.functions.invoke("voa-send-instructor-summary",{
+        body:{instructor_id:id,target_date:targetDate}
+      });
+
+      state.instructorSummarySending = false;
+      if(result.error){
+        const details = await functionErrorDetails(result.error);
+        let feedback = "No fue posible enviar el resumen. No lo repitas hasta revisar el estado.";
+        let feedbackType = "error";
+        if(details && details.code === "TEMPLATE_NOT_APPROVED"){
+          feedback = "La plantilla de Meta aún no está aprobada. No se envió nada; usa “Abrir WhatsApp” mientras se aprueba.";
+        }else if(details && details.code === "DUPLICATE_PREVENTED"){
+          feedback = "Veyra evitó un duplicado: este mismo resumen ya fue procesado.";
+          feedbackType = "success";
+        }else if(details && details.code === "CONTACT_NOT_READY"){
+          feedback = "El contacto del instructor no está habilitado o verificado.";
+        }else if(details && details.code === "NO_SESSIONS"){
+          feedback = "No hay sesiones asignadas a este instructor para esa fecha.";
+        }else if(details && details.code === "SUMMARY_TOO_LONG"){
+          feedback = "El resumen supera el límite de la plantilla. Divide las sesiones antes de enviarlo.";
+        }
+        await previewInstructorSummary(id);
+        setInstructorDirectoryMessage(feedback,feedbackType);
+        return;
+      }
+
+      if(!result.data || result.data.sent !== true){
+        await previewInstructorSummary(id);
+        setInstructorDirectoryMessage("WhatsApp no confirmó la aceptación del resumen.","error");
+        return;
+      }
+
+      await previewInstructorSummary(id);
+      setInstructorDirectoryMessage("WhatsApp aceptó el resumen. El estado se actualizará a enviado, entregado o leído.","success");
     }
 
     async function copyInstructorSummary(){
@@ -4061,6 +4281,8 @@
     $("instructorSummaryDate").addEventListener("change",function(){
       if(state.summaryInstructorId) previewInstructorSummary(state.summaryInstructorId);
     });
+    $("openInstructorWhatsAppButton").addEventListener("click",openInstructorWhatsApp);
+    $("sendInstructorSummaryButton").addEventListener("click",sendInstructorSummary);
     $("copyInstructorSummaryButton").addEventListener("click",copyInstructorSummary);
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
