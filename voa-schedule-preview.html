@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-soft-delete-20260824-7">
+  <meta name="veyra-build" content="schedule-juan-quiroga-jaimes-20260825-9">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -93,7 +93,7 @@
     .check-list{display:grid;gap:9px;margin:15px 0 0;padding:0;list-style:none}.check-list li{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;color:#475467;font-size:11px;line-height:1.4}.check-list li::before{content:"✓";display:grid;width:20px;height:20px;place-items:center;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:900}.check-list li.review::before{content:"!";background:var(--amber-soft);color:var(--amber)}
     .rule-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}.rule-list li{display:grid;grid-template-columns:29px 1fr;gap:10px;align-items:start;color:#475467;font-size:11px;line-height:1.42}.rule-number{display:grid;width:27px;height:27px;place-items:center;border:1px solid var(--gold-soft);border-radius:8px;background:#fffaf0;color:var(--amber);font-size:10px;font-weight:900}
     .source-list{display:grid;gap:9px}.source-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);color:#475467;font-size:11px}.source-row:last-child{border-bottom:0}.source-status{padding:5px 7px;border-radius:999px;background:#f2f4f7;color:#667085;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.source-status.loaded{background:var(--green-soft);color:var(--green)}
-    .wide-panel{margin-top:18px}.review-table-wrap{overflow-x:auto}.review-table{width:100%;min-width:1260px;border-collapse:collapse}.review-table th,.review-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:middle}.review-table th{background:#faf7f1;color:#667085;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.review-table td{color:#344054}.review-table strong{color:var(--navy)}.hours-cell strong{display:block}.hours-cell small,.active-note,.availability-cell small{display:block;margin-top:4px;color:#667085;line-height:1.35}.hours-cell .pending-hours{color:#8a6110;font-weight:800}.availability-cell.blocked{color:var(--red);font-weight:800}.availability-cell.ready{color:var(--green);font-weight:800}
+    .wide-panel{margin-top:18px}.review-table-wrap{overflow-x:auto}.review-table{width:100%;min-width:1260px;border-collapse:collapse}.review-table th,.review-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:middle}.review-table th{background:#faf7f1;color:#667085;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.review-table td{color:#344054}.review-table strong{color:var(--navy)}.hours-cell strong{display:block}.hours-cell small,.active-note,.availability-cell small{display:block;margin-top:4px;color:#667085;line-height:1.35}.hours-cell .pending-hours{color:#8a6110;font-weight:800}.availability-cell.blocked{color:var(--red);font-weight:800}.availability-cell.pending{color:var(--amber);font-weight:800}.availability-cell.ready{color:var(--green);font-weight:800}
     .pill{display:inline-flex;align-items:center;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.pill.ready{background:var(--green-soft);color:var(--green)}.pill.review{background:var(--amber-soft);color:var(--amber)}.pill.blocked{background:var(--red-soft);color:var(--red)}.pill.adjustment{background:var(--blue-soft);color:var(--blue)}
     .blocked-row{background:#fff9f8}.blocked-note{color:var(--red);font-weight:800}
     .footnote{margin-top:18px;padding:17px 19px;border-left:4px solid var(--gold);background:rgba(255,255,255,.76);color:#667085;font-size:12px;line-height:1.55}.footnote strong{color:var(--navy)}
@@ -125,7 +125,7 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Editor con eliminación · versión 5</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las sesiones pueden editarse o retirarse de la previsualización conservando su historial.</div>
+        <div class="draft-card"><strong>Editor con eliminación · versión 6</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las sesiones pueden editarse o retirarse de la previsualización conservando su historial.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -267,7 +267,14 @@
     function earliestStartForDate(date){return isWeekendDate(date)?"08:00":"06:00";}
     function overlaps(aStart,aEnd,bStart,bEnd){return minutes(aStart)<minutes(bEnd)&&minutes(bStart)<minutes(aEnd);}
     function missionNumber(code){const match=/^M(\d+)$/i.exec(String(code||""));return match?Number(match[1]):null;}
+    function isMissionCode(code){return /^M\d+(?:\.\d+)?$/i.test(String(code||""));}
     function nextMission(code){const number=missionNumber(code);return number===null?null:"M"+(number+1);}
+    function followsMission(previous,current){
+      const from=String(previous||"").trim().toUpperCase(),to=String(current||"").trim().toUpperCase();
+      if(!from||!to)return false;
+      if(to===nextMission(from))return true;
+      return (from==="M5"&&to==="M5.1")||(from==="M5.1"&&to==="M5.2");
+    }
     function resourceById(id){return RESOURCES.find(item=>item.id===id);}
     function proposalById(id){return PROPOSALS.find(item=>item.id===id);}
     function instructorName(proposal){return String(proposal?.instructor||"").trim();}
@@ -337,6 +344,10 @@
         return {valid:false,kind:"time",short:"Fuera del horario "+ranges,detail:"La sesión queda fuera del horario documentado para esa fecha: "+ranges+"."};
       }
       return {valid:true,kind:"documented",short:"Documentada "+ranges,detail:"Disponibilidad documentada para esta fecha: "+ranges+".",source:documented.sourceLabel};
+    }
+
+    function pendingAvailability(proposal,availability){
+      return Boolean(proposal?.manual&&!availability?.valid&&["missing","date"].includes(availability?.kind));
     }
 
     function mergeStudentAvailability(rows){
@@ -690,12 +701,16 @@
       return {start:startDate.toISOString(),end:endDate.toISOString(),endTime:String(Number(start.slice(0,2))+2).padStart(2,"0")+":00"};
     }
 
-    function expectedMissionBefore(studentKey,date,start,lastRecord,excludeId){
+    function latestMissionBefore(studentKey,date,start,lastRecord,excludeId){
       let latest=lastRecord;
       PROPOSALS.filter(item=>item.id!==excludeId&&item.student===studentKey&&(item.date+item.start)<(date+start))
         .sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))
-        .forEach(item=>{if(item.type!=="reinforcement"&&missionNumber(item.mission)!==null)latest=item.mission;});
-      return nextMission(latest);
+        .forEach(item=>{if(item.type!=="reinforcement"&&isMissionCode(item.mission))latest=item.mission;});
+      return latest;
+    }
+
+    function expectedMissionBefore(studentKey,date,start,lastRecord,excludeId){
+      return nextMission(latestMissionBefore(studentKey,date,start,lastRecord,excludeId));
     }
 
     function manualProposalConflicts(candidate,studentKey,lastRecord,excludeId=null,validateAvailability=true){
@@ -715,8 +730,9 @@
       const dailyMinutes=PROPOSALS.filter(item=>item.id!==excludeId&&item.date===candidate.date&&item.student===studentKey).reduce((total,item)=>total+minutes(item.end)-minutes(item.start),120);
       if(dailyMinutes>360)conflicts.push("La propuesta superaría el máximo de seis horas de simulador en el día.");
       if(candidate.confirmationStatus==="manual_standard"){
-        const expected=expectedMissionBefore(studentKey,candidate.date,candidate.start,lastRecord,excludeId);
-        if(expected&&candidate.mission.toUpperCase()!==expected)conflicts.push("La misión secuencial esperada para este bloque es "+expected+".");
+        const latest=latestMissionBefore(studentKey,candidate.date,candidate.start,lastRecord,excludeId);
+        const expected=nextMission(latest);
+        if(expected&&!followsMission(latest,candidate.mission))conflicts.push("La misión secuencial esperada para este bloque es "+expected+".");
       }
       return conflicts;
     }
@@ -847,7 +863,10 @@
         const flightConflict=(student.flights||[]).some(flight=>flight.date===proposal.date&&overlaps(proposal.start,proposal.end,flight.start,flight.end));
         if(flightConflict)errors.push("Existe cruce con el cronograma de vuelo.");else checks.push("Sin cruce con vuelos registrados");
         const availability=availabilityDecision(student,proposal);
-        if(!availability.valid)errors.push(availability.detail);
+        if(!availability.valid){
+          if(pendingAvailability(proposal,availability))warnings.push("Disponibilidad pendiente de confirmación antes de aprobar esta propuesta.");
+          else errors.push(availability.detail);
+        }
         else checks.push(availability.kind==="confirmed"?"Disponibilidad confirmada excepcionalmente para este bloque":"Disponibilidad laboral documentada: "+availability.short.replace(/^Documentada\s*/,""));
         const flandesFlights=(student.flights||[]).filter(flight=>flight.date===proposal.date&&flight.site==="Flandes").length;
         const flandesSessions=PROPOSALS.filter(other=>other.student===proposal.student&&other.date===proposal.date&&resourceById(other.resource)?.site==="Flandes").length;
@@ -871,13 +890,13 @@
           else checks.push("Último registro MES disponible: "+latestMission[proposal.student]);
         }else if(proposal.type==="scheduled"){
           const expected=nextMission(latestMission[proposal.student]);
-          const scheduledNumber=missionNumber(proposal.mission);
-          if(scheduledNumber===null){
+          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission);
+          if(!isMissionCode(proposal.mission)){
             errors.push("La misión programada no está informada; no es posible verificar la secuencia MES.");
-          }else if(expected&&proposal.mission!==expected){
+          }else if(expected&&!sequenceIsValid){
             errors.push("Secuencia MES inconsistente: desde "+latestMission[proposal.student]+" se esperaba "+expected+", no "+proposal.mission+".");
           }else if(errors.length===0){
-            if(expected)checks.push("Secuencia "+latestMission[proposal.student]+" → "+proposal.mission+" verificada");
+            if(expected||sequenceIsValid)checks.push("Secuencia "+latestMission[proposal.student]+" → "+proposal.mission+" verificada");
             else warnings.push("El último registro previo no contiene un código MES; confirmar manualmente que corresponde iniciar en "+proposal.mission+".");
             latestMission[proposal.student]=proposal.mission;
           }
@@ -886,10 +905,11 @@
           if(!proposal.reinforcementApproved&&(!student.reinforcement?.approved||student.reinforcement.mission!==proposal.mission))errors.push("El refuerzo no aparece solicitado o aprobado.");else checks.push("Refuerzo solicitado e identificado");
         }else{
           const expected=nextMission(latestMission[proposal.student]);
-          if(expected&&proposal.mission!==expected)errors.push("La secuencia esperada era "+expected+".");
-          else if(!expected)warnings.push("El último registro no contiene un código MES; Programación debe confirmar la continuidad antes de aprobar "+proposal.mission+".");
+          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission);
+          if(expected&&!sequenceIsValid)errors.push("La secuencia esperada era "+expected+".");
+          else if(!expected&&!sequenceIsValid)warnings.push("El último registro no contiene un código MES; Programación debe confirmar la continuidad antes de aprobar "+proposal.mission+".");
           else checks.push("Secuencia "+latestMission[proposal.student]+" → "+proposal.mission+" verificada");
-          if(errors.length===0&&expected)latestMission[proposal.student]=proposal.mission;
+          if(errors.length===0&&(expected||sequenceIsValid))latestMission[proposal.student]=proposal.mission;
         }
         checks.push("Sede asignada sin conflicto de recurso");
         results.set(proposal.id,{errors,warnings,checks,availability,status:errors.length?"blocked":warnings.length?"review":"ready"});
@@ -918,12 +938,14 @@
     function proposalCard(proposal){
       const student=STUDENTS[proposal.student],result=state.results.get(proposal.id),resource=resourceById(proposal.resource);
       const availability=result.availability||availabilityDecision(student,proposal);
+      const availabilityPending=pendingAvailability(proposal,availability);
       const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
       const onlyInstructorPending=result.warnings.length>0&&result.warnings.every(item=>item.startsWith("Instructor pendiente"));
-      const alertLabel=result.status==="blocked"?"Corrección requerida":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
+      const alertLabel=result.status==="blocked"?"Corrección requerida":availabilityPending?"Disponibilidad pendiente":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
       const instructor=instructorName(proposal);
-      const availabilityClass=availability.valid?'':'blocked-availability';
-      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource.cardLabel||resource.fullLabel)+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availability.short)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
+      const availabilityClass=availability.valid?'':availabilityPending?'pending-availability':'blocked-availability';
+      const availabilityLabel=availabilityPending?'Pendiente de confirmar':availability.short;
+      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource.cardLabel||resource.fullLabel)+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availabilityLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
     }
 
     function operationalBlockCard(block){
@@ -960,6 +982,7 @@
       state.selected=proposal.id;
       const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource),result=state.results.get(proposal.id);
       const day=DAYS.find(item=>item.key===proposal.date);
+      const detailAvailability=pendingAvailability(proposal,result.availability)?"Pendiente de confirmar":result.availability.short;
       const decision=proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
       const hours=student.flightHours;
@@ -972,7 +995,7 @@
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
           '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource.fullLabel)+'</dd></div>'+
-          '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(result.availability.short)+'</dd></div>'+
+          '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(detailAvailability)+'</dd></div>'+
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
           '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+
           '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+
@@ -997,13 +1020,15 @@
         const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:item.mission)).join(' → ')||'Sin propuesta';
         const resources=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.cardLabel).filter(Boolean)));
         const resourcesHtml=resources.length?resources.map(item=>escapeHtml(item)).join('<br>'):'—';
-        const availabilityResults=proposals.map(item=>({date:item.date,decision:state.results.get(item.id)?.availability})).filter(item=>item.decision);
-        const availabilityBlocked=availabilityResults.some(item=>!item.decision.valid);
+        const availabilityResults=proposals.map(item=>({date:item.date,proposal:item,decision:state.results.get(item.id)?.availability})).filter(item=>item.decision);
+        const availabilityBlocked=availabilityResults.some(item=>!item.decision.valid&&!pendingAvailability(item.proposal,item.decision));
+        const availabilityPending=availabilityResults.some(item=>pendingAvailability(item.proposal,item.decision));
         const availabilityLabels=Array.from(new Set(availabilityResults.map(item=>{
           const day=DAYS.find(dayItem=>dayItem.key===item.date);
-          return (day?.short||item.date)+": "+item.decision.short;
+          const label=pendingAvailability(item.proposal,item.decision)?"Pendiente de confirmar":item.decision.short;
+          return (day?.short||item.date)+": "+label;
         })));
-        const availabilityHtml='<div class="availability-cell '+(availabilityBlocked?'blocked':'ready')+'">'+(availabilityLabels.length?availabilityLabels.map(item=>escapeHtml(item)).join('<br>'):'Sin propuesta')+'</div>';
+        const availabilityHtml='<div class="availability-cell '+(availabilityBlocked?'blocked':availabilityPending?'pending':'ready')+'">'+(availabilityLabels.length?availabilityLabels.map(item=>escapeHtml(item)).join('<br>'):'Sin propuesta')+'</div>';
         const instructors=Array.from(new Set(proposals.map(item=>instructorLabel(item))));
         const instructorsHtml=instructors.length?instructors.map(item=>escapeHtml(item)).join('<br>'):'—';
         const flightCount=(student.flights||[]).length;
