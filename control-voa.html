@@ -1162,6 +1162,122 @@
     .student-edit-btn:hover,.student-edit-btn:focus-visible{border-color:var(--gold);background:#fff8e8}
     .directory-empty{padding:34px 20px;color:var(--muted);text-align:center;font-size:13px}
 
+    .instructor-card{width:min(1180px,100%)}
+    .instructor-toolbar{
+      display:grid;
+      grid-template-columns:minmax(230px,1fr) 190px auto;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .instructor-toolbar input,.instructor-toolbar select{
+      width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      outline:0;
+      background:var(--white);
+      color:var(--navy);
+    }
+    .instructor-toolbar input:focus,.instructor-toolbar select:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(215,166,58,.15);
+    }
+    .instructor-editor-grid{
+      display:grid;
+      grid-template-columns:minmax(220px,1.2fr) minmax(200px,.9fr) minmax(150px,.7fr);
+      gap:12px;
+      align-items:end;
+    }
+    .instructor-checks{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    .instructor-list{
+      max-height:min(42vh,430px);
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--white);
+    }
+    .instructor-list-head,.instructor-row{
+      display:grid;
+      grid-template-columns:minmax(210px,1.2fr) minmax(155px,.8fr) 120px 130px minmax(185px,.95fr);
+      gap:12px;
+      align-items:center;
+    }
+    .instructor-list-head{
+      position:sticky;
+      z-index:2;
+      top:0;
+      padding:11px 14px;
+      background:var(--navy);
+      color:#f1d898;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.9px;
+      text-transform:uppercase;
+    }
+    .instructor-row{padding:12px 14px;border-bottom:1px solid #eee7db;font-size:12px}
+    .instructor-row:last-child{border-bottom:0}
+    .instructor-row:hover{background:#fffcf7}
+    .instructor-row.inactive{background:#f7f7f6;color:#7b8491}
+    .instructor-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
+    .instructor-preview-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border:1px solid var(--gold);
+      border-radius:9px;
+      background:#fff8e8;
+      color:#6f5012;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.45px;
+      text-transform:uppercase;
+    }
+    .instructor-preview-btn:hover,.instructor-preview-btn:focus-visible{background:#fbedbf}
+    .notification-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:6px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .notification-badge.ready{color:var(--green);background:var(--green-soft)}
+    .notification-badge.off{color:#667085;background:#f1f3f6}
+    .summary-preview{
+      margin-top:16px;
+      padding:18px;
+      border:1px solid var(--gold-soft);
+      border-left:4px solid var(--gold);
+      border-radius:14px;
+      background:#fffaf0;
+    }
+    .summary-preview-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    .summary-preview h3{margin:0;color:var(--navy);font:700 22px/1.1 Georgia,serif}
+    .summary-preview p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+    .summary-message{
+      margin:15px 0 0;
+      padding:16px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:var(--white);
+      color:#344054;
+      font:12px/1.6 Arial,sans-serif;
+      white-space:pre-wrap;
+    }
+    .summary-safety-note{
+      margin-top:11px;
+      color:#6f5012;
+      font-size:11px;
+      line-height:1.45;
+    }
+
     @media(max-width:1400px){
       .table-wrap{display:none}
       .mobile-list{
@@ -1302,6 +1418,12 @@
       .student-row{grid-template-columns:1fr auto;gap:8px 12px}
       .student-row > :nth-child(2),.student-row > :nth-child(3),.student-row > :nth-child(4){grid-column:1}
       .student-row > :last-child{grid-column:2;grid-row:1 / span 2}
+      .instructor-toolbar,.instructor-editor-grid,.instructor-checks{grid-template-columns:1fr}
+      .instructor-list-head{display:none}
+      .instructor-row{grid-template-columns:1fr;gap:8px}
+      .instructor-actions{justify-content:flex-start}
+      .summary-preview-top{display:block}
+      .summary-preview-top .instructor-actions{margin-top:12px}
     }
     @media(max-width:430px){
       .back-link{display:none}
@@ -1387,6 +1509,7 @@
             <a class="directory-btn schedule-preview-link" href="./voa-schedule-preview.html">Cronograma</a>
             <a class="directory-btn mission-briefs-link" href="./voa-mission-briefs.html">Mission Briefs</a>
             <button class="directory-btn" id="directoryButton" type="button">Directorio</button>
+            <button class="directory-btn" id="instructorDirectoryButton" type="button">Instructores</button>
             <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
           </div>
           <div class="sync" aria-live="polite">
@@ -1757,6 +1880,98 @@
         </div>
       </section>
     </div>
+
+    <div class="modal-overlay hidden" id="instructorDirectoryModal" role="dialog" aria-modal="true" aria-labelledby="instructorDirectoryModalTitle">
+      <section class="modal-card instructor-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">Control VOA · Comunicación interna</div>
+            <h2 id="instructorDirectoryModalTitle">Directorio de instructores</h2>
+            <p>Registra y verifica el WhatsApp del instructor, y previsualiza el resumen de sus estudiantes sin revelar motivos de inasistencia.</p>
+          </div>
+          <button class="modal-close" id="closeInstructorDirectoryModal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="directory-body">
+          <div class="directory-summary" aria-label="Resumen del directorio de instructores">
+            <div class="directory-stat"><span>Total</span><strong id="instructorTotalCount">0</strong></div>
+            <div class="directory-stat"><span>Activos</span><strong id="instructorActiveCount">0</strong></div>
+            <div class="directory-stat"><span>Números verificados</span><strong id="instructorVerifiedCount">0</strong></div>
+            <div class="directory-stat"><span>Notificación habilitada</span><strong id="instructorEnabledCount">0</strong></div>
+          </div>
+
+          <div class="instructor-toolbar">
+            <input id="instructorSearchInput" type="search" placeholder="Buscar instructor o celular" autocomplete="off" aria-label="Buscar instructor" />
+            <select id="instructorStatusFilter" aria-label="Filtrar instructores">
+              <option value="">Todos los instructores</option>
+              <option value="active">Solo activos</option>
+              <option value="needs_data">Número pendiente</option>
+              <option value="ready">Listos para notificar</option>
+            </select>
+            <button class="new-session-btn" id="addInstructorButton" type="button">+ Nuevo instructor</button>
+          </div>
+
+          <form class="student-editor hidden" id="instructorForm" novalidate>
+            <h3 id="instructorFormTitle">Nuevo instructor</h3>
+            <div class="instructor-editor-grid">
+              <div class="session-field">
+                <label for="instructorFullName">Nombre para Programación</label>
+                <input id="instructorFullName" type="text" maxlength="160" autocomplete="off" autocapitalize="words" required />
+              </div>
+              <div class="session-field">
+                <label for="instructorPhone">WhatsApp con indicativo</label>
+                <input id="instructorPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" />
+                <span class="field-hint">El número no se usa hasta marcarlo como verificado.</span>
+              </div>
+              <div class="session-field">
+                <label for="instructorSummaryTime">Hora de resumen</label>
+                <input id="instructorSummaryTime" type="time" value="18:00" required />
+              </div>
+            </div>
+            <div class="instructor-checks">
+              <label class="student-active-check">
+                <input id="instructorActive" type="checkbox" checked />
+                <span>Instructor activo</span>
+              </label>
+              <label class="student-active-check">
+                <input id="instructorPhoneVerified" type="checkbox" />
+                <span>Número verificado</span>
+              </label>
+              <label class="student-active-check">
+                <input id="instructorNotificationEnabled" type="checkbox" />
+                <span>Preparar notificaciones</span>
+              </label>
+            </div>
+            <div class="create-note"><strong>Fase segura:</strong> esta opción solo deja el contacto listo. Todavía no envía WhatsApp ni modifica la programación.</div>
+            <div class="form-actions">
+              <button class="cancel-btn" id="cancelInstructorButton" type="button">Cancelar</button>
+              <button class="save-session-btn" id="saveInstructorButton" type="submit">Guardar instructor</button>
+            </div>
+          </form>
+
+          <div class="create-message" id="instructorDirectoryMessage" role="alert" aria-live="polite"></div>
+          <div class="instructor-list" id="instructorList">
+            <div class="directory-empty">Cargando instructores…</div>
+          </div>
+
+          <section class="summary-preview hidden" id="instructorSummaryPreview" aria-live="polite">
+            <div class="summary-preview-top">
+              <div>
+                <h3 id="instructorSummaryTitle">Vista previa del resumen</h3>
+                <p>Selecciona la fecha que recibirá el instructor. Los motivos privados del estudiante nunca aparecen.</p>
+              </div>
+              <div class="instructor-actions">
+                <input id="instructorSummaryDate" type="date" aria-label="Fecha del resumen" />
+                <button class="instructor-preview-btn" id="refreshInstructorSummaryButton" type="button">Actualizar vista</button>
+                <button class="student-edit-btn" id="copyInstructorSummaryButton" type="button">Copiar</button>
+              </div>
+            </div>
+            <pre class="summary-message" id="instructorSummaryMessage">Selecciona un instructor para preparar el resumen.</pre>
+            <div class="summary-safety-note"><strong>Sin envío:</strong> la vista previa no crea mensajes, no reprograma sesiones y no comparte el motivo de una inasistencia.</div>
+          </section>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
@@ -1767,6 +1982,8 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,absence_managed_at,absence_managed_by,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
+    const INSTRUCTOR_FIELDS = "id,full_name,normalized_name,phone_e164,phone_status,active,notification_enabled,summary_time,timezone,source,updated_at";
+    const INSTRUCTOR_SUMMARY_FIELDS = "id,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,cancelled_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const BRIEF_FIELDS = "id,mission_code,mission_key,title,active,public_token";
     const DEFAULT_INSTRUCTORS = [
@@ -1791,6 +2008,7 @@
     const state = {
       rows: [],
       students: [],
+      instructors: [],
       historyRows: [],
       briefsByMission: Object.create(null),
       briefingsAvailable: true,
@@ -1802,10 +2020,14 @@
       cancelling: false,
       studentsLoading: false,
       studentSaving: false,
+      instructorsLoading: false,
+      instructorSaving: false,
       editingSessionId: null,
       cancellingSessionId: null,
       historySessionId: null,
       editingStudentId: null,
+      editingInstructorId: null,
+      summaryInstructorId: null,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
       managingSessionIds: new Set(),
@@ -1830,6 +2052,13 @@
         return "Cap. González";
       }
       return name;
+    }
+
+    function instructorKey(value){
+      return normalize(canonicalInstructorName(value))
+        .replace(/[^a-z0-9\s]/g,"")
+        .replace(/\s+/g," ")
+        .trim();
     }
 
     function classifyStatus(value){
@@ -1979,6 +2208,12 @@
       element.className = "create-message" + (type ? " " + type : "");
     }
 
+    function setInstructorDirectoryMessage(message,type){
+      const element = $("instructorDirectoryMessage");
+      element.textContent = message || "";
+      element.className = "create-message" + (type ? " " + type : "");
+    }
+
     function setActionMessage(message,type){
       const element = $("actionMessage");
       if(state.actionTimer) window.clearTimeout(state.actionTimer);
@@ -2022,14 +2257,22 @@
     }
 
     function populateSessionFormInstructors(){
+      const names = Array.from(new Set(DEFAULT_INSTRUCTORS.concat(
+        state.instructors.filter(function(item){ return item.active; }).map(function(item){
+          return canonicalInstructorName(item.full_name);
+        })
+      ))).filter(Boolean).sort(function(a,b){ return a.localeCompare(b,"es"); });
       ["newInstructor","editInstructor"].forEach(function(id){
         const select = $(id);
-        DEFAULT_INSTRUCTORS.forEach(function(name){
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Selecciona un instructor</option>';
+        names.forEach(function(name){
           const option = document.createElement("option");
           option.value = name;
           option.textContent = name;
           select.appendChild(option);
         });
+        if(names.indexOf(currentValue) >= 0) select.value = currentValue;
       });
     }
 
@@ -2216,6 +2459,231 @@
       $("studentForm").reset();
     }
 
+    function instructorContactStatusLabel(value){
+      if(value === "verified") return "Verificado";
+      if(value === "needs_review") return "Por verificar";
+      return "Sin número";
+    }
+
+    function filteredInstructors(){
+      const search = normalize($("instructorSearchInput").value);
+      const filter = $("instructorStatusFilter").value;
+      return state.instructors.filter(function(instructor){
+        const haystack = normalize([instructor.full_name,instructor.phone_e164].join(" "));
+        if(search && haystack.indexOf(search) < 0) return false;
+        if(filter === "active" && !instructor.active) return false;
+        if(filter === "needs_data" && instructor.phone_status === "verified") return false;
+        if(filter === "ready" && !instructor.notification_enabled) return false;
+        return true;
+      });
+    }
+
+    function renderInstructorDirectory(){
+      const all = state.instructors;
+      const rows = filteredInstructors();
+      $("instructorTotalCount").textContent = all.length;
+      $("instructorActiveCount").textContent = all.filter(function(item){ return item.active; }).length;
+      $("instructorVerifiedCount").textContent = all.filter(function(item){ return item.phone_status === "verified"; }).length;
+      $("instructorEnabledCount").textContent = all.filter(function(item){ return item.notification_enabled; }).length;
+
+      if(!rows.length){
+        $("instructorList").innerHTML = '<div class="directory-empty">No hay instructores que coincidan con este filtro.</div>';
+        return;
+      }
+
+      const head = '<div class="instructor-list-head"><span>Instructor</span><span>WhatsApp</span><span>Contacto</span><span>Notificación</span><span>Acciones</span></div>';
+      const body = rows.map(function(instructor){
+        const phoneStatus = instructor.phone_status || "missing";
+        const ready = Boolean(instructor.notification_enabled && phoneStatus === "verified" && instructor.phone_e164);
+        const summaryTime = String(instructor.summary_time || "18:00").slice(0,5);
+        return '<div class="instructor-row' + (instructor.active ? '' : ' inactive') + '">' +
+          '<div class="student-name">' + escapeHtml(instructor.full_name || "Sin nombre") +
+            '<span class="student-source">Resumen previsto: ' + escapeHtml(summaryTime) + ' · Hora Bogotá</span></div>' +
+          '<div class="student-phone">' + escapeHtml(instructor.phone_e164 || "Pendiente") + '</div>' +
+          '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(instructorContactStatusLabel(phoneStatus)) + '</span>' +
+          '<span class="notification-badge ' + (ready ? 'ready' : 'off') + '">' + (ready ? 'Preparada' : 'Desactivada') + '</span>' +
+          '<div class="instructor-actions">' +
+            '<button class="instructor-preview-btn" type="button" data-preview-instructor="' + escapeHtml(instructor.id) + '">Vista previa</button>' +
+            '<button class="student-edit-btn" type="button" data-edit-instructor="' + escapeHtml(instructor.id) + '">Editar</button>' +
+          '</div>' +
+        '</div>';
+      }).join("");
+      $("instructorList").innerHTML = head + body;
+    }
+
+    async function loadInstructors(force){
+      if(!db || !state.session || state.instructorsLoading) return false;
+      if(!force && state.instructors.length) return true;
+      state.instructorsLoading = true;
+
+      const result = await db
+        .from("voa_instructors")
+        .select(INSTRUCTOR_FIELDS)
+        .order("full_name",{ascending:true})
+        .limit(500);
+
+      state.instructorsLoading = false;
+      if(result.error){
+        setInstructorDirectoryMessage("No fue posible consultar los instructores. Verifica que la cuenta siga autorizada.","error");
+        $("instructorList").innerHTML = '<div class="directory-empty">Directorio de instructores no disponible.</div>';
+        return false;
+      }
+
+      state.instructors = Array.isArray(result.data) ? result.data : [];
+      renderInstructorDirectory();
+      populateSessionFormInstructors();
+      return true;
+    }
+
+    async function openInstructorDirectoryModal(){
+      $("instructorDirectoryModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+      $("instructorSearchInput").value = "";
+      $("instructorStatusFilter").value = "";
+      $("instructorSummaryDate").value = dateKey(new Date(Date.now() + 86400000).toISOString());
+      $("instructorSummaryPreview").classList.add("hidden");
+      state.summaryInstructorId = null;
+      setInstructorDirectoryMessage("");
+      closeInstructorEditor();
+      if(!state.instructors.length){
+        $("instructorList").innerHTML = '<div class="directory-empty">Cargando instructores…</div>';
+      }else{
+        renderInstructorDirectory();
+      }
+      await loadInstructors(false);
+    }
+
+    function closeInstructorDirectoryModal(){
+      if(state.instructorSaving) return;
+      $("instructorDirectoryModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      closeInstructorEditor();
+      state.summaryInstructorId = null;
+      $("instructorSummaryPreview").classList.add("hidden");
+      setInstructorDirectoryMessage("");
+    }
+
+    function syncInstructorNotificationControl(){
+      const phoneReady = Boolean(normalizePhone($("instructorPhone").value));
+      const verified = phoneReady && $("instructorPhoneVerified").checked;
+      $("instructorNotificationEnabled").disabled = !verified;
+      if(!verified) $("instructorNotificationEnabled").checked = false;
+    }
+
+    function openInstructorEditor(instructorId){
+      const id = Number(instructorId);
+      const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
+      state.editingInstructorId = instructor ? id : null;
+      $("instructorForm").reset();
+      $("instructorFormTitle").textContent = instructor ? "Editar instructor" : "Nuevo instructor";
+      $("instructorFullName").value = instructor ? (instructor.full_name || "") : "";
+      $("instructorPhone").value = instructor ? (instructor.phone_e164 || "") : "";
+      $("instructorSummaryTime").value = instructor ? String(instructor.summary_time || "18:00").slice(0,5) : "18:00";
+      $("instructorActive").checked = instructor ? Boolean(instructor.active) : true;
+      $("instructorPhoneVerified").checked = instructor ? instructor.phone_status === "verified" : false;
+      $("instructorNotificationEnabled").checked = instructor ? Boolean(instructor.notification_enabled) : false;
+      syncInstructorNotificationControl();
+      $("instructorForm").classList.remove("hidden");
+      setInstructorDirectoryMessage("");
+      window.setTimeout(function(){ $("instructorFullName").focus(); },50);
+    }
+
+    function closeInstructorEditor(){
+      if(state.instructorSaving) return;
+      state.editingInstructorId = null;
+      $("instructorForm").classList.add("hidden");
+      $("instructorForm").reset();
+    }
+
+    function nextCalendarDate(dateValue){
+      const parts = String(dateValue || "").split("-").map(Number);
+      if(parts.length !== 3 || parts.some(function(part){ return !Number.isFinite(part); })) return "";
+      const date = new Date(Date.UTC(parts[0],parts[1] - 1,parts[2] + 1));
+      return date.toISOString().slice(0,10);
+    }
+
+    function summaryDateLabel(dateValue){
+      try{
+        return new Intl.DateTimeFormat("es-CO",{
+          timeZone:BOGOTA_TZ,
+          weekday:"long",
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }).format(new Date(dateValue + "T12:00:00-05:00"));
+      }catch(_error){
+        return dateValue;
+      }
+    }
+
+    function buildInstructorSummary(instructor,rows,targetDate){
+      const counts = {confirmed:0,pending:0,declined:0,cancelled:0};
+      const lines = rows.map(function(row,index){
+        const status = row.cancelled_at ? "cancelled" : classifyStatus(row.confirmation_status);
+        counts[status] += 1;
+        return (index + 1) + ". " + formatRange(row) + " · " + (row.student_name || "Estudiante") +
+          " · " + (row.mission || "Sin misión") + " · " + (row.location || "Lugar por confirmar") +
+          " · " + statusLabel(status);
+      });
+      if(!lines.length) lines.push("Sin sesiones asignadas para esta fecha.");
+
+      return "Veyra · Resumen de sesiones\n" +
+        "Instructor: " + (instructor.full_name || "Por confirmar") + "\n" +
+        "Fecha: " + summaryDateLabel(targetDate) + "\n\n" +
+        lines.join("\n") + "\n\n" +
+        "Confirmadas: " + counts.confirmed + " · Pendientes: " + counts.pending +
+        " · No puede asistir: " + counts.declined + " · Canceladas: " + counts.cancelled + "\n\n" +
+        "Información operativa. Cualquier cambio lo gestiona Programación; Veyra no reprograma.";
+    }
+
+    async function previewInstructorSummary(instructorId){
+      const id = Number(instructorId || state.summaryInstructorId);
+      const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
+      const targetDate = $("instructorSummaryDate").value;
+      if(!instructor || !targetDate){
+        setInstructorDirectoryMessage("Selecciona un instructor y una fecha válida.","error");
+        return;
+      }
+
+      state.summaryInstructorId = id;
+      $("instructorSummaryPreview").classList.remove("hidden");
+      $("instructorSummaryTitle").textContent = "Resumen para " + instructor.full_name;
+      $("instructorSummaryMessage").textContent = "Consultando sesiones…";
+      $("instructorSummaryPreview").scrollIntoView({behavior:"smooth",block:"nearest"});
+
+      const nextDate = nextCalendarDate(targetDate);
+      const result = await db
+        .from("voa_sessions")
+        .select(INSTRUCTOR_SUMMARY_FIELDS)
+        .gte("session_start",targetDate + "T00:00:00-05:00")
+        .lt("session_start",nextDate + "T00:00:00-05:00")
+        .order("session_start",{ascending:true})
+        .limit(500);
+
+      if(result.error){
+        $("instructorSummaryMessage").textContent = "No fue posible consultar las sesiones para esta fecha.";
+        setInstructorDirectoryMessage("La vista previa no pudo cargarse.","error");
+        return;
+      }
+
+      const rows = (Array.isArray(result.data) ? result.data : []).filter(function(row){
+        return instructorKey(row.instructor_name) === instructor.normalized_name;
+      });
+      $("instructorSummaryMessage").textContent = buildInstructorSummary(instructor,rows,targetDate);
+      setInstructorDirectoryMessage("");
+    }
+
+    async function copyInstructorSummary(){
+      const message = $("instructorSummaryMessage").textContent.trim();
+      if(!message || message === "Consultando sesiones…") return;
+      try{
+        await navigator.clipboard.writeText(message);
+        setInstructorDirectoryMessage("Resumen copiado. Revísalo antes de compartirlo.","success");
+      }catch(_error){
+        setInstructorDirectoryMessage("No fue posible copiar automáticamente. Mantén pulsado el texto para copiarlo.","error");
+      }
+    }
+
     async function openSessionModal(){
       const studentsReady = await loadStudents(false);
       if(!studentsReady){
@@ -2254,7 +2722,10 @@
       }
 
       const instructor = canonicalInstructorName(row.instructor_name);
-      if(DEFAULT_INSTRUCTORS.indexOf(instructor) < 0){
+      const allowedInstructors = DEFAULT_INSTRUCTORS.concat(state.instructors.filter(function(item){
+        return item.active;
+      }).map(function(item){ return canonicalInstructorName(item.full_name); }));
+      if(allowedInstructors.indexOf(instructor) < 0){
         setActionMessage("El instructor actual no está disponible en la lista autorizada.","error");
         return;
       }
@@ -2441,6 +2912,7 @@
       $("sessionEmail").textContent = session && session.user ? session.user.email : "";
       loadSessions();
       loadStudents(false);
+      loadInstructors(false);
       if(state.timer) window.clearInterval(state.timer);
       state.timer = window.setInterval(loadSessions,60000);
     }
@@ -2533,9 +3005,11 @@
       closeEditSessionModal();
       closeCancelSessionModal();
       closeDirectoryModal();
+      closeInstructorDirectoryModal();
       await db.auth.signOut();
       state.rows = [];
       state.students = [];
+      state.instructors = [];
       showLogin();
     });
 
@@ -2699,6 +3173,106 @@
       closeStudentEditor();
       await loadStudents(true);
       setDirectoryMessage("Estudiante guardado correctamente.","success");
+    });
+
+    $("instructorForm").addEventListener("submit",async function(event){
+      event.preventDefault();
+      if(!db || !state.session || state.instructorSaving) return;
+
+      setInstructorDirectoryMessage("");
+      const form = event.currentTarget;
+      if(!form.checkValidity()){
+        form.reportValidity();
+        setInstructorDirectoryMessage("Completa el nombre y la hora del resumen.","error");
+        return;
+      }
+
+      const fullName = canonicalInstructorName($("instructorFullName").value.trim());
+      const normalizedName = instructorKey(fullName);
+      const phoneRaw = $("instructorPhone").value.trim();
+      const phone = phoneRaw ? normalizePhone(phoneRaw) : "";
+      const verified = Boolean($("instructorPhoneVerified").checked);
+      const notificationEnabled = Boolean($("instructorNotificationEnabled").checked);
+
+      if(!normalizedName){
+        setInstructorDirectoryMessage("Escribe un nombre válido para el instructor.","error");
+        $("instructorFullName").focus();
+        return;
+      }
+      if(phoneRaw && !phone){
+        setInstructorDirectoryMessage("El WhatsApp debe incluir un indicativo válido, por ejemplo +57.","error");
+        $("instructorPhone").focus();
+        return;
+      }
+      if(verified && !phone){
+        setInstructorDirectoryMessage("Registra el WhatsApp antes de marcarlo como verificado.","error");
+        $("instructorPhone").focus();
+        return;
+      }
+      if(notificationEnabled && (!verified || !phone)){
+        setInstructorDirectoryMessage("Solo se pueden preparar notificaciones para un número verificado.","error");
+        return;
+      }
+
+      const duplicatedName = state.instructors.find(function(item){
+        return item.normalized_name === normalizedName && Number(item.id) !== Number(state.editingInstructorId);
+      });
+      if(duplicatedName){
+        setInstructorDirectoryMessage("Ya existe un instructor con ese nombre.","error");
+        return;
+      }
+      const duplicatedPhone = phone && state.instructors.find(function(item){
+        return item.phone_e164 === phone && Number(item.id) !== Number(state.editingInstructorId);
+      });
+      if(duplicatedPhone){
+        setInstructorDirectoryMessage("Ese WhatsApp ya pertenece a " + duplicatedPhone.full_name + ".","error");
+        return;
+      }
+
+      const payload = {
+        full_name:fullName,
+        normalized_name:normalizedName,
+        phone_e164:phone || null,
+        phone_status:verified ? "verified" : (phone ? "needs_review" : "missing"),
+        active:$("instructorActive").checked,
+        notification_enabled:notificationEnabled,
+        summary_time:$("instructorSummaryTime").value,
+        timezone:BOGOTA_TZ,
+        source:"control_voa"
+      };
+
+      state.instructorSaving = true;
+      $("saveInstructorButton").disabled = true;
+      $("cancelInstructorButton").disabled = true;
+      $("saveInstructorButton").textContent = "Guardando…";
+
+      let query;
+      if(Number.isSafeInteger(state.editingInstructorId)){
+        query = db.from("voa_instructors").update(payload).eq("id",state.editingInstructorId).select(INSTRUCTOR_FIELDS).single();
+      }else{
+        query = db.from("voa_instructors").insert(payload).select(INSTRUCTOR_FIELDS).single();
+      }
+      const result = await query;
+
+      state.instructorSaving = false;
+      $("saveInstructorButton").disabled = false;
+      $("cancelInstructorButton").disabled = false;
+      $("saveInstructorButton").textContent = "Guardar instructor";
+
+      if(result.error){
+        if(result.error.code === "23505"){
+          setInstructorDirectoryMessage("Ya existe un instructor con ese nombre.","error");
+        }else if(result.error.code === "23514"){
+          setInstructorDirectoryMessage("Revisa el número y su estado de verificación.","error");
+        }else{
+          setInstructorDirectoryMessage("No fue posible guardar el instructor. Verifica que la cuenta siga autorizada.","error");
+        }
+        return;
+      }
+
+      closeInstructorEditor();
+      await loadInstructors(true);
+      setInstructorDirectoryMessage("Instructor guardado. No se envió ningún WhatsApp.","success");
     });
 
     $("editSessionForm").addEventListener("submit",async function(event){
@@ -3387,6 +3961,7 @@
     $("refreshButton").addEventListener("click",function(){
       loadSessions();
       loadStudents(true);
+      loadInstructors(true);
     });
     $("showDeclinedButton").addEventListener("click",function(){
       const viewingDeclinedOnly = $("statusFilter").value === "management_pending";
@@ -3401,6 +3976,7 @@
     $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
     $("directoryButton").addEventListener("click",openDirectoryModal);
+    $("instructorDirectoryButton").addEventListener("click",openInstructorDirectoryModal);
     $("newStudentName").addEventListener("input",function(){
       if(
         state.selectedStudentId &&
@@ -3460,12 +4036,39 @@
       const button = event.target.closest("[data-edit-student]");
       if(button) openStudentEditor(button.getAttribute("data-edit-student"));
     });
+    $("closeInstructorDirectoryModal").addEventListener("click",closeInstructorDirectoryModal);
+    $("instructorDirectoryModal").addEventListener("click",function(event){
+      if(event.target === $("instructorDirectoryModal")) closeInstructorDirectoryModal();
+    });
+    $("instructorSearchInput").addEventListener("input",renderInstructorDirectory);
+    $("instructorStatusFilter").addEventListener("change",renderInstructorDirectory);
+    $("addInstructorButton").addEventListener("click",function(){ openInstructorEditor(null); });
+    $("cancelInstructorButton").addEventListener("click",closeInstructorEditor);
+    $("instructorPhone").addEventListener("input",syncInstructorNotificationControl);
+    $("instructorPhoneVerified").addEventListener("change",syncInstructorNotificationControl);
+    $("instructorList").addEventListener("click",function(event){
+      const previewButton = event.target.closest("[data-preview-instructor]");
+      if(previewButton){
+        previewInstructorSummary(previewButton.getAttribute("data-preview-instructor"));
+        return;
+      }
+      const editButton = event.target.closest("[data-edit-instructor]");
+      if(editButton) openInstructorEditor(editButton.getAttribute("data-edit-instructor"));
+    });
+    $("refreshInstructorSummaryButton").addEventListener("click",function(){
+      previewInstructorSummary(state.summaryInstructorId);
+    });
+    $("instructorSummaryDate").addEventListener("change",function(){
+      if(state.summaryInstructorId) previewInstructorSummary(state.summaryInstructorId);
+    });
+    $("copyInstructorSummaryButton").addEventListener("click",copyInstructorSummary);
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
       if(event.key === "Escape" && !$("cancelSessionModal").classList.contains("hidden")) closeCancelSessionModal();
       if(event.key === "Escape" && !$("historyModal").classList.contains("hidden")) closeHistoryModal();
       if(event.key === "Escape" && !$("directoryModal").classList.contains("hidden")) closeDirectoryModal();
+      if(event.key === "Escape" && !$("instructorDirectoryModal").classList.contains("hidden")) closeInstructorDirectoryModal();
     });
 
     populateSessionFormInstructors();
