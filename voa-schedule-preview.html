@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260825-10">
+  <meta name="veyra-build" content="schedule-approval-center-20260827-11">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -126,7 +126,7 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Centro de aprobación · versión 7</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Edita, valida, aprueba y publica cada sesión con trazabilidad.</div>
+        <div class="draft-card"><strong>Centro de aprobación · versión 8</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Integra horas y misiones desde Daily Report antes de aprobar y publicar.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -275,7 +275,7 @@
       {key:"manual",name:"Propuestas manuales",status:"Acceso protegido",loaded:false},
       {key:"flights",name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
       {key:"availability",name:"Disponibilidad laboral",status:"Acceso protegido",loaded:false},
-      {key:"progress",name:"Progreso y horas de vuelo",status:"Acceso protegido",loaded:false},
+      {key:"progress",name:"Daily Report · horas y misiones",status:"Conexión protegida",loaded:false},
       {key:"instructors",name:"Asignación de instructores",status:"Acceso protegido",loaded:false},
       {key:"blocks",name:"Bloqueos operativos",status:"Acceso protegido",loaded:false},
       {key:"approval",name:"Aprobación y publicación",status:"Activación pendiente",loaded:false},
@@ -300,6 +300,8 @@
       directoryByName:new Map(),
       approvalSelection:new Set(),
       publicationEvents:[],
+      consolidationSummary:null,
+      consolidationLoaded:false,
       approvalBusy:false,
       approvalAvailable:false,
       approvalError:"",
@@ -327,9 +329,42 @@
     function normalizedName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/\s+/g," ");}
     function shortTime(value){return String(value||"").slice(0,5);}
     function studentEntryForName(value){return Object.entries(STUDENTS).find(([,student])=>normalizedName(student.name)===normalizedName(value))||null;}
+    function studentEntryForSourceName(value){
+      const exact=studentEntryForName(value);if(exact)return exact;
+      const sourceTokens=new Set(normalizedName(value).split(/\s+/).filter(token=>token.length>1));
+      if(sourceTokens.size<2)return null;
+      const matches=Object.entries(STUDENTS).filter(([,student])=>{
+        const targetTokens=new Set(normalizedName(student.name).split(/\s+/).filter(token=>token.length>1));
+        if(targetTokens.size<2)return false;
+        const sourceInside=Array.from(sourceTokens).every(token=>targetTokens.has(token));
+        const targetInside=Array.from(targetTokens).every(token=>sourceTokens.has(token));
+        return sourceInside||targetInside;
+      });
+      return matches.length===1?matches[0]:null;
+    }
     function studentKeyForName(name){return "protected-student-"+String(name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function numberOrNull(value){if(value===null||value===undefined||value==="")return null;const number=Number(value);return Number.isFinite(number)?number:null;}
+    function localeNumberOrNull(value){
+      const text=String(value??"").trim();if(!text)return null;
+      if(/^\d{1,3}(?:\.\d{3})*,\d+$/.test(text))return numberOrNull(text.replace(/\./g,"").replace(",","."));
+      if(/^\d+(?:,\d+)?$/.test(text))return numberOrNull(text.replace(",","."));
+      return numberOrNull(text);
+    }
     function formatHours(value){const number=numberOrNull(value);return number===null?"—":new Intl.NumberFormat("es-CO",{maximumFractionDigits:1}).format(number);}
+    function loggedHoursLabel(hours){
+      if(!hours)return "—";
+      const direct=String(hours.loggedDisplay??"").trim();
+      return direct||formatHours(hours.logged);
+    }
+    function verificationLabel(status){
+      return ({
+        corroborated:"Corroborada RRO SIM ↔ SIM REPORT",
+        mismatch:"Diferencia RRO SIM ↔ SIM REPORT",
+        missing_rro:"Falta registro en RRO SIM",
+        missing_sim_report:"Falta corroboración en SIM REPORT",
+        no_history:"Sin historial en Daily Report"
+      })[status]||"Pendiente de corroboración";
+    }
     function activeWeek(){return WEEKS[state.week]||WEEKS[0];}
     function weekIndexForDate(date){const index=WEEKS.findIndex(week=>week.days.some(day=>day.key===date));return index<0?0:index;}
     function sessionCountLabel(items,blocks=[]){
@@ -531,6 +566,38 @@
       return merged;
     }
 
+    function mergeGoogleStudentConsolidation(payload){
+      const rows=Array.isArray(payload?.students)?payload.students:[];
+      let merged=0;
+      rows.forEach(row=>{
+        const entry=studentEntryForSourceName(row.student_name);
+        if(!entry)return;
+        const [studentKey,student]=entry;
+        const latestRro=row.latest_rro||null;
+        const latestSim=row.latest_sim_report||null;
+        if(latestRro?.mission)student.last=latestRro.mission;
+        const existingHours=student.flightHours||{};
+        student.flightHours={
+          ...existingHours,
+          logged:localeNumberOrNull(row.total_time),
+          loggedDisplay:String(row.total_time??"").trim()||null,
+          source:"DAILY REPORT · EST VUELO",
+          sourceDate:payload.generated_at||null
+        };
+        student.googleProgress={
+          studentRef:row.student_ref||null,
+          latestRro,
+          latestSim,
+          verification:row.verification||{status:"no_history",needs_review:false}
+        };
+        state.progressKeys.add(studentKey);
+        merged+=1;
+      });
+      state.consolidationSummary=payload?.summary||null;
+      state.consolidationLoaded=true;
+      return merged;
+    }
+
     function mergeFlightBlocks(rows){
       let merged=0;
       (rows||[]).forEach(row=>{
@@ -639,6 +706,30 @@
       }
       const merged=mergeStudentProgress(response.data);
       if(source){source.status=merged+" "+(merged===1?"estudiante integrado":"estudiantes integrados");source.loaded=true;}
+      return merged;
+    }
+
+    async function loadGoogleStudentConsolidation(){
+      const source=SOURCES.find(item=>item.key==="progress");
+      if(!db){if(source){source.status="No disponible";source.loaded=false;}return 0;}
+      const response=await db.functions.invoke("veyra-google-sheets-reader",{
+        body:{action:"student_consolidation"}
+      });
+      if(response.error||!response.data?.ok){
+        state.consolidationLoaded=false;
+        if(source){
+          source.status=source.loaded?"Respaldo protegido · conexión directa pendiente":"No disponible";
+        }
+        return 0;
+      }
+      const merged=mergeGoogleStudentConsolidation(response.data);
+      const summary=response.data.summary||{};
+      if(source){
+        const corroborated=Number(summary.corroborated)||0;
+        const review=Number(summary.needs_review)||0;
+        source.status=merged+" integrados · "+corroborated+" corroborados"+(review?" · "+review+" por revisar":"");
+        source.loaded=true;
+      }
       return merged;
     }
 
@@ -932,6 +1023,7 @@
       }
       await loadProtectedItems();
       await loadProtectedStudentProgress();
+      await loadGoogleStudentConsolidation();
       await loadProtectedAvailability();
       validateProposals();
       renderAll();
@@ -1009,6 +1101,23 @@
         if(dailyMinutes>360)errors.push("Supera el máximo de seis horas por día.");else checks.push("Carga diaria: "+dailyMinutes/60+" de 6 horas");
         if(proposal.manual)warnings.push("Propuesta manual no publicada: Programación conserva la aprobación final y debe confirmar que las fuentes continúan vigentes.");
         if(student.reasonableAdjustment&&availability.kind!=="confirmed")warnings.push(student.adjustmentNote||"El estudiante tiene ajustes razonables adicionales; revisar sus condiciones antes de aprobar el horario.");
+        if(state.consolidationLoaded){
+          const progress=student.googleProgress;
+          const verification=progress?.verification?.status;
+          if(!progress){
+            warnings.push("El estudiante no pudo cruzarse de forma única con DAILY REPORT; revisar su nombre o identificación.");
+          }else if(verification==="corroborated"){
+            checks.push("Última misión corroborada entre RRO SIM y SIM REPORT: "+student.last);
+          }else if(verification==="mismatch"){
+            warnings.push("RRO SIM y SIM REPORT no coinciden en la última misión; se requiere revisión humana antes de continuar la secuencia.");
+          }else if(verification==="missing_sim_report"){
+            warnings.push("La última misión aparece en RRO SIM, pero no pudo corroborarse en SIM REPORT.");
+          }else if(verification==="missing_rro"){
+            warnings.push("SIM REPORT contiene una misión, pero RRO SIM no registra una misión equivalente para este estudiante.");
+          }else if(verification==="no_history"){
+            warnings.push("No se encontró historial de misión en RRO SIM ni en SIM REPORT para este estudiante.");
+          }
+        }
         if(student.protected){
           const remaining=student.flightHours?.remaining;
           if(remaining===null||remaining===undefined)warnings.push("Las horas registradas todavía no están conciliadas. Este dato no modifica la secuencia definida desde "+student.last+".");
@@ -1258,7 +1367,7 @@
       const decision=workflow==="published"?"Publicada en Control VOA":workflow==="approved"?"Aprobada para publicar":proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
       const hours=student.flightHours;
-      const hoursText=hours?formatHours(hours.logged)+" h registradas · saldo "+formatHours(hours.remaining)+" h ("+(hours.basis==="calculated"?"calculado":"reportado")+")":"Por conciliar";
+      const hoursText=hours?loggedHoursLabel(hours)+" h registradas · "+(hours.remaining===null||hours.remaining===undefined?"saldo por conciliar":"saldo "+formatHours(hours.remaining)+" h ("+(hours.basis==="calculated"?"calculado":"reportado")+")"):"Por conciliar";
       const workflowCopy=workflow==="published"?"Sesión creada o enlazada en Control VOA. No se envió WhatsApp automáticamente.":workflow==="approved"?"Decisión registrada; pendiente de publicación explícita en Control VOA.":proposal.manual?'Propuesta manual pendiente de aprobación':proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="scheduled"?'Sesión registrada en la programación SCS':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial';
       const workflowActions=workflow==="published"?'':('<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>');
       $("detailPanel").innerHTML=
@@ -1271,9 +1380,10 @@
           '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource?.fullLabel||proposal.resource||"Sin recurso")+'</dd></div>'+ 
           '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(detailAvailability)+'</dd></div>'+
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
-          '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+
-          '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+
-          '<div class="detail-row"><dt>Horas registradas</dt><dd>'+escapeHtml(hoursText)+'</dd></div>'+
+          '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+ 
+          '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+ 
+          '<div class="detail-row"><dt>Corroboración</dt><dd>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</dd></div>'+ 
+          '<div class="detail-row"><dt>Horas registradas</dt><dd>'+escapeHtml(hoursText)+'</dd></div>'+ 
           '<div class="detail-row"><dt>Ajustes razonables</dt><dd>'+escapeHtml(student.adjustmentConfirmed?"Confirmados para este bloque":student.reasonableAdjustment?(student.adjustmentNote||"Registrados · disponibilidad por validar"):"No registrados en las fuentes consultadas")+'</dd></div>'+ 
           '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+ 
           '<div class="detail-row"><dt>Estado del flujo</dt><dd>'+escapeHtml(workflowLabel(workflow))+'</dd></div>'+ 
@@ -1308,8 +1418,10 @@
         const instructors=Array.from(new Set(proposals.map(item=>instructorLabel(item))));
         const instructorsHtml=instructors.length?instructors.map(item=>escapeHtml(item)).join('<br>'):'—';
         const flightCount=(student.flights||[]).length;
+        const verificationNote='<br><small>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</small>';
         const hours=student.flightHours;
-        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(formatHours(hours.logged)+' h registradas')+'</strong><small class="pending-hours">Saldo '+escapeHtml(hours.basis==='calculated'?'calculado':'reportado')+': '+escapeHtml(formatHours(hours.remaining))+' h</small><small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
+        const balanceLabel=hours&&(hours.remaining===null||hours.remaining===undefined)?'Saldo por conciliar':'Saldo '+(hours?.basis==='calculated'?'calculado':'reportado')+': '+formatHours(hours?.remaining)+' h';
+        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(loggedHoursLabel(hours)+' h registradas')+'</strong><small class="pending-hours">'+escapeHtml(balanceLabel)+'</small><small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
         const hasWorkAdjustment=(student.works||student.reasonableAdjustment)&&proposals.length;
         const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
         const scheduleRegistered=student.scheduleRegistered&&proposals.length;
@@ -1319,7 +1431,7 @@
         const resultLabel=hasBlocked?'Corrección requerida':hasReview?'Revisión requerida':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta';
         const activeNote=hours&&hours.remaining>0?'<small class="active-note">Continúa activo hasta completar MES y requisitos de etapa</small>':'';
         const adjustmentPill=confirmedAdjustment?'Ajuste confirmado':student.reasonableAdjustment?'Ajuste razonable':'Ajuste laboral';
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+availabilityHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+verificationNote+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+availabilityHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
       }).join("");
     }
 
@@ -1402,6 +1514,7 @@
       await loadProtectedItems();
       await loadProtectedAvailability();
       await loadProtectedStudentProgress();
+      await loadGoogleStudentConsolidation();
       await loadProtectedFlightBlocks();
       await loadProtectedOperationalBlocks();
       await loadStudentDirectory();
