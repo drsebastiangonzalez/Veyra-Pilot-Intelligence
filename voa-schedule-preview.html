@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260827-14">
+  <meta name="veyra-build" content="schedule-approval-center-20260827-15">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -126,7 +126,7 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Centro de aprobación · versión 11</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Distingue la secuencia normal de la prórroga autorizada e integra Daily Report antes de aprobar y publicar.</div>
+        <div class="draft-card"><strong>Centro de aprobación · versión 12</strong>Programación del 25 de agosto al 6 de septiembre de 2026. RRO SIM determina la última misión; SIM REPORT la corrobora y cualquier diferencia bloquea la aprobación.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -189,7 +189,7 @@
       </section>
 
       <section class="panel wide-panel">
-        <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>La última misión registrada determina la continuidad MES. Las horas se controlan por separado y no permiten adelantar la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
+        <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>RRO SIM determina la última misión MES. SIM REPORT solo la corrobora; una diferencia entre fuentes bloquea la aprobación. Los refuerzos no avanzan la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
         <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas registradas</th><th>Propuesta</th><th>Simulador</th><th>Disponibilidad laboral</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
@@ -264,9 +264,9 @@
       "Toda sesión debe quedar dentro de una disponibilidad documentada o de una confirmación excepcional registrada. La ausencia de información bloquea su aprobación.",
       "La jornada opera en bloques fijos de dos horas hasta las 18:00. De lunes a viernes inicia a las 06:00; sábados y domingos las instalaciones abren a las 08:00.",
       "Un estudiante no puede superar seis horas de simulador en el mismo día.",
-      "La siguiente sesión se determina por la última misión registrada en la evaluación y por la secuencia MES de la etapa vigente, sea PPA o PCA. Las horas acumuladas no permiten saltar misiones.",
+      "RRO SIM determina la última misión de la secuencia MES. SIM REPORT solo la corrobora; nunca puede reemplazar el registro principal y cualquier diferencia bloquea la aprobación.",
       "La ruta normal continúa M5 → M6. Solo una prórroga autorizada permite M5 → M5.1 → M5.2 → M6; nunca permite retroceder desde una misión posterior ya corroborada.",
-      "Un refuerzo solo se agenda cuando fue solicitado y queda identificado como ‘Sesión de refuerzo’.",
+      "Un refuerzo solo se agenda cuando fue solicitado y queda identificado como ‘Sesión de refuerzo’; no adelanta ni retrocede la última misión MES.",
       "Finalizar los simuladores PPA no finaliza al estudiante: únicamente bloquea el inicio de PCA hasta aprobar el examen con inspector y recibir autorización.",
       "Las misiones de simulador y las horas de vuelo se controlan por separado. Las horas pueden incluir repasos o repeticiones y nunca se utilizan para inferir qué misión sigue.",
       "Si el estudiante concentra varias actividades en Flandes, se procura mantenerlas en la misma sede y solo se alerta cuando la propuesta lo movería entre ciudades.",
@@ -400,7 +400,7 @@
       return text;
     }
     function sourceMissionAudit(progress){
-      if(!progress||progress.verification?.status==="corroborated")return "";
+      if(!progress)return "";
       const itemLabel=(name,item)=>{
         if(!item)return name+": sin registro";
         const mission=missionCodeFromValue(item.mission)||String(item.mission||"Sin misión").trim();
@@ -1190,19 +1190,19 @@
           const progress=student.googleProgress;
           const verification=progress?.verification?.status;
           if(!progress){
-            warnings.push("El estudiante no pudo cruzarse de forma única con DAILY REPORT; revisar su nombre o identificación.");
+            errors.push("Aprobación bloqueada: el estudiante no pudo cruzarse de forma única con DAILY REPORT. Debe verificarse su nombre o identificación.");
           }else if(verification==="corroborated"){
             checks.push("Última misión corroborada entre RRO SIM y SIM REPORT: "+student.last);
           }else if(verification==="mismatch"){
-            warnings.push("RRO SIM y SIM REPORT no coinciden en la última misión; se requiere revisión humana antes de continuar la secuencia.");
+            errors.push("Aprobación bloqueada: RRO SIM y SIM REPORT no coinciden en la última misión. RRO SIM conserva la misión principal y Programación debe resolver la diferencia.");
           }else if(verification==="missing_sim_report"){
-            warnings.push("La última misión aparece en RRO SIM, pero no pudo corroborarse en SIM REPORT.");
+            errors.push("Aprobación bloqueada: la última misión aparece en RRO SIM, pero no pudo corroborarse en SIM REPORT.");
           }else if(verification==="missing_rro"){
-            warnings.push("SIM REPORT contiene una misión, pero RRO SIM no registra una misión equivalente para este estudiante.");
+            errors.push("Aprobación bloqueada: SIM REPORT contiene una misión, pero RRO SIM no registra una misión equivalente para este estudiante.");
           }else if(verification==="no_history"){
-            warnings.push("No se encontró historial de misión en RRO SIM ni en SIM REPORT para este estudiante.");
+            errors.push("Aprobación bloqueada: no se encontró historial de misión en RRO SIM ni en SIM REPORT para este estudiante.");
           }
-        }
+        }else errors.push("Aprobación bloqueada: no fue posible verificar DAILY REPORT en tiempo real.");
         if(student.protected){
           const remaining=student.flightHours?.remaining;
           if(remaining===null||remaining===undefined)warnings.push("Las horas registradas todavía no están conciliadas. Este dato no modifica la secuencia definida desde "+student.last+".");
