@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260827-17">
+  <meta name="veyra-build" content="schedule-juan-quiroga-jaimes-20260825-9">
   <title>Veyra | Previsualización de cronograma</title>
-  <script>
-    (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
-  </script>
   <style>
     :root{
       --navy:#07111f;--navy-soft:#10233d;--cream:#f7f1e8;--paper:#fffdf9;
@@ -36,9 +33,8 @@
     .header-actions{display:flex;align-items:center;gap:10px}.header-email{max-width:260px;overflow:hidden;color:#c7d0dc;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
     .header-btn{min-height:40px;padding:10px 14px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:transparent;color:#fff;text-decoration:none;font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
     .header-btn:hover,.header-btn:focus-visible{border-color:var(--gold);background:rgba(255,255,255,.07)}
-    .theme-toggle{display:grid;width:44px;min-width:44px;padding:7px;place-items:center;font-size:20px;line-height:1;text-transform:none}
     main{width:min(1440px,calc(100% - 42px));margin:0 auto;padding:38px 0 74px}
-    .hero{display:flex;min-height:340px;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:22px;padding:36px;overflow:hidden;border:1px solid rgba(215,166,58,.48);border-radius:28px;background-image:linear-gradient(90deg,rgba(252,250,246,.97) 0%,rgba(252,250,246,.84) 45%,rgba(252,250,246,.16) 100%),url("./veyra-schedule-dawn-bg-v1.webp");background-position:center;background-size:cover;box-shadow:var(--shadow)}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:22px}
     .eyebrow{margin-bottom:13px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}
     .hero h1{margin:0;color:var(--navy);font:clamp(44px,6vw,72px)/.96 Georgia,"Times New Roman",serif;letter-spacing:-2px}
     .hero p{max-width:810px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
@@ -100,7 +96,6 @@
     .wide-panel{margin-top:18px}.review-table-wrap{overflow-x:auto}.review-table{width:100%;min-width:1260px;border-collapse:collapse}.review-table th,.review-table td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:middle}.review-table th{background:#faf7f1;color:#667085;font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.review-table td{color:#344054}.review-table strong{color:var(--navy)}.hours-cell strong{display:block}.hours-cell small,.active-note,.availability-cell small{display:block;margin-top:4px;color:#667085;line-height:1.35}.hours-cell .pending-hours{color:#8a6110;font-weight:800}.availability-cell.blocked{color:var(--red);font-weight:800}.availability-cell.pending{color:var(--amber);font-weight:800}.availability-cell.ready{color:var(--green);font-weight:800}
     .pill{display:inline-flex;align-items:center;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}.pill.ready{background:var(--green-soft);color:var(--green)}.pill.review{background:var(--amber-soft);color:var(--amber)}.pill.blocked{background:var(--red-soft);color:var(--red)}.pill.adjustment{background:var(--blue-soft);color:var(--blue)}
     .blocked-row{background:#fff9f8}.blocked-note{color:var(--red);font-weight:800}
-    .approval-panel{margin-bottom:18px}.approval-body{padding:20px 22px}.approval-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:15px}.approval-stat{padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:#fff}.approval-stat span{display:block;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.approval-stat strong{display:block;margin-top:5px;color:var(--navy);font:26px/1 Georgia,"Times New Roman",serif}.approval-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:13px}.approval-btn{min-height:40px;padding:9px 13px;border:1px solid var(--gold);border-radius:10px;background:#fffaf0;color:var(--navy);font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.approval-btn.primary{border-color:var(--navy);background:var(--navy);color:#fff}.approval-btn.publish{border-color:var(--green);background:var(--green);color:#fff}.approval-btn:disabled{cursor:not-allowed;opacity:.48}.approval-message{margin-bottom:13px;padding:11px 13px;border-left:3px solid var(--gold);background:#fff8e8;color:#6f5012;font-size:11px;line-height:1.45}.approval-message.success{border-color:var(--green);background:var(--green-soft);color:var(--green)}.approval-message.error{border-color:var(--red);background:var(--red-soft);color:var(--red)}.approval-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}.approval-table{width:100%;min-width:1120px;border-collapse:collapse}.approval-table th,.approval-table td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:10px;line-height:1.4;vertical-align:middle}.approval-table tr:last-child td{border-bottom:0}.approval-table th{background:#faf7f1;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.approval-table td strong{color:var(--navy)}.approval-table tr.published-row{background:#f4fbf7}.approval-table tr.approved-row{background:#fffaf0}.approval-select{width:17px;height:17px;accent-color:var(--navy)}.workflow-pill{display:inline-flex;align-items:center;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}.workflow-pill.draft{background:#f2f4f7;color:#667085}.workflow-pill.approved{background:var(--amber-soft);color:var(--amber)}.workflow-pill.published{background:var(--green-soft);color:var(--green)}.workflow-pill.rejected{background:var(--red-soft);color:var(--red)}.validation-copy{display:block;margin-top:4px;color:var(--muted);font-size:9px}.validation-copy.blocked{color:var(--red)}.validation-copy.ready{color:var(--green)}.phone-ready{color:var(--green);font-weight:800}.phone-pending{color:var(--red);font-weight:800}.approval-audit{margin-top:15px;padding:14px 15px;border:1px solid var(--line);border-radius:13px;background:#fbfaf7}.approval-audit h3{margin:0 0 9px;color:var(--navy);font-size:11px;letter-spacing:.6px;text-transform:uppercase}.audit-list{display:grid;gap:7px;margin:0;padding:0;list-style:none}.audit-list li{display:grid;grid-template-columns:130px 1fr;gap:10px;color:#475467;font-size:10px;line-height:1.4}.audit-list time{color:var(--muted);font-weight:700}.session-card.workflow-approved{box-shadow:inset 0 0 0 2px rgba(215,166,58,.52),0 6px 15px rgba(7,17,31,.06)}.session-card.workflow-published{border-color:#78b99b;background:#edf9f3;box-shadow:inset 0 0 0 2px rgba(8,119,75,.2),0 6px 15px rgba(7,17,31,.06)}
     .footnote{margin-top:18px;padding:17px 19px;border-left:4px solid var(--gold);background:rgba(255,255,255,.76);color:#667085;font-size:12px;line-height:1.55}.footnote strong{color:var(--navy)}
     .gate{min-height:100vh;display:grid;place-items:center;padding:30px;background:var(--navy);color:#fff;text-align:center}.gate-card{max-width:520px}.gate-mark{margin-bottom:14px;color:var(--gold);font:56px/1 Georgia,"Times New Roman",serif}.spinner{width:40px;height:40px;margin:24px auto 0;border:4px solid rgba(255,255,255,.18);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
     .manual-dialog{width:min(760px,calc(100% - 28px));max-height:90vh;padding:0;border:1px solid var(--gold-soft);border-radius:22px;background:var(--paper);color:var(--ink);box-shadow:0 30px 90px rgba(7,17,31,.32)}.manual-dialog::backdrop{background:rgba(7,17,31,.7);backdrop-filter:blur(3px)}
@@ -108,31 +103,10 @@
     .manual-form{padding:22px 24px}.manual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.manual-field{display:grid;gap:6px}.manual-field.full{grid-column:1 / -1}.manual-field label{color:#475467;font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.manual-field input,.manual-field select,.manual-field textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font:12px/1.35 Arial,Helvetica,sans-serif}.manual-field textarea{min-height:72px;resize:vertical}.manual-help{margin:14px 0 0;padding:11px 12px;border-left:3px solid var(--gold);background:#fff8e8;color:#6f5012;font-size:11px;line-height:1.45}.manual-form-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px}.manual-status{color:var(--muted);font-size:11px;line-height:1.4}.manual-status.error{color:var(--red)}.manual-status.success{color:var(--green)}.save-manual-btn{min-height:42px;padding:10px 17px;border:1px solid var(--navy);border-radius:11px;background:var(--navy);color:#fff;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.save-manual-btn:disabled{cursor:wait;opacity:.55}
     @media(max-width:1400px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr) minmax(0,.9fr)}}
     @media(max-width:1050px){.side-stack{grid-template-columns:1fr 1fr}.side-stack .panel:last-child{grid-column:1 / -1}}
-    @media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.side-stack{grid-template-columns:1fr}.side-stack .panel:last-child{grid-column:auto}.hero{align-items:flex-start;flex-direction:column}.draft-card{width:100%}.status-strip{align-items:flex-start;flex-direction:column}.status-actions{width:100%}.status-actions button{flex:1}.manual-grid{grid-template-columns:1fr}.manual-field.full{grid-column:auto}.approval-summary{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.side-stack{grid-template-columns:1fr}.side-stack .panel:last-child{grid-column:auto}.hero{align-items:flex-start;flex-direction:column}.draft-card{width:100%}.status-strip{align-items:flex-start;flex-direction:column}.status-actions{width:100%}.status-actions button{flex:1}.manual-grid{grid-template-columns:1fr}.manual-field.full{grid-column:auto}}
     @media(max-width:650px){.header-inner,main{width:min(100% - 28px,1440px)}.header-email{display:none}.brand{font-size:32px}.hero h1{font-size:44px}.hero p{font-size:15px}.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric{min-height:104px;padding:17px}.metric strong{font-size:34px}.week-tabs{flex-direction:column}.panel-head{align-items:flex-start;flex-direction:column}.week-tag{align-self:flex-start}.status-actions{align-items:stretch;flex-direction:column}.manual-dialog-head,.manual-form{padding:18px}.manual-form-actions{align-items:stretch;flex-direction:column}.save-manual-btn{width:100%}}
-    html[data-theme="dark"]{color-scheme:dark;--ink:#edf2f7;--muted:#aab5c4;--line:#344154;--green:#65d6a8;--green-soft:#12372c;--red:#ff938a;--red-soft:#3b1d20;--amber:#e5c270;--amber-soft:#362d17;--blue:#85b9ff;--blue-soft:#172d48;--gold-soft:#705a30;--shadow:0 18px 48px rgba(0,0,0,.32)}
-    html[data-theme="dark"] body{background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at 92% 0%,rgba(215,166,58,.12),transparent 30rem),linear-gradient(180deg,#0b1421,#080f19);background-size:46px 46px,46px 46px,auto,auto}
-    html[data-theme="dark"] .hero{background-image:linear-gradient(90deg,rgba(7,17,31,.97) 0%,rgba(7,17,31,.76) 47%,rgba(7,17,31,.16) 100%),url("./veyra-schedule-dawn-bg-v1.webp")}
-    html[data-theme="dark"] .hero h1,html[data-theme="dark"] .draft-card strong,html[data-theme="dark"] .status-copy strong,html[data-theme="dark"] .metric strong,html[data-theme="dark"] .panel-head h2,html[data-theme="dark"] .day-head strong,html[data-theme="dark"] .time-cell,html[data-theme="dark"] .session-top strong,html[data-theme="dark"] .resource-line strong,html[data-theme="dark"] .operational-block-card strong,html[data-theme="dark"] .detail-title,html[data-theme="dark"] .approval-stat strong,html[data-theme="dark"] .approval-table td strong,html[data-theme="dark"] .approval-audit h3,html[data-theme="dark"] .review-table strong,html[data-theme="dark"] .manual-dialog-head h2{color:#f4f0e8}
-    html[data-theme="dark"] .hero p,html[data-theme="dark"] .panel-head p,html[data-theme="dark"] .detail-sub,html[data-theme="dark"] .detail-row dd,html[data-theme="dark"] .check-list li,html[data-theme="dark"] .rule-list li,html[data-theme="dark"] .source-row,html[data-theme="dark"] .review-table td,html[data-theme="dark"] .audit-list li,html[data-theme="dark"] .footnote{color:#bdc7d4}
-    html[data-theme="dark"] .draft-card,html[data-theme="dark"] .status-strip{border-color:#705a30;background:rgba(24,31,43,.88);color:#ddc683;backdrop-filter:blur(12px)}
-    html[data-theme="dark"] .metric,html[data-theme="dark"] .metric.warning,html[data-theme="dark"] .metric.blocked,html[data-theme="dark"] .panel{background:rgba(15,24,37,.94)}
-    html[data-theme="dark"] .panel-head,html[data-theme="dark"] .manual-dialog-head{background:linear-gradient(135deg,#152033,#1e2531)}
-    html[data-theme="dark"] .week-tabs,html[data-theme="dark"] .schedule-grid,html[data-theme="dark"] .approval-stat,html[data-theme="dark"] .approval-audit,html[data-theme="dark"] .footnote{background:#111b29}
-    html[data-theme="dark"] .week-tab,html[data-theme="dark"] .day-head,html[data-theme="dark"] .time-cell,html[data-theme="dark"] .grid-cell{background:#121d2c;color:#bdc7d4}
-    html[data-theme="dark"] .week-tab.active{background:#d7a63a;color:#07111f}html[data-theme="dark"] .week-tab.active span{color:#47360c}
-    html[data-theme="dark"] .closed-slot{background:#1c2635;color:#aab5c4}html[data-theme="dark"] .empty-slot{color:#7f8a99}
-    html[data-theme="dark"] .resource-line,html[data-theme="dark"] .session-mission{background:rgba(8,15,25,.62)}
-    html[data-theme="dark"] .operational-block-card{border-color:#526076;background:linear-gradient(145deg,#1a2534,#111a27);color:#bdc7d4}
-    html[data-theme="dark"] .review-table th,html[data-theme="dark"] .approval-table th{background:#111b29;color:#aab5c4}
-    html[data-theme="dark"] .blocked-row,html[data-theme="dark"] .approval-table tr.published-row,html[data-theme="dark"] .approval-table tr.approved-row{background:#141e2b}
-    html[data-theme="dark"] .manual-btn,html[data-theme="dark"] .edit-session-btn,html[data-theme="dark"] .approval-btn{background:#172234;color:#edf2f7}
-    html[data-theme="dark"] .manual-dialog{background:#0f1927;color:#edf2f7}
-    html[data-theme="dark"] .manual-field input,html[data-theme="dark"] .manual-field select,html[data-theme="dark"] .manual-field textarea{background:#111c2b;color:#edf2f7}
-    html[data-theme="dark"] .approval-message{background:#302817;color:#e5c270}
-    html[data-theme="dark"] .gate{background:#07111f}
     @media print{
-      body{background:#fff}.header-actions,.present-btn,.manual-btn,.delete-session-btn,.manual-dialog,.edit-session-btn,.week-tabs,.footnote,.approval-toolbar,.approval-select,.approval-message,.approval-audit{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px;background:#fff!important}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(5,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}.approval-table{min-width:0}.approval-table th,.approval-table td{padding:7px;font-size:8px}}
+      body{background:#fff}.header-actions,.present-btn,.manual-btn,.delete-session-btn,.manual-dialog,.edit-session-btn,.week-tabs,.footnote{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(5,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}}
   </style>
 </head>
 <body>
@@ -144,18 +118,18 @@
     <header>
       <div class="header-inner">
         <a class="logo" href="./control-voa.html" aria-label="Volver a Control VOA"><div class="brand">Veyra</div><div class="subbrand">PILOT INTELLIGENCE</div></a>
-        <div class="header-actions"><span class="header-email" id="sessionEmail"></span><button class="header-btn theme-toggle" id="themeButton" type="button" aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">☾</button><a class="header-btn" href="./simulator-history.html">Historial</a><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
+        <div class="header-actions"><span class="header-email" id="sessionEmail"></span><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
       </div>
     </header>
 
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Centro de aprobación · versión 13</strong>Programación del 25 de agosto al 6 de septiembre de 2026. FC ESTIMATE actualiza las horas de vuelo; RRO SIM conserva la autoridad sobre la secuencia MES.</div>
+        <div class="draft-card"><strong>Editor con eliminación · versión 6</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las sesiones pueden editarse o retirarse de la previsualización conservando su historial.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
-        <div class="status-copy"><span class="status-icon">!</span><div><strong>Previsualización con publicación controlada</strong>Editar o aprobar no modifica Control VOA. Publicar es una acción separada y nunca envía WhatsApp automáticamente.</div></div>
+        <div class="status-copy"><span class="status-icon">!</span><div><strong>Propuesta — no publicada</strong>Esta pantalla no crea sesiones, no modifica la programación vigente y no envía notificaciones por WhatsApp.</div></div>
         <div class="status-actions"><button class="manual-btn" id="editSelectedButton" type="button">Editar sesión seleccionada</button><button class="delete-session-btn" id="deleteSelectedButton" type="button">Eliminar sesión seleccionada</button><button class="manual-btn" id="openManualButton" type="button">+ Nueva propuesta manual</button><button class="present-btn" id="printButton" type="button">Imprimir / presentar</button></div>
       </section>
 
@@ -165,27 +139,6 @@
         <article class="metric warning"><span>Requieren revisión</span><strong id="reviewCount">0</strong></article>
         <article class="metric warning"><span>Instructor por asignar</span><strong id="instructorPendingCount">0</strong></article>
         <article class="metric blocked"><span>Bloqueados PPA → PCA</span><strong id="blockedCount">0</strong></article>
-      </section>
-
-      <section class="panel approval-panel" id="approvalCenter" aria-labelledby="approvalTitle">
-        <div class="panel-head"><div><h2 id="approvalTitle">Centro de aprobación y publicación</h2><p>Selecciona propuestas de la semana, valida sus requisitos y publícalas en Control VOA sin duplicados ni envíos automáticos.</p></div><span class="week-tag">Sin envío de WhatsApp</span></div>
-        <div class="approval-body">
-          <div class="approval-summary" aria-label="Estados del flujo">
-            <div class="approval-stat"><span>Borradores</span><strong id="approvalDraftCount">0</strong></div>
-            <div class="approval-stat"><span>Aprobadas</span><strong id="approvalApprovedCount">0</strong></div>
-            <div class="approval-stat"><span>Publicadas</span><strong id="approvalPublishedCount">0</strong></div>
-            <div class="approval-stat"><span>Seleccionadas</span><strong id="approvalSelectedCount">0</strong></div>
-          </div>
-          <div class="approval-toolbar">
-            <button class="approval-btn" id="selectReadyButton" type="button">Seleccionar aptas</button>
-            <button class="approval-btn" id="clearApprovalButton" type="button">Limpiar selección</button>
-            <button class="approval-btn primary" id="approveSelectedButton" type="button">Aprobar seleccionadas</button>
-            <button class="approval-btn publish" id="publishSelectedButton" type="button">Publicar en Control VOA</button>
-          </div>
-          <div class="approval-message" id="approvalMessage" role="status"></div>
-          <div class="approval-table-wrap"><table class="approval-table"><thead><tr><th aria-label="Seleccionar"></th><th>Sesión</th><th>Simulador / instructor</th><th>Validación</th><th>Teléfono VOA</th><th>Estado</th></tr></thead><tbody id="approvalRows"></tbody></table></div>
-          <div class="approval-audit"><h3>Bitácora reciente</h3><ul class="audit-list" id="approvalAudit"></ul></div>
-        </div>
       </section>
 
       <section class="layout">
@@ -214,11 +167,11 @@
       </section>
 
       <section class="panel wide-panel">
-        <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>RRO SIM determina la última misión MES. SIM REPORT solo la corrobora; una diferencia entre fuentes bloquea la aprobación. Los refuerzos no avanzan la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
-        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas de vuelo</th><th>Propuesta</th><th>Simulador</th><th>Disponibilidad laboral</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+        <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>La última misión registrada determina la continuidad MES. Las horas se controlan por separado y no permiten adelantar la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
+        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas registradas</th><th>Propuesta</th><th>Simulador</th><th>Disponibilidad laboral</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
-      <div class="footnote"><strong>Alcance y seguridad.</strong> La aprobación y la publicación son acciones distintas. Una sesión publicada queda enlazada una sola vez con Control VOA y conserva su bitácora; editarla exige volver al flujo de revisión. La publicación no envía WhatsApp. Si el centro indica <em>Activación pendiente</em>, la interfaz está disponible para revisión, pero aún falta habilitar en Supabase la bitácora, los permisos y el vínculo único de publicación.</div>
+      <div class="footnote"><strong>Alcance de esta fase.</strong> La lógica, el diseño, el cruce protegido con vuelos, el progreso inicial y el documento de disponibilidad laboral ya están integrados para revisión. La continuidad se calcula siempre desde la última misión registrada; las horas son un control independiente y pueden incluir repasos o repeticiones. El instructor debe ser informado por Programación: VOA no lo asigna y no considera lista una sesión que carezca de ese dato. Ningún estudiante se considera terminado únicamente por completar simuladores. Los cambios posteriores en disponibilidad deben actualizarse en la fuente protegida; todavía deben automatizarse el registro de evaluaciones de Drive y la actualización continua de horas de vuelo. La publicación de una propuesta aprobada será una acción separada y con trazabilidad.</div>
     </main>
   </div>
 
@@ -232,13 +185,12 @@
         <div class="manual-field"><label for="manualDate">Fecha</label><input id="manualDate" name="date" type="date" min="2026-08-25" max="2026-09-06" required></div>
         <div class="manual-field"><label for="manualStart">Hora de inicio</label><select id="manualStart" name="start" required><option value="06:00">06:00–08:00</option><option value="08:00">08:00–10:00</option><option value="10:00">10:00–12:00</option><option value="12:00">12:00–14:00</option><option value="14:00">14:00–16:00</option><option value="16:00">16:00–18:00</option></select></div>
         <div class="manual-field"><label for="manualMission">Misión</label><input id="manualMission" name="mission" maxlength="80" placeholder="Ej. M8" required></div>
-        <div class="manual-field"><label for="manualSequenceRoute">Ruta MES</label><select id="manualSequenceRoute" name="sequenceRoute" required><option value="standard">Secuencia normal</option><option value="prorroga">Prórroga autorizada · M5.1 / M5.2</option></select></div>
         <div class="manual-field"><label for="manualType">Tipo de sesión</label><select id="manualType" name="type" required><option value="manual_standard">Sesión secuencial</option><option value="manual_reinforcement">Sesión de refuerzo</option><option value="manual_adjustment">Propuesta por ajuste razonable</option></select></div>
         <div class="manual-field"><label for="manualResource">Simulador</label><select id="manualResource" name="resource" required><option value="gym-sr20">Guaymaral · SR20 ATD</option><option value="gym-sr22">Guaymaral · SR22T ATD</option><option value="fla-sr20-1">Flandes · SR20 ATD 1S</option><option value="fla-sr20-2">Flandes · SR20 ATD 3S</option></select></div>
         <div class="manual-field"><label for="manualInstructor">Instructor asignado</label><input id="manualInstructor" name="instructor" maxlength="150" placeholder="Puede quedar pendiente"></div>
         <div class="manual-field full"><label for="manualReason">Justificación</label><textarea id="manualReason" name="reason" maxlength="300" placeholder="Motivo de la propuesta o condición que debe revisar Programación" required></textarea></div>
       </div>
-      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Selecciona <strong>Prórroga autorizada</strong> únicamente cuando Programación haya confirmado que ese estudiante debe cursar M5.1 y M5.2. La prórroga no permite retroceder desde una misión posterior ya corroborada. Programación conserva la aprobación final.</p>
+      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Si el estudiante o la fecha no aparecen en el documento de disponibilidad, la propuesta podrá guardarse y quedará marcada como <strong>Disponibilidad pendiente</strong> para validación humana. Programación conserva la aprobación final.</p>
       <div class="manual-form-actions"><span class="manual-status" id="manualStatus" role="status"></span><button class="save-manual-btn" id="saveManualButton" type="submit">Guardar propuesta</button></div>
     </form>
   </dialog>
@@ -254,9 +206,6 @@
     const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
     const $=id=>document.getElementById(id);
     const escapeHtml=input=>String(input??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
-    function currentTheme(){return document.documentElement.dataset.theme==="dark"?"dark":"light";}
-    function updateThemeButton(){const dark=currentTheme()==="dark";const button=$("themeButton");if(!button)return;const label=dark?"Activar modo claro":"Activar modo oscuro";button.textContent=dark?"☀":"☾";button.setAttribute("aria-pressed",String(dark));button.setAttribute("aria-label",label);button.title=label;}
-    function toggleTheme(){const next=currentTheme()==="dark"?"light":"dark";document.documentElement.dataset.theme=next;try{localStorage.setItem("veyra-theme",next);}catch{}updateThemeButton();}
 
     const DAYS=[
       {key:"2026-08-25",short:"Mar 25",long:"Martes 25 de agosto"},
@@ -292,11 +241,10 @@
       "Toda sesión debe quedar dentro de una disponibilidad documentada o de una confirmación excepcional registrada. La ausencia de información bloquea su aprobación.",
       "La jornada opera en bloques fijos de dos horas hasta las 18:00. De lunes a viernes inicia a las 06:00; sábados y domingos las instalaciones abren a las 08:00.",
       "Un estudiante no puede superar seis horas de simulador en el mismo día.",
-      "RRO SIM determina la última misión de la secuencia MES. SIM REPORT solo la corrobora; nunca puede reemplazar el registro principal y cualquier diferencia bloquea la aprobación.",
-      "La ruta normal continúa M5 → M6. Solo una prórroga autorizada permite M5 → M5.1 → M5.2 → M6; nunca permite retroceder desde una misión posterior ya corroborada.",
-      "Un refuerzo solo se agenda cuando fue solicitado y queda identificado como ‘Sesión de refuerzo’; no adelanta ni retrocede la última misión MES.",
+      "La siguiente sesión se determina por la última misión registrada en la evaluación y por la secuencia MES de la etapa vigente, sea PPA o PCA. Las horas acumuladas no permiten saltar misiones.",
+      "Un refuerzo solo se agenda cuando fue solicitado y queda identificado como ‘Sesión de refuerzo’.",
       "Finalizar los simuladores PPA no finaliza al estudiante: únicamente bloquea el inicio de PCA hasta aprobar el examen con inspector y recibir autorización.",
-      "Las misiones de simulador y las horas de vuelo se controlan por separado. FC ESTIMATE aporta el TOTAL TIME más actualizado y EST VUELO queda como respaldo; ninguna cifra de horas se utiliza para inferir qué misión sigue.",
+      "Las misiones de simulador y las horas de vuelo se controlan por separado. Las horas pueden incluir repasos o repeticiones y nunca se utilizan para inferir qué misión sigue.",
       "Si el estudiante concentra varias actividades en Flandes, se procura mantenerlas en la misma sede y solo se alerta cuando la propuesta lo movería entre ciudades.",
       "El instructor es asignado por Programación, no por VOA. Toda sesión debe identificarlo y se bloquea cualquier doble asignación del mismo instructor en el mismo horario."
     ];
@@ -305,69 +253,27 @@
       {key:"manual",name:"Propuestas manuales",status:"Acceso protegido",loaded:false},
       {key:"flights",name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
       {key:"availability",name:"Disponibilidad laboral",status:"Acceso protegido",loaded:false},
-      {key:"progress",name:"Daily Report · FC ESTIMATE, RRO SIM y SIM REPORT",status:"Conexión protegida",loaded:false},
+      {key:"progress",name:"Progreso y horas de vuelo",status:"Acceso protegido",loaded:false},
       {key:"instructors",name:"Asignación de instructores",status:"Acceso protegido",loaded:false},
       {key:"blocks",name:"Bloqueos operativos",status:"Acceso protegido",loaded:false},
-      {key:"approval",name:"Aprobación y publicación",status:"Activación pendiente",loaded:false},
       {name:"Manual MES",status:"Regla incorporada",loaded:true},
       {name:"Recursos de simulador",status:"Configurados",loaded:true}
     ];
 
-    const state={
-      week:0,
-      selected:null,
-      editingId:null,
-      results:new Map(),
-      protectedLoaded:false,
-      protectedKeys:new Set(),
-      flightKeys:new Set(),
-      progressKeys:new Set(),
-      operationalBlocks:[],
-      availabilityByName:new Map(),
-      availabilityRecords:0,
-      availabilityStudents:0,
-      directoryNames:[],
-      directoryByName:new Map(),
-      approvalSelection:new Set(),
-      publicationEvents:[],
-      consolidationSummary:null,
-      consolidationLoaded:false,
-      approvalBusy:false,
-      approvalAvailable:false,
-      approvalError:"",
-      approvalNotice:null
-    };
+    const state={week:0,selected:null,editingId:null,results:new Map(),protectedLoaded:false,protectedKeys:new Set(),flightKeys:new Set(),progressKeys:new Set(),operationalBlocks:[],availabilityByName:new Map(),availabilityRecords:0,availabilityStudents:0,directoryNames:[]};
 
     function minutes(value){const parts=String(value).split(":").map(Number);return parts[0]*60+parts[1];}
     function isWeekendDate(date){const day=new Date(date+"T12:00:00-05:00").getDay();return day===0||day===6;}
     function earliestStartForDate(date){return isWeekendDate(date)?"08:00":"06:00";}
     function overlaps(aStart,aEnd,bStart,bEnd){return minutes(aStart)<minutes(bEnd)&&minutes(bStart)<minutes(aEnd);}
-    function missionCodeFromValue(value){
-      const text=String(value||"").toUpperCase().replace(/,/g,".");
-      const match=text.match(/(?:^|[^A-Z0-9])M\s*0*(\d{1,2})(?:\s*\.\s*(\d+))?(?=$|[^0-9])/);
-      if(!match)return null;
-      const whole=String(Number(match[1]));
-      const decimal=match[2]?"."+match[2].replace(/0+$/g,""):"";
-      return "M"+whole+(decimal==="."?"":decimal);
-    }
     function missionNumber(code){const match=/^M(\d+)$/i.exec(String(code||""));return match?Number(match[1]):null;}
     function isMissionCode(code){return /^M\d+(?:\.\d+)?$/i.test(String(code||""));}
     function nextMission(code){const number=missionNumber(code);return number===null?null:"M"+(number+1);}
-    function sequenceRoute(value){return String(value||"").trim().toLowerCase()==="prorroga"?"prorroga":"standard";}
-    function sequenceRouteLabel(value){return sequenceRoute(value)==="prorroga"?"Prórroga autorizada":"Secuencia normal";}
-    function expectedMission(previous,route="standard"){
-      const from=String(previous||"").trim().toUpperCase();
-      if(sequenceRoute(route)==="prorroga"){
-        if(from==="M5")return "M5.1";
-        if(from==="M5.1")return "M5.2";
-      }
-      if(from==="M5.2")return "M6";
-      return nextMission(from);
-    }
-    function followsMission(previous,current,route="standard"){
-      const to=String(current||"").trim().toUpperCase();
-      const expected=expectedMission(previous,route);
-      return Boolean(to&&expected&&to===expected);
+    function followsMission(previous,current){
+      const from=String(previous||"").trim().toUpperCase(),to=String(current||"").trim().toUpperCase();
+      if(!from||!to)return false;
+      if(to===nextMission(from))return true;
+      return (from==="M5"&&to==="M5.1")||(from==="M5.1"&&to==="M5.2");
     }
     function resourceById(id){return RESOURCES.find(item=>item.id===id);}
     function proposalById(id){return PROPOSALS.find(item=>item.id===id);}
@@ -377,92 +283,9 @@
     function normalizedName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/\s+/g," ");}
     function shortTime(value){return String(value||"").slice(0,5);}
     function studentEntryForName(value){return Object.entries(STUDENTS).find(([,student])=>normalizedName(student.name)===normalizedName(value))||null;}
-    function studentEntryForSourceName(value){
-      const exact=studentEntryForName(value);if(exact)return exact;
-      const sourceTokens=new Set(normalizedName(value).split(/\s+/).filter(token=>token.length>1));
-      if(sourceTokens.size<2)return null;
-      const matches=Object.entries(STUDENTS).filter(([,student])=>{
-        const targetTokens=new Set(normalizedName(student.name).split(/\s+/).filter(token=>token.length>1));
-        if(targetTokens.size<2)return false;
-        const sourceInside=Array.from(sourceTokens).every(token=>targetTokens.has(token));
-        const targetInside=Array.from(targetTokens).every(token=>sourceTokens.has(token));
-        return sourceInside||targetInside;
-      });
-      return matches.length===1?matches[0]:null;
-    }
     function studentKeyForName(name){return "protected-student-"+String(name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function numberOrNull(value){if(value===null||value===undefined||value==="")return null;const number=Number(value);return Number.isFinite(number)?number:null;}
-    function localeNumberOrNull(value){
-      const text=String(value??"").trim();if(!text)return null;
-      if(/^\d{1,3}(?:\.\d{3})*,\d+$/.test(text))return numberOrNull(text.replace(/\./g,"").replace(",","."));
-      if(/^\d+(?:,\d+)?$/.test(text))return numberOrNull(text.replace(",","."));
-      return numberOrNull(text);
-    }
     function formatHours(value){const number=numberOrNull(value);return number===null?"—":new Intl.NumberFormat("es-CO",{maximumFractionDigits:1}).format(number);}
-    function loggedHoursValue(hours){
-      if(!hours)return null;
-      const direct=localeNumberOrNull(hours.loggedDisplay);
-      return direct===null?numberOrNull(hours.logged):direct;
-    }
-    function loggedHoursLabel(hours){
-      const value=loggedHoursValue(hours);
-      return value===null?"Sin dato reportado":formatHours(value)+" h de vuelo";
-    }
-    function flightHoursStatusLabel(hours){
-      const status=hours?.hoursVerification?.status;
-      const difference=numberOrNull(hours?.hoursVerification?.difference_hours);
-      return ({
-        matched:"FC ESTIMATE coincide con EST VUELO",
-        fc_estimate_more_current:"FC ESTIMATE reporta "+formatHours(Math.abs(difference)) + " h adicionales frente a EST VUELO",
-        fc_estimate_only:"FC ESTIMATE aporta el total que falta en EST VUELO",
-        est_vuelo_only:"EST VUELO es la única fuente con total disponible",
-        fc_estimate_regression:"Revisión obligatoria: FC ESTIMATE es "+formatHours(Math.abs(difference))+" h menor que EST VUELO",
-        duplicate_conflict:"Revisión obligatoria: existen filas duplicadas con totales incompatibles",
-        no_data:"Ninguna de las dos hojas aporta un total"
-      })[status]||"Fuente de horas pendiente de verificar";
-    }
-    function flightHoursSourceAudit(hours){
-      if(!hours)return "Sin fuente de horas";
-      const sourceSheet=String(hours.sourceSheet||"").trim();
-      const sourceRow=numberOrNull(hours.sourceRow);
-      const chosen=sourceSheet?("Fuente usada: "+sourceSheet+(sourceRow!==null?" · fila "+sourceRow:"")):"Sin fuente seleccionada";
-      const sources=hours.sources||{};
-      const est=localeNumberOrNull(sources.est_vuelo?.total_time);
-      const fc=localeNumberOrNull(sources.fc_estimate?.total_time);
-      const values=[];
-      if(est!==null)values.push("EST VUELO: "+formatHours(est)+" h"+(sources.est_vuelo?.source_row?" · fila "+sources.est_vuelo.source_row:""));
-      if(fc!==null)values.push("FC ESTIMATE: "+formatHours(fc)+" h"+(sources.fc_estimate?.source_row?" · fila "+sources.fc_estimate.source_row:""));
-      return chosen+(values.length?" | "+values.join(" | "):"");
-    }
-    function verificationLabel(status){
-      return ({
-        corroborated:"Corroborada RRO SIM ↔ SIM REPORT",
-        mismatch:"Diferencia RRO SIM ↔ SIM REPORT",
-        missing_rro:"Falta registro en RRO SIM",
-        missing_sim_report:"Falta corroboración en SIM REPORT",
-        no_history:"Sin historial en Daily Report"
-      })[status]||"Pendiente de corroboración";
-    }
-    function sourceDateLabel(value){
-      const text=String(value??"").trim();
-      if(!text)return "fecha no informada";
-      if(/^\d{5}(?:\.\d+)?$/.test(text)){
-        const serial=Number(text);
-        const date=new Date(Date.UTC(1899,11,30)+Math.floor(serial)*86400000);
-        if(Number.isFinite(date.getTime()))return new Intl.DateTimeFormat("es-CO",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date);
-      }
-      return text;
-    }
-    function sourceMissionAudit(progress){
-      if(!progress)return "";
-      const itemLabel=(name,item)=>{
-        if(!item)return name+": sin registro";
-        const mission=missionCodeFromValue(item.mission)||String(item.mission||"Sin misión").trim();
-        const row=item.source_row?"fila "+item.source_row:"fila no informada";
-        return name+": "+mission+" · "+sourceDateLabel(item.date)+" · "+row;
-      };
-      return itemLabel("RRO SIM",progress.latestRro)+" | "+itemLabel("SIM REPORT",progress.latestSim);
-    }
     function activeWeek(){return WEEKS[state.week]||WEEKS[0];}
     function weekIndexForDate(date){const index=WEEKS.findIndex(week=>week.days.some(day=>day.key===date));return index<0?0:index;}
     function sessionCountLabel(items,blocks=[]){
@@ -473,35 +296,6 @@
       if(proposed)labels.push(proposed+" "+(proposed===1?"propuesta":"propuestas"));
       if(blocks.length)labels.push(blocks.length+" "+(blocks.length===1?"bloqueo":"bloqueos"));
       return labels.join(" · ")||"0 sesiones";
-    }
-
-    function workflowStatus(proposal){
-      const value=String(proposal?.workflowStatus||"draft").toLowerCase();
-      return ["draft","approved","published","rejected"].includes(value)?value:"draft";
-    }
-
-    function workflowLabel(status){
-      return ({draft:"Borrador",approved:"Aprobada",published:"Publicada",rejected:"Rechazada"})[status]||"Borrador";
-    }
-
-    function proposalPhoneInfo(proposal){
-      const student=STUDENTS[proposal?.student];
-      const directory=state.directoryByName.get(normalizedName(student?.name));
-      const phone=String(directory?.phone_e164||"").trim();
-      const verified=Boolean(phone&&directory?.phone_status==="verified");
-      return {verified,phone,label:verified?"Verificado":"Pendiente de verificar"};
-    }
-
-    function formatAuditDate(value){
-      if(!value)return "—";
-      return new Intl.DateTimeFormat("es-CO",{timeZone:BOGOTA_TZ,day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(value));
-    }
-
-    function setApprovalMessage(message,type=""){
-      const element=$("approvalMessage");
-      if(!element)return;
-      element.textContent=message||"";
-      element.className="approval-message"+(type?" "+type:"");
     }
 
     function operationalBlockConflicts(candidate,studentName,instructor){
@@ -619,7 +413,6 @@
           end:end.time,
           resource:row.resource_key,
           mission:row.mission,
-          sequenceRoute:sequenceRoute(row.sequence_route),
           instructor:String(row.instructor_name||"").trim(),
           confirmationStatus:row.confirmation_status,
           recordKind:row.record_kind,
@@ -628,12 +421,7 @@
           reinforcementApproved:isManualReinforcement,
           reason:row.adjustment_label||(isAdjustment?"Ajuste razonable confirmado":"Programación SCS registrada"),
           source:row.source_label||"Programación protegida",
-          sourceLabel:row.source_label||"Programación protegida",
-          workflowStatus:row.workflow_status||"draft",
-          reviewNote:row.review_note||"",
-          approvedAt:row.approved_at||null,
-          publishedAt:row.published_at||null,
-          publishedSessionId:row.published_session_id||null
+          sourceLabel:row.source_label||"Programación protegida"
         });
         state.protectedKeys.add(proposalId);
         added.push(proposalId);
@@ -662,60 +450,6 @@
         state.progressKeys.add(studentKey);
         merged+=1;
       });
-      return merged;
-    }
-
-    function mergeGoogleStudentConsolidation(payload){
-      const rows=Array.isArray(payload?.students)?payload.students:[];
-      let merged=0;
-      const scopedVerifications=[];
-      const scopedHoursVerifications=[];
-      rows.forEach(row=>{
-        const entry=studentEntryForSourceName(row.student_name);
-        if(!entry)return;
-        const [studentKey,student]=entry;
-        const latestRro=row.latest_rro||null;
-        const latestSim=row.latest_sim_report||null;
-        const latestMissionCode=missionCodeFromValue(latestRro?.mission);
-        if(latestMissionCode)student.last=latestMissionCode;
-        else if(latestRro?.mission)student.last=latestRro.mission;
-        const existingHours=student.flightHours||{};
-        const logged=localeNumberOrNull(row.total_time);
-        const cap=numberOrNull(existingHours.cap);
-        const remaining=logged!==null&&cap!==null?Math.max(0,cap-logged):null;
-        const verification=row.verification||{status:"no_history",needs_review:false};
-        student.flightHours={
-          ...existingHours,
-          logged,
-          loggedDisplay:logged===null?null:String(row.total_time??"").trim()||null,
-          remaining,
-          basis:remaining===null?"pending":"calculated",
-          source:"DAILY REPORT · "+(row.total_time_source||"sin fuente"),
-          sourceSheet:row.total_time_source||null,
-          sourceRow:numberOrNull(row.total_time_source_row),
-          sources:row.total_time_sources||{},
-          hoursVerification:row.hours_verification||{status:"no_data",needs_review:false,difference_hours:null},
-          sourceDate:payload.generated_at||null
-        };
-        student.googleProgress={
-          studentRef:row.student_ref||null,
-          latestRro,
-          latestSim,
-          verification,
-          hoursVerification:row.hours_verification||{status:"no_data",needs_review:false,difference_hours:null}
-        };
-        state.progressKeys.add(studentKey);
-        scopedVerifications.push(verification);
-        scopedHoursVerifications.push(row.hours_verification||{status:"no_data",needs_review:false,difference_hours:null});
-        merged+=1;
-      });
-      state.consolidationSummary={
-        total:merged,
-        corroborated:scopedVerifications.filter(item=>item.status==="corroborated").length,
-        needs_review:scopedVerifications.filter(item=>item.status!=="corroborated"||item.needs_review).length,
-        hours_needs_review:scopedHoursVerifications.filter(item=>item.needs_review).length
-      };
-      state.consolidationLoaded=true;
       return merged;
     }
 
@@ -768,46 +502,24 @@
       const source=SOURCES.find(item=>item.key==="confirmed");
       const manualSource=SOURCES.find(item=>item.key==="manual");
       const instructorSource=SOURCES.find(item=>item.key==="instructors");
-      const approvalSource=SOURCES.find(item=>item.key==="approval");
-      const legacyColumns="id,student_name,stage,last_record,mission,resource_key,instructor_name,session_start,session_end,confirmation_status,adjustment_label,source_label,record_kind";
-      const baseColumns=legacyColumns+",sequence_route";
-      const approvalColumns=baseColumns+",workflow_status,review_note,approved_at,published_at,published_session_id";
-      const fetchItems=columns=>db.from("voa_schedule_preview_items")
-        .select(columns)
+      const response=await db.from("voa_schedule_preview_items")
+        .select("id,student_name,stage,last_record,mission,resource_key,instructor_name,session_start,session_end,confirmation_status,adjustment_label,source_label,record_kind")
         .eq("active",true)
         .gte("session_start","2026-08-25T05:00:00Z")
         .lt("session_start","2026-09-07T05:00:00Z")
         .order("session_start",{ascending:true});
-      let response=await fetchItems(approvalColumns);
-      if(response.error){
-        const legacyResponse=await fetchItems(legacyColumns);
-        if(!legacyResponse.error){
-          response=legacyResponse;
-          state.approvalAvailable=false;
-          state.approvalError="Activación pendiente: falta habilitar en Supabase la aprobación, la bitácora y el vínculo único con Control VOA.";
-          if(approvalSource){approvalSource.status="Activación pendiente";approvalSource.loaded=false;}
-        }
-      }else{
-        state.approvalAvailable=true;
-        state.approvalError="";
-        if(approvalSource){approvalSource.status="Centro habilitado";approvalSource.loaded=true;}
-      }
       if(response.error){
         if(source){source.status="No disponible";source.loaded=false;}
-        state.approvalAvailable=false;
-        state.approvalError="No fue posible consultar las propuestas protegidas.";
-        if(approvalSource){approvalSource.status="No disponible";approvalSource.loaded=false;}
         return [];
       }
-      const rows=response.data||[];
-      const added=mergeProtectedItems(rows);
-      const assignedInstructors=rows.filter(row=>String(row.instructor_name||"").trim()).length;
-      const manualCount=rows.filter(row=>row.record_kind==="manual_proposal").length;
-      const registeredCount=rows.length-manualCount;
+      const added=mergeProtectedItems(response.data);
+      const assignedInstructors=response.data.filter(row=>String(row.instructor_name||"").trim()).length;
+      const manualCount=response.data.filter(row=>row.record_kind==="manual_proposal").length;
+      const registeredCount=response.data.length-manualCount;
       state.protectedLoaded=true;
       if(source){source.status=registeredCount+" registradas";source.loaded=true;}
       if(manualSource){manualSource.status=manualCount+" "+(manualCount===1?"propuesta":"propuestas");manualSource.loaded=manualCount>0;}
-      if(instructorSource){instructorSource.status=assignedInstructors+" de "+rows.length+" asignados";instructorSource.loaded=assignedInstructors===rows.length&&rows.length>0;}
+      if(instructorSource){instructorSource.status=assignedInstructors+" de "+response.data.length+" asignados";instructorSource.loaded=assignedInstructors===response.data.length&&response.data.length>0;}
       if(added.length){
         const first=proposalById(added[0]);
         state.week=weekIndexForDate(first.date);
@@ -828,31 +540,6 @@
       }
       const merged=mergeStudentProgress(response.data);
       if(source){source.status=merged+" "+(merged===1?"estudiante integrado":"estudiantes integrados");source.loaded=true;}
-      return merged;
-    }
-
-    async function loadGoogleStudentConsolidation(){
-      const source=SOURCES.find(item=>item.key==="progress");
-      if(!db){if(source){source.status="No disponible";source.loaded=false;}return 0;}
-      const response=await db.functions.invoke("veyra-google-sheets-reader",{
-        body:{action:"student_consolidation"}
-      });
-      if(response.error||!response.data?.ok){
-        state.consolidationLoaded=false;
-        if(source){
-          source.status=source.loaded?"Respaldo protegido · conexión directa pendiente":"No disponible";
-        }
-        return 0;
-      }
-      const merged=mergeGoogleStudentConsolidation(response.data);
-      const summary=state.consolidationSummary||{};
-      if(source){
-        const corroborated=Number(summary.corroborated)||0;
-        const review=Number(summary.needs_review)||0;
-        const hoursReview=Number(summary.hours_needs_review)||0;
-        source.status=merged+" integrados · "+corroborated+" misiones corroboradas"+(review?" · "+review+" misiones por revisar":"")+(hoursReview?" · "+hoursReview+" horas por revisar":"");
-        source.loaded=true;
-      }
       return merged;
     }
 
@@ -916,35 +603,11 @@
 
     async function loadStudentDirectory(){
       if(!db){populateManualStudentOptions();return 0;}
-      let response=await db.from("voa_students").select("full_name,phone_e164,phone_status").eq("active",true).order("full_name",{ascending:true});
-      if(response.error)response=await db.from("voa_students").select("full_name").eq("active",true).order("full_name",{ascending:true});
+      const response=await db.from("voa_students").select("full_name").eq("active",true).order("full_name",{ascending:true});
       if(response.error){populateManualStudentOptions();return 0;}
-      const rows=response.data||[];
-      state.directoryNames=Array.from(new Set(rows.map(row=>String(row.full_name||"").trim()).filter(Boolean)));
-      state.directoryByName=new Map(rows.filter(row=>row.full_name).map(row=>[normalizedName(row.full_name),{
-        ...row,
-        phone_status:String(row.phone_status||"").toLowerCase()
-      }]));
+      state.directoryNames=Array.from(new Set((response.data||[]).map(row=>String(row.full_name||"").trim()).filter(Boolean)));
       populateManualStudentOptions();
       return state.directoryNames.length;
-    }
-
-    async function loadPublicationEvents(){
-      state.publicationEvents=[];
-      if(!db||!state.approvalAvailable)return 0;
-      const response=await db.from("voa_schedule_publication_events")
-        .select("id,preview_item_id,session_id,action,actor_email,note,created_at")
-        .order("created_at",{ascending:false})
-        .limit(30);
-      if(response.error){
-        state.approvalAvailable=false;
-        state.approvalError="La estructura de aprobación fue detectada, pero la bitácora aún no está disponible para esta cuenta.";
-        const source=SOURCES.find(item=>item.key==="approval");
-        if(source){source.status="Permiso pendiente";source.loaded=false;}
-        return 0;
-      }
-      state.publicationEvents=response.data||[];
-      return state.publicationEvents.length;
     }
 
     function setManualStatus(message,type=""){
@@ -967,17 +630,12 @@
       $("manualStart").value=earliestStartForDate($("manualDate").value);
       $("manualStage").value="PPA";
       $("manualType").value="manual_standard";
-      $("manualSequenceRoute").value="standard";
       $("manualResource").value="gym-sr20";
       setManualStatus("La propuesta quedará pendiente de aprobación de Programación.");
     }
 
     function openEditDialog(proposal){
       if(!proposal)return;
-      if(workflowStatus(proposal)==="published"){
-        alert("Esta sesión ya fue publicada en Control VOA. Para modificarla debe gestionarse primero desde el flujo operativo y conservar la trazabilidad.");
-        return;
-      }
       const student=STUDENTS[proposal.student];
       state.editingId=proposal.id;
       $("manualForm").reset();
@@ -994,7 +652,6 @@
       $("manualDate").value=proposal.date;
       $("manualStart").value=proposal.start;
       $("manualMission").value=proposal.mission;
-      $("manualSequenceRoute").value=sequenceRoute(proposal.sequenceRoute);
       $("manualType").value=proposal.type==="reinforcement"?"manual_reinforcement":proposal.type==="reasonable_adjustment"?"manual_adjustment":"manual_standard";
       $("manualType").disabled=true;
       $("manualResource").value=proposal.resource;
@@ -1052,8 +709,8 @@
       return latest;
     }
 
-    function expectedMissionBefore(studentKey,date,start,lastRecord,excludeId,route="standard"){
-      return expectedMission(latestMissionBefore(studentKey,date,start,lastRecord,excludeId),route);
+    function expectedMissionBefore(studentKey,date,start,lastRecord,excludeId){
+      return nextMission(latestMissionBefore(studentKey,date,start,lastRecord,excludeId));
     }
 
     function manualProposalConflicts(candidate,studentKey,lastRecord,excludeId=null,validateAvailability=true){
@@ -1074,12 +731,9 @@
       const dailyMinutes=PROPOSALS.filter(item=>item.id!==excludeId&&item.date===candidate.date&&item.student===studentKey).reduce((total,item)=>total+minutes(item.end)-minutes(item.start),120);
       if(dailyMinutes>360)conflicts.push("La propuesta superaría el máximo de seis horas de simulador en el día.");
       if(candidate.confirmationStatus==="manual_standard"){
-        if(sequenceRoute(candidate.sequenceRoute)==="prorroga"&&!/^M5\.(?:1|2)$/i.test(candidate.mission)){
-          conflicts.push("La ruta de prórroga solo admite las sesiones adicionales M5.1 o M5.2.");
-        }
         const latest=latestMissionBefore(studentKey,candidate.date,candidate.start,lastRecord,excludeId);
-        const expected=expectedMission(latest,candidate.sequenceRoute);
-        if(expected&&!followsMission(latest,candidate.mission,candidate.sequenceRoute))conflicts.push("La misión esperada para la ruta "+sequenceRouteLabel(candidate.sequenceRoute).toLowerCase()+" es "+expected+".");
+        const expected=nextMission(latest);
+        if(expected&&!followsMission(latest,candidate.mission))conflicts.push("La misión secuencial esperada para este bloque es "+expected+".");
       }
       return conflicts;
     }
@@ -1094,7 +748,6 @@
       const date=$("manualDate").value;
       const start=$("manualStart").value;
       const mission=$("manualMission").value.trim().toUpperCase();
-      const route=sequenceRoute($("manualSequenceRoute").value);
       const confirmationStatus=editingProposal?(editingProposal.type==="reinforcement"?"manual_reinforcement":editingProposal.type==="reasonable_adjustment"?"manual_adjustment":"manual_standard"):$("manualType").value;
       const resource=$("manualResource").value;
       const instructor=$("manualInstructor").value.trim();
@@ -1102,8 +755,8 @@
       const range=manualSessionRange(date,start);
       const existingEntry=studentEntryForName(studentName);
       const studentKey=existingEntry?.[0]||studentKeyForName(studentName);
-      const candidate={date,start,end:range.endTime,mission,resource,instructor,confirmationStatus,studentName,sequenceRoute:route};
-      const scheduleChanged=!editingProposal||editingProposal.date!==date||editingProposal.start!==start||editingProposal.mission!==mission||editingProposal.resource!==resource||editingProposal.reason!==reason||sequenceRoute(editingProposal.sequenceRoute)!==route;
+      const candidate={date,start,end:range.endTime,mission,resource,instructor,confirmationStatus,studentName};
+      const scheduleChanged=!editingProposal||editingProposal.date!==date||editingProposal.start!==start||editingProposal.mission!==mission||editingProposal.resource!==resource||editingProposal.reason!==reason;
       const conflicts=manualProposalConflicts(candidate,studentKey,lastRecord,editingProposal?.id||null,scheduleChanged);
       if(conflicts.length){setManualStatus(conflicts.join(" "),"error");return;}
       const saveButton=$("saveManualButton");
@@ -1113,7 +766,6 @@
       if(editingProposal){
         const changes={
           mission,
-          sequence_route:route,
           resource_key:resource,
           instructor_name:instructor||null,
           session_start:range.start,
@@ -1133,7 +785,6 @@
           stage,
           last_record:lastRecord,
           mission,
-          sequence_route:route,
           resource_key:resource,
           instructor_name:instructor||null,
           session_start:range.start,
@@ -1154,7 +805,6 @@
       }
       await loadProtectedItems();
       await loadProtectedStudentProgress();
-      await loadGoogleStudentConsolidation();
       await loadProtectedAvailability();
       validateProposals();
       renderAll();
@@ -1164,10 +814,6 @@
 
     async function removeProposal(proposal){
       if(!proposal){alert("Selecciona primero una sesión del cronograma.");return;}
-      if(workflowStatus(proposal)==="published"){
-        alert("Esta sesión ya fue publicada en Control VOA y no puede retirarse desde la previsualización.");
-        return;
-      }
       if(!db||!proposal.dbId){alert("Esta sesión no puede retirarse desde esta pantalla.");return;}
       const student=STUDENTS[proposal.student];
       const name=student?.name||"Estudiante";
@@ -1197,24 +843,7 @@
       const sorted=PROPOSALS.slice().sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
       sorted.forEach(proposal=>{
         const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource);
-        if(workflowStatus(proposal)==="published"){
-          const availability=availabilityDecision(student,proposal);
-          results.set(proposal.id,{
-            errors:[],
-            warnings:[],
-            checks:["Sesión ya enlazada con Control VOA; no requiere una nueva aprobación ni publicación."],
-            availability,
-            status:"ready"
-          });
-          return;
-        }
         const errors=[],warnings=[],checks=[];
-        if(sequenceRoute(proposal.sequenceRoute)==="prorroga"){
-          if(!/^M5\.(?:1|2)$/i.test(proposal.mission))errors.push("La ruta de prórroga solo admite M5.1 o M5.2.");
-          else checks.push("Prórroga identificada y limitada a la ruta M5 → M5.1 → M5.2 → M6");
-        }else if(/^M5\.(?:1|2)$/i.test(proposal.mission)){
-          errors.push("M5.1 y M5.2 requieren marcar una prórroga autorizada para este estudiante.");
-        }
         if(minutes(proposal.end)-minutes(proposal.start)!==120)errors.push("El bloque no dura dos horas.");else checks.push("Bloque reglamentario de dos horas");
         const earliestStart=isWeekendDate(proposal.date)?480:360;
         if(minutes(proposal.start)<earliestStart||minutes(proposal.end)>1080)errors.push(isWeekendDate(proposal.date)?"Horario fuera de la operación de fin de semana: 08:00–18:00.":"Horario fuera de 06:00–18:00.");else checks.push(isWeekendDate(proposal.date)?"Horario dentro de la operación de fin de semana: 08:00–18:00":"Horario dentro de la jornada operativa");
@@ -1249,32 +878,9 @@
         if(dailyMinutes>360)errors.push("Supera el máximo de seis horas por día.");else checks.push("Carga diaria: "+dailyMinutes/60+" de 6 horas");
         if(proposal.manual)warnings.push("Propuesta manual no publicada: Programación conserva la aprobación final y debe confirmar que las fuentes continúan vigentes.");
         if(student.reasonableAdjustment&&availability.kind!=="confirmed")warnings.push(student.adjustmentNote||"El estudiante tiene ajustes razonables adicionales; revisar sus condiciones antes de aprobar el horario.");
-        if(state.consolidationLoaded){
-          const progress=student.googleProgress;
-          const verification=progress?.verification?.status;
-          if(!progress){
-            errors.push("Aprobación bloqueada: el estudiante no pudo cruzarse de forma única con DAILY REPORT. Debe verificarse su nombre o identificación.");
-          }else if(verification==="corroborated"){
-            checks.push("Última misión corroborada entre RRO SIM y SIM REPORT: "+student.last);
-          }else if(verification==="mismatch"){
-            errors.push("Aprobación bloqueada: RRO SIM y SIM REPORT no coinciden en la última misión. RRO SIM conserva la misión principal y Programación debe resolver la diferencia.");
-          }else if(verification==="missing_sim_report"){
-            errors.push("Aprobación bloqueada: la última misión aparece en RRO SIM, pero no pudo corroborarse en SIM REPORT.");
-          }else if(verification==="missing_rro"){
-            errors.push("Aprobación bloqueada: SIM REPORT contiene una misión, pero RRO SIM no registra una misión equivalente para este estudiante.");
-          }else if(verification==="no_history"){
-            errors.push("Aprobación bloqueada: no se encontró historial de misión en RRO SIM ni en SIM REPORT para este estudiante.");
-          }
-          const hoursVerification=progress?.hoursVerification;
-          if(hoursVerification?.needs_review){
-            errors.push("Aprobación bloqueada: las fuentes de horas de vuelo requieren revisión. "+flightHoursStatusLabel(student.flightHours)+". La cifra no modifica la secuencia MES.");
-          }else if(student.flightHours?.sourceSheet){
-            checks.push("Horas de vuelo tomadas de "+student.flightHours.sourceSheet+"; se controlan por separado de la secuencia MES.");
-          }
-        }else errors.push("Aprobación bloqueada: no fue posible verificar DAILY REPORT en tiempo real.");
         if(student.protected){
           const remaining=student.flightHours?.remaining;
-          if(remaining===null||remaining===undefined)warnings.push("El saldo de horas de vuelo todavía no está conciliado. Este dato no modifica la secuencia definida desde "+student.last+".");
+          if(remaining===null||remaining===undefined)warnings.push("Las horas registradas todavía no están conciliadas. Este dato no modifica la secuencia definida desde "+student.last+".");
           else if(remaining>0)checks.push("Control independiente: quedan "+formatHours(remaining)+" horas. La secuencia continúa desde "+student.last+" y no se adelanta por horas acumuladas.");
           else warnings.push("El saldo de horas figura completo, pero la siguiente misión y la finalización se determinan por el último registro MES y los demás requisitos de la etapa.");
         }
@@ -1284,8 +890,8 @@
           if(missionNumber(latestMission[proposal.student])===null)warnings.push("El último registro no contiene un código MES; confirmar manualmente la secuencia de esta sesión.");
           else checks.push("Último registro MES disponible: "+latestMission[proposal.student]);
         }else if(proposal.type==="scheduled"){
-          const expected=expectedMission(latestMission[proposal.student],proposal.sequenceRoute);
-          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission,proposal.sequenceRoute);
+          const expected=nextMission(latestMission[proposal.student]);
+          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission);
           if(!isMissionCode(proposal.mission)){
             errors.push("La misión programada no está informada; no es posible verificar la secuencia MES.");
           }else if(expected&&!sequenceIsValid){
@@ -1299,8 +905,8 @@
         }else if(proposal.type==="reinforcement"){
           if(!proposal.reinforcementApproved&&(!student.reinforcement?.approved||student.reinforcement.mission!==proposal.mission))errors.push("El refuerzo no aparece solicitado o aprobado.");else checks.push("Refuerzo solicitado e identificado");
         }else{
-          const expected=expectedMission(latestMission[proposal.student],proposal.sequenceRoute);
-          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission,proposal.sequenceRoute);
+          const expected=nextMission(latestMission[proposal.student]);
+          const sequenceIsValid=followsMission(latestMission[proposal.student],proposal.mission);
           if(expected&&!sequenceIsValid)errors.push("La secuencia esperada era "+expected+".");
           else if(!expected&&!sequenceIsValid)warnings.push("El último registro no contiene un código MES; Programación debe confirmar la continuidad antes de aprobar "+proposal.mission+".");
           else checks.push("Secuencia "+latestMission[proposal.student]+" → "+proposal.mission+" verificada");
@@ -1310,144 +916,6 @@
         results.set(proposal.id,{errors,warnings,checks,availability,status:errors.length?"blocked":warnings.length?"review":"ready"});
       });
       state.results=results;
-    }
-
-    function approvalBlockingIssues(proposal,requirePhone=false){
-      const result=state.results.get(proposal.id);
-      const student=STUDENTS[proposal.student];
-      const availability=result?.availability||availabilityDecision(student,proposal);
-      const issues=[...(result?.errors||[])];
-      if(!instructorName(proposal))issues.push("Falta asignar el instructor informado por Programación.");
-      if(!availability?.valid)issues.push("La disponibilidad laboral debe estar documentada o confirmada para el bloque.");
-      if(requirePhone&&!proposalPhoneInfo(proposal).verified)issues.push("El estudiante no tiene un teléfono verificado en el directorio VOA.");
-      return Array.from(new Set(issues));
-    }
-
-    function approvalRowsForWeek(){
-      const dates=new Set(activeWeek().days.map(day=>day.key));
-      return PROPOSALS.filter(item=>dates.has(item.date)).sort((a,b)=>(a.date+a.start+a.resource).localeCompare(b.date+b.start+b.resource));
-    }
-
-    function renderApprovalCenter(){
-      const counts={draft:0,approved:0,published:0,rejected:0};
-      PROPOSALS.forEach(proposal=>{counts[workflowStatus(proposal)]=(counts[workflowStatus(proposal)]||0)+1;});
-      const validIds=new Set(PROPOSALS.map(proposal=>proposal.dbId).filter(Boolean));
-      Array.from(state.approvalSelection).forEach(id=>{if(!validIds.has(id))state.approvalSelection.delete(id);});
-      $("approvalDraftCount").textContent=counts.draft||0;
-      $("approvalApprovedCount").textContent=counts.approved||0;
-      $("approvalPublishedCount").textContent=counts.published||0;
-      $("approvalSelectedCount").textContent=state.approvalSelection.size;
-
-      const rows=approvalRowsForWeek();
-      $("approvalRows").innerHTML=rows.length?rows.map(proposal=>{
-        const student=STUDENTS[proposal.student];
-        const resource=resourceById(proposal.resource);
-        const result=state.results.get(proposal.id);
-        const status=workflowStatus(proposal);
-        const blockers=approvalBlockingIssues(proposal,false);
-        const phone=proposalPhoneInfo(proposal);
-        const warnings=(result?.warnings||[]).filter(item=>!item.startsWith("Instructor pendiente")&&!item.startsWith("Disponibilidad pendiente"));
-        const validationLabel=blockers.length?blockers.length+" "+(blockers.length===1?"requisito bloqueante":"requisitos bloqueantes"):warnings.length?"Apta con "+warnings.length+" "+(warnings.length===1?"advertencia":"advertencias"):"Apta para aprobar";
-        const selected=state.approvalSelection.has(proposal.dbId);
-        const disabled=!proposal.dbId||status==="published";
-        const stateDetail=status==="published"&&proposal.publishedSessionId?"Control VOA #"+proposal.publishedSessionId:workflowLabel(status);
-        return '<tr class="'+escapeHtml(status)+'-row">'+
-          '<td><input class="approval-select" type="checkbox" data-approval-id="'+escapeHtml(proposal.dbId||"")+'" '+(selected?'checked ':'')+(disabled?'disabled ':'')+'aria-label="Seleccionar '+escapeHtml(student?.name||"sesión")+'"></td>'+ 
-          '<td><strong>'+escapeHtml(student?.name||"Estudiante")+' · '+escapeHtml(proposal.mission)+'</strong><span class="validation-copy">'+escapeHtml(proposal.date+' · '+proposal.start+'–'+proposal.end)+'</span></td>'+
-          '<td><strong>'+escapeHtml(resource?.cardLabel||proposal.resource||"Sin recurso")+'</strong><span class="validation-copy">'+escapeHtml(instructorLabel(proposal))+'</span></td>'+
-          '<td><strong class="'+(blockers.length?'phone-pending':'phone-ready')+'">'+escapeHtml(validationLabel)+'</strong><span class="validation-copy '+(blockers.length?'blocked':'ready')+'">'+escapeHtml(blockers.length?'Debe corregirse antes de aprobar':'Validación final disponible')+'</span></td>'+
-          '<td><span class="'+(phone.verified?'phone-ready':'phone-pending')+'">'+escapeHtml(phone.label)+'</span><span class="validation-copy">Requerido para publicar</span></td>'+
-          '<td><span class="workflow-pill '+escapeHtml(status)+'">'+escapeHtml(stateDetail)+'</span></td>'+
-        '</tr>';
-      }).join(""):'<tr><td colspan="6">No hay sesiones en este periodo.</td></tr>';
-
-      const selected=PROPOSALS.filter(proposal=>state.approvalSelection.has(proposal.dbId));
-      const canApprove=selected.some(proposal=>workflowStatus(proposal)==="draft");
-      const canPublish=selected.some(proposal=>workflowStatus(proposal)==="approved");
-      $("approveSelectedButton").disabled=state.approvalBusy||!state.approvalAvailable||!canApprove;
-      $("publishSelectedButton").disabled=state.approvalBusy||!state.approvalAvailable||!canPublish;
-      $("selectReadyButton").disabled=state.approvalBusy||!rows.length;
-      $("clearApprovalButton").disabled=state.approvalBusy||!state.approvalSelection.size;
-
-      if(state.approvalNotice)setApprovalMessage(state.approvalNotice.message,state.approvalNotice.type||"");
-      else if(!state.approvalAvailable)setApprovalMessage(state.approvalError||"Activación pendiente: la interfaz puede revisarse, pero la aprobación y publicación real todavía no están habilitadas en Supabase.");
-      else setApprovalMessage("Selecciona sesiones aptas, apruébalas y luego publícalas. Publicar crea o enlaza la sesión en Control VOA, pero no envía WhatsApp.");
-
-      const actionLabels={approved:"Aprobada",published:"Publicada",publication_recovered:"Enlazada sin duplicar",validation_failed:"Validación fallida",approval_revoked:"Aprobación revocada",rejected:"Rechazada"};
-      $("approvalAudit").innerHTML=state.publicationEvents.length?state.publicationEvents.slice(0,8).map(event=>{
-        const proposal=PROPOSALS.find(item=>item.dbId===event.preview_item_id);
-        const student=proposal?STUDENTS[proposal.student]?.name:"Propuesta #"+event.preview_item_id;
-        const detail=(actionLabels[event.action]||event.action)+(event.session_id?" · Control VOA #"+event.session_id:"")+(event.actor_email?" · "+event.actor_email:"");
-        return '<li><time>'+escapeHtml(formatAuditDate(event.created_at))+'</time><span><strong>'+escapeHtml(student)+'</strong> · '+escapeHtml(detail)+'</span></li>';
-      }).join(""):'<li><time>—</time><span>Sin eventos registrados todavía.</span></li>';
-    }
-
-    function selectReadyForApproval(){
-      approvalRowsForWeek().forEach(proposal=>{
-        const status=workflowStatus(proposal);
-        if(proposal.dbId&&status!=="published"&&approvalBlockingIssues(proposal,status==="approved").length===0)state.approvalSelection.add(proposal.dbId);
-      });
-      state.approvalNotice=null;
-      renderApprovalCenter();
-    }
-
-    function summarizeWorkflowFailures(failures){
-      const messages=(failures||[]).flatMap(item=>Array.isArray(item.errors)?item.errors:[]);
-      return Array.from(new Set(messages)).slice(0,3).join(" ");
-    }
-
-    async function runApprovalAction(action){
-      if(!state.approvalAvailable){
-        state.approvalNotice={message:state.approvalError||"Activación pendiente en Supabase.",type:"error"};
-        renderApprovalCenter();
-        return;
-      }
-      const requiredStatus=action==="approve"?"draft":"approved";
-      const candidates=PROPOSALS.filter(proposal=>state.approvalSelection.has(proposal.dbId)&&workflowStatus(proposal)===requiredStatus);
-      if(!candidates.length){
-        state.approvalNotice={message:action==="approve"?"Selecciona al menos una propuesta en borrador.":"Selecciona al menos una propuesta ya aprobada.",type:"error"};
-        renderApprovalCenter();
-        return;
-      }
-      const invalid=candidates.map(proposal=>({proposal,issues:approvalBlockingIssues(proposal,action==="publish")})).filter(item=>item.issues.length);
-      if(invalid.length){
-        state.approvalNotice={message:"No se realizó la acción: "+invalid.length+" "+(invalid.length===1?"sesión tiene":"sesiones tienen")+" requisitos pendientes. Corrige disponibilidad, cruces, instructor y, al publicar, teléfono verificado.",type:"error"};
-        renderApprovalCenter();
-        return;
-      }
-      state.approvalBusy=true;
-      state.approvalNotice={message:action==="approve"?"Aprobando y registrando la decisión…":"Publicando en Control VOA sin enviar WhatsApp…"};
-      renderApprovalCenter();
-      const ids=candidates.map(proposal=>proposal.dbId);
-      const response=action==="approve"
-        ?await db.rpc("voa_approve_schedule_items",{p_item_ids:ids,p_note:null})
-        :await db.rpc("voa_publish_schedule_items",{p_item_ids:ids});
-      state.approvalBusy=false;
-      if(response.error){
-        state.approvalNotice={message:"No fue posible "+(action==="approve"?"aprobar":"publicar")+": "+response.error.message,type:"error"};
-        renderApprovalCenter();
-        return;
-      }
-      const succeeded=response.data?.[action==="approve"?"approved":"published"]||[];
-      const failed=response.data?.failed||[];
-      succeeded.forEach(item=>{
-        const proposal=PROPOSALS.find(candidate=>candidate.dbId===item.id);
-        if(!proposal)return;
-        if(action==="approve"){
-          proposal.workflowStatus=item.status==="published"?"published":"approved";
-          proposal.approvedAt=new Date().toISOString();
-        }else{
-          proposal.workflowStatus="published";
-          proposal.publishedSessionId=item.session_id||proposal.publishedSessionId;
-          proposal.publishedAt=new Date().toISOString();
-          state.approvalSelection.delete(item.id);
-        }
-      });
-      await loadPublicationEvents();
-      const actionName=action==="approve"?"aprobadas":"publicadas";
-      const failureCopy=failed.length?" "+failed.length+" no pasaron la validación. "+summarizeWorkflowFailures(failed):"";
-      state.approvalNotice={message:succeeded.length+" "+(succeeded.length===1?"sesión":"sesiones")+" "+actionName+" correctamente."+failureCopy,type:failed.length?"error":"success"};
-      renderAll();
     }
 
     function renderMetrics(){
@@ -1472,14 +940,13 @@
       const student=STUDENTS[proposal.student],result=state.results.get(proposal.id),resource=resourceById(proposal.resource);
       const availability=result.availability||availabilityDecision(student,proposal);
       const availabilityPending=pendingAvailability(proposal,availability);
-      const workflow=workflowStatus(proposal);
-      const typeLabel=workflow==="published"?"Publicada":workflow==="approved"?"Aprobada":sequenceRoute(proposal.sequenceRoute)==="prorroga"?"Prórroga":proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
+      const typeLabel=proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
       const onlyInstructorPending=result.warnings.length>0&&result.warnings.every(item=>item.startsWith("Instructor pendiente"));
-      const alertLabel=workflow==="published"?(proposal.publishedSessionId?"Control VOA #"+proposal.publishedSessionId:"Publicada en Control VOA"):workflow==="approved"?"Aprobada para publicar":result.status==="blocked"?"Corrección requerida":availabilityPending?"Disponibilidad pendiente":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
+      const alertLabel=result.status==="blocked"?"Corrección requerida":availabilityPending?"Disponibilidad pendiente":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
       const instructor=instructorName(proposal);
       const availabilityClass=availability.valid?'':availabilityPending?'pending-availability':'blocked-availability';
       const availabilityLabel=availabilityPending?'Pendiente de confirmar':availability.short;
-      return '<button class="session-card '+result.status+' '+proposal.type+' workflow-'+workflow+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource?.cardLabel||resource?.fullLabel||proposal.resource||"Sin recurso")+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availabilityLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
+      return '<button class="session-card '+result.status+' '+proposal.type+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource.cardLabel||resource.fullLabel)+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availabilityLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
     }
 
     function operationalBlockCard(block){
@@ -1517,34 +984,27 @@
       const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource),result=state.results.get(proposal.id);
       const day=DAYS.find(item=>item.key===proposal.date);
       const detailAvailability=pendingAvailability(proposal,result.availability)?"Pendiente de confirmar":result.availability.short;
-      const workflow=workflowStatus(proposal);
-      const decision=workflow==="published"?"Publicada en Control VOA":workflow==="approved"?"Aprobada para publicar":proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
+      const decision=proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
       const hours=student.flightHours;
-      const hoursText=hours?loggedHoursLabel(hours)+" · "+(hours.remaining===null||hours.remaining===undefined?"saldo por conciliar":"saldo "+formatHours(hours.remaining)+" h ("+(hours.basis==="calculated"?"calculado":"reportado")+")"):"Por conciliar";
-      const workflowCopy=workflow==="published"?"Sesión creada o enlazada en Control VOA. No se envió WhatsApp automáticamente.":workflow==="approved"?"Decisión registrada; pendiente de publicación explícita en Control VOA.":proposal.manual?'Propuesta manual pendiente de aprobación':proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="scheduled"?'Sesión registrada en la programación SCS':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial';
-      const workflowActions=workflow==="published"?'':('<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>');
+      const hoursText=hours?formatHours(hours.logged)+" h registradas · saldo "+formatHours(hours.remaining)+" h ("+(hours.basis==="calculated"?"calculado":"reportado")+")":"Por conciliar";
       $("detailPanel").innerHTML=
-        '<div class="decision '+(result.status==="review"?'review':result.status==="blocked"?'blocked':'')+'"><span class="decision-dot"></span>'+escapeHtml(decision)+'</div>'+ 
-        '<h3 class="detail-title">'+escapeHtml(student.name)+' · '+escapeHtml(proposal.mission)+'</h3>'+ 
-        '<p class="detail-sub">'+escapeHtml(workflowCopy)+'</p>'+ 
+        '<div class="decision '+(result.status==="review"?'review':result.status==="blocked"?'blocked':'')+'"><span class="decision-dot"></span>'+escapeHtml(decision)+'</div>'+
+        '<h3 class="detail-title">'+escapeHtml(student.name)+' · '+escapeHtml(proposal.mission)+'</h3>'+
+        '<p class="detail-sub">'+escapeHtml(proposal.manual?'Propuesta manual pendiente de aprobación':proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="scheduled"?'Sesión registrada en la programación SCS':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial')+'</p>'+
         '<dl class="detail-list">'+
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
-          '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource?.fullLabel||proposal.resource||"Sin recurso")+'</dd></div>'+ 
+          '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource.fullLabel)+'</dd></div>'+
           '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(detailAvailability)+'</dd></div>'+
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
-          '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Ruta MES</dt><dd>'+escapeHtml(sequenceRouteLabel(proposal.sequenceRoute))+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Corroboración</dt><dd>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+(sourceMissionAudit(student.googleProgress)?'<br><small>'+escapeHtml(sourceMissionAudit(student.googleProgress))+'</small>':'')+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Horas de vuelo</dt><dd>'+escapeHtml(hoursText)+(hours?'<br><small>'+escapeHtml(flightHoursStatusLabel(hours))+'</small><br><small>'+escapeHtml(flightHoursSourceAudit(hours))+'</small>':'')+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Ajustes razonables</dt><dd>'+escapeHtml(student.adjustmentConfirmed?"Confirmados para este bloque":student.reasonableAdjustment?(student.adjustmentNote||"Registrados · disponibilidad por validar"):"No registrados en las fuentes consultadas")+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Estado del flujo</dt><dd>'+escapeHtml(workflowLabel(workflow))+'</dd></div>'+ 
-          (workflow==="published"?'<div class="detail-row"><dt>Sesión Control VOA</dt><dd>'+escapeHtml(proposal.publishedSessionId?"#"+proposal.publishedSessionId:"Enlazada")+'</dd></div>':'')+
-        '</dl>'+ 
-        workflowActions+
+          '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+
+          '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+
+          '<div class="detail-row"><dt>Horas registradas</dt><dd>'+escapeHtml(hoursText)+'</dd></div>'+
+          '<div class="detail-row"><dt>Ajustes razonables</dt><dd>'+escapeHtml(student.adjustmentConfirmed?"Confirmados para este bloque":student.reasonableAdjustment?(student.adjustmentNote||"Registrados · disponibilidad por validar"):"No registrados en las fuentes consultadas")+'</dd></div>'+
+          '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+
+        '</dl>'+
+        '<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>'+
         '<ul class="check-list">'+result.checks.map(item=>'<li>'+escapeHtml(item)+'</li>').join("")+issues.map(item=>'<li class="review">'+escapeHtml(item)+'</li>').join("")+'</ul>';
     }
 
@@ -1558,7 +1018,7 @@
         if(student.ppaComplete&&!student.inspectorExam&&!student.pcaAuthorized){
           return '<tr class="blocked-row"><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+'</td><td class="hours-cell">Por conciliar</td><td class="blocked-note">Sin programación PCA</td><td>—</td><td>—</td><td>—</td><td><span class="pill blocked">Bloqueado para PCA</span><br><small>Continúa activo en los demás requisitos aplicables</small></td></tr>';
         }
-        const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:sequenceRoute(item.sequenceRoute)==="prorroga"?item.mission+' (prórroga)':item.mission)).join(' → ')||'Sin propuesta';
+        const proposalText=proposals.map(item=>(item.type==="reinforcement"?'Refuerzo '+item.mission:item.mission)).join(' → ')||'Sin propuesta';
         const resources=Array.from(new Set(proposals.map(item=>resourceById(item.resource)?.cardLabel).filter(Boolean)));
         const resourcesHtml=resources.length?resources.map(item=>escapeHtml(item)).join('<br>'):'—';
         const availabilityResults=proposals.map(item=>({date:item.date,proposal:item,decision:state.results.get(item.id)?.availability})).filter(item=>item.decision);
@@ -1573,12 +1033,8 @@
         const instructors=Array.from(new Set(proposals.map(item=>instructorLabel(item))));
         const instructorsHtml=instructors.length?instructors.map(item=>escapeHtml(item)).join('<br>'):'—';
         const flightCount=(student.flights||[]).length;
-        const auditNote=sourceMissionAudit(student.googleProgress);
-        const verificationNote='<br><small>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</small>'+(auditNote?'<br><small>'+escapeHtml(auditNote)+'</small>':'');
         const hours=student.flightHours;
-        const balanceLabel=hours&&(hours.remaining===null||hours.remaining===undefined)?'Saldo por conciliar':'Saldo '+(hours?.basis==='calculated'?'calculado':'reportado')+': '+formatHours(hours?.remaining)+' h';
-        const hoursReview=hours?.hoursVerification?.needs_review;
-        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(loggedHoursLabel(hours))+'</strong><small class="pending-hours">'+escapeHtml(balanceLabel)+'</small><small>'+escapeHtml(flightHoursStatusLabel(hours))+'</small><small>'+escapeHtml(flightHoursSourceAudit(hours))+'</small>'+(hoursReview?'<small class="pending-hours">Revisión obligatoria antes de aprobar</small>':'')+'<small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
+        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(formatHours(hours.logged)+' h registradas')+'</strong><small class="pending-hours">Saldo '+escapeHtml(hours.basis==='calculated'?'calculado':'reportado')+': '+escapeHtml(formatHours(hours.remaining))+' h</small><small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
         const hasWorkAdjustment=(student.works||student.reasonableAdjustment)&&proposals.length;
         const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
         const scheduleRegistered=student.scheduleRegistered&&proposals.length;
@@ -1588,7 +1044,7 @@
         const resultLabel=hasBlocked?'Corrección requerida':hasReview?'Revisión requerida':confirmedAdjustment?'Confirmada':scheduleRegistered?'Programada':'Secuencia apta';
         const activeNote=hours&&hours.remaining>0?'<small class="active-note">Continúa activo hasta completar MES y requisitos de etapa</small>':'';
         const adjustmentPill=confirmedAdjustment?'Ajuste confirmado':student.reasonableAdjustment?'Ajuste razonable':'Ajuste laboral';
-        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+verificationNote+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+availabilityHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
+        return '<tr><td><strong>'+escapeHtml(student.name)+'</strong></td><td>'+escapeHtml(student.stage)+'</td><td>'+escapeHtml(student.last)+(flightCount?'<br><small>'+flightCount+' '+(flightCount===1?'vuelo cruzado':'vuelos cruzados')+'</small>':'')+'</td><td>'+hoursHtml+'</td><td>'+escapeHtml(proposalText)+'</td><td>'+resourcesHtml+'</td><td>'+availabilityHtml+'</td><td>'+instructorsHtml+(hasWorkAdjustment?'<br><span class="pill adjustment">'+adjustmentPill+'</span>':'')+'</td><td><span class="pill '+resultClass+'">'+resultLabel+'</span>'+activeNote+'</td></tr>';
       }).join("");
     }
 
@@ -1600,14 +1056,14 @@
       $("sourceList").innerHTML=SOURCES.map(source=>'<div class="source-row"><span>'+escapeHtml(source.name)+'</span><span class="source-status '+(source.loaded?'loaded':'')+'">'+escapeHtml(source.status)+'</span></div>').join("");
     }
 
-    function renderAll(){renderMetrics();renderWeekTabs();renderApprovalCenter();renderGrid();renderDetail();renderStudents();renderRules();renderSources();}
+    function renderAll(){renderMetrics();renderWeekTabs();renderGrid();renderDetail();renderStudents();renderRules();renderSources();}
 
     $("weekTabs").addEventListener("click",event=>{
       const button=event.target.closest("[data-week]");if(!button)return;
       state.week=Number(button.dataset.week);
       const dates=new Set(activeWeek().days.map(day=>day.key));
       const first=PROPOSALS.find(item=>dates.has(item.date));state.selected=first?first.id:null;
-      renderWeekTabs();renderApprovalCenter();renderGrid();renderDetail();
+      renderWeekTabs();renderGrid();renderDetail();
     });
     $("scheduleGrid").addEventListener("click",event=>{
       const button=event.target.closest("[data-proposal]");if(!button)return;
@@ -1646,26 +1102,11 @@
       setManualStatus(isWeekendDate($("manualDate").value)?"Fin de semana: las instalaciones abren a las 08:00.":"Día hábil: la jornada inicia a las 06:00.");
     });
     $("manualForm").addEventListener("submit",saveManualProposal);
-    $("approvalRows").addEventListener("change",event=>{
-      const checkbox=event.target.closest("[data-approval-id]");
-      if(!checkbox)return;
-      const id=Number(checkbox.dataset.approvalId);
-      if(!Number.isFinite(id))return;
-      if(checkbox.checked)state.approvalSelection.add(id);else state.approvalSelection.delete(id);
-      state.approvalNotice=null;
-      renderApprovalCenter();
-    });
-    $("selectReadyButton").addEventListener("click",selectReadyForApproval);
-    $("clearApprovalButton").addEventListener("click",()=>{state.approvalSelection.clear();state.approvalNotice=null;renderApprovalCenter();});
-    $("approveSelectedButton").addEventListener("click",()=>runApprovalAction("approve"));
-    $("publishSelectedButton").addEventListener("click",()=>runApprovalAction("publish"));
     $("printButton").addEventListener("click",()=>window.print());
-    $("themeButton").addEventListener("click",toggleTheme);
-    updateThemeButton();
     $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
 
     async function init(){
-      if(IS_LOCAL){state.approvalAvailable=false;state.approvalError="La previsualización local no puede aprobar ni publicar sesiones.";populateManualStudentOptions();validateProposals();$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();return;}
+      if(IS_LOCAL){populateManualStudentOptions();validateProposals();$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();return;}
       if(!db){$("gateMessage").textContent="No fue posible iniciar el acceso seguro.";return;}
       const result=await db.auth.getUser();
       if(result.error||!result.data.user){location.replace("./control-voa.html");return;}
@@ -1673,11 +1114,9 @@
       await loadProtectedItems();
       await loadProtectedAvailability();
       await loadProtectedStudentProgress();
-      await loadGoogleStudentConsolidation();
       await loadProtectedFlightBlocks();
       await loadProtectedOperationalBlocks();
       await loadStudentDirectory();
-      await loadPublicationEvents();
       validateProposals();
       $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");renderAll();
     }

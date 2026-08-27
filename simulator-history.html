@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="simulator-history-20260827-6">
+  <meta name="veyra-build" content="simulator-history-20260827-7">
   <!-- Hero photograph: NASA/James Blair, public domain. Cropped and optimized for Veyra. -->
   <title>Veyra | Historial de simulador</title>
   <script>
@@ -129,10 +129,11 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · expediente académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico de cada intento tomado del DAILY REPORT oficial. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente de Aeronova.</p></div>
-        <aside class="sync-card"><strong>Sincronización automática</strong><span id="lastSyncText">Consultando última actualización…</span><span>Cada hora, al minuto 17 · solo lectura</span><span><strong>Cobertura:</strong> enero de 2026 en adelante</span><button class="sync-button" id="syncButton" type="button">Sincronizar ahora</button></aside>
+        <aside class="sync-card"><strong>Sincronización automática · build 7</strong><span id="lastSyncText">Consultando última actualización…</span><span>Cada hora, al minuto 17 · solo lectura sobre las fuentes</span><span><strong>Cobertura:</strong> enero de 2026 en adelante</span><button class="sync-button" id="syncButton" type="button">Sincronizar ahora</button></aside>
       </section>
 
       <div class="notice"><span class="notice-mark">!</span><div><strong>Regla de seguridad académica.</strong> Solo una misión con duración positiva y corroborada entre RRO SIM y SIM REPORT avanza la secuencia. Una cancelación, un `NO SHOW` o una duración cero permanece en el histórico y exige repetir; si la fuente es ambigua, Veyra no decide y la deja para revisión humana. Cuando RRO no identifica la actividad, se consulta la observación operativa de SIM REPORT. La cobertura conectada inicia en enero de 2026 y no representa años anteriores. No se guardan motivos privados de inasistencia.</div></div>
+      <div class="error-banner hidden" id="historyError" role="alert"></div>
 
       <section class="metrics" aria-label="Resumen del historial">
         <article class="metric"><span>Estudiantes</span><strong id="studentMetric">0</strong></article>
@@ -166,7 +167,7 @@
     const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
     const $=id=>document.getElementById(id);
     const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
-    const state={students:[],filtered:[],selectedId:null,history:[],filter:"all",busy:false};
+    const state={students:[],filtered:[],selectedId:null,history:[],filter:"all",busy:false,initialRecoveryAttempted:false,recoveryAttemptedIds:new Set()};
 
     function currentTheme(){return document.documentElement.dataset.theme==="dark"?"dark":"light";}
     function updateThemeButton(){
@@ -185,6 +186,9 @@
     function formatDateTime(value){if(!value)return"Sin registro";const date=new Date(value);return Number.isNaN(date.getTime())?String(value):dateTimeFormatter.format(date);}
     function timeLabel(value){return value?String(value).slice(0,5):"";}
     function normalize(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();}
+    function sameId(left,right){return String(left??"")===String(right??"");}
+    function setHistoryError(message){const banner=$("historyError");banner.textContent=message||"";banner.classList.toggle("hidden",!message);}
+    function clearHistoryError(){setHistoryError("");}
     function number(value){const parsed=Number(value);return Number.isFinite(parsed)?parsed:0;}
     function flightHoursLabel(value){if(value===null||value===undefined||value==="")return"Sin dato";const parsed=Number(value);return Number.isFinite(parsed)?new Intl.NumberFormat("es-CO",{minimumFractionDigits:0,maximumFractionDigits:2}).format(parsed)+" h":"Sin dato";}
     function statusLabel(status){return({completed:"Completada",no_show:"No asistió",cancelled:"Cancelada",not_completed:"No completada",unverified:"Revisión"})[status]||"Revisión";}
@@ -218,7 +222,7 @@
         const alerts=number(student.pending_repeats)+number(student.review_required);
         const meta="Última actividad: "+activityLabel(student)+(student.last_activity_date?" · "+formatDate(student.last_activity_date):"");
         const progress=[student.training_phase?"Fase "+student.training_phase:"Fase por identificar",flightHoursLabel(student.flight_hours)].join(" · ");
-        return '<button class="student-button'+(state.selectedId===student.id?' active':'')+'" type="button" data-student-id="'+escapeHtml(student.id)+'"><strong>'+escapeHtml(student.full_name)+'</strong><small>'+escapeHtml(meta)+'</small><small class="progress-meta">'+escapeHtml(progress)+'</small>'+(alerts?'<small class="alert">'+escapeHtml(alerts)+' pendiente'+(alerts===1?'':'s')+' de revisión o repetición</small>':'')+'</button>';
+        return '<button class="student-button'+(sameId(state.selectedId,student.id)?' active':'')+'" type="button" data-student-id="'+escapeHtml(student.id)+'"><strong>'+escapeHtml(student.full_name)+'</strong><small>'+escapeHtml(meta)+'</small><small class="progress-meta">'+escapeHtml(progress)+'</small>'+(alerts?'<small class="alert">'+escapeHtml(alerts)+' pendiente'+(alerts===1?'':'s')+' de revisión o repetición</small>':'')+'</button>';
       }).join("")||'<div class="detail-empty">No se encontraron estudiantes.</div>';
     }
 
@@ -240,7 +244,7 @@
     }
 
     function renderDetail(errorMessage=""){
-      const student=state.students.find(item=>item.id===state.selectedId);
+      const student=state.students.find(item=>sameId(item.id,state.selectedId));
       if(!student){$("detailPanel").innerHTML='<div class="detail-empty">Selecciona un estudiante para consultar su historial.</div>';return;}
       const rows=historyForFilter();
       const filterButtons=[["all","Todos"],["completed","Completadas"],["failed","No completadas"],["repeat","Repeticiones"],["review","Revisión"]]
@@ -264,12 +268,48 @@
         '<div class="table-wrap"><table class="history-table"><thead><tr><th>Fecha / ruta</th><th>Actividad</th><th>Intento / duración</th><th>Resultado</th><th>Efecto académico</th><th>Instructor / fuente</th></tr></thead><tbody>'+historyRows+'</tbody></table></div>';
     }
 
-    async function loadHistory(studentId){
+    async function requestHistorySync(trigger="manual"){
+      const sessionResult=await db.auth.getSession();
+      const token=sessionResult.data.session?.access_token;
+      if(!token)throw new Error("SESSION_EXPIRED");
+      const response=await fetch(SUPABASE_URL+"/functions/v1/veyra-simulator-history-sync",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token},
+        body:JSON.stringify({action:"sync",trigger})
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(!response.ok||!payload.ok)throw new Error(payload.code||"SYNC_FAILED");
+      return payload;
+    }
+
+    async function loadHistory(studentId,{allowRecovery=true}={}){
       state.selectedId=studentId;state.filter="all";renderStudentList();
       $("detailPanel").innerHTML='<div class="detail-empty"><div class="spinner" aria-hidden="true"></div>Consultando el expediente…</div>';
       const result=await db.from("voa_simulator_attempt_history").select("*").eq("student_id",studentId).order("session_date",{ascending:false,nullsFirst:false}).order("start_time",{ascending:false,nullsFirst:false}).order("source_row",{ascending:false}).limit(500);
-      if(result.error){state.history=[];renderDetail("No fue posible cargar este expediente. Ningún dato fue modificado.");return;}
-      state.history=result.data||[];renderDetail();
+      if(result.error){
+        state.history=[];
+        setHistoryError("No fue posible leer los intentos de este estudiante. La fuente oficial no fue modificada.");
+        renderDetail("No fue posible cargar este expediente. Revisa la última sincronización e intenta nuevamente.");
+        return false;
+      }
+      state.history=result.data||[];
+      const student=state.students.find(item=>sameId(item.id,studentId));
+      const expectsHistory=number(student?.total_attempts)>0;
+      const recoveryKey=String(studentId);
+      if(!state.history.length&&expectsHistory&&allowRecovery&&!state.recoveryAttemptedIds.has(recoveryKey)){
+        state.recoveryAttemptedIds.add(recoveryKey);
+        $("detailPanel").innerHTML='<div class="detail-empty"><div class="spinner" aria-hidden="true"></div>RRO registra actividad. Recuperando el histórico completo…</div>';
+        try{
+          await requestHistorySync("missing_student_history");
+          await loadLatestSync();
+          return loadHistory(studentId,{allowRecovery:false});
+        }catch{
+          setHistoryError("RRO registra actividad para este estudiante, pero la recuperación automática no terminó. Usa “Sincronizar ahora” para reintentar.");
+        }
+      }
+      if(state.history.length)clearHistoryError();
+      renderDetail(!state.history.length&&expectsHistory?"La ficha registra intentos, pero el detalle aún no fue recibido desde RRO SIM. Usa “Sincronizar ahora”.":"");
+      return state.history.length>0;
     }
 
     async function loadLatestSync(){
@@ -278,30 +318,49 @@
       $("lastSyncText").textContent=result.data.status==="succeeded"?"Actualizado "+formatDateTime(result.data.completed_at)+" · "+number(result.data.attempts_upserted)+" intentos":"Última sincronización requiere revisión";
     }
 
-    async function loadStudents(preferredId=null){
+    async function loadStudents(preferredId=null,{allowRecovery=true}={}){
       const result=await db.from("voa_simulator_student_summary").select("*").order("full_name",{ascending:true}).limit(1000);
       if(result.error){throw new Error("STUDENT_HISTORY_LOAD_FAILED");}
-      state.students=result.data||[];state.filtered=[...state.students];renderMetrics();renderStudentList();
-      const target=preferredId&&state.students.some(item=>item.id===preferredId)?preferredId:state.selectedId&&state.students.some(item=>item.id===state.selectedId)?state.selectedId:state.students[0]?.id;
-      if(target)await loadHistory(target);else renderDetail();
+      const rows=result.data||[];
+      if(!rows.length&&allowRecovery&&!state.initialRecoveryAttempted){
+        state.initialRecoveryAttempted=true;
+        $("lastSyncText").textContent="RRO sin registros locales · recuperando historial…";
+        try{
+          await requestHistorySync("empty_history");
+          await loadLatestSync();
+          return loadStudents(preferredId,{allowRecovery:false});
+        }catch{
+          setHistoryError("El histórico aún no tiene registros locales y la recuperación automática no terminó. Usa “Sincronizar ahora” para reintentar.");
+        }
+      }
+      state.students=rows;state.filtered=[...state.students];renderMetrics();renderStudentList();
+      const target=preferredId&&state.students.some(item=>sameId(item.id,preferredId))?preferredId:state.selectedId&&state.students.some(item=>sameId(item.id,state.selectedId))?state.selectedId:state.students[0]?.id;
+      if(target)await loadHistory(target,{allowRecovery});
+      else{
+        state.history=[];
+        renderDetail();
+        if(!state.students.length)setHistoryError("Todavía no hay expedientes sincronizados. Pulsa “Sincronizar ahora” para importar los registros existentes en RRO SIM.");
+      }
+      return state.students.length;
     }
 
     async function synchronize(){
       if(state.busy)return;state.busy=true;const button=$("syncButton");button.disabled=true;button.textContent="Sincronizando…";
       const selected=state.selectedId;
       try{
-        const sessionResult=await db.auth.getSession();const token=sessionResult.data.session?.access_token;
-        if(!token)throw new Error("SESSION_EXPIRED");
-        const response=await fetch(SUPABASE_URL+"/functions/v1/veyra-simulator-history-sync",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token},body:JSON.stringify({action:"sync",trigger:"manual"})});
-        const payload=await response.json().catch(()=>({}));
-        if(!response.ok||!payload.ok)throw new Error(payload.code||"SYNC_FAILED");
-        await Promise.all([loadLatestSync(),loadStudents(selected)]);
-      }catch(error){renderDetail("La sincronización se detuvo de forma segura. La fuente oficial no fue modificada; intenta nuevamente o revisa el estado de Google Sheets.");}
+        clearHistoryError();
+        await requestHistorySync("manual");
+        await loadLatestSync();
+        await loadStudents(selected,{allowRecovery:false});
+      }catch(error){
+        setHistoryError("La sincronización se detuvo de forma segura. La fuente oficial no fue modificada; intenta nuevamente o revisa la conexión con RRO SIM y SIM REPORT.");
+        renderDetail("No fue posible completar la sincronización. Los registros existentes permanecen sin cambios.");
+      }
       finally{state.busy=false;button.disabled=false;button.textContent="Sincronizar ahora";}
     }
 
     $("studentSearch").addEventListener("input",applySearch);
-    $("studentList").addEventListener("click",event=>{const button=event.target.closest("[data-student-id]");if(button)loadHistory(Number(button.dataset.studentId));});
+    $("studentList").addEventListener("click",event=>{const button=event.target.closest("[data-student-id]");if(button)loadHistory(button.dataset.studentId);});
     $("detailPanel").addEventListener("click",event=>{const button=event.target.closest("[data-filter]");if(!button)return;state.filter=button.dataset.filter;renderDetail();});
     $("syncButton").addEventListener("click",synchronize);
     $("themeButton").addEventListener("click",toggleTheme);
@@ -313,8 +372,16 @@
       if(result.error||!user){location.replace("./control-voa.html");return;}
       if(String(user.email||"").toLowerCase()!==ADMIN_EMAIL){location.replace("./internal-access.html");return;}
       $("sessionEmail").textContent=user.email||"";
-      try{await Promise.all([loadLatestSync(),loadStudents()]);$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");}
-      catch{$("gateMessage").textContent="No fue posible cargar el historial protegido. Ninguna fuente fue modificada.";}
+      try{
+        await loadLatestSync();
+        await loadStudents(null,{allowRecovery:true});
+        $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
+      }catch{
+        state.students=[];state.filtered=[];state.history=[];
+        renderMetrics();renderStudentList();renderDetail();
+        $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
+        setHistoryError("No fue posible cargar el historial protegido. Ninguna fuente fue modificada; usa “Sincronizar ahora” para reintentar.");
+      }
     }
     updateThemeButton();init();
   </script>
