@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="veyra-build" content="simulator-history-20260827-1">
+  <title>Veyra | Historial de simulador</title>
+  <style>
+    :root{
+      --navy:#07111f;--navy-soft:#10233d;--cream:#f7f1e8;--paper:#fffdf9;
+      --gold:#d7a63a;--gold-soft:#ead7b5;--ink:#101828;--muted:#667085;
+      --line:#dfd5c6;--green:#08774b;--green-soft:#e9f7f0;--red:#b42318;
+      --red-soft:#fff0ee;--amber:#986b12;--amber-soft:#fff7df;--blue:#175cd3;
+      --blue-soft:#eff6ff;--purple:#6941c6;--purple-soft:#f4f0ff;
+      --shadow:0 18px 48px rgba(7,17,31,.08)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;min-height:100vh;color:var(--ink);font-family:Arial,Helvetica,sans-serif;
+      background:
+        linear-gradient(rgba(7,17,31,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(7,17,31,.025) 1px,transparent 1px),
+        radial-gradient(circle at 92% 0%,rgba(215,166,58,.16),transparent 30rem),
+        linear-gradient(180deg,#fcfaf6,var(--cream));
+      background-size:46px 46px,46px 46px,auto,auto
+    }
+    button,input{font:inherit}.hidden{display:none!important}
+    header{position:sticky;top:0;z-index:20;border-bottom:2px solid var(--gold);background:rgba(7,17,31,.98);color:#fff}
+    .header-inner{width:min(1480px,calc(100% - 36px));min-height:86px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .logo{color:#fff;text-decoration:none}.brand{font:38px/.9 Georgia,"Times New Roman",serif;letter-spacing:-1px}.subbrand{margin-top:8px;color:#d8b35e;font-size:9px;font-weight:800;letter-spacing:6px}
+    .header-actions{display:flex;align-items:center;gap:9px}.header-email{max-width:250px;overflow:hidden;color:#c7d0dc;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+    .header-btn{min-height:40px;padding:10px 14px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:transparent;color:#fff;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .header-btn:hover,.header-btn:focus-visible{border-color:var(--gold);background:rgba(255,255,255,.07)}
+    main{width:min(1480px,calc(100% - 36px));margin:auto;padding:34px 0 70px}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:20px}
+    .eyebrow{margin-bottom:12px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}
+    h1{margin:0;color:var(--navy);font:clamp(42px,5vw,70px)/.96 Georgia,"Times New Roman",serif;letter-spacing:-2px}
+    .hero p{max-width:800px;margin:15px 0 0;color:#475467;font-size:16px;line-height:1.55}
+    .sync-card{min-width:310px;padding:17px 18px;border:1px solid var(--gold-soft);border-radius:16px;background:#fff8e8;color:#6f5012;font-size:12px;line-height:1.5}
+    .sync-card strong{display:block;color:var(--navy);font-size:12px;letter-spacing:.8px;text-transform:uppercase}.sync-card span{display:block;margin-top:4px}
+    .sync-button{width:100%;min-height:42px;margin-top:12px;padding:10px 14px;border:1px solid var(--navy);border-radius:11px;background:var(--navy);color:#fff;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer}.sync-button:disabled{cursor:wait;opacity:.58}
+    .notice{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px;padding:16px 18px;border:1px solid var(--gold-soft);border-radius:15px;background:rgba(255,250,240,.94);color:#6f5012;font-size:12px;line-height:1.5}.notice strong{color:var(--navy)}.notice-mark{display:grid;flex:0 0 29px;width:29px;height:29px;place-items:center;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:900}
+    .metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:18px}
+    .metric{min-height:108px;padding:18px 19px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.88);box-shadow:var(--shadow)}
+    .metric span{color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.metric strong{display:block;margin-top:8px;color:var(--navy);font:36px/1 Georgia,"Times New Roman",serif}.metric.warn{border-color:#efd28e;background:#fffaf0}.metric.danger{border-color:#efb5b0;background:#fff8f7}
+    .workspace{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}
+    .panel{overflow:hidden;border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.93);box-shadow:var(--shadow)}
+    .panel-head{padding:21px 22px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f8f0e3)}.panel-head h2{margin:0;color:var(--navy);font:29px/1 Georgia,"Times New Roman",serif}.panel-head p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+    .student-tools{padding:15px;border-bottom:1px solid var(--line)}
+    .search{width:100%;min-height:44px;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);outline:0}.search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(215,166,58,.14)}
+    .student-count{margin-top:9px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase}
+    .student-list{max-height:760px;overflow:auto;padding:8px}
+    .student-button{width:100%;padding:13px 12px;border:1px solid transparent;border-radius:12px;background:transparent;text-align:left;cursor:pointer}.student-button:hover{background:#faf7f1}.student-button.active{border-color:var(--gold-soft);background:#fff8e8;box-shadow:inset 4px 0 0 var(--gold)}
+    .student-button strong{display:block;color:var(--navy);font-size:12px;line-height:1.35}.student-button small{display:block;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.4}.student-button .alert{color:var(--red);font-weight:800}
+    .detail-empty{padding:80px 30px;color:var(--muted);text-align:center}
+    .student-summary{padding:22px}
+    .summary-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.summary-top h2{margin:0;color:var(--navy);font:38px/1.03 Georgia,"Times New Roman",serif}.summary-top p{margin:8px 0 0;color:var(--muted);font-size:12px}.private-pill{flex:0 0 auto;padding:7px 10px;border:1px solid var(--gold-soft);border-radius:999px;background:#fffaf0;color:var(--amber);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}
+    .progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:19px}.progress-card{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.progress-card span{display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.progress-card strong{display:block;margin-top:7px;color:var(--navy);font-size:15px;line-height:1.35}.progress-card small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.progress-card.activity{border-color:#d6c4a3;background:#fffbf3}.progress-card.mes{border-color:#b7dacb;background:var(--green-soft)}
+    .mini-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:11px}.mini{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfaf7}.mini span{display:block;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.6px;text-transform:uppercase}.mini strong{display:block;margin-top:5px;color:var(--navy);font:24px/1 Georgia,"Times New Roman",serif}
+    .history-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fbfaf7}.history-head h3{margin:0;color:var(--navy);font-size:12px;letter-spacing:.8px;text-transform:uppercase}.filters{display:flex;flex-wrap:wrap;gap:7px}.filter{padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#475467;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;cursor:pointer}.filter.active{border-color:var(--navy);background:var(--navy);color:#fff}
+    .table-wrap{overflow:auto}.history-table{width:100%;min-width:980px;border-collapse:collapse}.history-table th,.history-table td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.history-table th{background:#faf7f1;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;position:sticky;top:0}.history-table td{color:#475467;font-size:10px;line-height:1.42}.history-table td strong{color:var(--navy);font-size:11px}.history-table small{display:block;margin-top:4px;color:var(--muted)}
+    .status{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.45px;text-transform:uppercase;white-space:nowrap}.status.completed{background:var(--green-soft);color:var(--green)}.status.no_show,.status.cancelled{background:var(--red-soft);color:var(--red)}.status.not_completed{background:var(--amber-soft);color:var(--amber)}.status.unverified{background:var(--blue-soft);color:var(--blue)}
+    .progress-note{font-weight:800}.progress-note.advance{color:var(--green)}.progress-note.repeat{color:var(--red)}.progress-note.review{color:var(--blue)}.progress-note.neutral{color:var(--muted)}
+    .empty-row{padding:50px!important;color:var(--muted)!important;text-align:center!important}
+    .gate{min-height:100vh;display:grid;place-items:center;padding:30px;background:var(--navy);color:#fff;text-align:center}.gate-card{max-width:520px}.gate-mark{margin-bottom:14px;color:var(--gold);font:56px/1 Georgia,"Times New Roman",serif}.spinner{width:40px;height:40px;margin:24px auto 0;border:4px solid rgba(255,255,255,.18);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .error-banner{margin:0 22px 20px;padding:12px 14px;border-left:4px solid var(--red);background:var(--red-soft);color:var(--red);font-size:11px;line-height:1.45}
+    @media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}.workspace{grid-template-columns:310px minmax(0,1fr)}.mini-metrics{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:780px){.header-email{display:none}.header-inner,main{width:min(100% - 22px,1480px)}.hero{display:block}.sync-card{min-width:0;margin-top:18px}.metrics{grid-template-columns:repeat(2,1fr)}.workspace{display:block}.student-list{max-height:390px}.detail-panel{margin-top:16px}.summary-top{display:block}.private-pill{display:inline-flex;margin-top:12px}.progress-grid{grid-template-columns:1fr}.mini-metrics{grid-template-columns:repeat(2,1fr)}.history-head{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <section class="gate" id="secureGate">
+    <div class="gate-card"><div class="gate-mark">Veyra</div><strong>Preparando el historial protegido</strong><div class="spinner" aria-hidden="true"></div><p id="gateMessage"></p></div>
+  </section>
+
+  <div id="app" class="hidden">
+    <header>
+      <div class="header-inner">
+        <a class="logo" href="./internal-access.html" aria-label="Inicio de Veyra"><div class="brand">Veyra</div><div class="subbrand">PILOT INTELLIGENCE</div></a>
+        <div class="header-actions"><span class="header-email" id="sessionEmail"></span><a class="header-btn" href="./voa-schedule-preview.html">Cronograma</a><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div><div class="eyebrow">Veyra · expediente académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico de cada intento tomado del DAILY REPORT oficial. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente de Aeronova.</p></div>
+        <aside class="sync-card"><strong>Sincronización automática</strong><span id="lastSyncText">Consultando última actualización…</span><span>Cada hora, al minuto 17 · solo lectura</span><button class="sync-button" id="syncButton" type="button">Sincronizar ahora</button></aside>
+      </section>
+
+      <div class="notice"><span class="notice-mark">!</span><div><strong>Regla de seguridad académica.</strong> Solo una misión con duración positiva y corroborada entre RRO SIM y SIM REPORT avanza la secuencia. Una cancelación, un `NO SHOW` o una duración cero permanece en el histórico y exige repetir; si la fuente es ambigua, Veyra no decide y la deja para revisión humana. No se guardan motivos privados de inasistencia.</div></div>
+
+      <section class="metrics" aria-label="Resumen del historial">
+        <article class="metric"><span>Estudiantes</span><strong id="studentMetric">0</strong></article>
+        <article class="metric"><span>Intentos registrados</span><strong id="attemptMetric">0</strong></article>
+        <article class="metric"><span>Completadas</span><strong id="completedMetric">0</strong></article>
+        <article class="metric warn"><span>Repeticiones</span><strong id="repetitionMetric">0</strong></article>
+        <article class="metric danger"><span>No completadas</span><strong id="failedMetric">0</strong></article>
+        <article class="metric warn"><span>Revisión humana</span><strong id="reviewMetric">0</strong></article>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel">
+          <div class="panel-head"><h2>Estudiantes</h2><p>Busca por nombre y abre su expediente.</p></div>
+          <div class="student-tools"><input class="search" id="studentSearch" type="search" autocomplete="off" placeholder="Buscar estudiante"><div class="student-count" id="studentCount"></div></div>
+          <div class="student-list" id="studentList"></div>
+        </aside>
+
+        <article class="panel detail-panel" id="detailPanel">
+          <div class="detail-empty">Selecciona un estudiante para consultar su historial.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
+  <script>
+    "use strict";
+    const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const ADMIN_EMAIL="veyrapilotintelligence@gmail.com";
+    const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
+    const $=id=>document.getElementById(id);
+    const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    const state={students:[],filtered:[],selectedId:null,history:[],filter:"all",busy:false};
+
+    const dateFormatter=new Intl.DateTimeFormat("es-CO",{timeZone:"UTC",day:"numeric",month:"short",year:"numeric"});
+    const dateTimeFormatter=new Intl.DateTimeFormat("es-CO",{timeZone:"America/Bogota",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    function formatDate(value){if(!value)return"Fecha sin identificar";const date=new Date(value+"T12:00:00Z");return Number.isNaN(date.getTime())?String(value):dateFormatter.format(date);}
+    function formatDateTime(value){if(!value)return"Sin registro";const date=new Date(value);return Number.isNaN(date.getTime())?String(value):dateTimeFormatter.format(date);}
+    function timeLabel(value){return value?String(value).slice(0,5):"";}
+    function normalize(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();}
+    function number(value){const parsed=Number(value);return Number.isFinite(parsed)?parsed:0;}
+    function statusLabel(status){return({completed:"Completada",no_show:"No show",cancelled:"Cancelada",not_completed:"No completada",unverified:"Revisión"})[status]||"Revisión";}
+    function corroborationLabel(status){return({corroborated:"RRO ↔ SIM corroborada",missing_sim_report:"Falta SIM REPORT",mismatch:"Diferencia RRO ↔ SIM",cancelled_report:"SIM REPORT cancelado",not_applicable:"No aplica a una ausencia",unverified:"Fuente por revisar"})[status]||"Fuente por revisar";}
+    function activityLabel(student){return student.last_activity||"Sin actividad identificada";}
+
+    function renderMetrics(){
+      const totals=state.students.reduce((acc,item)=>{
+        acc.attempts+=number(item.total_attempts);acc.completed+=number(item.completed_attempts);
+        acc.repetitions+=number(item.repetitions);acc.failed+=number(item.no_show_attempts)+number(item.cancelled_attempts)+number(item.not_completed_attempts);
+        acc.review+=number(item.review_required);return acc;
+      },{attempts:0,completed:0,repetitions:0,failed:0,review:0});
+      $("studentMetric").textContent=state.students.length;$("attemptMetric").textContent=totals.attempts;
+      $("completedMetric").textContent=totals.completed;$("repetitionMetric").textContent=totals.repetitions;
+      $("failedMetric").textContent=totals.failed;$("reviewMetric").textContent=totals.review;
+    }
+
+    function applySearch(){
+      const query=normalize($("studentSearch").value);
+      state.filtered=state.students.filter(student=>normalize(student.full_name).includes(query));
+      renderStudentList();
+    }
+
+    function renderStudentList(){
+      $("studentCount").textContent=state.filtered.length+" de "+state.students.length+" estudiantes";
+      $("studentList").innerHTML=state.filtered.map(student=>{
+        const alerts=number(student.pending_repeats)+number(student.review_required);
+        const meta="Última actividad: "+activityLabel(student)+(student.last_activity_date?" · "+formatDate(student.last_activity_date):"");
+        return '<button class="student-button'+(state.selectedId===student.id?' active':'')+'" type="button" data-student-id="'+escapeHtml(student.id)+'"><strong>'+escapeHtml(student.full_name)+'</strong><small>'+escapeHtml(meta)+'</small>'+(alerts?'<small class="alert">'+escapeHtml(alerts)+' pendiente'+(alerts===1?'':'s')+' de revisión o repetición</small>':'')+'</button>';
+      }).join("")||'<div class="detail-empty">No se encontraron estudiantes.</div>';
+    }
+
+    function historyForFilter(){
+      if(state.filter==="completed")return state.history.filter(item=>item.operational_status==="completed");
+      if(state.filter==="failed")return state.history.filter(item=>["no_show","cancelled","not_completed"].includes(item.operational_status));
+      if(state.filter==="review")return state.history.filter(item=>item.operational_status==="unverified"||["missing_sim_report","mismatch","cancelled_report","unverified"].includes(item.corroboration_status));
+      if(state.filter==="repeat")return state.history.filter(item=>item.is_repetition||item.repeat_pending);
+      return state.history;
+    }
+
+    function progressFor(item){
+      if(item.advances_sequence)return{className:"advance",label:"Avanza la secuencia MES"};
+      if(item.requires_repeat&&item.mission_kind==="unknown")return{className:"review",label:"No completada · identificar misión"};
+      if(item.repeat_pending||item.requires_repeat)return{className:"repeat",label:item.repeat_pending?"Repetición pendiente":"Debe repetirse"};
+      if(item.operational_status==="unverified"||item.corroboration_status==="mismatch"||item.corroboration_status==="missing_sim_report")return{className:"review",label:"No avanza · revisión humana"};
+      if(item.mission_kind==="reinforcement")return{className:"neutral",label:"Refuerzo · no avanza MES"};
+      return{className:"neutral",label:"No modifica la secuencia"};
+    }
+
+    function renderDetail(errorMessage=""){
+      const student=state.students.find(item=>item.id===state.selectedId);
+      if(!student){$("detailPanel").innerHTML='<div class="detail-empty">Selecciona un estudiante para consultar su historial.</div>';return;}
+      const rows=historyForFilter();
+      const filterButtons=[["all","Todos"],["completed","Completadas"],["failed","No completadas"],["repeat","Repeticiones"],["review","Revisión"]]
+        .map(([key,label])=>'<button class="filter'+(state.filter===key?' active':'')+'" type="button" data-filter="'+key+'">'+label+'</button>').join("");
+      const historyRows=rows.map(item=>{
+        const progress=progressFor(item);
+        const schedule=[formatDate(item.session_date),[timeLabel(item.start_time),timeLabel(item.end_time)].filter(Boolean).join("–")].filter(Boolean).join(" · ");
+        const attempt=item.attempt_number>1?"Intento "+item.attempt_number:"Primer registro";
+        const source="RRO fila "+item.source_row+(item.sim_report_source_row?" ↔ SIM fila "+item.sim_report_source_row:"");
+        return '<tr><td><strong>'+escapeHtml(schedule)+'</strong><small>'+escapeHtml(item.route||"Ruta sin registrar")+'</small></td><td><strong>'+escapeHtml(item.activity_raw)+'</strong><small>'+escapeHtml(item.stage||"Etapa sin registrar")+'</small></td><td><strong>'+escapeHtml(attempt)+'</strong><small>'+escapeHtml(item.duration_minutes===null?"Duración por revisar":item.duration_minutes+" min")+'</small></td><td><span class="status '+escapeHtml(item.operational_status)+'">'+escapeHtml(statusLabel(item.operational_status))+'</span><small>'+escapeHtml(corroborationLabel(item.corroboration_status))+'</small></td><td><span class="progress-note '+progress.className+'">'+escapeHtml(progress.label)+'</span><small>'+escapeHtml(item.mission_code||"Sin código MES")+'</small></td><td><strong>'+escapeHtml(item.instructor_name||"Sin instructor registrado")+'</strong><small>'+escapeHtml(source)+'</small></td></tr>';
+      }).join("")||'<tr><td class="empty-row" colspan="6">No hay registros para este filtro.</td></tr>';
+      $("detailPanel").innerHTML=
+        '<div class="student-summary"><div class="summary-top"><div><h2>'+escapeHtml(student.full_name)+'</h2><p>'+(student.official_id_last4?'Documento terminado en '+escapeHtml(student.official_id_last4)+' · ':'')+escapeHtml(student.group_name||student.academic_status||"Expediente oficial")+'</p></div><span class="private-pill">Expediente protegido</span></div>'+ 
+        '<div class="progress-grid"><div class="progress-card activity"><span>Última actividad de simulador</span><strong>'+escapeHtml(activityLabel(student))+'</strong><small>'+escapeHtml(formatDate(student.last_activity_date))+' · '+escapeHtml(statusLabel(student.last_activity_status))+'</small></div><div class="progress-card mes"><span>Última misión completada que avanza MES</span><strong>'+escapeHtml(student.last_completed_mission||"Sin misión corroborada")+'</strong><small>'+escapeHtml(student.last_completed_mission_date?formatDate(student.last_completed_mission_date):"No se infiere desde horas ni actividades fallidas")+'</small></div></div>'+ 
+        '<div class="mini-metrics"><div class="mini"><span>Intentos</span><strong>'+number(student.total_attempts)+'</strong></div><div class="mini"><span>Completadas</span><strong>'+number(student.completed_attempts)+'</strong></div><div class="mini"><span>Repeticiones</span><strong>'+number(student.repetitions)+'</strong></div><div class="mini"><span>Repetir</span><strong>'+number(student.pending_repeats)+'</strong></div><div class="mini"><span>Revisar</span><strong>'+number(student.review_required)+'</strong></div></div></div>'+ 
+        (errorMessage?'<div class="error-banner">'+escapeHtml(errorMessage)+'</div>':'')+
+        '<div class="history-head"><h3>Histórico cronológico · '+rows.length+' registros</h3><div class="filters">'+filterButtons+'</div></div>'+ 
+        '<div class="table-wrap"><table class="history-table"><thead><tr><th>Fecha / ruta</th><th>Actividad</th><th>Intento / duración</th><th>Resultado</th><th>Efecto académico</th><th>Instructor / fuente</th></tr></thead><tbody>'+historyRows+'</tbody></table></div>';
+    }
+
+    async function loadHistory(studentId){
+      state.selectedId=studentId;state.filter="all";renderStudentList();
+      $("detailPanel").innerHTML='<div class="detail-empty"><div class="spinner" aria-hidden="true"></div>Consultando el expediente…</div>';
+      const result=await db.from("voa_simulator_attempt_history").select("*").eq("student_id",studentId).order("session_date",{ascending:false,nullsFirst:false}).order("start_time",{ascending:false,nullsFirst:false}).order("source_row",{ascending:false}).limit(500);
+      if(result.error){state.history=[];renderDetail("No fue posible cargar este expediente. Ningún dato fue modificado.");return;}
+      state.history=result.data||[];renderDetail();
+    }
+
+    async function loadLatestSync(){
+      const result=await db.from("voa_simulator_sync_runs").select("status,completed_at,attempts_upserted,error_code").order("started_at",{ascending:false}).limit(1).maybeSingle();
+      if(result.error||!result.data){$("lastSyncText").textContent="Sin actualización confirmada";return;}
+      $("lastSyncText").textContent=result.data.status==="succeeded"?"Actualizado "+formatDateTime(result.data.completed_at)+" · "+number(result.data.attempts_upserted)+" intentos":"Última sincronización requiere revisión";
+    }
+
+    async function loadStudents(preferredId=null){
+      const result=await db.from("voa_simulator_student_summary").select("*").order("full_name",{ascending:true}).limit(1000);
+      if(result.error){throw new Error("STUDENT_HISTORY_LOAD_FAILED");}
+      state.students=result.data||[];state.filtered=[...state.students];renderMetrics();renderStudentList();
+      const target=preferredId&&state.students.some(item=>item.id===preferredId)?preferredId:state.selectedId&&state.students.some(item=>item.id===state.selectedId)?state.selectedId:state.students[0]?.id;
+      if(target)await loadHistory(target);else renderDetail();
+    }
+
+    async function synchronize(){
+      if(state.busy)return;state.busy=true;const button=$("syncButton");button.disabled=true;button.textContent="Sincronizando…";
+      const selected=state.selectedId;
+      try{
+        const sessionResult=await db.auth.getSession();const token=sessionResult.data.session?.access_token;
+        if(!token)throw new Error("SESSION_EXPIRED");
+        const response=await fetch(SUPABASE_URL+"/functions/v1/veyra-simulator-history-sync",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token},body:JSON.stringify({action:"sync",trigger:"manual"})});
+        const payload=await response.json().catch(()=>({}));
+        if(!response.ok||!payload.ok)throw new Error(payload.code||"SYNC_FAILED");
+        await Promise.all([loadLatestSync(),loadStudents(selected)]);
+      }catch(error){renderDetail("La sincronización se detuvo de forma segura. La fuente oficial no fue modificada; intenta nuevamente o revisa el estado de Google Sheets.");}
+      finally{state.busy=false;button.disabled=false;button.textContent="Sincronizar ahora";}
+    }
+
+    $("studentSearch").addEventListener("input",applySearch);
+    $("studentList").addEventListener("click",event=>{const button=event.target.closest("[data-student-id]");if(button)loadHistory(Number(button.dataset.studentId));});
+    $("detailPanel").addEventListener("click",event=>{const button=event.target.closest("[data-filter]");if(!button)return;state.filter=button.dataset.filter;renderDetail();});
+    $("syncButton").addEventListener("click",synchronize);
+    $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
+
+    async function init(){
+      if(!db){$("gateMessage").textContent="No fue posible iniciar el acceso seguro.";return;}
+      const result=await db.auth.getUser();const user=result.data?.user;
+      if(result.error||!user){location.replace("./control-voa.html");return;}
+      if(String(user.email||"").toLowerCase()!==ADMIN_EMAIL){location.replace("./internal-access.html");return;}
+      $("sessionEmail").textContent=user.email||"";
+      try{await Promise.all([loadLatestSync(),loadStudents()]);$("secureGate").classList.add("hidden");$("app").classList.remove("hidden");}
+      catch{$("gateMessage").textContent="No fue posible cargar el historial protegido. Ninguna fuente fue modificada.";}
+    }
+    init();
+  </script>
+</body>
+</html>
