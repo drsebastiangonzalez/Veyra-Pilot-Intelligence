@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07111f" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="veyra-build" content="control-voa-20260827-1" />
   <title>Veyra | Control VOA</title>
+  <script>
+    (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
+  </script>
   <style>
     :root{
       --navy:#07111f;
@@ -104,6 +108,7 @@
       border-color:var(--gold);
       background:rgba(255,255,255,.07);
     }
+    .theme-toggle{display:grid;width:44px;min-width:44px;padding:7px;place-items:center;font-size:20px;line-height:1;text-transform:none}
 
     .auth-shell{
       position:relative;
@@ -319,10 +324,19 @@
     }
     .hero{
       display:flex;
+      min-height:330px;
       align-items:flex-end;
       justify-content:space-between;
       gap:28px;
       margin-bottom:28px;
+      padding:34px;
+      overflow:hidden;
+      border:1px solid rgba(215,166,58,.46);
+      border-radius:28px;
+      background-image:linear-gradient(90deg,rgba(252,250,246,.97) 0%,rgba(252,250,246,.85) 46%,rgba(252,250,246,.18) 100%),url("./veyra-control-twilight-bg-v1.webp");
+      background-position:center;
+      background-size:cover;
+      box-shadow:var(--shadow);
     }
     .eyebrow{
       margin-bottom:12px;
@@ -1462,6 +1476,30 @@
       .stats{grid-template-columns:1fr 1fr}
       .stat-label{font-size:9px}
     }
+    html[data-theme="dark"]{color-scheme:dark;--cream:#080f19;--cream-light:#0b1421;--text:#edf2f7;--muted:#aab5c4;--line:#344154;--shadow:0 18px 48px rgba(0,0,0,.32)}
+    html[data-theme="dark"] body{background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at 92% 0%,rgba(215,166,58,.12),transparent 30rem),linear-gradient(180deg,#0b1421,#080f19);background-size:46px 46px,46px 46px,auto,auto}
+    html[data-theme="dark"] .hero{background-image:linear-gradient(90deg,rgba(7,17,31,.97) 0%,rgba(7,17,31,.76) 48%,rgba(7,17,31,.14) 100%),url("./veyra-control-twilight-bg-v1.webp")}
+    html[data-theme="dark"] :is(.hero h1,.sync strong,.stat-value,.privacy-note strong,.student,.cell-title,.mission-brief-status a,.mission-brief-status button,.modal-header h2,.session-field label,.edit-summary strong,.absence-reason strong,.history-session-summary strong,.history-event-title,.history-change-list strong,.directory-stat strong,.student-editor h3,.student-name,.summary-preview h3,.session-card h2){color:#f4f0e8}
+    html[data-theme="dark"] :is(.hero p,.sync,.toolbar-row,td,.cell-sub,.cancellation-detail,.absence-reason,.absence-management,.history-event-actor,.history-change-list,.student-source,.summary-preview p,.summary-message,.privacy-note,.session-card dd){color:#bdc7d4}
+    html[data-theme="dark"] :is(.stat,.panel,.session-card,.modal-card,.edit-summary,.history-session-summary,.history-event,.directory-stat,.student-active-check,.student-list,.instructor-list,.summary-message){background:rgba(15,24,37,.95)}
+    html[data-theme="dark"] .modal-header{background:linear-gradient(135deg,#152033,#1e2531)}
+    html[data-theme="dark"] :is(.filter input,.filter select,.session-field input,.session-field select,.session-field textarea,.directory-toolbar input,.directory-toolbar select,.instructor-toolbar input,.instructor-toolbar select,.student-suggestions,.student-suggestion,.modal-close){background:#111c2b;color:#edf2f7}
+    html[data-theme="dark"] :is(.toolbar-row,.history-change-list,.summary-delivery,.notification-badge.off){background:#111b29}
+    html[data-theme="dark"] .directory-btn{border-color:#7d8a9c;background:rgba(9,18,30,.76);color:#f4f0e8;backdrop-filter:blur(8px)}
+    html[data-theme="dark"] .directory-btn:hover,html[data-theme="dark"] .directory-btn:focus-visible{background:#172234}
+    html[data-theme="dark"] .attendance-alert{border-color:#6a3033;background:linear-gradient(135deg,#29191e,#3b1d20);color:#ffc1bb}
+    html[data-theme="dark"] tbody tr:hover,html[data-theme="dark"] .student-row:hover,html[data-theme="dark"] .instructor-row:hover{background:#172234}
+    html[data-theme="dark"] tbody tr.declined-row,html[data-theme="dark"] .session-card.declined-card{background:#2b1a1d}
+    html[data-theme="dark"] tbody tr.cancelled-row,html[data-theme="dark"] .session-card.cancelled-card,html[data-theme="dark"] .student-row.inactive,html[data-theme="dark"] .instructor-row.inactive{background:#1b2430;color:#9aa6b5}
+    html[data-theme="dark"] td,html[data-theme="dark"] .student-row,html[data-theme="dark"] .instructor-row,html[data-theme="dark"] .student-suggestion{border-color:#344154}
+    html[data-theme="dark"] :is(.edit-session-btn,.history-session-btn,.cancel-btn,.student-edit-btn,.instructor-preview-btn,.instructor-send-btn.manual){background:#172234;color:#edf2f7}
+    html[data-theme="dark"] :is(.student-editor,.summary-preview,.create-note){background:#242116;color:#ddc683}
+    html[data-theme="dark"] .privacy-note{background:rgba(15,24,37,.82)}
+    html[data-theme="dark"] .badge.confirmed,html[data-theme="dark"] .contact-badge.verified,html[data-theme="dark"] .active-badge.active,html[data-theme="dark"] .notification-badge.ready{background:#12372c;color:#7ae0b7}
+    html[data-theme="dark"] .badge.pending,html[data-theme="dark"] .contact-badge.needs_review,html[data-theme="dark"] .summary-delivery.pending{background:#362d17;color:#efd084}
+    html[data-theme="dark"] .badge.declined,html[data-theme="dark"] .contact-badge.missing,html[data-theme="dark"] .active-badge.inactive{background:#3b1d20;color:#ffaaa3}
+    html[data-theme="dark"] .badge.cancelled{background:#263141;color:#bdc7d4}
+    html[data-theme="dark"] .history-event::before{border-color:#0f1927}
   </style>
 </head>
 <body>
@@ -1521,6 +1559,7 @@
         </a>
         <div class="header-actions">
           <span class="header-email" id="sessionEmail"></span>
+          <button class="ghost-btn theme-toggle" id="themeButton" type="button" aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">☾</button>
           <a class="back-link" href="./internal-access.html">Espacio del instructor</a>
           <button class="ghost-btn" id="logoutButton" type="button">Cerrar sesión</button>
         </div>
@@ -2073,6 +2112,24 @@
     };
 
     const $ = function(id){ return document.getElementById(id); };
+
+    function currentTheme(){ return document.documentElement.dataset.theme === "dark" ? "dark" : "light"; }
+    function updateThemeButton(){
+      const dark = currentTheme() === "dark";
+      const button = $("themeButton");
+      if(!button) return;
+      const label = dark ? "Activar modo claro" : "Activar modo oscuro";
+      button.textContent = dark ? "☀" : "☾";
+      button.setAttribute("aria-pressed",String(dark));
+      button.setAttribute("aria-label",label);
+      button.title = label;
+    }
+    function toggleTheme(){
+      const next = currentTheme() === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      try{ localStorage.setItem("veyra-theme",next); }catch(error){}
+      updateThemeButton();
+    }
 
     function normalize(value){
       return String(value || "")
@@ -2868,6 +2925,8 @@
         let feedbackType = "error";
         if(details && details.code === "TEMPLATE_NOT_APPROVED"){
           feedback = "La plantilla de Meta aún no está aprobada. No se envió nada; usa “Abrir WhatsApp” mientras se aprueba.";
+        }else if(details && details.code === "TEMPLATE_PARAMETER_ERROR"){
+          feedback = "Meta encontró un problema en las variables de la plantilla. No se envió nada; actualiza la página antes de volver a intentar.";
         }else if(details && details.code === "DUPLICATE_PREVENTED"){
           feedback = "Veyra evitó un duplicado: este mismo resumen ya fue procesado.";
           feedbackType = "success";
@@ -3216,6 +3275,9 @@
       setMessage($("passwordMessage"),"Contraseña guardada correctamente.","success");
       window.setTimeout(function(){ applySession(state.session); },500);
     });
+
+    $("themeButton").addEventListener("click",toggleTheme);
+    updateThemeButton();
 
     $("logoutButton").addEventListener("click",async function(){
       if(!db) return;
