@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260827-12">
+  <meta name="veyra-build" content="schedule-approval-center-20260827-13">
   <title>Veyra | Previsualización de cronograma</title>
   <style>
     :root{
@@ -126,7 +126,7 @@
     <main>
       <section class="hero">
         <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Centro de aprobación · versión 9</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Integra horas y misiones desde Daily Report antes de aprobar y publicar.</div>
+        <div class="draft-card"><strong>Centro de aprobación · versión 10</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Integra horas y misiones desde Daily Report antes de aprobar y publicar.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
@@ -376,6 +376,26 @@
         missing_sim_report:"Falta corroboración en SIM REPORT",
         no_history:"Sin historial en Daily Report"
       })[status]||"Pendiente de corroboración";
+    }
+    function sourceDateLabel(value){
+      const text=String(value??"").trim();
+      if(!text)return "fecha no informada";
+      if(/^\d{5}(?:\.\d+)?$/.test(text)){
+        const serial=Number(text);
+        const date=new Date(Date.UTC(1899,11,30)+Math.floor(serial)*86400000);
+        if(Number.isFinite(date.getTime()))return new Intl.DateTimeFormat("es-CO",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date);
+      }
+      return text;
+    }
+    function sourceMissionAudit(progress){
+      if(!progress||progress.verification?.status==="corroborated")return "";
+      const itemLabel=(name,item)=>{
+        if(!item)return name+": sin registro";
+        const mission=missionCodeFromValue(item.mission)||String(item.mission||"Sin misión").trim();
+        const row=item.source_row?"fila "+item.source_row:"fila no informada";
+        return name+": "+mission+" · "+sourceDateLabel(item.date)+" · "+row;
+      };
+      return itemLabel("RRO SIM",progress.latestRro)+" | "+itemLabel("SIM REPORT",progress.latestSim);
     }
     function activeWeek(){return WEEKS[state.week]||WEEKS[0];}
     function weekIndexForDate(date){const index=WEEKS.findIndex(week=>week.days.some(day=>day.key===date));return index<0?0:index;}
@@ -1408,7 +1428,7 @@
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
           '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+ 
           '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Corroboración</dt><dd>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</dd></div>'+ 
+          '<div class="detail-row"><dt>Corroboración</dt><dd>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+(sourceMissionAudit(student.googleProgress)?'<br><small>'+escapeHtml(sourceMissionAudit(student.googleProgress))+'</small>':'')+'</dd></div>'+ 
           '<div class="detail-row"><dt>Horas registradas</dt><dd>'+escapeHtml(hoursText)+'</dd></div>'+ 
           '<div class="detail-row"><dt>Ajustes razonables</dt><dd>'+escapeHtml(student.adjustmentConfirmed?"Confirmados para este bloque":student.reasonableAdjustment?(student.adjustmentNote||"Registrados · disponibilidad por validar"):"No registrados en las fuentes consultadas")+'</dd></div>'+ 
           '<div class="detail-row"><dt>Justificación</dt><dd>'+escapeHtml(proposal.reason)+'</dd></div>'+ 
@@ -1444,7 +1464,8 @@
         const instructors=Array.from(new Set(proposals.map(item=>instructorLabel(item))));
         const instructorsHtml=instructors.length?instructors.map(item=>escapeHtml(item)).join('<br>'):'—';
         const flightCount=(student.flights||[]).length;
-        const verificationNote='<br><small>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</small>';
+        const auditNote=sourceMissionAudit(student.googleProgress);
+        const verificationNote='<br><small>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</small>'+(auditNote?'<br><small>'+escapeHtml(auditNote)+'</small>':'');
         const hours=student.flightHours;
         const balanceLabel=hours&&(hours.remaining===null||hours.remaining===undefined)?'Saldo por conciliar':'Saldo '+(hours?.basis==='calculated'?'calculado':'reportado')+': '+formatHours(hours?.remaining)+' h';
         const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(loggedHoursLabel(hours))+'</strong><small class="pending-hours">'+escapeHtml(balanceLabel)+'</small><small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
