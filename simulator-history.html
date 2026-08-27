@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="simulator-history-20260827-2">
+  <meta name="veyra-build" content="simulator-history-20260827-3">
   <title>Veyra | Historial de simulador</title>
   <script>
     (()=>{
@@ -29,6 +29,7 @@
     html{scroll-behavior:smooth}
     body{
       margin:0;min-height:100vh;color:var(--ink);font-family:Arial,Helvetica,sans-serif;
+      position:relative;isolation:isolate;
       background:
         linear-gradient(rgba(7,17,31,.025) 1px,transparent 1px),
         linear-gradient(90deg,rgba(7,17,31,.025) 1px,transparent 1px),
@@ -36,6 +37,7 @@
         linear-gradient(180deg,#fcfaf6,var(--cream));
       background-size:46px 46px,46px 46px,auto,auto
     }
+    body::before{content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;opacity:.065;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'%3E%3Cg fill='none' stroke='%23d7a63a' stroke-width='2'%3E%3Ccircle cx='705' cy='410' r='305' opacity='.28'/%3E%3Ccircle cx='705' cy='410' r='220' opacity='.18'/%3E%3Cpath d='M70 770C300 390 690 245 1130 120' stroke-dasharray='10 18' opacity='.7'/%3E%3Cpath d='M705 95L742 378 952 523 930 564 752 483 770 710 705 770 640 710 658 483 480 564 458 523 668 378Z' opacity='.72'/%3E%3C/g%3E%3Ctext x='520' y='850' fill='%23d7a63a' font-family='Georgia,serif' font-size='60' letter-spacing='18' opacity='.7'%3EVEYRA%3C/text%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right -110px top 105px;background-size:min(940px,72vw) auto}
     button,input{font:inherit}.hidden{display:none!important}
     header{position:sticky;top:0;z-index:20;border-bottom:2px solid var(--gold);background:rgba(7,17,31,.98);color:#fff}
     .header-inner{width:min(1480px,calc(100% - 36px));min-height:86px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -43,6 +45,7 @@
     .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}.header-email{max-width:250px;overflow:hidden;color:#c7d0dc;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
     .header-btn{min-height:40px;padding:10px 14px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:transparent;color:#fff;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
     .header-btn:hover,.header-btn:focus-visible{border-color:var(--gold);background:rgba(255,255,255,.07)}
+    .theme-toggle{display:grid;width:44px;min-width:44px;padding:7px;place-items:center;font-size:20px;line-height:1;text-transform:none}
     main{width:min(1480px,calc(100% - 36px));margin:auto;padding:34px 0 70px}
     .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:20px}
     .eyebrow{margin-bottom:12px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}
@@ -67,7 +70,7 @@
     .detail-empty{padding:80px 30px;color:var(--muted);text-align:center}
     .student-summary{padding:22px}
     .summary-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.summary-top h2{margin:0;color:var(--navy);font:38px/1.03 Georgia,"Times New Roman",serif}.summary-top p{margin:8px 0 0;color:var(--muted);font-size:12px}.private-pill{flex:0 0 auto;padding:7px 10px;border:1px solid var(--gold-soft);border-radius:999px;background:#fffaf0;color:var(--amber);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}
-    .progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:19px}.progress-card{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.progress-card span{display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.progress-card strong{display:block;margin-top:7px;color:var(--navy);font-size:15px;line-height:1.35}.progress-card small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.progress-card.activity{border-color:#d6c4a3;background:#fffbf3}.progress-card.mes{border-color:#b7dacb;background:var(--green-soft)}
+    .progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:19px}.progress-card{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.progress-card span{display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.progress-card strong{display:block;margin-top:7px;color:var(--navy);font-size:15px;line-height:1.35}.progress-card small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.progress-card.activity{border-color:#d6c4a3;background:#fffbf3}.progress-card.mes{border-color:#b7dacb;background:var(--green-soft)}.progress-card.hours{border-color:#b8cbea;background:#f5f8ff}.progress-card.phase{border-color:#dfc778;background:#fff9e8}.student-button .progress-meta{color:var(--amber);font-weight:800}
     .mini-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:11px}.mini{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfaf7}.mini span{display:block;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.6px;text-transform:uppercase}.mini strong{display:block;margin-top:5px;color:var(--navy);font:24px/1 Georgia,"Times New Roman",serif}
     .history-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fbfaf7}.history-head h3{margin:0;color:var(--navy);font-size:12px;letter-spacing:.8px;text-transform:uppercase}.filters{display:flex;flex-wrap:wrap;gap:7px}.filter{padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#475467;font-size:8px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;cursor:pointer}.filter.active{border-color:var(--navy);background:var(--navy);color:#fff}
     .table-wrap{overflow:auto}.history-table{width:100%;min-width:980px;border-collapse:collapse}.history-table th,.history-table td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.history-table th{background:#faf7f1;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;position:sticky;top:0}.history-table td{color:#475467;font-size:10px;line-height:1.42}.history-table td strong{color:var(--navy);font-size:11px}.history-table small{display:block;margin-top:4px;color:var(--muted)}
@@ -78,6 +81,7 @@
     .error-banner{margin:0 22px 20px;padding:12px 14px;border-left:4px solid var(--red);background:var(--red-soft);color:var(--red);font-size:11px;line-height:1.45}
     html[data-theme="dark"]{color-scheme:dark;--ink:#edf2f7;--muted:#aab5c4;--line:#344154;--green:#65d6a8;--green-soft:#12372c;--red:#ff938a;--red-soft:#3b1d20;--amber:#e5c270;--amber-soft:#362d17;--blue:#85b9ff;--blue-soft:#172d48;--purple:#b79aff;--purple-soft:#2c2343;--gold-soft:#705a30;--shadow:0 18px 48px rgba(0,0,0,.3)}
     html[data-theme="dark"] body{background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at 92% 0%,rgba(215,166,58,.12),transparent 30rem),linear-gradient(180deg,#0b1421,#080f19);background-size:46px 46px,46px 46px,auto,auto}
+    html[data-theme="dark"] body::before{opacity:.11}
     html[data-theme="dark"] h1,html[data-theme="dark"] .sync-card strong,html[data-theme="dark"] .notice strong,html[data-theme="dark"] .metric strong,html[data-theme="dark"] .panel-head h2,html[data-theme="dark"] .student-button strong,html[data-theme="dark"] .summary-top h2,html[data-theme="dark"] .progress-card strong,html[data-theme="dark"] .mini strong,html[data-theme="dark"] .history-head h3,html[data-theme="dark"] .history-table td strong{color:#f4f0e8}
     html[data-theme="dark"] .hero p,html[data-theme="dark"] .history-table td,html[data-theme="dark"] .filter{color:#bdc7d4}
     html[data-theme="dark"] .sync-card{background:#1b2230;color:#ddc683}
@@ -94,6 +98,8 @@
     html[data-theme="dark"] .progress-card,html[data-theme="dark"] .mini{background:#121d2c}
     html[data-theme="dark"] .progress-card.activity{background:#292517}
     html[data-theme="dark"] .progress-card.mes{background:#12372c}
+    html[data-theme="dark"] .progress-card.hours{background:#17263c}
+    html[data-theme="dark"] .progress-card.phase{background:#302a17}
     html[data-theme="dark"] .history-head,html[data-theme="dark"] .history-table th{background:#111b29}
     html[data-theme="dark"] .filter.active{border-color:#d7a63a;background:#d7a63a;color:#07111f}
     html[data-theme="dark"] .gate{background:#07111f}
@@ -114,7 +120,7 @@
     <header>
       <div class="header-inner">
         <a class="logo" href="./internal-access.html" aria-label="Inicio de Veyra"><div class="brand">Veyra</div><div class="subbrand">PILOT INTELLIGENCE</div></a>
-        <div class="header-actions"><span class="header-email" id="sessionEmail"></span><button class="header-btn" id="themeButton" type="button" aria-pressed="false">Modo oscuro</button><a class="header-btn" href="./voa-schedule-preview.html">Cronograma</a><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
+        <div class="header-actions"><span class="header-email" id="sessionEmail"></span><button class="header-btn theme-toggle" id="themeButton" type="button" aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">☾</button><a class="header-btn" href="./voa-schedule-preview.html">Cronograma</a><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
       </div>
     </header>
 
@@ -163,7 +169,7 @@
     function currentTheme(){return document.documentElement.dataset.theme==="dark"?"dark":"light";}
     function updateThemeButton(){
       const dark=currentTheme()==="dark";const button=$("themeButton");
-      if(!button)return;button.textContent=dark?"Modo claro":"Modo oscuro";button.setAttribute("aria-pressed",String(dark));
+      if(!button)return;const label=dark?"Activar modo claro":"Activar modo oscuro";button.textContent=dark?"☀":"☾";button.setAttribute("aria-pressed",String(dark));button.setAttribute("aria-label",label);button.title=label;
       const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute("content",dark?"#07111f":"#07111f");
     }
     function toggleTheme(){
@@ -178,6 +184,7 @@
     function timeLabel(value){return value?String(value).slice(0,5):"";}
     function normalize(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();}
     function number(value){const parsed=Number(value);return Number.isFinite(parsed)?parsed:0;}
+    function flightHoursLabel(value){if(value===null||value===undefined||value==="")return"Sin dato";const parsed=Number(value);return Number.isFinite(parsed)?new Intl.NumberFormat("es-CO",{minimumFractionDigits:0,maximumFractionDigits:2}).format(parsed)+" h":"Sin dato";}
     function statusLabel(status){return({completed:"Completada",no_show:"No asistió",cancelled:"Cancelada",not_completed:"No completada",unverified:"Revisión"})[status]||"Revisión";}
     function corroborationLabel(status){return({corroborated:"RRO ↔ SIM corroborada",missing_sim_report:"Falta SIM REPORT",mismatch:"Diferencia RRO ↔ SIM",cancelled_report:"SIM REPORT cancelado",not_applicable:"Ausencia o cancelación registrada",unverified:"Fuente por revisar"})[status]||"Fuente por revisar";}
     function corroborationFor(item){
@@ -208,7 +215,8 @@
       $("studentList").innerHTML=state.filtered.map(student=>{
         const alerts=number(student.pending_repeats)+number(student.review_required);
         const meta="Última actividad: "+activityLabel(student)+(student.last_activity_date?" · "+formatDate(student.last_activity_date):"");
-        return '<button class="student-button'+(state.selectedId===student.id?' active':'')+'" type="button" data-student-id="'+escapeHtml(student.id)+'"><strong>'+escapeHtml(student.full_name)+'</strong><small>'+escapeHtml(meta)+'</small>'+(alerts?'<small class="alert">'+escapeHtml(alerts)+' pendiente'+(alerts===1?'':'s')+' de revisión o repetición</small>':'')+'</button>';
+        const progress=[student.training_phase?"Fase "+student.training_phase:"Fase por identificar",flightHoursLabel(student.flight_hours)].join(" · ");
+        return '<button class="student-button'+(state.selectedId===student.id?' active':'')+'" type="button" data-student-id="'+escapeHtml(student.id)+'"><strong>'+escapeHtml(student.full_name)+'</strong><small>'+escapeHtml(meta)+'</small><small class="progress-meta">'+escapeHtml(progress)+'</small>'+(alerts?'<small class="alert">'+escapeHtml(alerts)+' pendiente'+(alerts===1?'':'s')+' de revisión o repetición</small>':'')+'</button>';
       }).join("")||'<div class="detail-empty">No se encontraron estudiantes.</div>';
     }
 
@@ -242,9 +250,12 @@
         const source="RRO fila "+item.source_row+(item.sim_report_source_row?" ↔ SIM fila "+item.sim_report_source_row:"");
         return '<tr><td><strong>'+escapeHtml(schedule)+'</strong><small>'+escapeHtml(item.route||"Ruta sin registrar")+'</small></td><td><strong>'+escapeHtml(item.activity_raw)+'</strong><small>'+escapeHtml(item.stage||"Etapa sin registrar")+'</small></td><td><strong>'+escapeHtml(attempt)+'</strong><small>'+escapeHtml(item.duration_minutes===null?"Duración por revisar":item.duration_minutes+" min")+'</small></td><td><span class="status '+escapeHtml(item.operational_status)+'">'+escapeHtml(statusLabel(item.operational_status))+'</span><small>'+escapeHtml(corroborationFor(item))+'</small></td><td><span class="progress-note '+progress.className+'">'+escapeHtml(progress.label)+'</span><small>'+escapeHtml(item.mission_code||"Sin código MES")+'</small></td><td><strong>'+escapeHtml(item.instructor_name||"Sin instructor registrado")+'</strong><small>'+escapeHtml(source)+'</small></td></tr>';
       }).join("")||'<tr><td class="empty-row" colspan="6">No hay registros para este filtro.</td></tr>';
+      const hoursSource=student.flight_hours_source?(student.flight_hours_source+(student.flight_hours_source_row?" · fila "+student.flight_hours_source_row:"")+(student.flight_hours_needs_review?" · requiere revisión":"")):"Sin registro disponible en FC ESTIMATE ni EST VUELO";
+      const phaseLabel=student.training_phase||"Por identificar";
+      const phaseSource=student.training_phase?"Último registro oficial que identifica la fase":"No se infiere desde las horas de vuelo";
       $("detailPanel").innerHTML=
         '<div class="student-summary"><div class="summary-top"><div><h2>'+escapeHtml(student.full_name)+'</h2><p>'+(student.official_id_last4?'Documento terminado en '+escapeHtml(student.official_id_last4)+' · ':'')+escapeHtml(student.group_name||student.academic_status||"Expediente oficial")+'</p></div><span class="private-pill">Expediente protegido</span></div>'+ 
-        '<div class="progress-grid"><div class="progress-card activity"><span>Última actividad de simulador</span><strong>'+escapeHtml(activityLabel(student))+'</strong><small>'+escapeHtml(formatDate(student.last_activity_date))+' · '+escapeHtml(statusLabel(student.last_activity_status))+'</small></div><div class="progress-card mes"><span>Última misión completada que avanza MES</span><strong>'+escapeHtml(student.last_completed_mission||"Sin misión corroborada")+'</strong><small>'+escapeHtml(student.last_completed_mission_date?formatDate(student.last_completed_mission_date):"No se infiere desde horas ni actividades fallidas")+'</small></div></div>'+ 
+        '<div class="progress-grid"><div class="progress-card activity"><span>Última actividad de simulador</span><strong>'+escapeHtml(activityLabel(student))+'</strong><small>'+escapeHtml(formatDate(student.last_activity_date))+' · '+escapeHtml(statusLabel(student.last_activity_status))+'</small></div><div class="progress-card mes"><span>Última misión completada que avanza MES</span><strong>'+escapeHtml(student.last_completed_mission||"Sin misión corroborada")+'</strong><small>'+escapeHtml(student.last_completed_mission_date?formatDate(student.last_completed_mission_date):"No se infiere desde horas ni actividades fallidas")+'</small></div><div class="progress-card hours"><span>Horas de vuelo registradas</span><strong>'+escapeHtml(flightHoursLabel(student.flight_hours))+'</strong><small>'+escapeHtml(hoursSource)+'</small></div><div class="progress-card phase"><span>Fase de entrenamiento</span><strong>'+escapeHtml(phaseLabel)+'</strong><small>'+escapeHtml(phaseSource)+'</small></div></div>'+ 
         '<div class="mini-metrics"><div class="mini"><span>Intentos</span><strong>'+number(student.total_attempts)+'</strong></div><div class="mini"><span>Completadas</span><strong>'+number(student.completed_attempts)+'</strong></div><div class="mini"><span>Repeticiones</span><strong>'+number(student.repetitions)+'</strong></div><div class="mini"><span>Repetir</span><strong>'+number(student.pending_repeats)+'</strong></div><div class="mini"><span>Revisar</span><strong>'+number(student.review_required)+'</strong></div></div></div>'+ 
         (errorMessage?'<div class="error-banner">'+escapeHtml(errorMessage)+'</div>':'')+
         '<div class="history-head"><h3>Histórico cronológico · '+rows.length+' registros</h3><div class="filters">'+filterButtons+'</div></div>'+ 
