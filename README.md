@@ -44,9 +44,22 @@ The goal is to support more objective, traceable and useful academic evaluation 
 
 This version is being used as an academic pilot project to evaluate its usefulness, clarity, traceability, and potential for supporting real training environments.
 
+## Intellectual property
+
+Copyright © 2026 Sebastián González. All rights reserved.
+
+Veyra Pilot Intelligence is proprietary software. Public access to this repository does not grant permission to copy, modify, distribute, sublicense, commercialize, reverse engineer, or create derivative works. See [`LICENSE`](./LICENSE) and [`NOTICE.md`](./NOTICE.md).
+
+VEYRA, VEYRA PILOT and VEYRA PILOT INTELLIGENCE are used as distinctive signs of the project. No third-party use is authorized. Do not use the registered trademark symbol (`®`) unless and until registration is granted by the competent authority.
+
+## Security
+
+Please report vulnerabilities privately. Do not publish credentials, personal data, academic records or operational information in public issues. See [`SECURITY.md`](./SECURITY.md).
+
 ## Contact
 
 **Veyra Pilot Intelligence**  
 Bogotá, Colombia  
 veyrapilotintelligence@gmail.com  
 +57 3002006836
+
