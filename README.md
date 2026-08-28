@@ -46,7 +46,7 @@ This version is being used as an academic pilot project to evaluate its usefulne
 
 ## Intellectual property
 
-Copyright © 2026 Sebastián González. All rights reserved.
+Copyright © 2026 Sebastián David Gonzalez Chaves. All rights reserved.
 
 Veyra Pilot Intelligence is proprietary software. Public access to this repository does not grant permission to copy, modify, distribute, sublicense, commercialize, reverse engineer, or create derivative works. See [`LICENSE`](./LICENSE) and [`NOTICE.md`](./NOTICE.md).
 
@@ -62,4 +62,3 @@ Please report vulnerabilities privately. Do not publish credentials, personal da
 Bogotá, Colombia  
 veyrapilotintelligence@gmail.com  
 +57 3002006836
-

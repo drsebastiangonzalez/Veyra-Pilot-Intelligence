@@ -1,8 +1,8 @@
 # Aviso de titularidad — Veyra Pilot Intelligence
 
-Copyright © 2026 Sebastián González. Todos los derechos reservados.
+Copyright © 2026 Sebastián David Gonzalez Chaves. Todos los derechos reservados.
 
-Sebastián González declara ser el titular de los derechos patrimoniales sobre
+Sebastián David Gonzalez Chaves declara ser el titular de los derechos patrimoniales sobre
 los elementos originales de Veyra Pilot Intelligence, incluidos el código,
 la arquitectura expresiva, los textos, la documentación, la organización de
 contenidos, las reglas originales de la aplicación y los materiales propios,
@@ -18,7 +18,3 @@ VEYRA, VEYRA PILOT y VEYRA PILOT INTELLIGENCE se utilizan como signos
 distintivos del proyecto. Su uso por terceros no está autorizado.
 
 Contacto de propiedad intelectual: veyrapilotintelligence@gmail.com
-
-Este aviso deberá actualizarse con el nombre legal completo del titular antes
-de una radicación oficial.
-
