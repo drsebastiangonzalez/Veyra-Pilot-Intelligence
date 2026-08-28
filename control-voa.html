@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07111f" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
-  <meta name="veyra-build" content="control-voa-20260827-1" />
+  <meta name="veyra-build" content="control-voa-20260828-1" />
   <title>Veyra | Control VOA</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -2056,7 +2056,7 @@
     const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
     const INSTRUCTOR_FIELDS = "id,full_name,normalized_name,phone_e164,phone_status,active,notification_enabled,summary_time,timezone,source,updated_at";
     const INSTRUCTOR_SUMMARY_FIELDS = "id,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,cancelled_at";
-    const INSTRUCTOR_NOTIFICATION_FIELDS = "id,target_date,message_type,delivery_status,template_name,whatsapp_message_id,accepted_at,sent_at,delivered_at,read_at,failed_at,error_code,error_message,created_at,updated_at";
+    const INSTRUCTOR_NOTIFICATION_FIELDS = "id,target_date,message_type,delivery_status,template_name,whatsapp_message_id,content_snapshot,accepted_at,sent_at,delivered_at,read_at,failed_at,error_code,error_message,created_at,updated_at";
     const HISTORY_FIELDS = "id,session_id,event_type,event_at,actor_type,actor_label,summary,details,source";
     const BRIEF_FIELDS = "id,mission_code,mission_key,title,active,public_token";
     const DEFAULT_INSTRUCTORS = [
@@ -2862,10 +2862,28 @@
       }
 
       const rows = (Array.isArray(result.data) ? result.data : []).filter(function(row){
-        return instructorKey(row.instructor_name) === instructorKey(instructor.normalized_name || instructor.full_name);
+        const matchesInstructor =
+          instructorKey(row.instructor_name) === instructorKey(instructor.normalized_name || instructor.full_name);
+        const isCancelled =
+          Boolean(row.cancelled_at) || classifyStatus(row.confirmation_status) === "cancelled";
+        return matchesInstructor && !isCancelled;
       });
+      const notification = notificationResult.error ? null : notificationResult.data;
+      const snapshotSessions = notification && notification.content_snapshot &&
+          Array.isArray(notification.content_snapshot.sessions)
+        ? notification.content_snapshot.sessions
+        : [];
+      const snapshotSessionIds = snapshotSessions
+        .map(function(item){ return Number(item.session_id); })
+        .filter(Number.isSafeInteger);
+      const currentSessionIds = rows
+        .map(function(item){ return Number(item.id); })
+        .filter(Number.isSafeInteger);
+      const notificationMatchesRows =
+        snapshotSessionIds.length === currentSessionIds.length &&
+        snapshotSessionIds.every(function(id,index){ return id === currentSessionIds[index]; });
       state.summaryRows = rows;
-      state.summaryNotification = notificationResult.error ? null : notificationResult.data;
+      state.summaryNotification = notificationMatchesRows ? notification : null;
       $("instructorSummaryMessage").textContent = buildInstructorSummary(instructor,rows,targetDate);
       renderInstructorSummaryControls(instructor,rows,state.summaryNotification);
       if(notificationResult.error){
