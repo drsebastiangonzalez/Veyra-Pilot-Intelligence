@@ -102,7 +102,7 @@
     const $=id=>document.getElementById(id);
     const value=id=>$(id).value.trim();
     const escapeHtml=input=>String(input??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
-    const missionKey=input=>String(input||"").trim().replace(/\s+/g," ").toUpperCase();
+    const missionKey=input=>{const normalized=String(input||"").trim().replace(/\s+/g," ").toUpperCase();const compact=normalized.replace(/[^A-Z0-9]/g,"");const curriculumMission=compact.match(/^(?:MES)?M?0*(\d{1,2})$/);return curriculumMission?"M"+String(Number(curriculumMission[1])):normalized;};
     const lines=input=>String(input||"").split(/\r?\n/).map(item=>item.trim()).filter(Boolean);
 
     function questionsFromForm(){return [1,2,3].map(number=>({prompt:value("question"+number),answer:value("answer"+number),explanation:""}));}
