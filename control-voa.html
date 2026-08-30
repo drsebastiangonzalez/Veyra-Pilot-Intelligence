@@ -3897,7 +3897,10 @@
     }
 
     function missionBriefKey(value){
-      return String(value || "").trim().replace(/\s+/g," ").toUpperCase();
+      const normalized = String(value || "").trim().replace(/\s+/g," ").toUpperCase();
+      const compact = normalized.replace(/[^A-Z0-9]/g,"");
+      const curriculumMission = compact.match(/^(?:MES)?M?0*(\d{1,2})$/);
+      return curriculumMission ? "M" + String(Number(curriculumMission[1])) : normalized;
     }
 
     function missionBriefFor(row){
