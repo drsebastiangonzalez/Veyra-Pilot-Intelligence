@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07111f" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="veyra-build" content="mission-briefs-20260831-2" />
   <title>Veyra | Mission Briefs</title>
+  <script>
+    (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
+  </script>
   <style>
     :root{
       --navy:#07111f;--navy-soft:#10233d;--cream:#f7f1e8;--paper:#fffdf9;
@@ -23,8 +27,14 @@
     .header-actions{display:flex;align-items:center;gap:10px}.header-email{max-width:270px;overflow:hidden;color:#c7d0dc;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
     .header-btn{min-height:40px;padding:10px 14px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:transparent;color:#fff;text-decoration:none;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
     .header-btn:hover,.header-btn:focus-visible{border-color:var(--gold);background:rgba(255,255,255,.07)}
+    .theme-toggle{display:grid;width:44px;min-width:44px;padding:7px;place-items:center;font-size:20px;line-height:1;text-transform:none}
+    .voa-nav-shell{position:sticky;z-index:9;top:88px;border-bottom:1px solid var(--line);background:rgba(252,250,246,.96);box-shadow:0 8px 24px rgba(7,17,31,.06);backdrop-filter:blur(14px)}
+    .voa-nav{width:min(1380px,calc(100% - 42px));margin:auto;padding:8px 0;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}.voa-nav::-webkit-scrollbar{display:none}
+    .voa-nav a{min-height:42px;padding:10px 13px;display:inline-flex;flex:0 0 auto;align-items:center;border:1px solid transparent;border-radius:10px;color:#475467;text-decoration:none;font-size:11px;font-weight:800;letter-spacing:.45px;white-space:nowrap}
+    .voa-nav a:hover,.voa-nav a:focus-visible{border-color:var(--gold-soft);background:#fff8e8;color:var(--navy)}
+    .voa-nav .active{border-color:var(--gold-soft);background:var(--navy);color:#fff}
     main{width:min(1380px,calc(100% - 42px));margin:0 auto;padding:38px 0 70px}
-    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:22px}.eyebrow{margin-bottom:13px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}.hero h1{margin:0;color:var(--navy);font:clamp(46px,6vw,76px)/.95 Georgia,"Times New Roman",serif;letter-spacing:-2px}.hero p{max-width:760px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
+    .hero{display:flex;min-height:300px;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:22px;padding:34px;overflow:hidden;border:1px solid rgba(215,166,58,.46);border-radius:28px;background:radial-gradient(circle at 84% 18%,rgba(215,166,58,.24),transparent 21rem),linear-gradient(118deg,#fffdf9 0%,#f7f1e8 56%,#e7dccb 100%);box-shadow:var(--shadow)}.eyebrow{margin-bottom:13px;color:var(--amber);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}.hero h1{margin:0;color:var(--navy);font:clamp(46px,6vw,76px)/.95 Georgia,"Times New Roman",serif;letter-spacing:-2px}.hero p{max-width:760px;margin:16px 0 0;color:#475467;font-size:17px;line-height:1.55}
     .phase{min-width:230px;padding:17px 18px;border:1px solid var(--gold-soft);border-radius:15px;background:#fff8e8;color:#6f5012;font-size:12px;line-height:1.5}.phase strong{display:block;color:var(--navy);font-size:12px;letter-spacing:.8px;text-transform:uppercase}
     .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.metric{padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.86);box-shadow:var(--shadow)}.metric span{color:var(--muted);font-size:10px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase}.metric strong{display:block;margin-top:7px;color:var(--navy);font:40px/1 Georgia,"Times New Roman",serif}
     .workspace{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(340px,.97fr);gap:18px;align-items:start}.panel{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.9);box-shadow:var(--shadow)}.panel-head{padding:22px 24px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f8f0e3)}.panel-head h2{margin:0;color:var(--navy);font:30px/1 Georgia,"Times New Roman",serif}.panel-head p{margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
@@ -34,17 +44,44 @@
     .form-message{min-height:20px;margin:17px 0 0;font-size:13px;font-weight:700}.form-message.error{color:var(--red)}.form-message.success{color:var(--green)}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.btn{min-height:44px;padding:11px 16px;border-radius:11px;font-size:10px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}.btn.secondary{border:1px solid var(--line);background:#fff;color:var(--navy)}.btn.primary{border:1px solid var(--gold);background:var(--navy);color:#fff}.btn:disabled{cursor:wait;opacity:.62}
     .preview-wrap{position:sticky;top:108px}.preview{padding:24px}.phone{overflow:hidden;border:8px solid var(--navy);border-radius:28px;background:#efeae2;box-shadow:0 24px 55px rgba(7,17,31,.18)}.phone-top{padding:13px 18px;background:var(--navy);color:#fff;font-size:12px;font-weight:800}.bubble{margin:18px;padding:18px;border-radius:4px 16px 16px 16px;background:#fff;color:#213047;font-size:13px;line-height:1.55;white-space:pre-wrap}.bubble strong{color:var(--green)}.preview-note{margin:16px 0 0;padding:13px 14px;border-left:3px solid var(--gold);background:var(--amber-soft);color:#6f5012;font-size:11px;line-height:1.45}.answer-key{margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.answer-key h3{margin:0 0 12px;color:var(--navy);font-size:13px}.answer-key ol{margin:0;padding-left:20px;color:#475467;font-size:12px;line-height:1.5}.answer-key li+li{margin-top:8px}
     .library{margin-top:18px}.library-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px}.library-toolbar .btn{flex:0 0 auto}.brief-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px}.brief-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.brief-card.inactive{background:#f7f8fa}.brief-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.brief-card h3{margin:0;color:var(--navy);font-size:17px}.brief-card p{margin:10px 0;color:#475467;font-size:12px;line-height:1.45}.brief-meta{color:var(--muted);font-size:10px;line-height:1.45}.pill{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:9px;font-weight:900;text-transform:uppercase}.pill.active{color:var(--green);background:var(--green-soft)}.pill.draft{color:var(--amber);background:var(--amber-soft)}.edit-brief{width:100%;margin-top:14px;min-height:36px;border:1px solid var(--navy);border-radius:9px;background:#fff;color:var(--navy);font-size:9px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}.empty{padding:42px 20px;color:var(--muted);text-align:center;font-size:13px}.loading{padding:42px 20px;color:var(--muted);text-align:center}.error-box{padding:24px;color:var(--red);background:var(--red-soft);font-size:13px;font-weight:700}.privacy{margin-top:18px;padding:16px 18px;border-left:4px solid var(--gold);background:rgba(255,255,255,.72);color:var(--muted);font-size:12px;line-height:1.5}
+    html[data-theme="dark"]{color-scheme:dark;--paper:#0f1825;--text:#edf2f7;--muted:#aab5c4;--line:#344154;--green:#65d6a8;--green-soft:#12372c;--red:#ff938a;--red-soft:#3b1d20;--amber:#e5c270;--amber-soft:#362d17;--gold-soft:#705a30;--shadow:0 18px 48px rgba(0,0,0,.32)}
+    html[data-theme="dark"] body{background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at 92% 0%,rgba(215,166,58,.12),transparent 30rem),linear-gradient(180deg,#0b1421,#080f19);background-size:46px 46px,46px 46px,auto,auto}
+    html[data-theme="dark"] .voa-nav-shell{border-color:#344154;background:rgba(8,15,25,.94);box-shadow:0 8px 24px rgba(0,0,0,.24)}
+    html[data-theme="dark"] .voa-nav a{color:#bdc7d4}
+    html[data-theme="dark"] .voa-nav a:hover,html[data-theme="dark"] .voa-nav a:focus-visible{background:#172234;color:#f4f0e8}
+    html[data-theme="dark"] .voa-nav .active{border-color:#d7a63a;background:#d7a63a;color:#07111f}
+    html[data-theme="dark"] .hero{background:radial-gradient(circle at 84% 18%,rgba(215,166,58,.18),transparent 21rem),linear-gradient(118deg,#0f1b2b 0%,#0b1421 58%,#121c29 100%)}
+    html[data-theme="dark"] .hero h1,html[data-theme="dark"] .phase strong,html[data-theme="dark"] .metric strong,html[data-theme="dark"] .panel-head h2,html[data-theme="dark"] .field label,html[data-theme="dark"] .answer-key h3,html[data-theme="dark"] .brief-card h3{color:#f4f0e8}
+    html[data-theme="dark"] .hero p,html[data-theme="dark"] .panel-head p,html[data-theme="dark"] .brief-card p,html[data-theme="dark"] .answer-key ol,html[data-theme="dark"] .privacy{color:#bdc7d4}
+    html[data-theme="dark"] .phase,html[data-theme="dark"] .metric,html[data-theme="dark"] .panel,html[data-theme="dark"] .answer-key,html[data-theme="dark"] .brief-card,html[data-theme="dark"] .privacy{background:rgba(15,24,37,.95)}
+    html[data-theme="dark"] .panel-head{background:linear-gradient(135deg,#152033,#1e2531)}
+    html[data-theme="dark"] .field input,html[data-theme="dark"] .field textarea,html[data-theme="dark"] .active-check,html[data-theme="dark"] .btn.secondary,html[data-theme="dark"] .edit-brief{background:#111c2b;color:#edf2f7}
+    html[data-theme="dark"] .challenge{background:#282316}
+    html[data-theme="dark"] .phone{background:#172234}
+    html[data-theme="dark"] .bubble{background:#f5f1e8;color:#213047}
+    html[data-theme="dark"] .preview-note{background:#362d17;color:#e5c270}
+    html[data-theme="dark"] .brief-card.inactive{background:#141e2b}
     @media(max-width:1050px){.workspace{grid-template-columns:1fr}.preview-wrap{position:static}.brief-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:720px){.header-inner,main{width:min(100% - 28px,1380px)}.header-email{display:none}.hero{align-items:flex-start;flex-direction:column}.phase{width:100%}.summary{grid-template-columns:1fr}.form-grid,.challenge-grid{grid-template-columns:1fr}.field.full,.challenge,.active-check{grid-column:auto}.brief-list{grid-template-columns:1fr}.library-toolbar{align-items:flex-start;flex-direction:column}.form-actions{flex-direction:column-reverse}.form-actions .btn,.library-toolbar .btn{width:100%}.brand{font-size:32px}}
+    @media(max-width:720px){.header-inner,main,.voa-nav{width:min(100% - 28px,1380px)}.voa-nav-shell{top:78px}.header-inner{min-height:78px}.header-email{display:none}.hero{align-items:flex-start;flex-direction:column}.phase{width:100%}.summary{grid-template-columns:1fr}.form-grid,.challenge-grid{grid-template-columns:1fr}.field.full,.challenge,.active-check{grid-column:auto}.brief-list{grid-template-columns:1fr}.library-toolbar{align-items:flex-start;flex-direction:column}.form-actions{flex-direction:column-reverse}.form-actions .btn,.library-toolbar .btn{width:100%}.brand{font-size:32px}}
   </style>
 </head>
 <body>
   <header>
     <div class="header-inner">
       <a class="logo" href="./control-voa.html" aria-label="Volver a Control VOA"><div class="brand">Veyra</div><div class="subbrand">PILOT INTELLIGENCE</div></a>
-      <div class="header-actions"><span class="header-email" id="sessionEmail"></span><a class="header-btn" href="./control-voa.html">Control VOA</a><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
+      <div class="header-actions"><span class="header-email" id="sessionEmail"></span><button class="header-btn theme-toggle" id="themeButton" type="button" aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">☾</button><button class="header-btn" id="logoutButton" type="button">Cerrar sesión</button></div>
     </div>
   </header>
+  <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
+    <div class="voa-nav">
+      <a href="./control-voa.html">Control VOA</a>
+      <a href="./voa-schedule-preview.html">Cronograma</a>
+      <a href="./simulator-history.html">Historial</a>
+      <a class="active" href="./voa-mission-briefs.html" aria-current="page">Mission Briefs</a>
+      <a href="./control-voa.html#directorio">Directorio</a>
+      <a href="./control-voa.html#instructores">Instructores</a>
+    </div>
+  </nav>
 
   <main>
     <section class="hero">
@@ -102,6 +139,9 @@
     const $=id=>document.getElementById(id);
     const value=id=>$(id).value.trim();
     const escapeHtml=input=>String(input??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    function currentTheme(){return document.documentElement.dataset.theme==="dark"?"dark":"light";}
+    function updateThemeButton(){const dark=currentTheme()==="dark";const button=$("themeButton");if(!button)return;const label=dark?"Activar modo claro":"Activar modo oscuro";button.textContent=dark?"☀":"☾";button.setAttribute("aria-pressed",String(dark));button.setAttribute("aria-label",label);button.title=label;}
+    function toggleTheme(){const next=currentTheme()==="dark"?"light":"dark";document.documentElement.dataset.theme=next;try{localStorage.setItem("veyra-theme",next);}catch{}updateThemeButton();}
     const missionKey=input=>{const normalized=String(input||"").trim().replace(/\s+/g," ").toUpperCase();const compact=normalized.replace(/[^A-Z0-9]/g,"");const curriculumMission=compact.match(/^(?:MES)?M?0*(\d{1,2})$/);return curriculumMission?"M"+String(Number(curriculumMission[1])):normalized;};
     const lines=input=>String(input||"").split(/\r?\n/).map(item=>item.trim()).filter(Boolean);
 
@@ -170,6 +210,7 @@
     });
     $("briefList").addEventListener("click",event=>{const button=event.target.closest("[data-brief-id]");if(!button)return;const brief=state.briefs.find(item=>String(item.id)===button.getAttribute("data-brief-id"));if(brief)fillForm(brief);});
     $("clearButton").addEventListener("click",()=>resetForm());$("newBriefButton").addEventListener("click",()=>resetForm());
+    $("themeButton").addEventListener("click",toggleTheme);updateThemeButton();
     $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
     (async()=>{if(!db){$("libraryState").className="error-box";$("libraryState").textContent="No fue posible iniciar la conexión segura.";return;}const sessionResult=await db.auth.getSession();state.session=sessionResult.data.session;if(!state.session){location.replace("./control-voa.html");return;}$("sessionEmail").textContent=state.session.user?.email||"";renderPreview();await loadData();})();
   </script>
