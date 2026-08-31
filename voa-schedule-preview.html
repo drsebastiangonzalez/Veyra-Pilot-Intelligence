@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260831-21-v17">
+  <meta name="veyra-build" content="schedule-approval-center-20260831-22-v18">
   <title>Veyra | Previsualización de cronograma</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -142,6 +142,83 @@
     html[data-theme="dark"] .gate{background:#07111f}
     @media print{
       body{background:#fff}.header-actions,.voa-nav-shell,.present-btn,.manual-btn,.delete-session-btn,.manual-dialog,.edit-session-btn,.week-tabs,.footnote,.approval-toolbar,.approval-select,.approval-message,.approval-audit{display:none!important}header{position:static}.header-inner,main{width:100%}main{padding:24px}.hero{margin-bottom:14px;background:#fff!important}.hero h1{font-size:46px}.metrics{grid-template-columns:repeat(5,1fr)}.metric{box-shadow:none}.layout{grid-template-columns:1fr}.side-stack{grid-template-columns:repeat(3,1fr)}.panel{box-shadow:none;break-inside:avoid}.schedule-scroll{overflow:visible;padding:10px}.schedule-grid{min-width:0}.wide-panel{break-before:page}.review-table{min-width:0}.review-table th,.review-table td{padding:8px;font-size:9px}.approval-table{min-width:0}.approval-table th,.approval-table td{padding:7px;font-size:8px}}
+  
+    /* VPI cockpit UI · sistema visual unificado */
+    :root{
+      --navy:#0b1730;--navy-soft:#13294b;--cream:#f2f6fb;--paper:#fff;
+      --gold:#2fd4b0;--gold-soft:#c9f5eb;--ink:#122033;--text:#122033;
+      --muted:#66758a;--line:#dbe4ef;--blue:#246bfd;--blue-soft:#eaf1ff;
+      --shadow:0 18px 48px rgba(24,55,91,.09)
+    }
+    body{
+      background:radial-gradient(circle at 12% -5%,rgba(36,107,253,.12),transparent 28rem),radial-gradient(circle at 92% 8%,rgba(47,212,176,.13),transparent 26rem),linear-gradient(180deg,#f8fbff 0%,#f2f6fb 62%,#edf3f9 100%);
+      background-size:auto;
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+    }
+    header{border-bottom:0;background:rgba(8,22,43,.96);box-shadow:0 10px 34px rgba(5,20,41,.18)}
+    .header-inner{min-height:76px}
+    .brand{font:780 27px/1 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-1.2px}
+    .subbrand{margin-top:5px;color:#7de8d1;font-size:8px;letter-spacing:4.2px}
+    .header-btn{min-height:38px;padding:9px 14px;border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.045);letter-spacing:.7px}
+    .theme-toggle{background:rgba(47,212,176,.12);border-color:rgba(47,212,176,.35)}
+    .voa-nav-shell{top:76px;border-bottom:1px solid rgba(148,163,184,.24);background:rgba(248,251,255,.88);box-shadow:none}
+    .voa-nav{padding:9px 0;gap:7px}
+    .voa-nav a{min-height:39px;padding:9px 14px;border-radius:999px;color:#52647b;font-size:11px;letter-spacing:.1px}
+    .voa-nav a:hover,.voa-nav a:focus-visible{border-color:#cbd9ea;background:#eaf1fb;color:#10213d}
+    .voa-nav .active{border-color:#246bfd;background:#246bfd;box-shadow:0 8px 20px rgba(36,107,253,.24);color:#fff}
+    main{padding-top:30px}
+    .hero{
+      position:relative;isolation:isolate;min-height:225px;align-items:center;padding:36px 40px;overflow:hidden;border:0;border-radius:26px;
+      background:radial-gradient(circle at 78% 15%,rgba(255,255,255,.20),transparent 14rem),linear-gradient(120deg,#10284a 0%,#1750a3 55%,#159f92 118%);
+      box-shadow:0 26px 60px rgba(15,51,104,.22)
+    }
+    .hero::before{content:"";position:absolute;z-index:-1;width:280px;height:280px;right:13%;bottom:-190px;border:52px solid rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
+    .eyebrow{color:#83efd9;font-size:10px;letter-spacing:2.1px}
+    .hero h1{color:#fff;font:780 clamp(38px,5vw,60px)/1.02 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-2.6px}
+    .hero p{color:rgba(239,247,255,.82);font-size:16px}
+    .draft-card,.phase,.sync-card{border-color:rgba(255,255,255,.25);background:rgba(7,28,58,.54);color:rgba(239,247,255,.84);backdrop-filter:blur(12px)}
+    .draft-card strong,.phase strong,.sync-card strong{color:#fff}
+    .metrics,.summary{gap:12px}
+    .metric{border-color:#dce5ef;border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 14px 35px rgba(25,55,91,.09)}
+    .metric span{color:#718096;letter-spacing:.8px}
+    .metric strong{color:#14233a;font:760 34px/1 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-1.5px}
+    .panel{border-color:#dce5ef;border-radius:20px;background:rgba(255,255,255,.94);box-shadow:0 20px 50px rgba(28,57,91,.08)}
+    .panel-head{border-bottom-color:#dce5ef;background:linear-gradient(180deg,#fff,#f8fbff)}
+    .panel-head h2,.summary-top h2{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:750;letter-spacing:-1px}
+    .week-tag,.private-pill{border-color:#c9f5eb;background:#eafffa;color:#087f78}
+    .week-tab.active,.filter.active{border-color:#246bfd;background:#246bfd;box-shadow:0 8px 18px rgba(36,107,253,.2);color:#fff}
+    .search,.field input,.field textarea{border-color:#d5e0eb;background:#f8fafd}
+    .search:focus,.field input:focus,.field textarea:focus{border-color:#246bfd;box-shadow:0 0 0 4px rgba(36,107,253,.12)}
+    .student-button.active{border-color:#bcd2ff;background:#edf3ff;box-shadow:inset 4px 0 0 #246bfd}
+    .status-strip,.notice{border-color:#d7e3f0;background:rgba(255,255,255,.8)}
+    .challenge{border-color:#cfe0f4;background:#f2f7ff}
+    .btn.primary,.present-btn{border-color:#246bfd;background:#246bfd;box-shadow:0 8px 18px rgba(36,107,253,.18)}
+
+    @media(max-width:720px){
+      .voa-nav-shell{top:72px}.header-inner{min-height:72px}main{padding-top:18px}
+      .hero{min-height:0;padding:28px 24px}.hero h1{font-size:36px;letter-spacing:-1.7px}
+    }
+    html[data-theme="dark"]{
+      --paper:#0d1b2b;--ink:#eaf1f9;--text:#eaf1f9;--muted:#99a9bc;--line:#26384d;
+      --gold:#2fd4b0;--gold-soft:#245c54;--blue:#6e9fff;--blue-soft:#172d48;
+      --shadow:0 22px 55px rgba(0,0,0,.34)
+    }
+    html[data-theme="dark"] body{background:radial-gradient(circle at 10% -6%,rgba(36,107,253,.18),transparent 30rem),radial-gradient(circle at 94% 8%,rgba(47,212,176,.10),transparent 27rem),linear-gradient(180deg,#07111f 0%,#091522 62%,#07111f 100%);background-size:auto}
+    html[data-theme="dark"] .voa-nav-shell{border-color:rgba(74,94,118,.38);background:rgba(8,18,31,.88);box-shadow:none}
+    html[data-theme="dark"] .voa-nav a{color:#a9b7c8}
+    html[data-theme="dark"] .voa-nav a:hover,html[data-theme="dark"] .voa-nav a:focus-visible{border-color:#30465f;background:#132238;color:#f1f6fb}
+    html[data-theme="dark"] .voa-nav .active{border-color:#4d87ff;background:#246bfd;color:#fff}
+    html[data-theme="dark"] .hero{background:radial-gradient(circle at 78% 15%,rgba(255,255,255,.13),transparent 14rem),linear-gradient(120deg,#0f2848 0%,#164b8d 58%,#0b766f 120%)}
+    html[data-theme="dark"] .metric{border-color:#263a51;background:rgba(14,29,47,.94)}
+    html[data-theme="dark"] .metric strong{color:#f1f6fb}
+    html[data-theme="dark"] .panel{border-color:#24364b;background:rgba(10,22,36,.96)}
+    html[data-theme="dark"] .panel-head{border-bottom-color:#26384d;background:linear-gradient(180deg,#102033,#0d1b2b)}
+    html[data-theme="dark"] .panel-head h2,html[data-theme="dark"] .summary-top h2{color:#edf4fb}
+    html[data-theme="dark"] .search,html[data-theme="dark"] .field input,html[data-theme="dark"] .field textarea{border-color:#2a3e55;background:#0f2134;color:#e9f0f8}
+    html[data-theme="dark"] .student-button.active{border-color:#345f9d;background:#122b49;box-shadow:inset 4px 0 0 #5b91ff}
+    html[data-theme="dark"] .status-strip,html[data-theme="dark"] .notice{border-color:#263d55;background:#0e2135}
+    html[data-theme="dark"] .challenge{border-color:#294766;background:#102841}
+
   </style>
 </head>
 <body>
