@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07111f" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
-  <meta name="veyra-build" content="control-voa-20260828-1" />
+  <meta name="veyra-build" content="control-voa-20260831-2" />
   <title>Veyra | Control VOA</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -109,6 +109,51 @@
       background:rgba(255,255,255,.07);
     }
     .theme-toggle{display:grid;width:44px;min-width:44px;padding:7px;place-items:center;font-size:20px;line-height:1;text-transform:none}
+    .voa-nav-shell{
+      position:sticky;
+      z-index:19;
+      top:88px;
+      border-bottom:1px solid var(--line);
+      background:rgba(252,250,246,.96);
+      box-shadow:0 8px 24px rgba(7,17,31,.06);
+      backdrop-filter:blur(14px);
+    }
+    .voa-nav{
+      width:min(1320px,calc(100% - 42px));
+      margin:auto;
+      padding:8px 0;
+      display:flex;
+      gap:5px;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .voa-nav::-webkit-scrollbar{display:none}
+    .voa-nav a,.voa-nav button{
+      min-height:42px;
+      padding:10px 13px;
+      display:inline-flex;
+      flex:0 0 auto;
+      align-items:center;
+      border:1px solid transparent;
+      border-radius:10px;
+      background:transparent;
+      color:#475467;
+      text-decoration:none;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.45px;
+      white-space:nowrap;
+    }
+    .voa-nav a:hover,.voa-nav a:focus-visible,.voa-nav button:hover,.voa-nav button:focus-visible{
+      border-color:var(--gold-soft);
+      background:#fff8e8;
+      color:var(--navy);
+    }
+    .voa-nav .active{
+      border-color:var(--gold-soft);
+      background:var(--navy);
+      color:var(--white);
+    }
 
     .auth-shell{
       position:relative;
@@ -1045,7 +1090,7 @@
     .history-change-list strong{color:var(--navy)}
     .history-empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
 
-    .directory-card{width:min(1080px,100%)}
+    .directory-card{width:min(1280px,100%)}
     .directory-body{padding:22px 26px 26px}
     .directory-summary{
       display:grid;
@@ -1099,7 +1144,7 @@
     .student-editor h3{margin:0 0 14px;color:var(--navy);font:700 20px/1.1 Georgia,serif}
     .student-editor-grid{
       display:grid;
-      grid-template-columns:minmax(240px,1.35fr) minmax(220px,1fr) auto;
+      grid-template-columns:minmax(220px,1.2fr) minmax(190px,.9fr) minmax(230px,1fr) auto;
       gap:12px;
       align-items:end;
     }
@@ -1126,7 +1171,7 @@
     }
     .student-list-head,.student-row{
       display:grid;
-      grid-template-columns:minmax(260px,1.35fr) minmax(170px,.85fr) 130px 105px 82px;
+      grid-template-columns:minmax(220px,1.15fr) minmax(175px,.82fr) minmax(230px,1fr) 115px 95px 82px;
       gap:12px;
       align-items:center;
     }
@@ -1148,7 +1193,24 @@
     .student-row.inactive{background:#f7f7f6;color:#7b8491}
     .student-name{min-width:0;color:var(--navy);font-weight:800;line-height:1.35}
     .student-source{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:400}
-    .student-phone{font-variant-numeric:tabular-nums;white-space:nowrap}
+    .student-phone{font-variant-numeric:tabular-nums}
+    .student-contact{min-width:0;display:flex;align-items:center;gap:7px}
+    .student-contact-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .copy-contact-btn{
+      flex:0 0 auto;
+      min-height:32px;
+      padding:6px 8px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--white);
+      color:var(--navy);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+    }
+    .copy-contact-btn:hover,.copy-contact-btn:focus-visible{border-color:var(--gold);background:#fff8e8}
+    .copy-contact-btn:disabled{cursor:not-allowed;opacity:.42}
     .contact-badge,.active-badge{
       display:inline-flex;
       width:max-content;
@@ -1398,7 +1460,9 @@
       .refresh-btn{width:100%}
     }
     @media(max-width:720px){
-      .header-inner,main{width:min(100% - 28px,1320px)}
+      .header-inner,main,.voa-nav{width:min(100% - 28px,1320px)}
+      .voa-nav-shell{top:78px}
+      .header-inner{min-height:78px}
       .header-email{display:none}
       .hero{align-items:flex-start;flex-direction:column}
       .hero-actions{width:100%;align-items:flex-start}
@@ -1459,8 +1523,10 @@
       .directory-toolbar{grid-template-columns:1fr}
       .student-editor-grid{grid-template-columns:1fr}
       .student-list-head{display:none}
-      .student-row{grid-template-columns:1fr auto;gap:8px 12px}
-      .student-row > :nth-child(2),.student-row > :nth-child(3),.student-row > :nth-child(4){grid-column:1}
+      .student-row{grid-template-columns:1fr auto;gap:9px 12px}
+      .student-row .student-name,.student-row .student-contact{grid-column:1 / -1}
+      .student-row .contact-badge{grid-column:1}
+      .student-row .active-badge{grid-column:1}
       .student-row > :last-child{grid-column:2;grid-row:1 / span 2}
       .instructor-toolbar,.instructor-editor-grid,.instructor-checks{grid-template-columns:1fr}
       .instructor-list-head{display:none}
@@ -1485,6 +1551,10 @@
     html[data-theme="dark"] .modal-header{background:linear-gradient(135deg,#152033,#1e2531)}
     html[data-theme="dark"] :is(.filter input,.filter select,.session-field input,.session-field select,.session-field textarea,.directory-toolbar input,.directory-toolbar select,.instructor-toolbar input,.instructor-toolbar select,.student-suggestions,.student-suggestion,.modal-close){background:#111c2b;color:#edf2f7}
     html[data-theme="dark"] :is(.toolbar-row,.history-change-list,.summary-delivery,.notification-badge.off){background:#111b29}
+    html[data-theme="dark"] .voa-nav-shell{border-color:#344154;background:rgba(8,15,25,.94);box-shadow:0 8px 24px rgba(0,0,0,.24)}
+    html[data-theme="dark"] .voa-nav a,html[data-theme="dark"] .voa-nav button{color:#bdc7d4}
+    html[data-theme="dark"] .voa-nav a:hover,html[data-theme="dark"] .voa-nav a:focus-visible,html[data-theme="dark"] .voa-nav button:hover,html[data-theme="dark"] .voa-nav button:focus-visible{background:#172234;color:#f4f0e8}
+    html[data-theme="dark"] .voa-nav .active{border-color:#d7a63a;background:#d7a63a;color:#07111f}
     html[data-theme="dark"] .directory-btn{border-color:#7d8a9c;background:rgba(9,18,30,.76);color:#f4f0e8;backdrop-filter:blur(8px)}
     html[data-theme="dark"] .directory-btn:hover,html[data-theme="dark"] .directory-btn:focus-visible{background:#172234}
     html[data-theme="dark"] .attendance-alert{border-color:#6a3033;background:linear-gradient(135deg,#29191e,#3b1d20);color:#ffc1bb}
@@ -1565,6 +1635,16 @@
         </div>
       </div>
     </header>
+    <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
+      <div class="voa-nav">
+        <a class="active" href="./control-voa.html" aria-current="page">Control VOA</a>
+        <a href="./voa-schedule-preview.html">Cronograma</a>
+        <a href="./simulator-history.html">Historial</a>
+        <a href="./voa-mission-briefs.html">Mission Briefs</a>
+        <button id="navDirectoryButton" type="button">Directorio</button>
+        <button id="navInstructorButton" type="button">Instructores</button>
+      </div>
+    </nav>
 
     <main>
       <section class="hero">
@@ -1575,10 +1655,6 @@
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
-            <a class="directory-btn schedule-preview-link" href="./voa-schedule-preview.html">Cronograma</a>
-            <a class="directory-btn mission-briefs-link" href="./voa-mission-briefs.html">Mission Briefs</a>
-            <button class="directory-btn" id="directoryButton" type="button">Directorio</button>
-            <button class="directory-btn" id="instructorDirectoryButton" type="button">Instructores</button>
             <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
           </div>
           <div class="sync" aria-live="polite">
@@ -1909,7 +1985,7 @@
           </div>
 
           <div class="directory-toolbar">
-            <input id="studentSearchInput" type="search" placeholder="Buscar estudiante o celular" autocomplete="off" aria-label="Buscar estudiante" />
+            <input id="studentSearchInput" type="search" placeholder="Buscar estudiante, celular o correo" autocomplete="off" aria-label="Buscar estudiante" />
             <select id="studentStatusFilter" aria-label="Filtrar estudiantes">
               <option value="">Todos los estudiantes</option>
               <option value="active">Solo activos</option>
@@ -1930,6 +2006,11 @@
                 <label for="studentPhone">Celular con indicativo</label>
                 <input id="studentPhone" type="tel" inputmode="tel" maxlength="18" placeholder="+573001234567" autocomplete="off" />
                 <span class="field-hint">Puede dejarse vacío hasta verificarlo.</span>
+              </div>
+              <div class="session-field">
+                <label for="studentEmail">Correo electrónico</label>
+                <input id="studentEmail" type="email" maxlength="254" placeholder="estudiante@correo.com" autocomplete="off" autocapitalize="none" spellcheck="false" />
+                <span class="field-hint">Opcional; se conserva en el directorio protegido.</span>
               </div>
               <label class="student-active-check">
                 <input id="studentActive" type="checkbox" checked />
@@ -2053,7 +2134,7 @@
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,absence_managed_at,absence_managed_by,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
-    const STUDENT_FIELDS = "id,full_name,phone_e164,phone_status,active,source,notes,updated_at";
+    const STUDENT_FIELDS = "id,full_name,phone_e164,email,phone_status,active,source,notes,updated_at";
     const INSTRUCTOR_FIELDS = "id,full_name,normalized_name,phone_e164,phone_status,active,notification_enabled,summary_time,timezone,source,updated_at";
     const INSTRUCTOR_SUMMARY_FIELDS = "id,student_name,mission,equipment,location,instructor_name,confirmation_status,session_start,session_end,cancelled_at";
     const INSTRUCTOR_NOTIFICATION_FIELDS = "id,target_date,message_type,delivery_status,template_name,whatsapp_message_id,content_snapshot,accepted_at,sent_at,delivered_at,read_at,failed_at,error_code,error_message,created_at,updated_at";
@@ -2443,13 +2524,20 @@
       const search = normalize($("studentSearchInput").value);
       const filter = $("studentStatusFilter").value;
       return state.students.filter(function(student){
-        const haystack = normalize([student.full_name,student.phone_e164,student.notes].join(" "));
+        const haystack = normalize([student.full_name,student.phone_e164,student.email,student.notes].join(" "));
         if(search && haystack.indexOf(search) < 0) return false;
         if(filter === "active" && !student.active) return false;
         if(filter === "inactive" && student.active) return false;
         if(filter === "needs_data" && student.phone_status === "verified") return false;
         return true;
       });
+    }
+
+    function studentContactHtml(value,label){
+      const clean = String(value || "").trim();
+      return '<div class="student-contact"><span class="student-contact-value">' +
+        escapeHtml(clean || "Pendiente") + '</span><button class="copy-contact-btn" type="button" data-copy-student-contact="' +
+        escapeHtml(label) + '"' + (clean ? '' : ' disabled') + '>Copiar</button></div>';
     }
 
     function renderDirectory(){
@@ -2465,14 +2553,15 @@
         return;
       }
 
-      const head = '<div class="student-list-head"><span>Estudiante</span><span>Celular</span><span>Contacto</span><span>Estado</span><span>Acción</span></div>';
+      const head = '<div class="student-list-head"><span>Estudiante</span><span>Celular</span><span>Correo</span><span>Contacto</span><span>Estado</span><span>Acción</span></div>';
       const body = rows.map(function(student){
         const phoneStatus = student.phone_status || "missing";
         const sourceText = sourceLabel(student.source) + (student.notes ? " · " + student.notes : "");
         return '<div class="student-row' + (student.active ? '' : ' inactive') + '">' +
           '<div class="student-name">' + escapeHtml(student.full_name || "Sin nombre") +
             '<span class="student-source">' + escapeHtml(sourceText) + '</span></div>' +
-          '<div class="student-phone">' + escapeHtml(student.phone_e164 || "Pendiente") + '</div>' +
+          studentContactHtml(student.phone_e164,"Celular") +
+          studentContactHtml(student.email,"Correo") +
           '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(contactStatusLabel(phoneStatus)) + '</span>' +
           '<span class="active-badge ' + (student.active ? 'active' : 'inactive') + '">' + (student.active ? 'Activo' : 'Inactivo') + '</span>' +
           '<button class="student-edit-btn" type="button" data-edit-student="' + escapeHtml(student.id) + '">Editar</button>' +
@@ -2526,6 +2615,7 @@
     function closeDirectoryModal(){
       if(state.studentSaving) return;
       $("directoryModal").classList.add("hidden");
+      if(window.location.hash === "#directorio") window.history.replaceState({},document.title,window.location.pathname + window.location.search);
       document.body.classList.remove("modal-open");
       closeStudentEditor();
       setDirectoryMessage("");
@@ -2540,6 +2630,7 @@
       $("studentFormTitle").textContent = student ? "Editar estudiante" : "Nuevo estudiante";
       $("studentFullName").value = student ? (student.full_name || "") : "";
       $("studentPhone").value = student ? (student.phone_e164 || "") : "";
+      $("studentEmail").value = student ? (student.email || "") : "";
       $("studentActive").checked = student ? Boolean(student.active) : true;
       $("studentForm").classList.remove("hidden");
       setDirectoryMessage("");
@@ -2653,6 +2744,7 @@
     function closeInstructorDirectoryModal(){
       if(state.instructorSaving) return;
       $("instructorDirectoryModal").classList.add("hidden");
+      if(window.location.hash === "#instructores") window.history.replaceState({},document.title,window.location.pathname + window.location.search);
       document.body.classList.remove("modal-open");
       closeInstructorEditor();
       state.summaryInstructorId = null;
@@ -3202,6 +3294,15 @@
       window.setTimeout(function(){ $("newPassword").focus(); },50);
     }
 
+    function openRequestedVoaView(){
+      if(!state.session) return;
+      if(window.location.hash === "#directorio"){
+        openDirectoryModal();
+      }else if(window.location.hash === "#instructores"){
+        openInstructorDirectoryModal();
+      }
+    }
+
     function showApp(session){
       state.session = session;
       $("authShell").classList.add("hidden");
@@ -3210,6 +3311,7 @@
       loadSessions();
       loadStudents(false);
       loadInstructors(false);
+      window.setTimeout(openRequestedVoaView,0);
       if(state.timer) window.clearInterval(state.timer);
       state.timer = window.setInterval(loadSessions,60000);
     }
@@ -3417,11 +3519,12 @@
       const form = event.currentTarget;
       if(!form.checkValidity()){
         form.reportValidity();
-        setDirectoryMessage("Escribe el nombre completo del estudiante.","error");
+        setDirectoryMessage("Revisa el nombre y el correo electrónico del estudiante.","error");
         return;
       }
 
       const phoneRaw = $("studentPhone").value.trim();
+      const emailRaw = $("studentEmail").value.trim().toLowerCase();
       if(phoneRaw && !normalizePhone(phoneRaw)){
         setDirectoryMessage("El celular debe incluir un indicativo válido, por ejemplo +57.","error");
         $("studentPhone").focus();
@@ -3439,6 +3542,7 @@
           student_id:state.editingStudentId,
           full_name:$("studentFullName").value.trim(),
           phone:phoneRaw,
+          email:emailRaw,
           active:$("studentActive").checked
         }
       });
@@ -3456,7 +3560,7 @@
         }else if(code === "DUPLICATE_PHONE"){
           setDirectoryMessage("Ese celular ya pertenece a " + (details.existing_name || "otro estudiante") + ".","error");
         }else if(code === "INVALID_INPUT"){
-          setDirectoryMessage("Revisa el nombre y el celular antes de guardar.","error");
+          setDirectoryMessage("Revisa el nombre, el celular y el correo antes de guardar.","error");
         }else if(code === "NOT_FOUND"){
           setDirectoryMessage("El registro ya no existe. Actualiza el directorio.","error");
         }else{
@@ -4278,8 +4382,14 @@
     $("sessionRows").addEventListener("click",handleSessionAction);
     $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
-    $("directoryButton").addEventListener("click",openDirectoryModal);
-    $("instructorDirectoryButton").addEventListener("click",openInstructorDirectoryModal);
+    $("navDirectoryButton").addEventListener("click",function(){
+      window.history.replaceState({},document.title,window.location.pathname + window.location.search + "#directorio");
+      openDirectoryModal();
+    });
+    $("navInstructorButton").addEventListener("click",function(){
+      window.history.replaceState({},document.title,window.location.pathname + window.location.search + "#instructores");
+      openInstructorDirectoryModal();
+    });
     $("newStudentName").addEventListener("input",function(){
       if(
         state.selectedStudentId &&
@@ -4336,6 +4446,15 @@
     $("addStudentButton").addEventListener("click",function(){ openStudentEditor(null); });
     $("cancelStudentButton").addEventListener("click",closeStudentEditor);
     $("studentList").addEventListener("click",function(event){
+      const copyButton = event.target.closest("[data-copy-student-contact]");
+      if(copyButton && !copyButton.disabled){
+        const value = copyButton.closest(".student-contact").querySelector(".student-contact-value").textContent.trim();
+        const label = copyButton.getAttribute("data-copy-student-contact") || "Dato";
+        copyText(value)
+          .then(function(){ setDirectoryMessage(label + " copiado.","success"); })
+          .catch(function(){ setDirectoryMessage("No fue posible copiar el " + label.toLowerCase() + ".","error"); });
+        return;
+      }
       const button = event.target.closest("[data-edit-student]");
       if(button) openStudentEditor(button.getAttribute("data-edit-student"));
     });
@@ -4367,6 +4486,7 @@
     $("openInstructorWhatsAppButton").addEventListener("click",openInstructorWhatsApp);
     $("sendInstructorSummaryButton").addEventListener("click",sendInstructorSummary);
     $("copyInstructorSummaryButton").addEventListener("click",copyInstructorSummary);
+    window.addEventListener("hashchange",openRequestedVoaView);
     document.addEventListener("keydown",function(event){
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
