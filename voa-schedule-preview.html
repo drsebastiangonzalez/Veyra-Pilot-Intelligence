@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260827-18-v14">
+  <meta name="veyra-build" content="schedule-approval-center-20260831-19-v15">
   <title>Veyra | Previsualización de cronograma</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -301,7 +301,7 @@
       "La ruta normal continúa M5 → M6. Solo una prórroga autorizada permite M5 → M5.1 → M5.2 → M6; nunca permite retroceder desde una misión posterior ya corroborada.",
       "Un refuerzo solo se agenda cuando fue solicitado y queda identificado como ‘Sesión de refuerzo’; no adelanta ni retrocede la última misión MES.",
       "Finalizar los simuladores PPA no finaliza al estudiante: únicamente bloquea el inicio de PCA hasta aprobar el examen con inspector y recibir autorización.",
-      "Las misiones de simulador y las horas de vuelo se controlan por separado. FC ESTIMATE aporta el TOTAL TIME más actualizado y EST VUELO queda como respaldo; ninguna cifra de horas se utiliza para inferir qué misión sigue.",
+      "Las misiones de simulador y las horas de vuelo se controlan por separado. FC ESTIMATE y EST VUELO se muestran únicamente como referencia informativa; sus diferencias no bloquean la aprobación ni determinan qué misión sigue.",
       "Si el estudiante concentra varias actividades en Flandes, se procura mantenerlas en la misma sede y solo se alerta cuando la propuesta lo movería entre ciudades.",
       "El instructor es asignado por Programación, no por VOA. Toda sesión debe identificarlo y se bloquea cualquier doble asignación del mismo instructor en el mismo horario.",
       "Cada jornada de instructor debe reunir mínimo tres sesiones; la jornada ideal utiliza los seis bloques disponibles. Una o dos sesiones no se aprueban sin una excepción documentada por Programación."
@@ -1308,7 +1308,7 @@
           }
           const hoursVerification=progress?.hoursVerification;
           if(hoursVerification?.needs_review){
-            errors.push("Aprobación bloqueada: las fuentes de horas de vuelo requieren revisión. "+flightHoursStatusLabel(student.flightHours)+". La cifra no modifica la secuencia MES.");
+            checks.push("Las diferencias entre FC ESTIMATE y EST VUELO se conservan como información y no bloquean la aprobación ni alteran la secuencia MES.");
           }else if(student.flightHours?.sourceSheet){
             checks.push("Horas de vuelo tomadas de "+student.flightHours.sourceSheet+"; se controlan por separado de la secuencia MES.");
           }
@@ -1637,8 +1637,7 @@
         const verificationNote='<br><small>'+escapeHtml(verificationLabel(student.googleProgress?.verification?.status))+'</small>'+(auditNote?'<br><small>'+escapeHtml(auditNote)+'</small>':'');
         const hours=student.flightHours;
         const balanceLabel=hours&&(hours.remaining===null||hours.remaining===undefined)?'Saldo por conciliar':'Saldo '+(hours?.basis==='calculated'?'calculado':'reportado')+': '+formatHours(hours?.remaining)+' h';
-        const hoursReview=hours?.hoursVerification?.needs_review;
-        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(loggedHoursLabel(hours))+'</strong><small class="pending-hours">'+escapeHtml(balanceLabel)+'</small><small>'+escapeHtml(flightHoursStatusLabel(hours))+'</small><small>'+escapeHtml(flightHoursSourceAudit(hours))+'</small>'+(hoursReview?'<small class="pending-hours">Revisión obligatoria antes de aprobar</small>':'')+'<small>No determina la siguiente misión</small></div>':'<div class="hours-cell">Por conciliar<br><small>No determina la siguiente misión</small></div>';
+        const hoursHtml=hours?'<div class="hours-cell"><strong>'+escapeHtml(loggedHoursLabel(hours))+'</strong><small class="pending-hours">'+escapeHtml(balanceLabel)+'</small><small>'+escapeHtml(flightHoursStatusLabel(hours))+'</small><small>'+escapeHtml(flightHoursSourceAudit(hours))+'</small><small>Referencia informativa; no determina la misión ni bloquea la aprobación</small></div>':'<div class="hours-cell">Por conciliar<br><small>Referencia informativa; no determina la misión ni bloquea la aprobación</small></div>';
         const hasWorkAdjustment=(student.works||student.reasonableAdjustment)&&proposals.length;
         const confirmedAdjustment=student.adjustmentConfirmed&&proposals.length;
         const scheduleRegistered=student.scheduleRegistered&&proposals.length;
