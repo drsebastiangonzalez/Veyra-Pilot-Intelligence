@@ -19,6 +19,9 @@ FUNCIONES DE LA PRIMERA VERSION
 - Controles de banco, cronometro, marca de fin outbound, pausa y reinicio.
 - Teclado en PC y botones tactiles en iPad/iPhone.
 - Debriefing local con puntuacion.
+- Ejercicios guiados para entrada directa, paralela y gota, mas modo aleatorio.
+- Brief dinamico con curso inbound, llegada, sentido de giros, tramo y viento.
+- Historial local de los ultimos 20 intentos con mejor resultado y promedio.
 - Ultimo resultado guardado en localStorage.
 
 ALCANCE
