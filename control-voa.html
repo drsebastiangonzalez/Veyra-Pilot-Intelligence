@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07111f" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
-  <meta name="veyra-build" content="control-voa-20260831-3" />
+  <meta name="veyra-build" content="control-voa-20260831-4" />
   <title>Veyra | Control VOA</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -1570,6 +1570,532 @@
     html[data-theme="dark"] .badge.declined,html[data-theme="dark"] .contact-badge.missing,html[data-theme="dark"] .active-badge.inactive{background:#3b1d20;color:#ffaaa3}
     html[data-theme="dark"] .badge.cancelled{background:#263141;color:#bdc7d4}
     html[data-theme="dark"] .history-event::before{border-color:#0f1927}
+  
+    /* VPI cockpit UI · versión 4 */
+    :root{
+      --navy:#0b1730;
+      --navy-soft:#13294b;
+      --cream:#f2f6fb;
+      --cream-light:#f8fafe;
+      --gold:#2fd4b0;
+      --gold-dark:#087f78;
+      --gold-soft:#c9f5eb;
+      --text:#122033;
+      --muted:#66758a;
+      --line:#dbe4ef;
+      --white:#ffffff;
+      --green:#09835c;
+      --green-soft:#e7f8f1;
+      --red:#c4323f;
+      --red-soft:#ffedf0;
+      --amber:#9b6812;
+      --amber-soft:#fff5d9;
+      --shadow:0 18px 48px rgba(24,55,91,.09);
+    }
+    body{
+      background:
+        radial-gradient(circle at 12% -5%,rgba(36,107,253,.12),transparent 28rem),
+        radial-gradient(circle at 92% 8%,rgba(47,212,176,.13),transparent 26rem),
+        linear-gradient(180deg,#f8fbff 0%,#f2f6fb 62%,#edf3f9 100%);
+      background-size:auto;
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    header{
+      border-bottom:0;
+      background:rgba(8,22,43,.96);
+      box-shadow:0 10px 34px rgba(5,20,41,.18);
+    }
+    .header-inner{
+      width:min(1400px,calc(100% - 48px));
+      min-height:76px;
+    }
+    .brand{
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:27px;
+      font-weight:780;
+      letter-spacing:-1.2px;
+    }
+    .subbrand{
+      margin-top:5px;
+      color:#7de8d1;
+      font-size:8px;
+      letter-spacing:4.2px;
+    }
+    .ghost-btn,.back-link{
+      min-height:38px;
+      padding:9px 14px;
+      border-color:rgba(255,255,255,.15);
+      background:rgba(255,255,255,.045);
+      letter-spacing:.7px;
+    }
+    .theme-toggle{background:rgba(47,212,176,.12);border-color:rgba(47,212,176,.35)}
+    .voa-nav-shell{
+      top:76px;
+      border-bottom:1px solid rgba(148,163,184,.24);
+      background:rgba(248,251,255,.88);
+      box-shadow:none;
+    }
+    .voa-nav{
+      width:min(1400px,calc(100% - 48px));
+      padding:9px 0;
+      gap:7px;
+    }
+    .voa-nav a,.voa-nav button{
+      min-height:39px;
+      padding:9px 14px;
+      border-radius:999px;
+      color:#52647b;
+      font-size:11px;
+      letter-spacing:.1px;
+    }
+    .voa-nav a:hover,.voa-nav a:focus-visible,.voa-nav button:hover,.voa-nav button:focus-visible{
+      border-color:#cbd9ea;
+      background:#eaf1fb;
+      color:#10213d;
+    }
+    .voa-nav .active{
+      border-color:#246bfd;
+      background:#246bfd;
+      box-shadow:0 8px 20px rgba(36,107,253,.24);
+      color:#fff;
+    }
+    main{
+      width:min(1400px,calc(100% - 48px));
+      padding:30px 0 54px;
+    }
+    .hero{
+      position:relative;
+      isolation:isolate;
+      min-height:230px;
+      align-items:center;
+      margin-bottom:0;
+      padding:38px 40px 74px;
+      border:0;
+      border-radius:26px;
+      background:
+        radial-gradient(circle at 78% 15%,rgba(255,255,255,.20),transparent 14rem),
+        linear-gradient(120deg,#10284a 0%,#1750a3 55%,#159f92 118%);
+      box-shadow:0 26px 60px rgba(15,51,104,.22);
+    }
+    .hero::before,.hero::after{
+      content:"";
+      position:absolute;
+      z-index:-1;
+      pointer-events:none;
+      border-radius:50%;
+    }
+    .hero::before{
+      width:280px;
+      height:280px;
+      right:13%;
+      bottom:-190px;
+      border:52px solid rgba(255,255,255,.08);
+    }
+    .hero::after{
+      width:11px;
+      height:11px;
+      right:7%;
+      top:26%;
+      background:#79efd6;
+      box-shadow:-36px 35px 0 2px rgba(255,255,255,.28),42px 54px 0 -2px rgba(255,255,255,.4);
+    }
+    .hero > div:first-child{max-width:760px}
+    .eyebrow{
+      margin-bottom:12px;
+      color:#83efd9;
+      font-size:10px;
+      letter-spacing:2.1px;
+    }
+    h1,h2{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .hero h1{
+      max-width:760px;
+      color:#fff;
+      font-size:clamp(36px,4.7vw,58px);
+      font-weight:780;
+      line-height:1.02;
+      letter-spacing:-2.6px;
+    }
+    .hero p{
+      max-width:680px;
+      margin-top:14px;
+      color:rgba(239,247,255,.82);
+      font-size:16px;
+      line-height:1.55;
+    }
+    .hero-actions{position:relative;z-index:2;gap:12px}
+    .hero .new-session-btn{
+      border-color:rgba(255,255,255,.8);
+      background:#fff;
+      color:#123665;
+      box-shadow:0 13px 30px rgba(7,28,61,.26);
+    }
+    .hero .new-session-btn:hover,.hero .new-session-btn:focus-visible{
+      border-color:#85efda;
+      background:#eafffa;
+      box-shadow:0 0 0 4px rgba(126,239,216,.18),0 13px 30px rgba(7,28,61,.24);
+    }
+    .sync,.sync strong{color:rgba(239,247,255,.76)}
+    .sync strong{font-size:12px}
+    .stats{
+      position:relative;
+      z-index:3;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:12px;
+      margin:-49px 22px 22px;
+    }
+    .stat{
+      position:relative;
+      min-height:108px;
+      overflow:hidden;
+      padding:18px 18px 16px;
+      border:1px solid rgba(212,223,235,.92);
+      border-top:1px solid rgba(212,223,235,.92)!important;
+      border-radius:16px;
+      background:rgba(255,255,255,.96);
+      box-shadow:0 14px 35px rgba(25,55,91,.10);
+      backdrop-filter:blur(16px);
+    }
+    .stat::after{
+      position:absolute;
+      right:15px;
+      bottom:10px;
+      color:#dce5f0;
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+    }
+    .stat.total::after{content:"↗"}
+    .stat.confirmed::after{content:"✓";color:#a7e5cf}
+    .stat.declined::after{content:"!";color:#fac2c8}
+    .stat.pending::after{content:"◷";color:#f6dda4}
+    .stat.cancelled::after{content:"×";color:#ced7e3}
+    .stat-label{
+      color:#718096;
+      font-size:9px;
+      letter-spacing:.8px;
+    }
+    .stat-value{
+      margin-top:9px;
+      color:#14233a;
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:34px;
+      font-weight:760;
+      letter-spacing:-1.5px;
+    }
+    .panel{
+      border-color:#dce5ef;
+      border-radius:20px;
+      background:rgba(255,255,255,.94);
+      box-shadow:0 20px 50px rgba(28,57,91,.08);
+    }
+    .filters{padding:19px 20px 16px;background:linear-gradient(180deg,#fff,#fbfdff)}
+    .filter label{color:#718096;letter-spacing:.7px}
+    .filter input,.filter select{
+      border-color:#d5e0eb;
+      border-radius:12px;
+      background:#f8fafd;
+    }
+    .filter input:focus,.filter select:focus,
+    .directory-toolbar input:focus,.directory-toolbar select:focus{
+      border-color:#246bfd;
+      box-shadow:0 0 0 4px rgba(36,107,253,.12);
+    }
+    .refresh-btn,.new-session-btn{
+      border-color:#246bfd;
+      border-radius:12px;
+      background:#246bfd;
+      box-shadow:0 8px 18px rgba(36,107,253,.18);
+    }
+    .toolbar-row{background:#f7f9fc}
+    th{
+      background:#edf3f9;
+      color:#53657b;
+      letter-spacing:.8px;
+    }
+    td{border-bottom-color:#e6edf5}
+    tbody tr:hover{background:#f4f8fd}
+    .privacy-note{
+      border-color:#dce5ef;
+      border-left:0;
+      border-radius:14px;
+      background:rgba(255,255,255,.68);
+    }
+
+    .modal-overlay{
+      padding:16px;
+      background:rgba(4,15,30,.68);
+      backdrop-filter:blur(14px) saturate(115%);
+    }
+    .modal-card{
+      border:1px solid rgba(219,228,239,.95);
+      border-top:1px solid rgba(219,228,239,.95);
+      border-radius:24px;
+      background:#f6f9fd;
+      box-shadow:0 36px 100px rgba(3,15,31,.38);
+    }
+    .directory-card{
+      width:min(1380px,100%);
+      max-height:calc(100dvh - 32px);
+    }
+    .modal-header{
+      padding:24px 28px;
+      align-items:center;
+      border-bottom:0;
+      background:
+        radial-gradient(circle at 88% 0%,rgba(47,212,176,.20),transparent 17rem),
+        linear-gradient(115deg,#10284a,#173c70);
+    }
+    .modal-header .eyebrow{margin-bottom:8px;color:#79e9d1}
+    .modal-header h2{
+      margin:0;
+      color:#fff;
+      font-size:31px;
+      font-weight:750;
+      line-height:1.05;
+      letter-spacing:-1px;
+    }
+    .modal-header p{
+      max-width:760px;
+      margin-top:9px;
+      color:rgba(237,245,255,.74);
+    }
+    .modal-close{
+      border-color:rgba(255,255,255,.18);
+      background:rgba(255,255,255,.09);
+      color:#fff;
+    }
+    .modal-close:hover,.modal-close:focus-visible{
+      border-color:#7be9d2;
+      background:rgba(47,212,176,.18);
+    }
+    .directory-body{padding:20px 24px 24px}
+    .directory-summary{gap:12px;margin-bottom:14px}
+    .directory-stat{
+      position:relative;
+      overflow:hidden;
+      padding:14px 16px;
+      border-color:#dce5ef;
+      border-radius:14px;
+      background:#fff;
+      box-shadow:0 8px 22px rgba(31,61,96,.055);
+    }
+    .directory-stat::before{
+      content:"";
+      position:absolute;
+      top:0;
+      right:0;
+      left:0;
+      height:3px;
+      background:linear-gradient(90deg,#246bfd,#2fd4b0);
+    }
+    .directory-stat span{color:#748398;letter-spacing:.65px}
+    .directory-stat strong{
+      margin-top:6px;
+      color:#15263f;
+      font-size:25px;
+      font-weight:760;
+      letter-spacing:-.8px;
+    }
+    .directory-toolbar{
+      grid-template-columns:minmax(320px,1fr) 220px auto;
+      gap:11px;
+      margin-bottom:14px;
+    }
+    .directory-toolbar input,.directory-toolbar select{
+      min-height:46px;
+      border-color:#d6e1ed;
+      border-radius:12px;
+      background:#fff;
+    }
+    .student-editor{
+      border-color:#bfd4f4;
+      border-left:0;
+      border-radius:16px;
+      background:#edf5ff;
+    }
+    .student-editor h3{
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-weight:740;
+    }
+    .student-list{
+      max-height:min(55vh,570px);
+      border-color:#dce5ef;
+      border-radius:16px;
+      box-shadow:0 10px 28px rgba(25,55,91,.045);
+    }
+    .student-list-head{
+      padding:12px 15px;
+      background:#edf3f9;
+      color:#52657b;
+      letter-spacing:.7px;
+    }
+    .student-row{
+      padding:13px 15px;
+      border-bottom-color:#e7eef6;
+      background:#fff;
+    }
+    .student-row:hover{background:#f3f8fd}
+    .student-contact-value{color:#263a54}
+    .copy-contact-btn{
+      border-color:#ccdae8;
+      border-radius:9px;
+      background:#f5f8fc;
+      color:#24599f;
+    }
+    .copy-contact-btn:hover,.copy-contact-btn:focus-visible{
+      border-color:#246bfd;
+      background:#eaf1ff;
+    }
+    .student-edit-btn{
+      border-color:#cad7e5;
+      border-radius:9px;
+      background:#fff;
+      color:#27405f;
+    }
+    .student-edit-btn:hover,.student-edit-btn:focus-visible{
+      border-color:#246bfd;
+      background:#edf3ff;
+    }
+
+    @media(max-width:1050px){
+      .stats{grid-template-columns:repeat(5,minmax(145px,1fr));overflow-x:auto;padding-bottom:8px}
+      .hero{min-height:245px}
+    }
+    @media(max-width:720px){
+      .header-inner,main,.voa-nav{width:min(100% - 28px,1400px)}
+      .voa-nav-shell{top:72px}
+      .header-inner{min-height:72px}
+      main{padding-top:18px}
+      .hero{min-height:0;padding:28px 24px;align-items:flex-start}
+      .hero h1{font-size:36px;letter-spacing:-1.7px}
+      .hero-actions{margin-top:4px}
+      .stats{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        margin:14px 0 18px;
+        overflow:visible;
+        padding:0;
+      }
+      .stat{min-height:96px}
+      .stat:last-child{grid-column:1 / -1}
+      .directory-card{max-height:calc(100dvh - 20px)}
+      .modal-header{padding:20px}
+      .modal-header h2{font-size:25px}
+      .directory-body{padding:14px}
+      .directory-toolbar{grid-template-columns:1fr}
+      .student-row{background:#fff}
+    }
+
+    html[data-theme="dark"]{
+      --cream:#07111f;
+      --cream-light:#0a1422;
+      --text:#eaf1f9;
+      --muted:#99a9bc;
+      --line:#26384d;
+      --shadow:0 22px 55px rgba(0,0,0,.34);
+    }
+    html[data-theme="dark"] body{
+      background:
+        radial-gradient(circle at 10% -6%,rgba(36,107,253,.18),transparent 30rem),
+        radial-gradient(circle at 94% 8%,rgba(47,212,176,.10),transparent 27rem),
+        linear-gradient(180deg,#07111f 0%,#091522 62%,#07111f 100%);
+      background-size:auto;
+    }
+    html[data-theme="dark"] .voa-nav-shell{
+      border-color:rgba(74,94,118,.38);
+      background:rgba(8,18,31,.88);
+      box-shadow:none;
+    }
+    html[data-theme="dark"] .voa-nav a,
+    html[data-theme="dark"] .voa-nav button{color:#a9b7c8}
+    html[data-theme="dark"] .voa-nav a:hover,
+    html[data-theme="dark"] .voa-nav a:focus-visible,
+    html[data-theme="dark"] .voa-nav button:hover,
+    html[data-theme="dark"] .voa-nav button:focus-visible{
+      border-color:#30465f;
+      background:#132238;
+      color:#f1f6fb;
+    }
+    html[data-theme="dark"] .voa-nav .active{
+      border-color:#4d87ff;
+      background:#246bfd;
+      color:#fff;
+    }
+    html[data-theme="dark"] .hero{
+      background:
+        radial-gradient(circle at 78% 15%,rgba(255,255,255,.13),transparent 14rem),
+        linear-gradient(120deg,#0f2848 0%,#164b8d 58%,#0b766f 120%);
+    }
+    html[data-theme="dark"] .stat{
+      border-color:#263a51!important;
+      background:rgba(14,29,47,.94);
+    }
+    html[data-theme="dark"] .stat-value{color:#f1f6fb}
+    html[data-theme="dark"] .stat-label{color:#9babc0}
+    html[data-theme="dark"] .panel{
+      border-color:#24364b;
+      background:rgba(10,22,36,.96);
+    }
+    html[data-theme="dark"] .filters{background:linear-gradient(180deg,#0e1c2c,#0b1827)}
+    html[data-theme="dark"] .filter input,
+    html[data-theme="dark"] .filter select{
+      border-color:#2a3e55;
+      background:#0f2134;
+      color:#e9f0f8;
+    }
+    html[data-theme="dark"] .toolbar-row{background:#0b1827}
+    html[data-theme="dark"] th{
+      background:#13243a;
+      color:#9fb0c4;
+    }
+    html[data-theme="dark"] td{border-bottom-color:#213449}
+    html[data-theme="dark"] tbody tr:hover{background:#102338}
+    html[data-theme="dark"] .privacy-note{background:rgba(12,26,42,.74)}
+    html[data-theme="dark"] .modal-card{
+      border-color:#2a3d53;
+      background:#0a1625;
+    }
+    html[data-theme="dark"] .modal-header{
+      background:
+        radial-gradient(circle at 88% 0%,rgba(47,212,176,.13),transparent 17rem),
+        linear-gradient(115deg,#0f2746,#132f56);
+    }
+    html[data-theme="dark"] .directory-stat{
+      border-color:#273b51;
+      background:#0f2033;
+    }
+    html[data-theme="dark"] .directory-stat strong{color:#edf4fb}
+    html[data-theme="dark"] .directory-toolbar input,
+    html[data-theme="dark"] .directory-toolbar select{
+      border-color:#2a3d53;
+      background:#0f2033;
+      color:#eaf1f9;
+    }
+    html[data-theme="dark"] .student-list{
+      border-color:#283c52;
+      background:#0d1c2d;
+    }
+    html[data-theme="dark"] .student-list-head{
+      background:#13253a;
+      color:#9fb1c6;
+    }
+    html[data-theme="dark"] .student-row{
+      border-bottom-color:#20364c;
+      background:#0d1c2d;
+    }
+    html[data-theme="dark"] .student-row:hover{background:#12263c}
+    html[data-theme="dark"] .student-contact-value{color:#dbe7f3}
+    html[data-theme="dark"] .copy-contact-btn,
+    html[data-theme="dark"] .student-edit-btn{
+      border-color:#30465e;
+      background:#14273b;
+      color:#a9c9f5;
+    }
+    html[data-theme="dark"] .student-editor{
+      border-color:#2d5077;
+      background:#102841;
+    }
+    html[data-theme="dark"] :is(.modal-header h2,.hero h1){color:#fff}
+
   </style>
 </head>
 <body>
@@ -1649,9 +2175,9 @@
     <main>
       <section class="hero">
         <div>
-          <div class="eyebrow">Administración · Asistencia</div>
-          <h1>Control VOA</h1>
-          <p>Consulta confirmaciones, crea sesiones y controla las respuestas de asistencia desde una sola vista protegida.</p>
+          <div class="eyebrow">Centro de operaciones VOA</div>
+          <h1>Todo el día de simulador, en una sola vista.</h1>
+          <p>Controla asistencia, novedades y comunicación operativa sin perder el contexto de cada sesión.</p>
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
@@ -1980,8 +2506,8 @@
           <div class="directory-summary" aria-label="Resumen del directorio">
             <div class="directory-stat"><span>Total</span><strong id="studentTotalCount">0</strong></div>
             <div class="directory-stat"><span>Activos</span><strong id="studentActiveCount">0</strong></div>
-            <div class="directory-stat"><span>Contactos listos</span><strong id="studentVerifiedCount">0</strong></div>
-            <div class="directory-stat"><span>Datos pendientes</span><strong id="studentPendingDataCount">0</strong></div>
+            <div class="directory-stat"><span>Con celular</span><strong id="studentVerifiedCount">0</strong></div>
+            <div class="directory-stat"><span>Con correo</span><strong id="studentPendingDataCount">0</strong></div>
           </div>
 
           <div class="directory-toolbar">
@@ -2528,7 +3054,7 @@
         if(search && haystack.indexOf(search) < 0) return false;
         if(filter === "active" && !student.active) return false;
         if(filter === "inactive" && student.active) return false;
-        if(filter === "needs_data" && student.phone_status === "verified") return false;
+        if(filter === "needs_data" && student.phone_status === "verified" && String(student.email || "").trim()) return false;
         return true;
       });
     }
@@ -2536,7 +3062,7 @@
     function studentContactHtml(value,label){
       const clean = String(value || "").trim();
       return '<div class="student-contact"><span class="student-contact-value">' +
-        escapeHtml(clean || "Pendiente") + '</span><button class="copy-contact-btn" type="button" data-copy-student-contact="' +
+        escapeHtml(clean || (label === "Correo" ? "Sin correo" : "Sin celular")) + '</span><button class="copy-contact-btn" type="button" data-copy-student-contact="' +
         escapeHtml(label) + '"' + (clean ? '' : ' disabled') + '>Copiar</button></div>';
     }
 
@@ -2546,7 +3072,7 @@
       $("studentTotalCount").textContent = all.length;
       $("studentActiveCount").textContent = all.filter(function(item){ return item.active; }).length;
       $("studentVerifiedCount").textContent = all.filter(function(item){ return item.phone_status === "verified"; }).length;
-      $("studentPendingDataCount").textContent = all.filter(function(item){ return item.phone_status !== "verified"; }).length;
+      $("studentPendingDataCount").textContent = all.filter(function(item){ return Boolean(String(item.email || "").trim()); }).length;
 
       if(!rows.length){
         $("studentList").innerHTML = '<div class="directory-empty">No hay estudiantes que coincidan con este filtro.</div>';
