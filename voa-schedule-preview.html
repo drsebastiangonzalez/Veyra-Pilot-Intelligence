@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="schedule-approval-center-20260831-19-v15">
+  <meta name="veyra-build" content="schedule-approval-center-20260831-20-v16">
   <title>Veyra | Previsualización de cronograma</title>
   <script>
     (()=>{try{const saved=localStorage.getItem("veyra-theme");const dark=saved?saved==="dark":window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light";}catch{document.documentElement.dataset.theme="light";}})();
@@ -216,7 +216,7 @@
 
       <section class="panel wide-panel">
         <div class="panel-head"><div><h2>Secuencia y elegibilidad del estudiante</h2><p>RRO SIM determina la última misión MES. SIM REPORT solo la corrobora; una diferencia entre fuentes bloquea la aprobación. Los refuerzos no avanzan la secuencia.</p></div><span class="week-tag">Máximo 6 horas por día</span></div>
-        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas de vuelo</th><th>Propuesta</th><th>Simulador</th><th>Disponibilidad laboral</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+        <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas de vuelo</th><th>Propuesta</th><th>Simulador</th><th>Asistencia / disponibilidad</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
       <div class="footnote"><strong>Alcance y seguridad.</strong> La aprobación y la publicación son acciones distintas. Una sesión publicada queda enlazada una sola vez con Control VOA y conserva su bitácora; editarla exige volver al flujo de revisión. La publicación no envía WhatsApp. Si el centro indica <em>Activación pendiente</em>, la interfaz está disponible para revisión, pero aún falta habilitar en Supabase la bitácora, los permisos y el vínculo único de publicación.</div>
@@ -234,12 +234,12 @@
         <div class="manual-field"><label for="manualStart">Hora de inicio</label><select id="manualStart" name="start" required><option value="06:00">06:00–08:00</option><option value="08:00">08:00–10:00</option><option value="10:00">10:00–12:00</option><option value="12:00">12:00–14:00</option><option value="14:00">14:00–16:00</option><option value="16:00">16:00–18:00</option></select></div>
         <div class="manual-field"><label for="manualMission">Misión</label><input id="manualMission" name="mission" maxlength="80" placeholder="Ej. M8" required></div>
         <div class="manual-field"><label for="manualSequenceRoute">Ruta MES</label><select id="manualSequenceRoute" name="sequenceRoute" required><option value="standard">Secuencia normal</option><option value="prorroga">Prórroga autorizada · M5.1 / M5.2</option></select></div>
-        <div class="manual-field"><label for="manualType">Tipo de sesión</label><select id="manualType" name="type" required><option value="manual_standard">Sesión secuencial</option><option value="confirmed_availability">Disponibilidad confirmada por Programación</option><option value="manual_reinforcement">Sesión de refuerzo</option><option value="manual_adjustment">Propuesta por ajuste razonable</option></select></div>
+        <div class="manual-field"><label for="manualType">Tipo de sesión</label><select id="manualType" name="type" required><option value="manual_standard">Sesión secuencial</option><option value="confirmed_availability">Disponibilidad confirmada por ajuste razonable</option><option value="manual_reinforcement">Sesión de refuerzo</option><option value="manual_adjustment">Propuesta por ajuste razonable</option></select></div>
         <div class="manual-field"><label for="manualResource">Simulador</label><select id="manualResource" name="resource" required><option value="gym-sr20">Guaymaral · SR20 ATD</option><option value="gym-sr22">Guaymaral · SR22T ATD</option><option value="fla-sr20-1">Flandes · SR20 ATD 1S</option><option value="fla-sr20-2">Flandes · SR20 ATD 3S</option></select></div>
         <div class="manual-field"><label for="manualInstructor">Instructor asignado</label><input id="manualInstructor" name="instructor" maxlength="150" placeholder="Puede quedar pendiente"></div>
         <div class="manual-field full"><label for="manualReason">Justificación</label><textarea id="manualReason" name="reason" maxlength="300" placeholder="Motivo de la propuesta o condición que debe revisar Programación" required></textarea></div>
       </div>
-      <p class="manual-help">Al guardar, Veyra revisará disponibilidad documentada, cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Selecciona <strong>Prórroga autorizada</strong> únicamente cuando Programación haya confirmado que ese estudiante debe cursar M5.1 y M5.2. La prórroga no permite retroceder desde una misión posterior ya corroborada. Programación conserva la aprobación final.</p>
+      <p class="manual-help">Al guardar, Veyra revisará la disponibilidad únicamente para estudiantes con ajuste razonable. Para los demás, la sesión programada es de asistencia obligatoria y una ausencia se registra como no show. También revisará cruces de estudiante, simulador, instructor, vuelos registrados, jornada, carga diaria y secuencia MES. Selecciona <strong>Prórroga autorizada</strong> únicamente cuando Programación haya confirmado que ese estudiante debe cursar M5.1 y M5.2. La prórroga no permite retroceder desde una misión posterior ya corroborada. Programación conserva la aprobación final.</p>
       <div class="manual-form-actions"><span class="manual-status" id="manualStatus" role="status"></span><button class="save-manual-btn" id="saveManualButton" type="submit">Guardar propuesta</button></div>
     </form>
   </dialog>
@@ -294,7 +294,7 @@
       "El cronograma de vuelo prevalece: si el estudiante tiene vuelo el mismo día, el simulador solo puede iniciar después de finalizar su último vuelo; nunca antes ni superpuesto.",
       "Guaymaral es la sede prioritaria. Flandes se utiliza cuando la disponibilidad, los vuelos y la continuidad geográfica lo justifican, evitando traslados innecesarios.",
       "Guaymaral debe tener programación el lunes 31 de agosto y el miércoles 2, jueves 3 y viernes 4 de septiembre.",
-      "Toda sesión debe quedar dentro de una disponibilidad documentada o de una confirmación excepcional registrada. La ausencia de información bloquea su aprobación.",
+      "La disponibilidad solo condiciona a estudiantes con ajuste razonable. Para los demás, la sesión programada es de asistencia obligatoria y la ausencia se registra como no show.",
       "La jornada opera en bloques fijos de dos horas hasta las 18:00. De lunes a viernes inicia a las 06:00; sábados y domingos las instalaciones abren a las 08:00.",
       "Un estudiante no puede superar seis horas de simulador en el mismo día.",
       "RRO SIM determina la última misión de la secuencia MES. SIM REPORT solo la corrobora; nunca puede reemplazar el registro principal y cualquier diferencia bloquea la aprobación.",
@@ -310,7 +310,7 @@
       {key:"confirmed",name:"Programación SCS actual",status:"Acceso protegido",loaded:false},
       {key:"manual",name:"Propuestas manuales",status:"Acceso protegido",loaded:false},
       {key:"flights",name:"Cronograma de vuelo",status:"Por conectar",loaded:false},
-      {key:"availability",name:"Disponibilidad laboral",status:"Acceso protegido",loaded:false},
+      {key:"availability",name:"Disponibilidad para ajustes razonables",status:"Acceso protegido",loaded:false},
       {key:"progress",name:"Daily Report · FC ESTIMATE, RRO SIM y SIM REPORT",status:"Conexión protegida",loaded:false},
       {key:"instructors",name:"Asignación de instructores",status:"Acceso protegido",loaded:false},
       {key:"blocks",name:"Bloqueos operativos",status:"Acceso protegido",loaded:false},
@@ -400,6 +400,7 @@
     function instructorKey(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
     function instructorLabel(proposal){return instructorName(proposal)||"Por asignar por Programación";}
     function hasDirectAvailabilityConfirmation(value){return ["confirmed_availability","availability_confirmed","direct_confirmation","confirmed_direct","confirmed_by_programming"].includes(String(value||"").trim().toLowerCase());}
+    function requiresAvailabilityValidation(student,proposal){return Boolean(student?.reasonableAdjustment||proposal?.type==="reasonable_adjustment"||["manual_adjustment","confirmed_adjustment"].includes(String(proposal?.confirmationStatus||"").trim().toLowerCase())||hasDirectAvailabilityConfirmation(proposal?.confirmationStatus));}
     function normalizedName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/\s+/g," ");}
     function shortTime(value){return String(value||"").slice(0,5);}
     function studentEntryForName(value){return Object.entries(STUDENTS).find(([,student])=>normalizedName(student.name)===normalizedName(value))||null;}
@@ -554,6 +555,9 @@
     }
 
     function availabilityDecision(student,proposal){
+      if(!requiresAvailabilityValidation(student,proposal)){
+        return {valid:true,kind:"mandatory",short:"Asistencia obligatoria",detail:"La sesión programada es de asistencia obligatoria; si el estudiante no asiste, debe registrarse no show."};
+      }
       if(hasDirectAvailabilityConfirmation(proposal.confirmationStatus)){
         return {valid:true,kind:"confirmed",short:"Confirmada por Programación",detail:"Disponibilidad confirmada directamente por Programación para "+proposal.start+"–"+proposal.end+"."};
       }
@@ -612,7 +616,7 @@
         const isConfirmedAdjustment=row.confirmation_status==="confirmed_adjustment";
         const isConfirmedAvailability=hasDirectAvailabilityConfirmation(row.confirmation_status);
         const isManualAdjustment=row.confirmation_status==="manual_adjustment";
-        const isAdjustment=isConfirmedAdjustment||isManualAdjustment;
+        const isAdjustment=isConfirmedAdjustment||isConfirmedAvailability||isManualAdjustment;
         const isManualReinforcement=row.confirmation_status==="manual_reinforcement";
         const proposalType=isAdjustment?"reasonable_adjustment":isManualReinforcement?"reinforcement":isManual?"standard":"scheduled";
         const studentKey=studentKeyForName(row.student_name);
@@ -1044,10 +1048,7 @@
     function syncManualStudent(){
       const entry=studentEntryForName($("manualStudent").value);
       if(!entry){
-        const documented=state.availabilityByName.get(normalizedName($("manualStudent").value));
-        if(documented?.explicitUnavailable)setManualStatus("El documento registra a este estudiante sin disponibilidad.","error");
-        else if(documented)setManualStatus("Disponibilidad localizada. Completa la última misión registrada con el documento de evaluación vigente.");
-        else setManualStatus("No se encontró disponibilidad para este estudiante. No podrá guardarse una propuesta hasta documentarla.","error");
+        setManualStatus("Completa la última misión registrada. La disponibilidad solo se exige si seleccionas un ajuste razonable.");
         return;
       }
       const student=entry[1];
@@ -1059,12 +1060,9 @@
       if(student.reasonableAdjustment){
         $("manualType").value="manual_adjustment";
         setManualStatus((student.adjustmentNote||"El estudiante tiene ajustes razonables.")+(documentedDates?" Disponibilidad: "+documentedDates:" Falta disponibilidad específica."),documentedDates?"":"error");
-      }else if(documented?.explicitUnavailable){
-        setManualStatus("El documento registra a este estudiante sin disponibilidad.","error");
-      }else if(documentedDates){
-        setManualStatus("Disponibilidad documentada: "+documentedDates);
       }else{
-        setManualStatus("No se encontró disponibilidad laboral para este estudiante. No podrá guardarse una propuesta.","error");
+        $("manualType").value="manual_standard";
+        setManualStatus("Asistencia obligatoria. La disponibilidad no aplica; si el estudiante no asiste, corresponde registrar no show.");
       }
     }
 
@@ -1096,7 +1094,7 @@
       conflicts.push(...operationalBlockConflicts(candidate,student?.name||candidate.studentName,candidate.instructor));
       const flightDecision=flightOrderDecision(student,candidate);
       if(!flightDecision.valid)conflicts.push(flightDecision.detail);
-      if(validateAvailability){
+      if(validateAvailability&&requiresAvailabilityValidation(student,candidate)){
         const availabilityStudent=student||{name:candidate.studentName,availability:{}};
         const availability=availabilityDecision(availabilityStudent,candidate);
         const availabilityIsUnknown=["missing","date"].includes(availability.kind);
@@ -1275,10 +1273,13 @@
         else checks.push("Sin vuelos registrados para este estudiante en la fecha");
         const availability=availabilityDecision(student,proposal);
         if(!availability.valid){
-          if(pendingAvailability(proposal,availability))warnings.push("Disponibilidad pendiente de confirmación antes de aprobar esta propuesta.");
+          if(pendingAvailability(proposal,availability))warnings.push("Disponibilidad pendiente de confirmación antes de aprobar esta propuesta de ajuste razonable.");
           else errors.push(availability.detail);
+        }else if(availability.kind==="mandatory"){
+          checks.push("Asistencia obligatoria: si el estudiante no asiste, corresponde registrar no show.");
+        }else{
+          checks.push(availability.kind==="confirmed"?"Disponibilidad confirmada para el ajuste razonable":"Disponibilidad documentada para el ajuste razonable: "+availability.short.replace(/^Documentada\s*/,""));
         }
-        else checks.push(availability.kind==="confirmed"?"Disponibilidad confirmada excepcionalmente para este bloque":"Disponibilidad laboral documentada: "+availability.short.replace(/^Documentada\s*/,""));
         const flandesFlights=(student.flights||[]).filter(flight=>flight.date===proposal.date&&flight.site==="Flandes").length;
         const flandesSessions=PROPOSALS.filter(other=>other.student===proposal.student&&other.date===proposal.date&&resourceById(other.resource)?.site==="Flandes").length;
         const flandesActivities=flandesFlights+flandesSessions;
@@ -1535,11 +1536,12 @@
       const workflow=workflowStatus(proposal);
       const typeLabel=workflow==="published"?"Publicada":workflow==="approved"?"Aprobada":sequenceRoute(proposal.sequenceRoute)==="prorroga"?"Prórroga":proposal.type==="reasonable_adjustment"?"Ajuste":proposal.type==="scheduled"?"Programada":proposal.type==="reinforcement"?"Refuerzo":"Propuesta";
       const onlyInstructorPending=result.warnings.length>0&&result.warnings.every(item=>item.startsWith("Instructor pendiente"));
-      const alertLabel=workflow==="published"?(proposal.publishedSessionId?"Control VOA #"+proposal.publishedSessionId:"Publicada en Control VOA"):workflow==="approved"?"Aprobada para publicar":result.status==="blocked"?"Corrección requerida":availabilityPending?"Disponibilidad pendiente":proposal.manual?"Propuesta manual":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
+      const alertLabel=workflow==="published"?(proposal.publishedSessionId?"Control VOA #"+proposal.publishedSessionId:"Publicada en Control VOA"):workflow==="approved"?"Aprobada para publicar":result.status==="blocked"?"Corrección requerida":availabilityPending?"Disponibilidad pendiente":proposal.manual?"Pendiente de aprobación":student.reasonableAdjustment?"Ajuste por validar":onlyInstructorPending?"Instructor pendiente":result.status==="review"?"Revisión requerida":"";
       const instructor=instructorName(proposal);
       const availabilityClass=availability.valid?'':availabilityPending?'pending-availability':'blocked-availability';
+      const availabilityHeading=availability.kind==="mandatory"?"Asistencia":"Disponibilidad por ajuste";
       const availabilityLabel=availabilityPending?'Pendiente de confirmar':availability.short;
-      return '<button class="session-card '+result.status+' '+proposal.type+' workflow-'+workflow+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource?.cardLabel||resource?.fullLabel||proposal.resource||"Sin recurso")+'</strong><span class="availability-label">Disponibilidad</span><strong class="'+availabilityClass+'">'+escapeHtml(availabilityLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
+      return '<button class="session-card '+result.status+' '+proposal.type+' workflow-'+workflow+(state.selected===proposal.id?' selected':'')+'" type="button" data-proposal="'+proposal.id+'"><span class="session-top"><strong>'+escapeHtml(student.name)+'</strong><span class="session-mission">'+escapeHtml(typeLabel)+'</span></span><small>'+escapeHtml(proposal.start+'–'+proposal.end)+' · '+escapeHtml(proposal.mission)+'</small>'+(alertLabel?'<small class="session-alert">'+escapeHtml(alertLabel)+'</small>':'')+'<small class="resource-line"><span>Simulador asignado</span><strong>'+escapeHtml(resource?.cardLabel||resource?.fullLabel||proposal.resource||"Sin recurso")+'</strong><span class="availability-label">'+escapeHtml(availabilityHeading)+'</span><strong class="'+availabilityClass+'">'+escapeHtml(availabilityLabel)+'</strong><span class="instructor-label">Instructor asignado</span><strong class="'+(instructor?'':'pending-assignment')+'">'+escapeHtml(instructorLabel(proposal))+'</strong></small></button>';
     }
 
     function operationalBlockCard(block){
@@ -1577,6 +1579,7 @@
       const student=STUDENTS[proposal.student],resource=resourceById(proposal.resource),result=state.results.get(proposal.id);
       const day=DAYS.find(item=>item.key===proposal.date);
       const detailAvailability=pendingAvailability(proposal,result.availability)?"Pendiente de confirmar":result.availability.short;
+      const detailAvailabilityLabel=result.availability.kind==="mandatory"?"Asistencia":"Disponibilidad por ajuste";
       const workflow=workflowStatus(proposal);
       const decision=workflow==="published"?"Publicada en Control VOA":workflow==="approved"?"Aprobada para publicar":proposal.type==="reasonable_adjustment"&&result.status==="ready"?"Confirmación incorporada":proposal.type==="scheduled"&&result.status==="ready"?"Programación incorporada":result.status==="ready"?"Apta para revisión final":result.status==="review"?"Requiere decisión humana":"Conflicto crítico";
       const issues=result.errors.concat(result.warnings);
@@ -1592,7 +1595,7 @@
           '<div class="detail-row"><dt>Fecha</dt><dd>'+escapeHtml(day?.long||proposal.date)+'</dd></div>'+
           '<div class="detail-row"><dt>Horario</dt><dd>'+escapeHtml(proposal.start+'–'+proposal.end)+'</dd></div>'+
           '<div class="detail-row"><dt>Simulador</dt><dd>'+escapeHtml(resource?.fullLabel||proposal.resource||"Sin recurso")+'</dd></div>'+ 
-          '<div class="detail-row"><dt>Disponibilidad laboral</dt><dd>'+escapeHtml(detailAvailability)+'</dd></div>'+
+          '<div class="detail-row"><dt>'+escapeHtml(detailAvailabilityLabel)+'</dt><dd>'+escapeHtml(detailAvailability)+'</dd></div>'+
           '<div class="detail-row"><dt>Instructor asignado</dt><dd>'+escapeHtml(instructorLabel(proposal))+'</dd></div>'+
           '<div class="detail-row"><dt>Etapa</dt><dd>'+escapeHtml(student.stage)+'</dd></div>'+ 
           '<div class="detail-row"><dt>Última misión registrada</dt><dd>'+escapeHtml(student.last)+'</dd></div>'+ 
