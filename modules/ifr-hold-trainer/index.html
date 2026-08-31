@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Entrenador de Esperas IFR · Veyra Pilot Intelligence</title>
+<style>
+:root{
+  --bg:#050a12;--bg2:#08111d;--panel:#0d1928;--panel2:#111f31;
+  --gold:#d6ad55;--gold2:#f0cf86;--white:#f7f4ee;--muted:#9eabba;
+  --green:#46d59a;--cyan:#52cbd4;--red:#f07979;--line:rgba(214,173,85,.28);
+  --line2:rgba(255,255,255,.1);--shadow:0 22px 60px rgba(0,0,0,.42);
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,#07111f,#04080f);color:var(--white);font-family:var(--sans);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(#000,transparent 94%)}
+button,input,select{font:inherit}button{touch-action:manipulation}.app{position:relative;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:18px;padding:13px clamp(15px,3vw,38px);background:rgba(5,10,18,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(15px)}
+.brand{text-decoration:none;color:var(--white);min-width:max-content}.brand b{display:block;font:600 28px/1 var(--serif)}.brand span{display:block;margin-top:5px;color:var(--gold);font-size:8px;font-weight:800;letter-spacing:.25em;text-transform:uppercase}
+.topTitle{flex:1;text-align:center;color:#b9c3cf;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.topLinks{display:flex;gap:8px}.topLinks a{min-height:42px;display:grid;place-items:center;padding:0 14px;border:1px solid var(--line2);border-radius:12px;text-decoration:none;color:#dfe5ec;font-size:12px;font-weight:800}.topLinks a:hover,.topLinks a:focus{border-color:var(--gold);color:var(--gold2);outline:none}
+main{position:relative;z-index:1;width:min(1540px,100%);margin:auto;padding:24px clamp(12px,2.4vw,34px) 46px}
+.intro{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px}.eyebrow{color:var(--gold);font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px}.intro h1{font:600 clamp(31px,4.3vw,58px)/1 var(--serif);letter-spacing:-.035em;margin:0}.intro p{color:#bdc7d2;line-height:1.5;max-width:760px;margin:10px 0 0}.statusPill{border:1px solid rgba(70,213,154,.35);background:rgba(70,213,154,.08);color:#9ce9c9;border-radius:999px;padding:10px 14px;font-size:11px;font-weight:850;white-space:nowrap}
+.workspace{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(340px,.58fr);gap:18px;align-items:start}
+.simPanel,.sidePanel{border:1px solid var(--line);border-radius:24px;background:linear-gradient(150deg,rgba(15,27,43,.96),rgba(6,12,21,.98));box-shadow:var(--shadow);overflow:hidden}
+.simHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line2);background:rgba(255,255,255,.018)}
+.simMeta{display:flex;gap:8px;flex-wrap:wrap}.tag{border:1px solid var(--line2);border-radius:999px;padding:7px 10px;color:#c2ccd7;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}.tag.gold{color:var(--gold2);border-color:var(--line);background:rgba(214,173,85,.06)}
+.live{display:flex;align-items:center;gap:8px;color:#aeb8c5;font-size:11px}.live:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}.live.running:before{background:var(--green);box-shadow:0 0 16px rgba(70,213,154,.7)}
+.canvasWrap{position:relative;min-height:610px;background:#050b14;overflow:hidden}.canvasWrap canvas{display:block;width:100%;height:610px;touch-action:pan-y}
+.instrumentStrip{position:absolute;left:14px;right:14px;top:14px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;pointer-events:none}.instrument{min-width:0;padding:9px 10px;border:1px solid rgba(255,255,255,.11);border-radius:11px;background:rgba(5,10,18,.82);backdrop-filter:blur(9px)}.instrument small{display:block;color:#7f8fa3;font-size:8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.instrument b{display:block;margin-top:3px;color:#f5f2eb;font:600 17px/1.1 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coach{position:absolute;left:15px;bottom:15px;max-width:min(620px,calc(100% - 30px));border:1px solid rgba(214,173,85,.32);border-left:3px solid var(--gold);border-radius:0 13px 13px 0;padding:11px 14px;background:rgba(5,10,18,.88);color:#d9e0e8;font-size:12px;line-height:1.45;backdrop-filter:blur(9px)}.coach strong{color:var(--gold2)}
+.controls{padding:14px;border-top:1px solid var(--line2);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.controlBtn{min-height:54px;border:1px solid var(--line2);border-radius:13px;background:#0a1422;color:#eef2f6;font-weight:850;font-size:11px;cursor:pointer;padding:7px}.controlBtn small{display:block;margin-top:3px;color:#8291a4;font-size:8px;font-weight:700}.controlBtn:hover,.controlBtn:focus{border-color:var(--gold);outline:none}.controlBtn.active{border-color:var(--gold);background:rgba(214,173,85,.14);color:var(--gold2)}.controlBtn.action{border-color:rgba(82,203,212,.35);color:#9de8ed}.controlBtn.danger{border-color:rgba(240,121,121,.3);color:#ffb0b0}
+.keyboardHelp{padding:0 16px 14px;color:#758599;font-size:9px;text-align:center;letter-spacing:.04em}
+.sidePanel{padding:18px}.modeTabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:18px}.modeTab{min-height:43px;border:1px solid var(--line2);border-radius:12px;background:#0a1422;color:#aab6c4;font-size:11px;font-weight:850;cursor:pointer}.modeTab.active{border-color:var(--gold);background:rgba(214,173,85,.12);color:var(--gold2)}
+.sideTitle{font:600 23px/1.1 var(--serif);margin:0 0 5px}.sideLead{color:#93a1b2;font-size:11px;line-height:1.45;margin:0 0 17px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:6px;color:#9faebe;font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.field input,.field select{width:100%;min-height:44px;border:1px solid var(--line2);border-radius:11px;background:#081220;color:#f3f5f7;padding:0 11px;outline:none}.field input:focus,.field select:focus{border-color:var(--gold)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:7px}.seg button{min-height:44px;border:1px solid var(--line2);border-radius:11px;background:#081220;color:#aeb9c6;font-size:11px;font-weight:800;cursor:pointer}.seg button.active{border-color:var(--gold);background:rgba(214,173,85,.11);color:var(--gold2)}
+.entryBlock{margin-top:16px;padding-top:15px;border-top:1px solid var(--line2)}.entryBlock h3{font-size:12px;margin:0 0 9px}.entryChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.entryChoice{min-height:43px;border:1px solid var(--line2);border-radius:11px;background:#081220;color:#d6dce4;font-size:10px;font-weight:850;cursor:pointer}.entryChoice.selected{border-color:var(--cyan);background:rgba(82,203,212,.11);color:#b9f5f7}.entryFeedback{min-height:36px;color:#8999ab;font-size:10px;line-height:1.4;padding-top:8px}.entryFeedback.good{color:#9ce9c9}.entryFeedback.bad{color:#ffadad}
+.primary,.secondary{width:100%;min-height:48px;border-radius:13px;font-weight:900;cursor:pointer}.primary{border:1px solid var(--gold2);background:linear-gradient(135deg,var(--gold2),#bc8b2f);color:#171005;margin-top:9px}.secondary{border:1px solid var(--line2);background:#091321;color:#dce2ea;margin-top:8px}.primary:disabled{opacity:.45;cursor:not-allowed}
+.attemptHint{margin-top:14px;border-left:2px solid var(--gold);background:rgba(214,173,85,.055);padding:11px 12px;color:#aeb9c6;font-size:10px;line-height:1.5;border-radius:0 10px 10px 0}
+.debrief{display:none;margin-top:17px;padding-top:16px;border-top:1px solid var(--line2)}.debrief.show{display:block}.scoreRow{display:flex;align-items:center;gap:14px}.scoreRing{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) 0%,#1b2938 0);position:relative}.scoreRing:after{content:"";position:absolute;inset:8px;border-radius:50%;background:#0b1725}.scoreRing b{position:relative;z-index:1;font:600 22px/1 var(--serif)}.scoreCopy h3{margin:0;font:600 19px/1.15 var(--serif)}.scoreCopy p{margin:6px 0 0;color:#93a2b4;font-size:10px;line-height:1.4}.resultList{display:grid;gap:7px;margin-top:13px}.resultItem{display:flex;justify-content:space-between;gap:12px;padding:8px 10px;border:1px solid var(--line2);border-radius:10px;color:#9dacbd;font-size:10px}.resultItem b{color:#e5eaf0;text-align:right}
+.disclaimer{max-width:1100px;margin:18px auto 0;color:#758599;font-size:10px;line-height:1.5;text-align:center}.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.canvasWrap,.canvasWrap canvas{height:590px;min-height:590px}.sidePanel{order:-1}.sidePanel.collapsed .setupBody{display:none}.sidePanel.collapsed{padding-bottom:10px}.intro{align-items:start}.statusPill{display:none}}
+@media(max-width:760px){.topTitle{display:none}.topLinks a{padding:0 10px}.intro{display:block}.intro h1{font-size:38px}.instrumentStrip{grid-template-columns:repeat(3,1fr);top:10px;left:8px;right:8px}.instrument{padding:7px}.instrument b{font-size:15px}.canvasWrap,.canvasWrap canvas{height:540px;min-height:540px}.controls{grid-template-columns:repeat(4,1fr)}.keyboardHelp{display:none}.coach{font-size:11px}.formGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){main{padding:16px 7px 34px}.topbar{padding:11px 10px}.brand b{font-size:24px}.topLinks a:first-child{display:none}.intro{padding:0 6px}.intro h1{font-size:33px}.intro p{font-size:13px}.simPanel,.sidePanel{border-radius:18px}.simHeader{padding:12px}.simMeta .tag:nth-child(2){display:none}.canvasWrap,.canvasWrap canvas{height:500px;min-height:500px}.controls{padding:9px;gap:6px}.controlBtn{min-height:52px;font-size:10px;padding:4px}.sidePanel{padding:14px}.entryChoices{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr}.field.full{grid-column:auto}.modeTabs{gap:5px}.modeTab{font-size:10px}.coach{bottom:9px;left:9px;max-width:calc(100% - 18px)}}
+@media(orientation:landscape) and (max-height:620px){.topbar{position:relative}.intro{display:none}.workspace{grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr)}.sidePanel{order:initial}.canvasWrap,.canvasWrap canvas{height:470px;min-height:470px}.instrument b{font-size:14px}.controls{padding:8px}.controlBtn{min-height:46px}.sidePanel{max-height:590px;overflow:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="/?course=ifr" target="_top" aria-label="Volver a Veyra Pilot Intelligence"><b>Veyra</b><span>Pilot Intelligence</span></a>
+  <div class="topTitle">Training Center · Entrenador de Esperas IFR</div>
+  <div class="topLinks"><a href="/?course=ifr" target="_top">IFR Path</a><a href="/?view=pbn" target="_top">PBN Path</a></div>
+</header>
+<main>
+  <section class="intro">
+    <div><div class="eyebrow">Práctica interactiva · IFR y PBN</div><h1>Entrenador de Esperas IFR</h1><p>Interpreta el patrón, selecciona la incorporación y controla la aeronave mientras el viento modifica la trayectoria sobre el terreno.</p></div>
+    <div class="statusPill">Compatible con iPad · iPhone · PC</div>
+  </section>
+
+  <div class="workspace">
+    <section class="simPanel" aria-label="Simulador de esperas">
+      <div class="simHeader"><div class="simMeta"><span class="tag gold" id="sourceTag">IFR · VOR</span><span class="tag" id="patternTag">Giros derecha</span><span class="tag">Velocidad ×5</span></div><div class="live" id="liveState">Preparación</div></div>
+      <div class="canvasWrap">
+        <canvas id="simCanvas" aria-label="Vista superior de la aeronave y el patrón de espera"></canvas>
+        <div class="instrumentStrip" aria-hidden="true">
+          <div class="instrument"><small>Rumbo</small><b id="headingValue">000°</b></div>
+          <div class="instrument"><small>Banco</small><b id="bankValue">0°</b></div>
+          <div class="instrument"><small>DME al fix</small><b id="distanceValue">0,0 NM</b></div>
+          <div class="instrument"><small>Cronómetro</small><b id="timerValue">00:00</b></div>
+          <div class="instrument"><small>Cruces</small><b id="crossingValue">0</b></div>
+          <div class="instrument"><small>Viento</small><b id="windValue">270/15</b></div>
+        </div>
+        <div class="coach" id="coach"><strong>Antes de comenzar:</strong> configura la espera y selecciona la incorporación recomendada.</div>
+      </div>
+      <div class="controls" aria-label="Controles de vuelo">
+        <button class="controlBtn" id="leftBtn" type="button">↶ Izquierda<small>← / A</small></button>
+        <button class="controlBtn" id="levelBtn" type="button">◇ Nivelar<small>↑ / W</small></button>
+        <button class="controlBtn" id="rightBtn" type="button">↷ Derecha<small>→ / D</small></button>
+        <button class="controlBtn action" id="timerBtn" type="button">◷ Cronómetro<small>Tecla T</small></button>
+        <button class="controlBtn action" id="markBtn" type="button">◆ Fin outbound<small>Tecla M</small></button>
+        <button class="controlBtn" id="pauseBtn" type="button">▶ Iniciar<small>Espacio</small></button>
+        <button class="controlBtn danger" id="resetBtn" type="button">↺ Reiniciar<small>Tecla R</small></button>
+      </div>
+      <div class="keyboardHelp">PC: ←/A giro izquierdo · ↑/W nivelar · →/D giro derecho · T cronómetro · M marcar fin outbound · Espacio pausa</div>
+    </section>
+
+    <aside class="sidePanel" id="sidePanel">
+      <div class="modeTabs" aria-label="Modo de práctica">
+        <button class="modeTab active" data-mode="learn" type="button">Aprender</button>
+        <button class="modeTab" data-mode="practice" type="button">Practicar</button>
+        <button class="modeTab" data-mode="evaluation" type="button">Evaluación</button>
+      </div>
+      <div class="setupBody">
+        <h2 class="sideTitle">Configurar escenario</h2><p class="sideLead" id="modeDescription">Muestra la trayectoria de referencia y ofrece orientación durante el intento.</p>
+        <div class="formGrid">
+          <div class="field full"><label>Fuente de navegación</label><div class="seg"><button class="active" data-source="vor" type="button">VOR / Fix</button><button data-source="rnav" type="button">RNAV</button></div></div>
+          <div class="field full"><label>Patrón</label><div class="seg"><button class="active" data-turn="right" type="button">Estándar · derecha</button><button data-turn="left" type="button">No estándar · izquierda</button></div></div>
+          <div class="field"><label for="inboundCourse">Curso inbound</label><input id="inboundCourse" type="number" min="0" max="360" step="1" value="360" inputmode="numeric"></div>
+          <div class="field"><label for="arrivalCourse">Curso de llegada al fix</label><input id="arrivalCourse" type="number" min="0" max="360" step="1" value="225" inputmode="numeric"></div>
+          <div class="field"><label for="airspeed">Velocidad</label><input id="airspeed" type="number" min="80" max="180" step="5" value="120" inputmode="numeric"></div>
+          <div class="field"><label for="bankLimit">Banco de giro</label><select id="bankLimit"><option value="15">15°</option><option value="20">20°</option><option value="25" selected>25°</option></select></div>
+          <div class="field"><label for="windFrom">Viento desde</label><input id="windFrom" type="number" min="0" max="360" step="5" value="270" inputmode="numeric"></div>
+          <div class="field"><label for="windSpeed">Intensidad</label><input id="windSpeed" type="number" min="0" max="50" step="1" value="15" inputmode="numeric"></div>
+          <div class="field full"><label>Longitud del tramo</label><div class="seg"><button class="active" data-leg="time" type="button">Tiempo</button><button data-leg="distance" type="button">Distancia</button></div></div>
+          <div class="field full"><label for="legValue" id="legValueLabel">Tiempo objetivo outbound</label><input id="legValue" type="number" min="30" max="120" step="5" value="60" inputmode="numeric"></div>
+        </div>
+        <div class="entryBlock"><h3>Selecciona la incorporación recomendada</h3><div class="entryChoices"><button class="entryChoice" data-entry="direct" type="button">Directa</button><button class="entryChoice" data-entry="parallel" type="button">Paralela</button><button class="entryChoice" data-entry="teardrop" type="button">Gota</button></div><div class="entryFeedback" id="entryFeedback">Analiza el curso de llegada, el inbound y el sentido de los giros.</div></div>
+        <button class="primary" id="loadBtn" type="button">Cargar escenario</button>
+        <button class="secondary" id="randomBtn" type="button">Generar escenario aleatorio</button>
+        <div class="attemptHint" id="attemptHint"><strong>Objetivo:</strong> cruza el fix, ejecuta la incorporación seleccionada, marca el final del outbound y regresa estabilizado sobre el curso inbound.</div>
+        <section class="debrief" id="debrief" aria-live="polite"><div class="scoreRow"><div class="scoreRing" id="scoreRing"><b id="scoreValue">0%</b></div><div class="scoreCopy"><h3 id="resultTitle">Intento evaluado</h3><p id="resultSummary"></p></div></div><div class="resultList" id="resultList"></div><button class="secondary" id="newAttemptBtn" type="button">Preparar otro intento</button></section>
+      </div>
+    </aside>
+  </div>
+  <p class="disclaimer">Entrenador académico simplificado. Las entradas son procedimientos recomendados y la representación no muestra dimensiones reales del espacio aéreo protegido. Verifica carta, AIP, autorización ATC, AFM/POH, aviónica y SOP aplicables.</p>
+  <div class="srOnly" id="a11yStatus" aria-live="polite"></div>
+</main>
+</div>
+<script>
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id),canvas=$("simCanvas"),ctx=canvas.getContext("2d");
+const controls={inbound:$("inboundCourse"),arrival:$("arrivalCourse"),speed:$("airspeed"),bankLimit:$("bankLimit"),windFrom:$("windFrom"),windSpeed:$("windSpeed"),legValue:$("legValue")};
+const state={mode:"learn",source:"vor",turn:"right",legType:"time",entry:null,correctEntry:"direct",loaded:false,running:false,finished:false,bank:0,heading:0,x:0,y:0,elapsed:0,timer:0,timerRunning:false,timerMarked:null,distanceMarked:null,crossings:0,insideFix:false,trail:[],lastFrame:0,accumulator:0,headingAtReturn:null,maxDistance:0,scenario:null};
+const view={w:900,h:610,dpr:1,scale:76,cx:450,cy:330};
+const COLORS={gold:"#d6ad55",gold2:"#f0cf86",white:"#f7f4ee",muted:"#526175",green:"#46d59a",cyan:"#52cbd4",red:"#f07979",grid:"rgba(140,160,182,.10)",line:"rgba(214,173,85,.35)"};
+const modes={learn:"Muestra la trayectoria de referencia y ofrece orientación durante el intento.",practice:"Conserva referencias mínimas y entrega el análisis al finalizar.",evaluation:"Oculta la trayectoria ideal y reserva todas las respuestas para el debriefing."};
+const entryNames={direct:"directa",parallel:"paralela",teardrop:"gota"};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const norm=d=>((Number(d)%360)+360)%360;
+const signed=d=>{const n=norm(d);return n>180?n-360:n};
+const angleDiff=(a,b)=>Math.abs(signed(a-b));
+const fmtHeading=n=>String(Math.round(norm(n))||360).padStart(3,"0")+"°";
+const fmtTime=s=>`${String(Math.floor(s/60)).padStart(2,"0")}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+const unit=course=>({x:Math.sin(course*Math.PI/180),y:Math.cos(course*Math.PI/180)});
+const dist=()=>Math.hypot(state.x,state.y);
+
+function readNumber(el,min,max,fallback){const v=Number(el.value);return Number.isFinite(v)?clamp(v,min,max):fallback}
+function readScenario(){
+  const inbound=norm(readNumber(controls.inbound,0,360,0));
+  return {inbound,arrival:norm(readNumber(controls.arrival,0,360,225)),speed:readNumber(controls.speed,80,180,120),bankLimit:readNumber(controls.bankLimit,15,25,25),windFrom:norm(readNumber(controls.windFrom,0,360,270)),windSpeed:readNumber(controls.windSpeed,0,50,15),legType:state.legType,legValue:state.legType==="time"?readNumber(controls.legValue,30,120,60):readNumber(controls.legValue,2,12,4),turn:state.turn,source:state.source};
+}
+function recommendedEntry(s){
+  const rel=signed(s.arrival-s.inbound);
+  if(s.turn==="right") return rel>110?"teardrop":rel< -70?"parallel":"direct";
+  return rel< -110?"teardrop":rel>70?"parallel":"direct";
+}
+function setCoach(html){$("coach").innerHTML=html;$("a11yStatus").textContent=$("coach").textContent}
+function setActive(selector,button){document.querySelectorAll(selector).forEach(b=>b.classList.toggle("active",b===button))}
+function applyQuerySource(){const q=new URLSearchParams(location.search).get("source");if(q==="pbn"){state.source="rnav";$("sourceTag").textContent="PBN · RNAV";document.querySelectorAll("[data-source]").forEach(b=>b.classList.toggle("active",b.dataset.source==="rnav"));state.legType="distance";document.querySelectorAll("[data-leg]").forEach(b=>b.classList.toggle("active",b.dataset.leg==="distance"));controls.legValue.value=4;updateLegLabel()}}
+
+document.querySelectorAll(".modeTab").forEach(b=>b.addEventListener("click",()=>{if(state.running)return;setActive(".modeTab",b);state.mode=b.dataset.mode;$("modeDescription").textContent=modes[state.mode];draw()}));
+document.querySelectorAll("[data-source]").forEach(b=>b.addEventListener("click",()=>{if(state.running)return;setActive("[data-source]",b);state.source=b.dataset.source;$("sourceTag").textContent=state.source==="rnav"?"PBN · RNAV":"IFR · VOR";draw()}));
+document.querySelectorAll("[data-turn]").forEach(b=>b.addEventListener("click",()=>{if(state.running)return;setActive("[data-turn]",b);state.turn=b.dataset.turn;$("patternTag").textContent=state.turn==="right"?"Giros derecha":"Giros izquierda";draw()}));
+document.querySelectorAll("[data-leg]").forEach(b=>b.addEventListener("click",()=>{if(state.running)return;setActive("[data-leg]",b);state.legType=b.dataset.leg;controls.legValue.value=state.legType==="time"?60:4;updateLegLabel()}));
+function updateLegLabel(){$("legValueLabel").textContent=state.legType==="time"?"Tiempo objetivo outbound (segundos)":"Distancia objetivo outbound (NM)";controls.legValue.min=state.legType==="time"?30:2;controls.legValue.max=state.legType==="time"?120:12;controls.legValue.step=state.legType==="time"?5:.5}
+document.querySelectorAll(".entryChoice").forEach(b=>b.addEventListener("click",()=>{if(state.running)return;document.querySelectorAll(".entryChoice").forEach(x=>x.classList.toggle("selected",x===b));state.entry=b.dataset.entry;const s=readScenario(),correct=recommendedEntry(s),fb=$("entryFeedback");if(state.mode==="evaluation"){fb.className="entryFeedback";fb.textContent="Selección registrada. La respuesta se mostrará al finalizar."}else{const ok=state.entry===correct;fb.className="entryFeedback "+(ok?"good":"bad");fb.textContent=ok?`Correcto: entrada ${entryNames[correct]}.`:`Revisa la geometría: la recomendada es ${entryNames[correct]}.`}}));
+
+function loadScenario(){
+  if(!state.entry){$("entryFeedback").className="entryFeedback bad";$("entryFeedback").textContent="Selecciona una incorporación antes de cargar el escenario.";return}
+  state.scenario=readScenario();state.correctEntry=recommendedEntry(state.scenario);state.loaded=true;state.running=false;state.finished=false;state.bank=0;state.heading=state.scenario.arrival;state.elapsed=0;state.timer=0;state.timerRunning=false;state.timerMarked=null;state.distanceMarked=null;state.crossings=0;state.insideFix=false;state.trail=[];state.headingAtReturn=null;state.maxDistance=0;
+  const u=unit(state.heading);state.x=-u.x*3.6;state.y=-u.y*3.6;state.trail.push({x:state.x,y:state.y});
+  $("debrief").classList.remove("show");$("pauseBtn").textContent="▶ Iniciar";$("pauseBtn").classList.remove("active");$("liveState").className="live";$("liveState").textContent="Escenario cargado";setBank(0);
+  setCoach(state.mode==="evaluation"?"<strong>Evaluación:</strong> ejecuta el intento sin ayudas y regresa al fix.":`<strong>Preparado:</strong> llega al fix por ${fmtHeading(state.scenario.arrival)}, ejecuta la entrada ${entryNames[state.entry]} y establece la espera.`);
+  updateDisplays();draw();
+}
+function randomScenario(){
+  if(state.running)return;const inbound=Math.floor(Math.random()*36)*10;const candidates=state.turn==="right"?[-135,140,25]:[135,-140,-25];const rel=candidates[Math.floor(Math.random()*candidates.length)];controls.inbound.value=inbound||360;controls.arrival.value=Math.round(norm(inbound+rel));controls.windFrom.value=Math.floor(Math.random()*12)*30;controls.windSpeed.value=5+Math.floor(Math.random()*26);state.entry=null;document.querySelectorAll(".entryChoice").forEach(x=>x.classList.remove("selected"));$("entryFeedback").className="entryFeedback";$("entryFeedback").textContent="Nuevo escenario listo. Determina la incorporación recomendada.";state.loaded=false;draw();
+}
+
+function toggleRun(){if(!state.loaded){loadScenario();if(!state.loaded)return}if(state.finished)return;state.running=!state.running;state.lastFrame=performance.now();$("pauseBtn").textContent=state.running?"Ⅱ Pausar":"▶ Continuar";$("pauseBtn").classList.toggle("active",state.running);$("liveState").className="live"+(state.running?" running":"");$("liveState").textContent=state.running?"En vuelo":"Pausado";if(state.running)requestAnimationFrame(loop)}
+function setBank(v){state.bank=v;[$("leftBtn"),$("levelBtn"),$("rightBtn")].forEach(b=>b.classList.remove("active"));if(v<0)$("leftBtn").classList.add("active");else if(v>0)$("rightBtn").classList.add("active");else $("levelBtn").classList.add("active");updateDisplays()}
+function toggleTimer(){if(!state.loaded)return;state.timerRunning=!state.timerRunning;$("timerBtn").classList.toggle("active",state.timerRunning);$("timerBtn").firstChild.textContent=state.timerRunning?"◷ Detener":"◷ Cronómetro";if(!state.timerRunning&&state.timer>0)state.timerMarked=state.timer}
+function markOutbound(){if(!state.loaded)return;state.timerMarked=state.timer;state.distanceMarked=dist();$("markBtn").classList.add("active");setTimeout(()=>$("markBtn").classList.remove("active"),700);setCoach(`<strong>Fin outbound marcado:</strong> ${state.timerMarked.toFixed(0)} s · ${state.distanceMarked.toFixed(1).replace(".",",")} NM al fix. Inicia el viraje e intercepta inbound.`)}
+function resetAttempt(){state.running=false;state.finished=false;state.loaded=false;state.trail=[];state.bank=0;state.timer=0;state.timerRunning=false;state.crossings=0;$("debrief").classList.remove("show");$("pauseBtn").textContent="▶ Iniciar";$("liveState").className="live";$("liveState").textContent="Preparación";setCoach("<strong>Antes de comenzar:</strong> configura la espera y selecciona la incorporación recomendada.");updateDisplays();draw()}
+
+function step(dt){
+  const s=state.scenario;if(!s)return;const speedMps=s.speed*.514444,turnRate=9.80665*Math.tan(Math.abs(state.bank)*Math.PI/180)/Math.max(speedMps,1)*180/Math.PI;state.heading=norm(state.heading+Math.sign(state.bank)*turnRate*dt);
+  const air=unit(state.heading),wind=unit(norm(s.windFrom+180));state.x+=(air.x*s.speed+wind.x*s.windSpeed)/3600*dt;state.y+=(air.y*s.speed+wind.y*s.windSpeed)/3600*dt;state.elapsed+=dt;if(state.timerRunning)state.timer+=dt;state.maxDistance=Math.max(state.maxDistance,dist());
+  state.accumulator+=dt;if(state.accumulator>.18){state.trail.push({x:state.x,y:state.y});if(state.trail.length>3600)state.trail.shift();state.accumulator=0}
+  const d=dist();if(d<.16&&!state.insideFix){state.insideFix=true;state.crossings++;if(state.crossings===1){if(state.mode!=="evaluation")setCoach(`<strong>Fix cruzado:</strong> ejecuta la entrada ${entryNames[state.entry]}. Inicia el cronómetro sobre/abeam el fix o al completar el giro outbound si no puedes determinar el abeam.`)}else if(state.crossings>=2){state.headingAtReturn=state.heading;finishAttempt("fix")}}
+  if(d>.34)state.insideFix=false;if(d>8.5)finishAttempt("outside");updateDisplays()
+}
+function loop(now){if(!state.running)return;const realDt=Math.min((now-state.lastFrame)/1000,.055);state.lastFrame=now;step(realDt*5);draw();if(state.running)requestAnimationFrame(loop)}
+
+function finishAttempt(reason){
+  state.running=false;state.finished=true;state.timerRunning=false;if(state.timerMarked===null&&state.timer>0)state.timerMarked=state.timer;$("pauseBtn").textContent="Intento finalizado";$("pauseBtn").classList.remove("active");$("liveState").className="live";$("liveState").textContent="Debriefing";showDebrief(reason);draw();
+}
+function showDebrief(reason){
+  const s=state.scenario,entryOk=state.entry===state.correctEntry;let legError,legActual,legTarget;
+  if(s.legType==="time"){legActual=state.timerMarked??0;legTarget=s.legValue;legError=Math.abs(legActual-legTarget)}else{legActual=state.distanceMarked??0;legTarget=s.legValue;legError=Math.abs(legActual-legTarget)}
+  const entryScore=entryOk?30:0,circuitScore=state.crossings>=2?25:state.crossings===1?10:0,legScore=Math.round(clamp(25-(s.legType==="time"?legError*.6:legError*6),0,25));
+  const hError=state.headingAtReturn===null?180:angleDiff(state.headingAtReturn,s.inbound),courseScore=Math.round(clamp(20-hError*.8,0,20)),score=entryScore+circuitScore+legScore+courseScore;
+  const passed=score>=75&&state.crossings>=2;$("scoreValue").textContent=score+"%";$("scoreRing").style.background=`conic-gradient(${passed?"var(--green)":"var(--gold)"} ${score}%,#1b2938 0)`;$("resultTitle").textContent=passed?"Patrón completado":"Requiere otro intento";$("resultSummary").textContent=reason==="outside"?"La aeronave salió del área de trabajo didáctica.":passed?"La incorporación y el regreso al fix cumplen el objetivo básico del ejercicio.":"Revisa la entrada, el tramo outbound y la estabilización inbound.";
+  const actualLabel=s.legType==="time"?`${legActual.toFixed(0)} s / ${legTarget} s`:`${legActual.toFixed(1).replace(".",",")} NM / ${legTarget} NM`;
+  $("resultList").innerHTML=`<div class="resultItem"><span>Incorporación</span><b>${entryOk?"Correcta · "+entryNames[state.correctEntry]:"Seleccionaste "+entryNames[state.entry]+" · recomendada "+entryNames[state.correctEntry]}</b></div><div class="resultItem"><span>Cruces del fix</span><b>${state.crossings} · ${state.crossings>=2?"circuito completado":"incompleto"}</b></div><div class="resultItem"><span>Fin outbound</span><b>${actualLabel}</b></div><div class="resultItem"><span>Rumbo al regresar</span><b>${state.headingAtReturn===null?"No registrado":fmtHeading(state.headingAtReturn)+" · error "+Math.round(hError)+"°"}</b></div>`;
+  $("debrief").classList.add("show");$("debrief").scrollIntoView({behavior:"smooth",block:"nearest"});localStorage.setItem("veyra:ifr-hold-trainer:last",JSON.stringify({date:new Date().toISOString(),score,mode:state.mode,source:s.source,entry:state.entry,correctEntry:state.correctEntry,crossings:state.crossings}));
+  setCoach(`<strong>Debriefing:</strong> resultado ${score} %. ${entryOk?"La entrada fue correcta.":"Revisa el sector de entrada."}`);
+}
+
+function updateDisplays(){const s=state.scenario||readScenario();$("headingValue").textContent=fmtHeading(state.heading);$("bankValue").textContent=(state.bank>0?"R ":state.bank<0?"L ":"")+Math.abs(state.bank)+"°";$("distanceValue").textContent=dist().toFixed(1).replace(".",",")+" NM";$("timerValue").textContent=fmtTime(state.timer);$("crossingValue").textContent=state.crossings;$("windValue").textContent=String(Math.round(s.windFrom)||360).padStart(3,"0")+"/"+Math.round(s.windSpeed)}
+function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);view.w=Math.max(320,r.width);view.h=Math.max(420,r.height);view.dpr=dpr;canvas.width=Math.round(view.w*dpr);canvas.height=Math.round(view.h*dpr);view.scale=Math.min(view.w/10.2,view.h/7.8);view.cx=view.w*.51;view.cy=view.h*.54;draw()}
+function toPx(x,y){return{x:view.cx+x*view.scale,y:view.cy-y*view.scale}}
+function drawGrid(){ctx.strokeStyle=COLORS.grid;ctx.lineWidth=1;const spacing=view.scale;for(let x=view.cx%spacing;x<view.w;x+=spacing){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,view.h);ctx.stroke()}for(let y=view.cy%spacing;y<view.h;y+=spacing){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(view.w,y);ctx.stroke()}ctx.fillStyle="rgba(160,178,198,.42)";ctx.font="10px system-ui";ctx.fillText("1 NM",14,view.h-16);ctx.strokeStyle="rgba(160,178,198,.42)";ctx.beginPath();ctx.moveTo(48,view.h-19);ctx.lineTo(48+view.scale,view.h-19);ctx.stroke()}
+function idealTrack(s){let x=0,y=0,h=s.inbound;const pts=[{x,y}],dir=s.turn==="right"?1:-1,speed=s.speed/3600,bank=s.bankLimit,rate=9.80665*Math.tan(bank*Math.PI/180)/(s.speed*.514444)*180/Math.PI,dt=.35;function move(t,b){for(let e=0;e<t;e+=dt){h=norm(h+b*rate*dt);const u=unit(h);x+=u.x*speed*dt;y+=u.y*speed*dt;pts.push({x,y})}}move(180/rate,dir);const legSeconds=s.legType==="time"?s.legValue:s.legValue/(s.speed/3600);move(legSeconds,0);move(180/rate,dir);move(legSeconds,0);return pts}
+function drawPolyline(points,color,width,dash=[]){if(points.length<2)return;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();points.forEach((p,i)=>{const q=toPx(p.x,p.y);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.stroke();ctx.restore()}
+function drawFix(s){const p=toPx(0,0);ctx.save();ctx.translate(p.x,p.y);ctx.strokeStyle=COLORS.gold2;ctx.lineWidth=2.4;ctx.strokeRect(-10,-10,20,20);ctx.beginPath();ctx.moveTo(-8,-8);ctx.lineTo(8,8);ctx.moveTo(8,-8);ctx.lineTo(-8,8);ctx.stroke();ctx.fillStyle=COLORS.gold2;ctx.font="700 10px system-ui";ctx.fillText(s.source==="rnav"?"WPT":"FIX",15,4);ctx.restore()}
+function drawWind(s){const p={x:view.w-86,y:118},toward=norm(s.windFrom+180),a=toward*Math.PI/180,len=46;const dx=Math.sin(a)*len,dy=-Math.cos(a)*len;ctx.save();ctx.strokeStyle=COLORS.cyan;ctx.fillStyle=COLORS.cyan;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(p.x-dx*.5,p.y-dy*.5);ctx.lineTo(p.x+dx*.5,p.y+dy*.5);ctx.stroke();ctx.translate(p.x+dx*.5,p.y+dy*.5);ctx.rotate(a);ctx.beginPath();ctx.moveTo(0,-1);ctx.lineTo(-7,-12);ctx.lineTo(7,-12);ctx.closePath();ctx.fill();ctx.setTransform(view.dpr,0,0,view.dpr,0,0);ctx.font="700 10px system-ui";ctx.fillText(`DESDE ${String(Math.round(s.windFrom)||360).padStart(3,"0")}° · ${s.windSpeed} kt`,view.w-170,172);ctx.restore()}
+function drawAircraft(){const p=toPx(state.x,state.y),a=state.heading*Math.PI/180;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(a);ctx.fillStyle=COLORS.white;ctx.shadowColor="rgba(255,255,255,.28)";ctx.shadowBlur=7;ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(4,-5);ctx.lineTo(17,2);ctx.lineTo(17,6);ctx.lineTo(4,5);ctx.lineTo(3,15);ctx.lineTo(8,19);ctx.lineTo(8,22);ctx.lineTo(0,20);ctx.lineTo(-8,22);ctx.lineTo(-8,19);ctx.lineTo(-3,15);ctx.lineTo(-4,5);ctx.lineTo(-17,6);ctx.lineTo(-17,2);ctx.lineTo(-4,-5);ctx.closePath();ctx.fill();ctx.restore()}
+function drawArrival(s){const u=unit(s.arrival),start={x:-u.x*3.6,y:-u.y*3.6};drawPolyline([start,{x:0,y:0}],"rgba(214,173,85,.38)",1.6,[7,7])}
+function draw(){
+  if(!canvas.width)return;ctx.setTransform(view.dpr,0,0,view.dpr,0,0);ctx.clearRect(0,0,view.w,view.h);const g=ctx.createLinearGradient(0,0,0,view.h);g.addColorStop(0,"#07111d");g.addColorStop(1,"#040911");ctx.fillStyle=g;ctx.fillRect(0,0,view.w,view.h);drawGrid();const s=state.scenario||readScenario();drawArrival(s);if(state.mode!=="evaluation")drawPolyline(idealTrack(s),state.mode==="learn"?"rgba(214,173,85,.56)":"rgba(214,173,85,.25)",state.mode==="learn"?3:2,[state.mode==="learn"?0:8,6]);if(state.trail.length>1)drawPolyline(state.trail,state.finished?COLORS.cyan:COLORS.green,3);drawFix(s);drawWind(s);if(state.loaded||!state.running)drawAircraft();ctx.fillStyle="rgba(158,171,186,.62)";ctx.font="700 10px system-ui";ctx.fillText(`INBOUND ${fmtHeading(s.inbound)} · ${s.turn==="right"?"GIROS DERECHA":"GIROS IZQUIERDA"}`,14,view.h-38)
+}
+
+$("loadBtn").addEventListener("click",loadScenario);$("randomBtn").addEventListener("click",randomScenario);$("pauseBtn").addEventListener("click",toggleRun);$("leftBtn").addEventListener("click",()=>{if(state.loaded)setBank(-(state.scenario?.bankLimit||Number(controls.bankLimit.value)))});$("levelBtn").addEventListener("click",()=>{if(state.loaded)setBank(0)});$("rightBtn").addEventListener("click",()=>{if(state.loaded)setBank(state.scenario?.bankLimit||Number(controls.bankLimit.value))});$("timerBtn").addEventListener("click",toggleTimer);$("markBtn").addEventListener("click",markOutbound);$("resetBtn").addEventListener("click",resetAttempt);$("newAttemptBtn").addEventListener("click",()=>{resetAttempt();$("sidePanel").scrollIntoView({behavior:"smooth",block:"start"})});
+document.addEventListener("keydown",e=>{if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement?.tagName))return;if(["ArrowLeft","ArrowRight","ArrowUp"," "].includes(e.key))e.preventDefault();if(state.loaded&&(e.key==="ArrowLeft"||e.key.toLowerCase()==="a"))setBank(-(state.scenario?.bankLimit||25));if(state.loaded&&(e.key==="ArrowRight"||e.key.toLowerCase()==="d"))setBank(state.scenario?.bankLimit||25);if(state.loaded&&(e.key==="ArrowUp"||e.key.toLowerCase()==="w"))setBank(0);if(e.key.toLowerCase()==="t")toggleTimer();if(e.key.toLowerCase()==="m")markOutbound();if(e.key.toLowerCase()==="r")resetAttempt();if(e.key===" ")toggleRun()});
+window.addEventListener("resize",resize,{passive:true});if("ResizeObserver" in window)new ResizeObserver(resize).observe(canvas);applyQuerySource();updateLegLabel();updateDisplays();resize();draw();
+})();
+</script>
+</body>
+</html>

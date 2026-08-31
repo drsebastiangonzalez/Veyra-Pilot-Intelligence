@@ -1318,7 +1318,14 @@ main{max-width:1180px;}
 .ifrModuleNumber{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;border:1px solid rgba(200,164,93,.42);color:#f0cf86;font-family:Georgia,serif;font-size:23px;background:#0a1523}
 .ifrModuleCopy small{display:block;color:#8fa0b5;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.ifrModuleCopy strong{display:block;font-family:Georgia,serif;font-size:20px;line-height:1.25}.ifrModuleArrow{color:#d6ad55;font-size:22px}
 .ifrRoadmapNote{margin-top:22px;padding:17px 19px;border-left:3px solid #d6ad55;background:rgba(200,164,93,.07);color:#cbd3df;line-height:1.5;border-radius:0 14px 14px 0}
-@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}#training .abbrToolCard{grid-template-columns:1fr!important;grid-column:auto}.abbrVisualTerms span{font-size:21px;min-height:58px}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}}
+#training .holdTrainerCard{grid-column:1/-1;grid-template-columns:minmax(340px,.82fr) minmax(0,1.18fr)!important;border-color:rgba(200,164,93,.82)!important}
+#training .holdTrainerCard:before{content:"PRÁCTICA"!important}
+#training .holdTrainerVisual{height:auto!important;min-height:350px!important;display:grid!important;place-items:center!important;padding:24px!important;background:radial-gradient(circle at 70% 28%,rgba(214,173,85,.16),transparent 24%),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),#06101c!important;background-size:auto,42px 42px,42px 42px,auto!important}
+.holdTrainerVisual svg{position:relative;z-index:1;width:min(100%,500px);height:auto;filter:drop-shadow(0 18px 26px rgba(0,0,0,.35))}
+.holdPracticeLaunch{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;margin:0 0 22px;padding:18px 20px;border:1px solid rgba(214,173,85,.55);border-radius:18px;background:radial-gradient(circle at 8% 20%,rgba(214,173,85,.13),transparent 28%),rgba(255,255,255,.045);color:#fff;text-decoration:none;transition:.2s ease}
+.holdPracticeLaunch:hover,.holdPracticeLaunch:focus{transform:translateY(-2px);border-color:#f0cf86;background-color:rgba(214,173,85,.08);outline:none}.holdPracticeIcon{width:58px;height:58px;border:1px solid rgba(214,173,85,.55);border-radius:16px;display:grid;place-items:center;color:#f0cf86;background:#0a1523;font:600 24px/1 Georgia,serif}.holdPracticeCopy small{display:block;color:#d6ad55;font-size:10px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px}.holdPracticeCopy strong{display:block;font:600 23px/1.15 Georgia,serif}.holdPracticeCopy span{display:block;color:#aeb8c7;font-size:13px;line-height:1.45;margin-top:5px}.holdPracticeAction{color:#f0cf86;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+@media(max-width:900px){#training .trainingCards,.ifrPurposeGrid,.ifrIntroStats,.ifrModuleGrid{grid-template-columns:1fr}#training .abbrToolCard,#training .holdTrainerCard{grid-template-columns:1fr!important;grid-column:auto}.abbrVisualTerms span{font-size:21px;min-height:58px}.ifrIntroHero{grid-template-columns:1fr}.ifrIntroCopy{padding:54px 24px}.ifrIntroVisual{min-height:390px;order:-1}.ifrPurpose,.ifrRoadmap{padding:36px 20px 44px}.ifrRoadmapHead{display:block}.ifrRoadmapLegend{margin-top:16px}.ifrModuleCard{grid-template-columns:58px 1fr auto;gap:12px;padding:15px}.ifrModuleCopy strong{font-size:18px}.holdPracticeLaunch{grid-template-columns:auto 1fr}.holdPracticeAction{grid-column:2}}
+@media(max-width:560px){.holdPracticeLaunch{grid-template-columns:1fr;padding:18px}.holdPracticeIcon{width:50px;height:50px}.holdPracticeAction{grid-column:auto}.holdPracticeCopy strong{font-size:21px}}
 
 /* Veyra mobile navigation · hide on downward scroll, reveal on upward scroll */
 @media(max-width:900px){
@@ -1815,6 +1822,31 @@ main{max-width:1180px;}
         </div>
       </article>
 
+      <article class="trainingCard ifrTrainingCard holdTrainerCard">
+        <div class="trainingCardImg holdTrainerVisual" aria-hidden="true">
+          <svg viewBox="0 0 620 360">
+            <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M300 175H440a82 82 0 0 1 0 164H300a82 82 0 0 1 0-164Z" stroke="#8190a4" stroke-width="5"/>
+              <path d="M96 175H300" stroke="#d6ad55" stroke-width="4" stroke-dasharray="10 10"/>
+              <path d="M300 175H440a82 82 0 0 1 0 164H300a82 82 0 0 1 0-164Z" stroke="#d6ad55" stroke-width="6" opacity=".55"/>
+              <path d="M500 62l40-31M540 31l-9 25M540 31l-26 4" stroke="#52cbd4" stroke-width="6"/>
+              <rect x="287" y="162" width="26" height="26" stroke="#f0cf86" stroke-width="4"/>
+              <path d="M290 165l20 20M310 165l-20 20" stroke="#f0cf86" stroke-width="3"/>
+            </g>
+            <g transform="translate(213 175) rotate(90)" fill="#f7f4ee"><path d="M0-22l7 16 27 6-27 6L0 22-7 6-31 0l24-6Z"/></g>
+            <text x="30" y="42" fill="#d6ad55" font-family="system-ui" font-size="13" font-weight="800" letter-spacing="3">IFR · HOLDING PRACTICE</text>
+            <text x="462" y="92" fill="#52cbd4" font-family="system-ui" font-size="14" font-weight="800">VIENTO</text>
+            <text x="318" y="156" fill="#f0cf86" font-family="Georgia" font-size="18">FIX</text>
+          </svg>
+        </div>
+        <div class="trainingCardBody">
+          <h3>Práctica IFR <span>Entrenador de esperas</span></h3>
+          <p class="trainingMeta">Controla rumbo y virajes, practica entradas directa, paralela y gota, trabaja por tiempo o distancia y observa el efecto del viento sobre la trayectoria.</p>
+          <span class="trainingBadge">Aprender</span><span class="trainingBadge">Practicar</span><span class="trainingBadge">Evaluación</span>
+          <div style="margin-top:20px"><button class="trainingBtnGold" onclick="location.href='/modules/ifr-hold-trainer/index.html?source=ifr&amp;v=1'">Abrir entrenador</button></div>
+        </div>
+      </article>
+
       <article class="trainingCard ifrTrainingCard abbrToolCard">
         <div class="trainingCardImg abbrToolVisual" aria-hidden="true">
           <div class="abbrVisualPanel">
@@ -1881,6 +1913,11 @@ main{max-width:1180px;}
       <div><h2>Ruta inicial IFR</h2><p>Los diez módulos están organizados de forma progresiva: primero el lenguaje de navegación, después la determinación de posición y, finalmente, la aplicación en procedimientos y aproximaciones.</p></div>
       <div class="ifrRoadmapLegend">10 módulos · Acceso individual</div>
     </div>
+    <a class="holdPracticeLaunch" href="/modules/ifr-hold-trainer/index.html?source=ifr&amp;v=1">
+      <span class="holdPracticeIcon">↻</span>
+      <span class="holdPracticeCopy"><small>Práctica independiente · acceso directo</small><strong>Entrenador de Esperas IFR</strong><span>Opera la incorporación, los virajes, el tramo outbound y la corrección por viento sin tener que buscar el módulo 07.</span></span>
+      <span class="holdPracticeAction">Abrir simulador →</span>
+    </a>
     <div class="ifrModuleGrid">
       <a class="ifrModuleCard" href="/modules/ifr-vor-01/index.html"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Fundamentos VOR</small><strong>El lenguaje del VOR</strong></span><span class="ifrModuleArrow">→</span></a>
       <a class="ifrModuleCard" href="/modules/ifr-vor-02/index.html"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Navegación convencional</small><strong>Interceptación y seguimiento de radiales</strong></span><span class="ifrModuleArrow">→</span></a>
@@ -1931,6 +1968,11 @@ main{max-width:1180px;}
       <div><h2>Ruta inicial PBN</h2><p>La secuencia parte del concepto general, diferencia RNAV de RNP y termina integrando cartas, elegibilidad, planificación y contingencias.</p></div>
       <div class="ifrRoadmapLegend">10 módulos disponibles · Ruta completa</div>
     </div>
+    <a class="holdPracticeLaunch" href="/modules/ifr-hold-trainer/index.html?source=pbn&amp;v=1">
+      <span class="holdPracticeIcon">◎</span>
+      <span class="holdPracticeCopy"><small>Práctica RNAV · acceso directo</small><strong>Esperas por tiempo o distancia</strong><span>Abre el entrenador con la fuente RNAV y el tramo por distancia preseleccionados; el progreso de PBN permanece independiente.</span></span>
+      <span class="holdPracticeAction">Practicar ahora →</span>
+    </a>
     <div class="ifrModuleGrid">
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleOne()"><span class="ifrModuleNumber">01</span><span class="ifrModuleCopy"><small>Visión general</small><strong>Fundamentos del concepto PBN</strong></span><span class="ifrModuleArrow">→</span></button>
       <button class="ifrModuleCard" type="button" onclick="openPBNModuleTwo()"><span class="ifrModuleNumber">02</span><span class="ifrModuleCopy"><small>Performance de navegación</small><strong>Errores del sistema: TSE, PDE, FTE y NSE</strong></span><span class="ifrModuleArrow">→</span></button>
