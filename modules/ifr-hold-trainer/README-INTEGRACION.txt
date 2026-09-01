@@ -17,7 +17,8 @@ FUNCIONES DEL ENTRENADOR
 - Modo Evaluacion con escenario aleatorio, solucion oculta y resultado al final.
 - Demostraciones automaticas de entradas directa, paralela y gota.
 - Geometria continua de viraje: la paralela usa el giro de mas de 180 grados
-  hacia el fix y la gota mantiene 30 grados dentro del lado protegido sin cruces.
+  hacia el lado protegido, opuesto a los giros del patron; la gota mantiene
+  30 grados dentro del lado protegido sin cruces.
 - CDI/HSI didactico en vivo con rumbo, curso seleccionado, desviacion lateral
   y bandera TO/FROM.
 - Cada demostracion termina al completar la incorporacion y regresar al fix;
@@ -28,7 +29,8 @@ FUNCIONES DEL ENTRENADOR
   INBOUND XXX grados en todos los modos.
 - La guia futura se revela por etapas y el CDI ocupa un area lateral reservada
   para no cubrir la aeronave ni la trayectoria.
-- Ritmo seleccionable: lento 0,5x, normal 1x o rapido 2x; el valor inicial es 1x.
+- Ritmo seleccionable: lento 0,5x, normal 1x, rapido 2x o turbo 5x;
+  el valor inicial es 1x.
 - Posicion inicial editable tocando o arrastrando sobre el mapa.
 - Rumbo inicial configurable con deslizador antes de comenzar.
 - Esperas estandar y no estandar.
