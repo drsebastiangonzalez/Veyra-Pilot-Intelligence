@@ -450,6 +450,101 @@
     }
     .coordination-summary-status.success{color:var(--green)}
     .coordination-summary-status.error{color:var(--red)}
+    .coordination-summary-card{width:min(780px,100%)}
+    .coordination-preview-body{padding:24px 26px 26px}
+    .coordination-preview-meta{
+      margin-bottom:18px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    .coordination-preview-meta div{
+      min-width:0;
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:var(--white);
+    }
+    .coordination-preview-meta span{
+      display:block;
+      margin-bottom:5px;
+      color:var(--muted);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .coordination-preview-meta strong{
+      display:block;
+      overflow-wrap:anywhere;
+      color:var(--navy);
+      font-size:13px;
+      line-height:1.35;
+    }
+    .whatsapp-preview-frame{
+      position:relative;
+      overflow:hidden;
+      min-height:320px;
+      padding:54px 24px 24px;
+      border:1px solid #cfd8d1;
+      border-radius:20px;
+      background-color:#efeae2;
+      background-image:
+        radial-gradient(circle at 15% 20%,rgba(255,255,255,.3) 0 2px,transparent 3px),
+        radial-gradient(circle at 85% 78%,rgba(111,145,128,.12) 0 2px,transparent 3px);
+      background-size:34px 34px,42px 42px;
+    }
+    .whatsapp-preview-label{
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      padding:12px 18px;
+      border-bottom:1px solid rgba(13,68,62,.12);
+      background:#075e54;
+      color:#fff;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+    }
+    .whatsapp-message-bubble{
+      position:relative;
+      width:min(610px,94%);
+      padding:15px 16px 27px;
+      border-radius:4px 13px 13px 13px;
+      background:#fff;
+      color:#20252a;
+      box-shadow:0 2px 5px rgba(26,43,35,.16);
+      font:400 13px/1.48 Arial,sans-serif;
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+    }
+    .whatsapp-message-bubble::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-9px;
+      border-top:10px solid #fff;
+      border-left:10px solid transparent;
+    }
+    .whatsapp-message-time{
+      position:absolute;
+      right:10px;
+      bottom:7px;
+      color:#7d8b85;
+      font-size:9px;
+      white-space:nowrap;
+    }
+    .coordination-preview-note{
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.5;
+    }
+    .coordination-preview-note strong{color:var(--navy)}
+    .coordination-preview-actions{margin-top:18px}
+    .coordination-preview-actions .save-session-btn{min-width:240px}
     .directory-btn{
       min-height:46px;
       padding:12px 19px;
@@ -1488,6 +1583,12 @@
       .sync{text-align:left}
       .hero-button-row{width:100%;display:grid;grid-template-columns:1fr 1fr}
       .new-session-btn,.directory-btn{width:100%}
+      .coordination-preview-body{padding:18px}
+      .coordination-preview-meta{grid-template-columns:1fr}
+      .whatsapp-preview-frame{min-height:280px;padding:52px 14px 18px}
+      .whatsapp-message-bubble{width:100%;font-size:12px}
+      .coordination-preview-actions{flex-direction:column-reverse}
+      .coordination-preview-actions .cancel-btn,.coordination-preview-actions .save-session-btn{width:100%;min-width:0}
       .mission-briefs-link,.schedule-preview-link{grid-column:auto}
       .stats{grid-template-columns:repeat(2,1fr);gap:10px}
       .stat{min-height:108px;padding:17px}
@@ -1567,6 +1668,9 @@
     html[data-theme="dark"] :is(.hero h1,.sync strong,.stat-value,.privacy-note strong,.student,.cell-title,.mission-brief-status a,.mission-brief-status button,.modal-header h2,.session-field label,.edit-summary strong,.absence-reason strong,.history-session-summary strong,.history-event-title,.history-change-list strong,.directory-stat strong,.student-editor h3,.student-name,.summary-preview h3,.session-card h2){color:#f4f0e8}
     html[data-theme="dark"] :is(.hero p,.sync,.toolbar-row,td,.cell-sub,.cancellation-detail,.absence-reason,.absence-management,.history-event-actor,.history-change-list,.student-source,.summary-preview p,.summary-message,.privacy-note,.session-card dd){color:#bdc7d4}
     html[data-theme="dark"] :is(.stat,.panel,.session-card,.modal-card,.edit-summary,.history-session-summary,.history-event,.directory-stat,.student-active-check,.student-list,.instructor-list,.summary-message){background:rgba(15,24,37,.95)}
+    html[data-theme="dark"] .coordination-preview-meta div{border-color:#344154;background:#111c2b}
+    html[data-theme="dark"] .coordination-preview-meta strong,html[data-theme="dark"] .coordination-preview-note strong{color:#f4f0e8}
+    html[data-theme="dark"] .coordination-preview-note{color:#bdc7d4}
     html[data-theme="dark"] .modal-header{background:linear-gradient(135deg,#152033,#1e2531)}
     html[data-theme="dark"] :is(.filter input,.filter select,.session-field input,.session-field select,.session-field textarea,.directory-toolbar input,.directory-toolbar select,.instructor-toolbar input,.instructor-toolbar select,.student-suggestions,.student-suggestion,.modal-close){background:#111c2b;color:#edf2f7}
     html[data-theme="dark"] :is(.toolbar-row,.history-change-list,.summary-delivery,.notification-badge.off){background:#111b29}
@@ -2513,10 +2617,10 @@
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
-            <button class="new-session-btn coordination-summary-btn" id="sendCoordinationSummaryButton" type="button" aria-describedby="coordinationSummaryStatus">Enviar resumen a Johan</button>
+            <button class="new-session-btn coordination-summary-btn" id="sendCoordinationSummaryButton" type="button" aria-describedby="coordinationSummaryStatus">Revisar y enviar a Johan</button>
             <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
           </div>
-          <div class="coordination-summary-status" id="coordinationSummaryStatus" role="status" aria-live="polite">Envío manual: Veyra pedirá confirmación antes de enviarlo.</div>
+          <div class="coordination-summary-status" id="coordinationSummaryStatus" role="status" aria-live="polite">Primero verás el mensaje completo; nada se envía sin tu confirmación.</div>
           <div class="sync" aria-live="polite">
             <strong id="syncLabel">Preparando datos…</strong>
             <span>Actualización automática cada minuto</span>
@@ -2625,6 +2729,42 @@
         <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos solo se muestran dentro del directorio y del formulario de programación.
       </div>
     </main>
+
+    <div class="modal-overlay hidden" id="coordinationSummaryModal" role="dialog" aria-modal="true" aria-labelledby="coordinationSummaryModalTitle">
+      <section class="modal-card coordination-summary-card">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow">WhatsApp · Vista previa segura</div>
+            <h2 id="coordinationSummaryModalTitle">Mensaje para Johan</h2>
+            <p>Revisa el contenido completo. Nada se enviará hasta que pulses “Enviar ahora por WhatsApp”.</p>
+          </div>
+          <button class="modal-close" id="closeCoordinationSummaryModal" type="button" aria-label="Cerrar sin enviar">×</button>
+        </div>
+
+        <div class="coordination-preview-body">
+          <div class="coordination-preview-meta" aria-label="Datos del envío">
+            <div><span>Destinatario</span><strong id="coordinationSummaryRecipient">Johan Salas</strong></div>
+            <div><span>Número</span><strong id="coordinationSummaryPhone">Verificado en Veyra</strong></div>
+            <div><span>Semana</span><strong id="coordinationSummaryWeek">—</strong></div>
+          </div>
+
+          <div class="whatsapp-preview-frame">
+            <div class="whatsapp-preview-label">Así verá el contenido en WhatsApp</div>
+            <div class="whatsapp-message-bubble">
+              <div id="coordinationSummaryMessage">Preparando mensaje…</div>
+              <span class="whatsapp-message-time">Vista previa</span>
+            </div>
+          </div>
+
+          <p class="coordination-preview-note"><strong>Envío manual:</strong> cerrar o volver no envía nada. WhatsApp puede ajustar ligeramente la tipografía y los saltos de línea según el dispositivo.</p>
+          <div class="create-message" id="coordinationSummaryModalStatus" role="alert" aria-live="polite"></div>
+          <div class="form-actions coordination-preview-actions">
+            <button class="cancel-btn" id="cancelCoordinationSummaryButton" type="button">Volver sin enviar</button>
+            <button class="save-session-btn" id="confirmCoordinationSummaryButton" type="button">Enviar ahora por WhatsApp</button>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <div class="modal-overlay hidden" id="sessionModal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
       <section class="modal-card">
@@ -3046,6 +3186,7 @@
       summaryNotification: null,
       instructorSummarySending: false,
       coordinationSummarySending: false,
+      coordinationSummaryPreview: null,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
       managingSessionIds: new Set(),
@@ -3938,16 +4079,66 @@
       const button = $("sendCoordinationSummaryButton");
       const status = $("coordinationSummaryStatus");
       button.disabled = state.coordinationSummarySending;
-      button.textContent = label || "Enviar resumen a Johan";
-      status.textContent = message || "Envío manual: Veyra pedirá confirmación antes de enviarlo.";
+      button.textContent = label || "Revisar y enviar a Johan";
+      status.textContent = message || "Primero verás el mensaje completo; nada se envía sin tu confirmación.";
       status.className = "coordination-summary-status" + (type ? " " + type : "");
+    }
+
+    function setCoordinationSummaryModalState(message,type){
+      const status = $("coordinationSummaryModalStatus");
+      status.textContent = message || "";
+      status.className = "create-message" + (type ? " " + type : "");
+    }
+
+    function fallbackCoordinationMessage(previewEntry,previewData,preview){
+      return [
+        "Hola " + (previewEntry.recipient_name || "Johan Salas") + ".",
+        "",
+        "Resumen ejecutivo VOA",
+        "Semana: " + (previewData.week_label || (previewData.week_start + " al " + previewData.week_end)),
+        "",
+        "Estado general",
+        preview.metrics || "Información operativa preparada.",
+        "",
+        "Sesiones publicadas",
+        preview.details || "No hay sesiones publicadas.",
+        "",
+        "Alertas operativas",
+        preview.alerts || "Sin alertas operativas.",
+        "",
+        "Veyra Pilot Intelligence"
+      ].join("\n");
+    }
+
+    function openCoordinationSummaryPreview(previewEntry,previewData){
+      const preview = previewEntry.preview;
+      state.coordinationSummaryPreview = {
+        recipientId:Number(previewEntry.recipient_id || 1),
+        weekStart:previewData.week_start
+      };
+      $("coordinationSummaryRecipient").textContent = previewEntry.recipient_name || "Johan Salas";
+      $("coordinationSummaryPhone").textContent = previewEntry.phone_masked || "Verificado en Veyra";
+      $("coordinationSummaryWeek").textContent = previewData.week_label || (previewData.week_start + " al " + previewData.week_end);
+      $("coordinationSummaryMessage").textContent = previewEntry.message_preview || fallbackCoordinationMessage(previewEntry,previewData,preview);
+      $("confirmCoordinationSummaryButton").disabled = false;
+      setCoordinationSummaryModalState("");
+      $("coordinationSummaryModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeCoordinationSummaryModal(force){
+      if(state.coordinationSummarySending && force !== true) return;
+      $("coordinationSummaryModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+      state.coordinationSummaryPreview = null;
+      setCoordinationSummaryModalState("");
     }
 
     async function sendCoordinationSummary(){
       if(!db || !state.session || state.coordinationSummarySending) return;
 
       state.coordinationSummarySending = true;
-      setCoordinationSummaryState("Preparando la vista previa sin enviar nada…","","Preparando…");
+      setCoordinationSummaryState("Preparando el mensaje completo sin enviar nada…","","Preparando vista…");
 
       const previewResult = await db.functions.invoke("voa-send-coordination-summary",{
         body:{action:"preview",recipient_id:1}
@@ -3972,55 +4163,60 @@
         return;
       }
 
-      const confirmed = window.confirm(
-        "¿Enviar ahora el resumen ejecutivo por WhatsApp?\n\n" +
-        "Destinatario: " + (previewEntry.recipient_name || "Johan Salas") + "\n" +
-        "Número: " + (previewEntry.phone_masked || "verificado en Veyra") + "\n" +
-        "Semana: " + (previewData.week_label || (previewData.week_start + " al " + previewData.week_end)) + "\n" +
-        "Resumen: " + (preview.metrics || "Información operativa preparada") + "\n\n" +
-        "Este envío es manual y no activa mensajes automáticos para Johan."
-      );
+      state.coordinationSummarySending = false;
+      setCoordinationSummaryState("Vista previa lista. Revísala antes de decidir si deseas enviarla.","success");
+      openCoordinationSummaryPreview(previewEntry,previewData);
+    }
 
-      if(!confirmed){
-        state.coordinationSummarySending = false;
-        setCoordinationSummaryState("Envío cancelado. No se envió ningún mensaje.","");
-        return;
-      }
+    async function confirmCoordinationSummarySend(){
+      const prepared = state.coordinationSummaryPreview;
+      if(!db || !state.session || !prepared || state.coordinationSummarySending) return;
 
+      state.coordinationSummarySending = true;
+      $("confirmCoordinationSummaryButton").disabled = true;
+      setCoordinationSummaryModalState("Enviando el mensaje que acabas de revisar…","");
       setCoordinationSummaryState("Enviando el resumen aprobado a Johan…","","Enviando…");
       const sendResult = await db.functions.invoke("voa-send-coordination-summary",{
         body:{
           action:"send",
-          recipient_id:1,
-          week_start:previewData.week_start
+          recipient_id:prepared.recipientId,
+          week_start:prepared.weekStart
         }
       });
 
       state.coordinationSummarySending = false;
+      $("confirmCoordinationSummaryButton").disabled = false;
       if(sendResult.error){
         const details = await functionErrorDetails(sendResult.error);
         const message = details && details.code === "UNAUTHORIZED"
           ? "La sesión administrativa no está autorizada para este envío."
           : "WhatsApp no confirmó el envío. No lo repitas hasta revisar el estado.";
         setCoordinationSummaryState(message,"error");
+        setCoordinationSummaryModalState(message,"error");
         return;
       }
 
       const sendData = sendResult.data || {};
       const sendEntry = Array.isArray(sendData.results) ? sendData.results[0] : null;
       if(sendEntry && sendEntry.sent === true){
+        closeCoordinationSummaryModal(true);
         setCoordinationSummaryState("WhatsApp aceptó el resumen para Johan. El envío seguirá siendo únicamente manual.","success");
         return;
       }
       if(sendEntry && sendEntry.code === "DUPLICATE_PREVENTED"){
+        closeCoordinationSummaryModal(true);
         setCoordinationSummaryState("Veyra evitó un duplicado: este mismo resumen ya fue procesado.","success");
         return;
       }
       if(sendEntry && sendEntry.code === "TEMPLATE_NOT_APPROVED"){
-        setCoordinationSummaryState("Meta todavía no permite usar la plantilla de resumen ejecutivo.","error");
+        const message = "Meta todavía no permite usar la plantilla de resumen ejecutivo.";
+        setCoordinationSummaryState(message,"error");
+        setCoordinationSummaryModalState(message,"error");
         return;
       }
-      setCoordinationSummaryState("WhatsApp no confirmó la aceptación del resumen.","error");
+      const message = "WhatsApp no confirmó la aceptación del resumen.";
+      setCoordinationSummaryState(message,"error");
+      setCoordinationSummaryModalState(message,"error");
     }
 
     async function openSessionModal(){
@@ -5333,6 +5529,12 @@
     $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
     $("sendCoordinationSummaryButton").addEventListener("click",sendCoordinationSummary);
+    $("closeCoordinationSummaryModal").addEventListener("click",closeCoordinationSummaryModal);
+    $("cancelCoordinationSummaryButton").addEventListener("click",closeCoordinationSummaryModal);
+    $("confirmCoordinationSummaryButton").addEventListener("click",confirmCoordinationSummarySend);
+    $("coordinationSummaryModal").addEventListener("click",function(event){
+      if(event.target === $("coordinationSummaryModal")) closeCoordinationSummaryModal();
+    });
     $("navDirectoryButton").addEventListener("click",function(){
       window.history.replaceState({},document.title,window.location.pathname + window.location.search + "#directorio");
       openDirectoryModal();
@@ -5439,6 +5641,7 @@
     $("copyInstructorSummaryButton").addEventListener("click",copyInstructorSummary);
     window.addEventListener("hashchange",openRequestedVoaView);
     document.addEventListener("keydown",function(event){
+      if(event.key === "Escape" && !$("coordinationSummaryModal").classList.contains("hidden")) closeCoordinationSummaryModal();
       if(event.key === "Escape" && !$("sessionModal").classList.contains("hidden")) closeSessionModal();
       if(event.key === "Escape" && !$("editSessionModal").classList.contains("hidden")) closeEditSessionModal();
       if(event.key === "Escape" && !$("cancelSessionModal").classList.contains("hidden")) closeCancelSessionModal();
