@@ -16,6 +16,10 @@ FUNCIONES DEL ENTRENADOR
 - Modo Practicar con ayudas reducidas y retroalimentacion inmediata de la entrada.
 - Modo Evaluacion con escenario aleatorio, solucion oculta y resultado al final.
 - Demostraciones automaticas de entradas directa, paralela y gota.
+- Geometria continua de viraje: la paralela usa el giro de mas de 180 grados
+  hacia el fix y la gota mantiene 30 grados dentro del lado protegido sin cruces.
+- CDI/HSI didactico en vivo con rumbo, curso seleccionado, desviacion lateral
+  y bandera TO/FROM.
 - Ritmo seleccionable: lento 0,5x, normal 1x o rapido 2x; el valor inicial es 1x.
 - Posicion inicial editable tocando o arrastrando sobre el mapa.
 - Rumbo inicial configurable con deslizador antes de comenzar.
