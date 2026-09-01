@@ -9,13 +9,16 @@ ACCESOS RECOMENDADOS
 - PBN Path: el mismo entrenador abre con ?source=pbn.
 - Modulo IFR 07: boton "Abrir entrenador"; el simulador no se carga dentro del modulo.
 
-FUNCIONES DE LA PRIMERA VERSION
-- Modos Aprender, Practicar y Evaluacion.
+FUNCIONES DEL ENTRENADOR
+- Flujo inicial simplificado en tres pasos y configuracion avanzada plegable.
+- Modo Aprender con tutor guiado en cuatro pasos sobre el mapa.
+- Modo Practicar con ayudas reducidas y retroalimentacion inmediata de la entrada.
+- Modo Evaluacion con escenario aleatorio, solucion oculta y resultado al final.
 - Esperas estandar y no estandar.
 - Fuente VOR/Fix o RNAV.
 - Entradas directa, paralela y gota.
 - Tramos por tiempo o distancia.
-- Viento configurable y trayectoria sobre el terreno.
+- Viento configurable con deslizadores; direccion e intensidad se aplican en vivo.
 - Controles de banco, cronometro, marca de fin outbound, pausa y reinicio.
 - Teclado en PC y botones tactiles en iPad/iPhone.
 - Debriefing local con puntuacion.
