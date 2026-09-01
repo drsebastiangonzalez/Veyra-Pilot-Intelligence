@@ -22,6 +22,10 @@ FUNCIONES DEL ENTRENADOR
   y bandera TO/FROM.
 - Cada demostracion termina al completar la incorporacion y regresar al fix;
   no superpone un segundo circuito de espera.
+- El patron de espera permanece visible como referencia dorada independiente
+  de la trayectoria volada y muestra el sentido de los giros.
+- El mapa identifica el curso inbound con linea, flecha hacia el fix y rotulo
+  INBOUND XXX grados en todos los modos.
 - La guia futura se revela por etapas y el CDI ocupa un area lateral reservada
   para no cubrir la aeronave ni la trayectoria.
 - Ritmo seleccionable: lento 0,5x, normal 1x o rapido 2x; el valor inicial es 1x.
