@@ -526,7 +526,7 @@
     </header>
     <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
       <div class="voa-nav">
-        <a href="./control-voa.html">Control VOA</a>
+        <a href="./control-voa.html">Archivo VOA</a>
         <a href="./voa-schedule-preview.html">Cronograma</a>
         <a class="active" href="./simulator-history.html" aria-current="page">Historial</a>
         <a href="./voa-mission-briefs.html">Mission Briefs</a>
@@ -537,8 +537,8 @@
 
     <main>
       <section class="hero">
-        <div><div class="eyebrow">Veyra · expediente académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico de cada intento tomado del DAILY REPORT oficial. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente de Aeronova.</p></div>
-        <aside class="sync-card"><strong>Sincronización automática · build 7</strong><span id="lastSyncText">Consultando última actualización…</span><span>Cada hora, al minuto 17 · solo lectura sobre las fuentes</span><span><strong>Cobertura:</strong> enero de 2026 en adelante</span><button class="sync-button" id="syncButton" type="button">Sincronizar ahora</button></aside>
+        <div><div class="eyebrow">Veyra · archivo académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico preservado al cierre de la etapa piloto. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente histórica de Aeronova.</p></div>
+        <aside class="sync-card"><strong>Archivo cerrado · build 7</strong><span id="lastSyncText">Consultando última actualización registrada…</span><span>La sincronización automática finalizó el 1 de septiembre de 2026</span><span><strong>Cobertura histórica:</strong> enero a septiembre de 2026</span><button class="sync-button" id="syncButton" type="button" disabled>Sincronización cerrada</button></aside>
       </section>
 
       <div class="notice"><span class="notice-mark">!</span><div><strong>Regla de seguridad académica.</strong> Solo una misión con duración positiva y corroborada entre RRO SIM y SIM REPORT avanza la secuencia. Una cancelación, un `NO SHOW` o una duración cero permanece en el histórico y exige repetir; si la fuente es ambigua, Veyra no decide y la deja para revisión humana. Cuando RRO no identifica la actividad, se consulta la observación operativa de SIM REPORT. La cobertura conectada inicia en enero de 2026 y no representa años anteriores. No se guardan motivos privados de inasistencia.</div></div>
@@ -571,6 +571,7 @@
   <script>
     "use strict";
     const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
+    const VOA_OPERATION_CLOSED=true;
     const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const ADMIN_EMAIL="veyrapilotintelligence@gmail.com";
     const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
@@ -678,6 +679,7 @@
     }
 
     async function requestHistorySync(trigger="manual"){
+      if(VOA_OPERATION_CLOSED)throw new Error("VOA_OPERATION_CLOSED");
       const sessionResult=await db.auth.getSession();
       const token=sessionResult.data.session?.access_token;
       if(!token)throw new Error("SESSION_EXPIRED");
@@ -713,11 +715,11 @@
           await loadLatestSync();
           return loadHistory(studentId,{allowRecovery:false});
         }catch{
-          setHistoryError("RRO registra actividad para este estudiante, pero la recuperación automática no terminó. Usa “Sincronizar ahora” para reintentar.");
+          setHistoryError("RRO registra actividad para este estudiante, pero el detalle no quedó importado antes del cierre operativo.");
         }
       }
       if(state.history.length)clearHistoryError();
-      renderDetail(!state.history.length&&expectsHistory?"La ficha registra intentos, pero el detalle aún no fue recibido desde RRO SIM. Usa “Sincronizar ahora”.":"");
+      renderDetail(!state.history.length&&expectsHistory?"La ficha registra intentos, pero el detalle no quedó recibido antes del cierre de la etapa piloto.":"");
       return state.history.length>0;
     }
 
@@ -739,7 +741,7 @@
           await loadLatestSync();
           return loadStudents(preferredId,{allowRecovery:false});
         }catch{
-          setHistoryError("El histórico aún no tiene registros locales y la recuperación automática no terminó. Usa “Sincronizar ahora” para reintentar.");
+          setHistoryError("El histórico no recibió registros locales antes del cierre operativo.");
         }
       }
       state.students=rows;state.filtered=[...state.students];renderMetrics();renderStudentList();
@@ -748,12 +750,13 @@
       else{
         state.history=[];
         renderDetail();
-        if(!state.students.length)setHistoryError("Todavía no hay expedientes sincronizados. Pulsa “Sincronizar ahora” para importar los registros existentes en RRO SIM.");
+        if(!state.students.length)setHistoryError("No quedaron expedientes importados antes del cierre de la etapa piloto.");
       }
       return state.students.length;
     }
 
     async function synchronize(){
+      if(VOA_OPERATION_CLOSED){setHistoryError("La etapa piloto está cerrada. El historial permanece disponible sin nuevas sincronizaciones.");return;}
       if(state.busy)return;state.busy=true;const button=$("syncButton");button.disabled=true;button.textContent="Sincronizando…";
       const selected=state.selectedId;
       try{
@@ -783,13 +786,13 @@
       $("sessionEmail").textContent=user.email||"";
       try{
         await loadLatestSync();
-        await loadStudents(null,{allowRecovery:true});
+        await loadStudents(null,{allowRecovery:false});
         $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
       }catch{
         state.students=[];state.filtered=[];state.history=[];
         renderMetrics();renderStudentList();renderDetail();
         $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
-        setHistoryError("No fue posible cargar el historial protegido. Ninguna fuente fue modificada; usa “Sincronizar ahora” para reintentar.");
+        setHistoryError("No fue posible cargar el archivo histórico protegido. Ninguna fuente fue modificada.");
       }
     }
     updateThemeButton();init();

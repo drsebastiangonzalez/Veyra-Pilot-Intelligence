@@ -548,7 +548,7 @@
     </header>
     <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
       <div class="voa-nav">
-        <a href="./control-voa.html">Control VOA</a>
+        <a href="./control-voa.html">Archivo VOA</a>
         <a class="active" href="./voa-schedule-preview.html" aria-current="page">Cronograma</a>
         <a href="./simulator-history.html">Historial</a>
         <a href="./voa-mission-briefs.html">Mission Briefs</a>
@@ -559,13 +559,13 @@
 
     <main>
       <section class="hero">
-        <div><div class="eyebrow">Veyra · Programación asistida</div><h1>Cronograma de simulador</h1><p>Previsualización de una propuesta que combina disponibilidad, secuencia de entrenamiento, vuelos, simuladores e instructores asignados antes de pasar a programación real.</p></div>
-        <div class="draft-card"><strong>Editor con eliminación · versión 14</strong>Programación del 25 de agosto al 6 de septiembre de 2026. Las sesiones pueden editarse o retirarse de la previsualización conservando su historial; RRO SIM conserva la autoridad sobre la secuencia MES.</div>
+        <div><div class="eyebrow">Veyra · Archivo de programación</div><h1>Cronograma histórico de simulador</h1><p>Consulta la propuesta y las decisiones registradas durante la etapa piloto. La programación institucional quedó cerrada el 1 de septiembre de 2026.</p></div>
+        <div class="draft-card"><strong>Archivo de solo lectura</strong>La información conserva su trazabilidad histórica. Ya no se crean, editan, eliminan, aprueban ni publican propuestas desde este panel.</div>
       </section>
 
       <section class="status-strip" aria-label="Estado de la propuesta">
-        <div class="status-copy"><span class="status-icon">!</span><div><strong>Previsualización con publicación controlada</strong><span id="scheduleCoverageText">Verificando jornadas prioritarias, vuelos e instructores…</span></div></div>
-        <div class="status-actions"><button class="manual-btn" id="editSelectedButton" type="button">Editar sesión seleccionada</button><button class="delete-session-btn" id="deleteSelectedButton" type="button">Eliminar sesión seleccionada</button><button class="manual-btn" id="openManualButton" type="button">+ Nueva propuesta manual</button><button class="present-btn" id="printButton" type="button">Imprimir / presentar</button></div>
+        <div class="status-copy"><span class="status-icon">✓</span><div><strong>Etapa piloto cerrada · solo consulta</strong><span id="scheduleCoverageText">Cargando el archivo histórico…</span></div></div>
+        <div class="status-actions"><button class="manual-btn" id="editSelectedButton" type="button" disabled>Edición cerrada</button><button class="delete-session-btn" id="deleteSelectedButton" type="button" disabled>Eliminación cerrada</button><button class="manual-btn" id="openManualButton" type="button" disabled>Operación cerrada</button><button class="present-btn" id="printButton" type="button">Imprimir / presentar</button></div>
       </section>
 
       <section class="metrics" aria-label="Resumen de la propuesta">
@@ -578,7 +578,7 @@
       </section>
 
       <section class="panel approval-panel" id="approvalCenter" aria-labelledby="approvalTitle">
-        <div class="panel-head"><div><h2 id="approvalTitle">Centro de aprobación y publicación</h2><p>Selecciona propuestas de la semana, valida sus requisitos y publícalas en Control VOA sin duplicados ni envíos automáticos.</p></div><span class="week-tag">Sin envío de WhatsApp</span></div>
+        <div class="panel-head"><div><h2 id="approvalTitle">Historial de aprobación y publicación</h2><p>Consulta el estado en que quedó cada propuesta y su vínculo histórico con el archivo VOA.</p></div><span class="week-tag">Solo lectura</span></div>
         <div class="approval-body">
           <div class="approval-summary" aria-label="Estados del flujo">
             <div class="approval-stat"><span>Borradores</span><strong id="approvalDraftCount">0</strong></div>
@@ -589,8 +589,8 @@
           <div class="approval-toolbar">
             <button class="approval-btn" id="selectReadyButton" type="button">Seleccionar aptas</button>
             <button class="approval-btn" id="clearApprovalButton" type="button">Limpiar selección</button>
-            <button class="approval-btn primary" id="approveSelectedButton" type="button">Aprobar seleccionadas</button>
-            <button class="approval-btn publish" id="publishSelectedButton" type="button">Publicar en Control VOA</button>
+            <button class="approval-btn primary" id="approveSelectedButton" type="button" disabled>Aprobación cerrada</button>
+            <button class="approval-btn publish" id="publishSelectedButton" type="button" disabled>Publicación cerrada</button>
           </div>
           <div class="approval-message" id="approvalMessage" role="status"></div>
           <div class="approval-table-wrap"><table class="approval-table"><thead><tr><th aria-label="Seleccionar"></th><th>Sesión</th><th>Simulador / instructor</th><th>Validación</th><th>Teléfono VOA</th><th>Estado</th></tr></thead><tbody id="approvalRows"></tbody></table></div>
@@ -628,7 +628,7 @@
         <div class="review-table-wrap"><table class="review-table"><thead><tr><th>Estudiante</th><th>Etapa</th><th>Última misión registrada</th><th>Horas de vuelo</th><th>Propuesta</th><th>Simulador</th><th>Asistencia / disponibilidad</th><th>Instructor / ajuste</th><th>Resultado</th></tr></thead><tbody id="studentRows"></tbody></table></div>
       </section>
 
-      <div class="footnote"><strong>Alcance y seguridad.</strong> La aprobación y la publicación son acciones distintas. Una sesión publicada queda enlazada una sola vez con Control VOA y conserva su bitácora; editarla exige volver al flujo de revisión. La publicación no envía WhatsApp. Si el centro indica <em>Activación pendiente</em>, la interfaz está disponible para revisión, pero aún falta habilitar en Supabase la bitácora, los permisos y el vínculo único de publicación.</div>
+      <div class="footnote"><strong>Archivo histórico.</strong> Las decisiones, validaciones y vínculos publicados se conservan para trazabilidad. Desde el 1 de septiembre de 2026 este panel no permite aprobar, publicar, editar ni eliminar propuestas, y no genera mensajes de WhatsApp.</div>
     </main>
   </div>
 
@@ -658,6 +658,7 @@
     "use strict";
 
     const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
+    const VOA_OPERATION_CLOSED=true;
     const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const BOGOTA_TZ="America/Bogota";
     const IS_LOCAL=location.protocol==="file:"||location.hostname==="localhost"||location.hostname==="127.0.0.1";
@@ -1416,6 +1417,7 @@
     }
 
     function openEditDialog(proposal){
+      if(VOA_OPERATION_CLOSED){setManualStatus("La etapa piloto está cerrada. El cronograma es únicamente de consulta.","error");return;}
       if(!proposal)return;
       if(workflowStatus(proposal)==="published"){
         alert("Esta sesión ya fue publicada en Control VOA. Para modificarla debe gestionarse primero desde el flujo operativo y conservar la trazabilidad.");
@@ -1524,6 +1526,7 @@
 
     async function saveManualProposal(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){setManualStatus("La etapa piloto está cerrada. No se guardaron cambios.","error");return;}
       if(!db){setManualStatus("El guardado manual solo está disponible en la página publicada con sesión iniciada.","error");return;}
       const editingProposal=proposalById(state.editingId);
       const studentName=$("manualStudent").value.trim();
@@ -1601,6 +1604,7 @@
     }
 
     async function removeProposal(proposal){
+      if(VOA_OPERATION_CLOSED){setApprovalMessage("La etapa piloto está cerrada. No se eliminó ninguna propuesta.","error");return;}
       if(!proposal){alert("Selecciona primero una sesión del cronograma.");return;}
       if(workflowStatus(proposal)==="published"){
         alert("Esta sesión ya fue publicada en Control VOA y no puede retirarse desde la previsualización.");
@@ -1800,7 +1804,7 @@
         const warnings=(result?.warnings||[]).filter(item=>!item.startsWith("Instructor pendiente")&&!item.startsWith("Disponibilidad pendiente"));
         const validationLabel=blockers.length?blockers.length+" "+(blockers.length===1?"requisito bloqueante":"requisitos bloqueantes"):warnings.length?"Apta con "+warnings.length+" "+(warnings.length===1?"advertencia":"advertencias"):"Apta para aprobar";
         const selected=state.approvalSelection.has(proposal.dbId);
-        const disabled=!proposal.dbId||status==="published";
+        const disabled=VOA_OPERATION_CLOSED||!proposal.dbId||status==="published";
         const stateDetail=status==="published"&&proposal.publishedSessionId?"Control VOA #"+proposal.publishedSessionId:workflowLabel(status);
         return '<tr class="'+escapeHtml(status)+'-row">'+
           '<td><input class="approval-select" type="checkbox" data-approval-id="'+escapeHtml(proposal.dbId||"")+'" '+(selected?'checked ':'')+(disabled?'disabled ':'')+'aria-label="Seleccionar '+escapeHtml(student?.name||"sesión")+'"></td>'+ 
@@ -1815,12 +1819,13 @@
       const selected=PROPOSALS.filter(proposal=>state.approvalSelection.has(proposal.dbId));
       const canApprove=selected.some(proposal=>workflowStatus(proposal)==="draft");
       const canPublish=selected.some(proposal=>workflowStatus(proposal)==="approved");
-      $("approveSelectedButton").disabled=state.approvalBusy||!state.approvalAvailable||!canApprove;
-      $("publishSelectedButton").disabled=state.approvalBusy||!state.approvalAvailable||!canPublish;
-      $("selectReadyButton").disabled=state.approvalBusy||!rows.length;
-      $("clearApprovalButton").disabled=state.approvalBusy||!state.approvalSelection.size;
+      $("approveSelectedButton").disabled=VOA_OPERATION_CLOSED||state.approvalBusy||!state.approvalAvailable||!canApprove;
+      $("publishSelectedButton").disabled=VOA_OPERATION_CLOSED||state.approvalBusy||!state.approvalAvailable||!canPublish;
+      $("selectReadyButton").disabled=VOA_OPERATION_CLOSED||state.approvalBusy||!rows.length;
+      $("clearApprovalButton").disabled=VOA_OPERATION_CLOSED||state.approvalBusy||!state.approvalSelection.size;
 
-      if(state.approvalNotice)setApprovalMessage(state.approvalNotice.message,state.approvalNotice.type||"");
+      if(VOA_OPERATION_CLOSED)setApprovalMessage("Archivo histórico: aprobación y publicación cerradas desde el 1 de septiembre de 2026.");
+      else if(state.approvalNotice)setApprovalMessage(state.approvalNotice.message,state.approvalNotice.type||"");
       else if(!state.approvalAvailable)setApprovalMessage(state.approvalError||"Activación pendiente: la interfaz puede revisarse, pero la aprobación y publicación real todavía no están habilitadas en Supabase.");
       else setApprovalMessage("Selecciona sesiones aptas, apruébalas y luego publícalas. Publicar crea o enlaza la sesión en Control VOA, pero no envía WhatsApp.");
 
@@ -1848,6 +1853,7 @@
     }
 
     async function runApprovalAction(action){
+      if(VOA_OPERATION_CLOSED){setApprovalMessage("La etapa piloto está cerrada. El flujo permanece como archivo histórico.","error");return;}
       if(!state.approvalAvailable){
         state.approvalNotice={message:state.approvalError||"Activación pendiente en Supabase.",type:"error"};
         renderApprovalCenter();
@@ -1926,7 +1932,7 @@
       const missingLabels=coverage.missing.map(date=>DAYS.find(day=>day.key===date)?.short||date).join(", ");
       const coverageCopy=coverage.missing.length?"Faltan jornadas prioritarias en Guaymaral: "+missingLabels+".":"Guaymaral está cubierto el lunes 31 y el miércoles 2, jueves 3 y viernes 4.";
       const instructorCopy=incompleteInstructorDays?" Hay "+incompleteInstructorDays+" "+(incompleteInstructorDays===1?"jornada de instructor con menos de tres sesiones.":"jornadas de instructor con menos de tres sesiones."):" Las jornadas asignadas cumplen el mínimo de tres sesiones.";
-      $("scheduleCoverageText").textContent=coverageCopy+instructorCopy+" Publicar sigue siendo una acción separada y no envía WhatsApp.";
+      $("scheduleCoverageText").textContent=coverageCopy+instructorCopy+(VOA_OPERATION_CLOSED?" Archivo cerrado para nuevas acciones.":" Publicar sigue siendo una acción separada y no envía WhatsApp.");
     }
 
     function renderWeekTabs(){
@@ -1995,7 +2001,9 @@
       const hours=student.flightHours;
       const hoursText=hours?loggedHoursLabel(hours)+" · "+(hours.remaining===null||hours.remaining===undefined?"saldo por conciliar":"saldo "+formatHours(hours.remaining)+" h ("+(hours.basis==="calculated"?"calculado":"reportado")+")"):"Por conciliar";
       const workflowCopy=workflow==="published"?"Sesión creada o enlazada en Control VOA. No se envió WhatsApp automáticamente.":workflow==="approved"?"Decisión registrada; pendiente de publicación explícita en Control VOA.":proposal.manual?'Propuesta manual pendiente de aprobación':proposal.type==="reasonable_adjustment"?'Confirmada por ajuste razonable':proposal.type==="scheduled"?'Sesión registrada en la programación SCS':proposal.type==="reinforcement"?'Sesión de refuerzo':'Sesión secuencial';
-      const workflowActions=workflow==="published"?'':('<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>');
+      const workflowActions=VOA_OPERATION_CLOSED||workflow==="published"
+        ? '<div class="detail-actions"><span class="week-tag">Archivo · solo lectura</span></div>'
+        : ('<div class="detail-actions"><button class="edit-session-btn" type="button" data-edit-proposal="'+escapeHtml(proposal.id)+'">Editar sesión / asignar instructor</button><button class="delete-session-btn" type="button" data-delete-proposal="'+escapeHtml(proposal.id)+'">Eliminar sesión</button></div>');
       $("detailPanel").innerHTML=
         '<div class="decision '+(result.status==="review"?'review':result.status==="blocked"?'blocked':'')+'"><span class="decision-dot"></span>'+escapeHtml(decision)+'</div>'+ 
         '<h3 class="detail-title">'+escapeHtml(student.name)+' · '+escapeHtml(proposal.mission)+'</h3>'+ 

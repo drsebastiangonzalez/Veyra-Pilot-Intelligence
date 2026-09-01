@@ -2532,6 +2532,23 @@
       body,html[data-theme="dark"] body{background-size:560px 327px,auto,auto,auto}
     }
 
+    .archive-banner{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      margin:0 0 22px;
+      padding:18px 20px;
+      border:1px solid rgba(184,142,48,.5);
+      border-radius:18px;
+      background:linear-gradient(135deg,rgba(184,142,48,.16),rgba(7,17,31,.72));
+      color:var(--text,#eef3f8);
+    }
+    .archive-banner strong{display:block;margin-bottom:4px;color:#f1cf79;letter-spacing:.04em}
+    .archive-banner p{margin:0;color:var(--muted,#a8b4c5);line-height:1.5}
+    .archive-icon{display:grid;place-items:center;flex:0 0 38px;height:38px;border:1px solid rgba(241,207,121,.48);border-radius:50%;color:#f1cf79;font-weight:900}
+    .archive-state{display:inline-flex;padding:7px 10px;border:1px solid rgba(184,142,48,.35);border-radius:10px;color:#d8bd78;font-size:12px;font-weight:800}
+    button[disabled].archive-disabled{opacity:.62;cursor:not-allowed;filter:saturate(.55)}
+
   </style>
 </head>
 <body>
@@ -2548,8 +2565,8 @@
     <form class="auth-card" id="loginForm">
       <div class="auth-brand">Veyra</div>
       <div class="auth-subbrand">PILOT INTELLIGENCE</div>
-      <h1>Control VOA</h1>
-      <p>Inicia sesión con la cuenta administradora autorizada para consultar el estado de asistencia.</p>
+      <h1>Archivo VOA</h1>
+      <p>Inicia sesión con la cuenta administradora autorizada para consultar el historial de la etapa piloto.</p>
       <div class="field">
         <label for="email">Correo autorizado</label>
         <input id="email" type="email" autocomplete="username" required />
@@ -2599,7 +2616,7 @@
     </header>
     <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
       <div class="voa-nav">
-        <a class="active" href="./control-voa.html" aria-current="page">Control VOA</a>
+        <a class="active" href="./control-voa.html" aria-current="page">Archivo VOA</a>
         <a href="./voa-schedule-preview.html">Cronograma</a>
         <a href="./simulator-history.html">Historial</a>
         <a href="./voa-mission-briefs.html">Mission Briefs</a>
@@ -2611,21 +2628,26 @@
     <main>
       <section class="hero">
         <div>
-          <div class="eyebrow">Centro de operaciones VOA</div>
-          <h1>Todo el día de simulador, en una sola vista.</h1>
-          <p>Controla asistencia, novedades y comunicación operativa sin perder el contexto de cada sesión.</p>
+          <div class="eyebrow">Archivo histórico VOA</div>
+          <h1>La trazabilidad de la etapa piloto, en una sola vista.</h1>
+          <p>Consulta sesiones, estados, novedades y comunicaciones registradas hasta el cierre operativo.</p>
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
-            <button class="new-session-btn coordination-summary-btn" id="sendCoordinationSummaryButton" type="button" aria-describedby="coordinationSummaryStatus">Revisar y enviar a Johan</button>
-            <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
+            <button class="new-session-btn coordination-summary-btn archive-disabled" id="sendCoordinationSummaryButton" type="button" aria-describedby="coordinationSummaryStatus" disabled>Envíos cerrados</button>
+            <button class="new-session-btn archive-disabled" id="newSessionButton" type="button" disabled>Operación cerrada</button>
           </div>
-          <div class="coordination-summary-status" id="coordinationSummaryStatus" role="status" aria-live="polite">Primero verás el mensaje completo; nada se envía sin tu confirmación.</div>
+          <div class="coordination-summary-status" id="coordinationSummaryStatus" role="status" aria-live="polite">No se generan ni envían nuevas comunicaciones institucionales.</div>
           <div class="sync" aria-live="polite">
             <strong id="syncLabel">Preparando datos…</strong>
-            <span>Actualización automática cada minuto</span>
+            <span>Consulta histórica protegida</span>
           </div>
         </div>
+      </section>
+
+      <section class="archive-banner" role="status" aria-label="Estado de la operación VOA">
+        <span class="archive-icon" aria-hidden="true">✓</span>
+        <div><strong>Etapa piloto cerrada · 1 de septiembre de 2026</strong><p>El panel está en modo de solo lectura. El historial se conserva para trazabilidad; no permite crear, modificar, cancelar ni enviar sesiones, recordatorios, resúmenes o Mission Briefs.</p></div>
       </section>
 
       <section class="stats" aria-label="Resumen de asistencia">
@@ -2693,8 +2715,8 @@
 
         <div class="toolbar-row">
           <label class="check">
-            <input id="includePast" type="checkbox" />
-            <span>Incluir sesiones anteriores</span>
+            <input id="includePast" type="checkbox" checked />
+            <span>Mostrar el archivo completo</span>
           </label>
           <span id="resultCount">0 sesiones</span>
         </div>
@@ -2726,7 +2748,7 @@
       <div class="action-message hidden" id="actionMessage" role="status" aria-live="polite"></div>
 
       <div class="privacy-note">
-        <strong>Vista protegida de administración.</strong> El panel consulta únicamente los campos autorizados; los teléfonos solo se muestran dentro del directorio y del formulario de programación.
+        <strong>Archivo protegido de administración.</strong> El panel consulta únicamente los campos autorizados; los datos de contacto se conservan con acceso restringido para trazabilidad histórica.
       </div>
     </main>
 
@@ -2734,9 +2756,9 @@
       <section class="modal-card coordination-summary-card">
         <div class="modal-header">
           <div>
-            <div class="eyebrow">WhatsApp · Vista previa segura</div>
-            <h2 id="coordinationSummaryModalTitle">Mensaje para Johan</h2>
-            <p>Revisa el contenido completo. Nada se enviará hasta que pulses “Enviar ahora por WhatsApp”.</p>
+            <div class="eyebrow">WhatsApp · Registro histórico</div>
+            <h2 id="coordinationSummaryModalTitle">Última vista previa para Johan</h2>
+            <p>Consulta el contenido registrado al cierre. Esta vista ya no permite realizar envíos.</p>
           </div>
           <button class="modal-close" id="closeCoordinationSummaryModal" type="button" aria-label="Cerrar sin enviar">×</button>
         </div>
@@ -2756,11 +2778,11 @@
             </div>
           </div>
 
-          <p class="coordination-preview-note"><strong>Envío manual:</strong> cerrar o volver no envía nada. WhatsApp puede ajustar ligeramente la tipografía y los saltos de línea según el dispositivo.</p>
+          <p class="coordination-preview-note"><strong>Archivo de solo lectura:</strong> el cierre operativo deshabilitó los nuevos mensajes y resúmenes institucionales.</p>
           <div class="create-message" id="coordinationSummaryModalStatus" role="alert" aria-live="polite"></div>
           <div class="form-actions coordination-preview-actions">
             <button class="cancel-btn" id="cancelCoordinationSummaryButton" type="button">Volver sin enviar</button>
-            <button class="save-session-btn" id="confirmCoordinationSummaryButton" type="button">Enviar ahora por WhatsApp</button>
+            <button class="save-session-btn archive-disabled" id="confirmCoordinationSummaryButton" type="button" disabled>Envío cerrado</button>
           </div>
         </div>
       </section>
@@ -3133,6 +3155,7 @@
 
     const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const VOA_OPERATION_CLOSED = true;
     const SELECT_FIELDS = "id,created_at,student_name,mission,equipment,location,instructor_name,confirmation_status,response_text,absence_reason_requested_at,absence_reason_received_at,absence_managed_at,absence_managed_by,session_start,session_end,initial_message_sent_at,reminder_sent_at,cancelled_at,cancellation_reason,cancelled_by,status_before_cancellation";
     const STUDENT_FIELDS = "id,full_name,phone_e164,email,phone_status,active,source,notes,updated_at";
     const INSTRUCTOR_FIELDS = "id,full_name,normalized_name,phone_e164,phone_status,active,notification_enabled,summary_time,timezone,source,updated_at";
@@ -3195,6 +3218,10 @@
     };
 
     const $ = function(id){ return document.getElementById(id); };
+
+    function archiveOnlyMessage(){
+      setActionMessage("La etapa piloto VOA finalizó el 1 de septiembre de 2026. Este panel es únicamente de consulta.","error");
+    }
 
     function currentTheme(){ return document.documentElement.dataset.theme === "dark" ? "dark" : "light"; }
     function updateThemeButton(){
@@ -3566,7 +3593,9 @@
           studentContactHtml(student.email,"Correo") +
           '<span class="contact-badge ' + escapeHtml(phoneStatus) + '">' + escapeHtml(contactStatusLabel(phoneStatus)) + '</span>' +
           '<span class="active-badge ' + (student.active ? 'active' : 'inactive') + '">' + (student.active ? 'Activo' : 'Inactivo') + '</span>' +
-          '<button class="student-edit-btn" type="button" data-edit-student="' + escapeHtml(student.id) + '">Editar</button>' +
+          (VOA_OPERATION_CLOSED
+            ? '<span class="archive-state">Solo lectura</span>'
+            : '<button class="student-edit-btn" type="button" data-edit-student="' + escapeHtml(student.id) + '">Editar</button>') +
         '</div>';
       }).join("");
       $("studentList").innerHTML = head + body;
@@ -3624,6 +3653,7 @@
     }
 
     function openStudentEditor(studentId){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const id = Number(studentId);
       const student = state.students.find(function(item){ return Number(item.id) === id; });
       state.editingStudentId = student ? id : null;
@@ -3691,7 +3721,9 @@
           '<span class="notification-badge ' + (ready ? 'ready' : 'off') + '">' + (ready ? 'Habilitada' : 'Desactivada') + '</span>' +
           '<div class="instructor-actions">' +
             '<button class="instructor-preview-btn" type="button" data-preview-instructor="' + escapeHtml(instructor.id) + '">Vista previa</button>' +
-            '<button class="student-edit-btn" type="button" data-edit-instructor="' + escapeHtml(instructor.id) + '">Editar</button>' +
+            (VOA_OPERATION_CLOSED
+              ? '<span class="archive-state">Solo lectura</span>'
+              : '<button class="student-edit-btn" type="button" data-edit-instructor="' + escapeHtml(instructor.id) + '">Editar</button>') +
           '</div>' +
         '</div>';
       }).join("");
@@ -3765,6 +3797,7 @@
     }
 
     function openInstructorEditor(instructorId){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const id = Number(instructorId);
       const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
       state.editingInstructorId = instructor ? id : null;
@@ -3871,6 +3904,15 @@
       const manualButton = $("openInstructorWhatsAppButton");
       const sendButton = $("sendInstructorSummaryButton");
       const delivery = $("instructorSummaryDelivery");
+
+      if(VOA_OPERATION_CLOSED){
+        manualButton.disabled = true;
+        sendButton.disabled = true;
+        sendButton.textContent = "Envíos cerrados";
+        delivery.className = "summary-delivery";
+        delivery.textContent = "Vista histórica disponible. No se generan ni envían nuevos resúmenes.";
+        return;
+      }
 
       manualButton.disabled = busy || !ready || !hasRows;
       sendButton.disabled = busy || !ready || !hasRows;
@@ -3988,6 +4030,7 @@
     }
 
     function openInstructorWhatsApp(){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const instructor = state.instructors.find(function(item){
         return Number(item.id) === Number(state.summaryInstructorId);
       });
@@ -4004,6 +4047,7 @@
     }
 
     async function sendInstructorSummary(){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const id = Number(state.summaryInstructorId);
       const instructor = state.instructors.find(function(item){ return Number(item.id) === id; });
       const targetDate = $("instructorSummaryDate").value;
@@ -4078,9 +4122,11 @@
     function setCoordinationSummaryState(message,type,label){
       const button = $("sendCoordinationSummaryButton");
       const status = $("coordinationSummaryStatus");
-      button.disabled = state.coordinationSummarySending;
-      button.textContent = label || "Revisar y enviar a Johan";
-      status.textContent = message || "Primero verás el mensaje completo; nada se envía sin tu confirmación.";
+      button.disabled = VOA_OPERATION_CLOSED || state.coordinationSummarySending;
+      button.textContent = VOA_OPERATION_CLOSED ? "Envíos cerrados" : (label || "Revisar y enviar a Johan");
+      status.textContent = VOA_OPERATION_CLOSED
+        ? "No se generan ni envían nuevas comunicaciones institucionales."
+        : (message || "Primero verás el mensaje completo; nada se envía sin tu confirmación.");
       status.className = "coordination-summary-status" + (type ? " " + type : "");
     }
 
@@ -4111,6 +4157,7 @@
     }
 
     function openCoordinationSummaryPreview(previewEntry,previewData){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const preview = previewEntry.preview;
       state.coordinationSummaryPreview = {
         recipientId:Number(previewEntry.recipient_id || 1),
@@ -4135,6 +4182,7 @@
     }
 
     async function sendCoordinationSummary(){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.coordinationSummarySending) return;
 
       state.coordinationSummarySending = true;
@@ -4169,6 +4217,7 @@
     }
 
     async function confirmCoordinationSummarySend(){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const prepared = state.coordinationSummaryPreview;
       if(!db || !state.session || !prepared || state.coordinationSummarySending) return;
 
@@ -4220,6 +4269,7 @@
     }
 
     async function openSessionModal(){
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       const studentsReady = await loadStudents(false);
       if(!studentsReady){
         setActionMessage("No fue posible abrir Nueva sesión porque el directorio no está disponible.","error");
@@ -4454,12 +4504,13 @@
       $("authShell").classList.add("hidden");
       $("app").classList.remove("hidden");
       $("sessionEmail").textContent = session && session.user ? session.user.email : "";
+      $("includePast").checked = true;
       loadSessions();
       loadStudents(false);
       loadInstructors(false);
       window.setTimeout(openRequestedVoaView,0);
       if(state.timer) window.clearInterval(state.timer);
-      state.timer = window.setInterval(loadSessions,60000);
+      state.timer = VOA_OPERATION_CLOSED ? null : window.setInterval(loadSessions,60000);
     }
 
     async function applySession(session){
@@ -4563,6 +4614,7 @@
 
     $("newSessionForm").addEventListener("submit",async function(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.creating) return;
 
       setCreateMessage("");
@@ -4659,6 +4711,7 @@
 
     $("studentForm").addEventListener("submit",async function(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.studentSaving) return;
 
       setDirectoryMessage("");
@@ -4727,6 +4780,7 @@
 
     $("instructorForm").addEventListener("submit",async function(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.instructorSaving) return;
 
       setInstructorDirectoryMessage("");
@@ -4827,6 +4881,7 @@
 
     $("editSessionForm").addEventListener("submit",async function(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.updating || !Number.isSafeInteger(state.editingSessionId)) return;
 
       setEditSessionMessage("");
@@ -4910,6 +4965,7 @@
 
     $("cancelSessionForm").addEventListener("submit",async function(event){
       event.preventDefault();
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       if(!db || !state.session || state.cancelling || !Number.isSafeInteger(state.cancellingSessionId)) return;
 
       setCancelSessionMessage("");
@@ -5056,6 +5112,7 @@
     }
 
     function cancelActionButtonHtml(row){
+      if(VOA_OPERATION_CLOSED) return "";
       const status = classifyStatus(row.confirmation_status);
       if(status === "cancelled" || Date.parse(row.session_end) <= Date.now()) return "";
       const id = Number(row.id);
@@ -5073,6 +5130,9 @@
     function messageActionHtml(row){
       const status = classifyStatus(row.confirmation_status);
       const historyButton = historyButtonHtml(row);
+      if(VOA_OPERATION_CLOSED){
+        return '<div class="session-actions"><span class="archive-state">Archivada</span>' + historyButton + '</div>';
+      }
       if(status === "cancelled"){
         return '<div class="session-actions"><span class="message-state unavailable">No disponible<br><span class="cell-sub">Sesión cancelada</span></span>' + historyButton + '</div>';
       }
@@ -5127,7 +5187,9 @@
           ? '<div class="absence-management managed"><strong>Novedad gestionada</strong>' +
               escapeHtml(formatDate(row.absence_managed_at) + " · " + formatTime(row.absence_managed_at)) +
               '<div class="cell-sub">Responsable: ' + escapeHtml(row.absence_managed_by) + '</div></div>'
-          : '<div class="absence-management pending"><strong>Pendiente de gestión</strong>' +
+          : VOA_OPERATION_CLOSED
+            ? '<div class="absence-management pending"><strong>Registrada al cierre</strong><span class="archive-state">Solo lectura</span></div>'
+            : '<div class="absence-management pending"><strong>Pendiente de gestión</strong>' +
               '<button class="manage-absence-btn" type="button" data-manage-absence="' +
               escapeHtml(row.id) + '"' + (managing ? ' disabled' : '') + '>' +
               (managing ? 'Guardando…' : 'Marcar como gestionada') + '</button></div>';
@@ -5396,6 +5458,7 @@
       }
       const manageButton = event.target.closest("[data-manage-absence]");
       if(manageButton){
+        if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
         markAbsenceManaged(manageButton.getAttribute("data-manage-absence"));
         return;
       }
@@ -5406,16 +5469,19 @@
       }
       const editButton = event.target.closest("[data-edit-session]");
       if(editButton){
+        if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
         openEditSessionModal(editButton.getAttribute("data-edit-session"));
         return;
       }
       const cancelButton = event.target.closest("[data-cancel-session]");
       if(cancelButton){
+        if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
         openCancelSessionModal(cancelButton.getAttribute("data-cancel-session"));
         return;
       }
       const button = event.target.closest("[data-send-session]");
       if(!button) return;
+      if(VOA_OPERATION_CLOSED){ archiveOnlyMessage(); return; }
       sendWhatsAppForSession(button.getAttribute("data-send-session"));
     }
 
@@ -5503,7 +5569,7 @@
       state.historyRows = Array.isArray(historyResult.data) ? historyResult.data : [];
       populateInstructors(state.rows);
       render();
-      $("syncLabel").textContent = "Actualizado " + formatTime(new Date().toISOString()) +
+      $("syncLabel").textContent = "Archivo consultado " + formatTime(new Date().toISOString()) +
         (briefingResult.error ? " · Briefings no disponibles" : "");
     }
 
@@ -5527,8 +5593,8 @@
     });
     $("sessionRows").addEventListener("click",handleSessionAction);
     $("mobileList").addEventListener("click",handleSessionAction);
-    $("newSessionButton").addEventListener("click",openSessionModal);
-    $("sendCoordinationSummaryButton").addEventListener("click",sendCoordinationSummary);
+    $("newSessionButton").addEventListener("click",function(){ if(VOA_OPERATION_CLOSED) archiveOnlyMessage(); else openSessionModal(); });
+    $("sendCoordinationSummaryButton").addEventListener("click",function(){ if(VOA_OPERATION_CLOSED) archiveOnlyMessage(); else sendCoordinationSummary(); });
     $("closeCoordinationSummaryModal").addEventListener("click",closeCoordinationSummaryModal);
     $("cancelCoordinationSummaryButton").addEventListener("click",closeCoordinationSummaryModal);
     $("confirmCoordinationSummaryButton").addEventListener("click",confirmCoordinationSummarySend);
@@ -5596,7 +5662,10 @@
     });
     $("studentSearchInput").addEventListener("input",renderDirectory);
     $("studentStatusFilter").addEventListener("change",renderDirectory);
-    $("addStudentButton").addEventListener("click",function(){ openStudentEditor(null); });
+    $("addStudentButton").disabled = VOA_OPERATION_CLOSED;
+    $("addStudentButton").classList.toggle("archive-disabled",VOA_OPERATION_CLOSED);
+    $("addStudentButton").textContent = VOA_OPERATION_CLOSED ? "Archivo cerrado" : "+ Nuevo estudiante";
+    $("addStudentButton").addEventListener("click",function(){ if(VOA_OPERATION_CLOSED) archiveOnlyMessage(); else openStudentEditor(null); });
     $("cancelStudentButton").addEventListener("click",closeStudentEditor);
     $("studentList").addEventListener("click",function(event){
       const copyButton = event.target.closest("[data-copy-student-contact]");
@@ -5617,7 +5686,10 @@
     });
     $("instructorSearchInput").addEventListener("input",renderInstructorDirectory);
     $("instructorStatusFilter").addEventListener("change",renderInstructorDirectory);
-    $("addInstructorButton").addEventListener("click",function(){ openInstructorEditor(null); });
+    $("addInstructorButton").disabled = VOA_OPERATION_CLOSED;
+    $("addInstructorButton").classList.toggle("archive-disabled",VOA_OPERATION_CLOSED);
+    $("addInstructorButton").textContent = VOA_OPERATION_CLOSED ? "Archivo cerrado" : "+ Nuevo instructor";
+    $("addInstructorButton").addEventListener("click",function(){ if(VOA_OPERATION_CLOSED) archiveOnlyMessage(); else openInstructorEditor(null); });
     $("cancelInstructorButton").addEventListener("click",closeInstructorEditor);
     $("instructorPhone").addEventListener("input",syncInstructorNotificationControl);
     $("instructorPhoneVerified").addEventListener("change",syncInstructorNotificationControl);

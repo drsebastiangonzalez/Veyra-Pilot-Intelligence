@@ -464,7 +464,7 @@
   </header>
   <nav class="voa-nav-shell" aria-label="Navegación principal de VOA">
     <div class="voa-nav">
-      <a href="./control-voa.html">Control VOA</a>
+      <a href="./control-voa.html">Archivo VOA</a>
       <a href="./voa-schedule-preview.html">Cronograma</a>
       <a href="./simulator-history.html">Historial</a>
       <a class="active" href="./voa-mission-briefs.html" aria-current="page">Mission Briefs</a>
@@ -475,8 +475,8 @@
 
   <main>
     <section class="hero">
-      <div><div class="eyebrow">Veyra Mission Intelligence</div><h1>Mission Briefs</h1><p>Construye el briefing previo de cada misión con contenido aprobado: objetivo, puntos de atención y un reto de tres preguntas.</p></div>
-      <div class="phase"><strong>Fase 1 · Piloto seguro</strong>Biblioteca, edición y vista previa. Todavía no envía mensajes al estudiante.</div>
+      <div><div class="eyebrow">Veyra Mission Intelligence · Archivo</div><h1>Mission Briefs</h1><p>Consulta los briefings creados durante la etapa piloto: objetivos, puntos de atención y retos previos.</p></div>
+      <div class="phase"><strong>Etapa cerrada · 1 sep 2026</strong>Biblioteca y vista previa en modo de solo lectura. No admite ediciones ni nuevos envíos.</div>
     </section>
 
     <section class="summary" aria-label="Resumen de briefings">
@@ -487,7 +487,7 @@
 
     <section class="workspace">
       <article class="panel">
-        <div class="panel-head"><h2 id="editorTitle">Nuevo briefing</h2><p>El contenido se guarda como borrador hasta que marques la versión como activa.</p></div>
+        <div class="panel-head"><h2 id="editorTitle">Briefing archivado</h2><p>Selecciona una misión de la biblioteca para consultar el contenido preservado.</p></div>
         <form id="briefForm" novalidate>
           <input id="briefId" type="hidden" />
           <div class="form-grid">
@@ -501,7 +501,7 @@
             <label class="active-check"><input id="briefActive" type="checkbox" /><span><strong>Briefing activo.</strong> Quedará identificado como contenido aprobado para la futura automatización de WhatsApp.</span></label>
           </div>
           <div class="form-message" id="formMessage" role="alert" aria-live="polite"></div>
-          <div class="form-actions"><button class="btn secondary" id="clearButton" type="button">Limpiar</button><button class="btn primary" id="saveButton" type="submit">Guardar briefing</button></div>
+          <div class="form-actions"><button class="btn secondary" id="clearButton" type="button" disabled>Solo lectura</button><button class="btn primary" id="saveButton" type="submit" disabled>Edición cerrada</button></div>
         </form>
       </article>
 
@@ -512,7 +512,7 @@
     </section>
 
     <section class="panel library">
-      <div class="panel-head library-toolbar"><div><h2>Biblioteca de misiones</h2><p>Selecciona un briefing para editarlo. Las versiones inactivas permanecen como borradores.</p></div><button class="btn secondary" id="newBriefButton" type="button">+ Nuevo briefing</button></div>
+      <div class="panel-head library-toolbar"><div><h2>Biblioteca de misiones</h2><p>Selecciona un briefing para consultarlo. Las versiones se conservan con su estado histórico.</p></div><button class="btn secondary" id="newBriefButton" type="button" disabled>Archivo cerrado</button></div>
       <div id="libraryState" class="loading">Consultando briefings…</div><div id="briefList" class="brief-list hidden"></div>
     </section>
     <div class="privacy"><strong>Vista protegida.</strong> Esta biblioteca no contiene números telefónicos y solo puede ser consultada o modificada por la cuenta administradora autorizada.</div>
@@ -523,6 +523,7 @@
     "use strict";
     const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
+    const VOA_OPERATION_CLOSED=true;
     const BRIEF_FIELDS="id,mission_code,mission_key,title,objective,focus_points,challenge_questions,active,created_at,updated_at,updated_by";
     const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
     const state={session:null,briefs:[],missions:[],saving:false};
@@ -557,7 +558,7 @@
       $("briefId").value=brief.id;$("missionCode").value=brief.mission_code||"";$("briefTitle").value=brief.title||"";$("objective").value=brief.objective||"";$("focusPoints").value=Array.isArray(brief.focus_points)?brief.focus_points.join("\n"):"";
       const questions=Array.isArray(brief.challenge_questions)?brief.challenge_questions:[];
       [1,2,3].forEach(number=>{const question=questions[number-1]||{};$("question"+number).value=question.prompt||"";$("answer"+number).value=question.answer||"";});
-      $("briefActive").checked=brief.active===true;$("editorTitle").textContent="Editar "+brief.mission_code;setMessage("","");renderPreview();window.scrollTo({top:0,behavior:"smooth"});
+      $("briefActive").checked=brief.active===true;$("editorTitle").textContent=(VOA_OPERATION_CLOSED?"Consulta ":"Editar ")+brief.mission_code;setMessage(VOA_OPERATION_CLOSED?"Archivo histórico de solo lectura.":"","");renderPreview();window.scrollTo({top:0,behavior:"smooth"});
     }
 
     function renderSummary(){
@@ -570,7 +571,7 @@
     function renderLibrary(){
       const container=$("briefList"),status=$("libraryState");
       if(!state.briefs.length){status.className="empty";status.textContent="Aún no hay briefings. Crea el primero usando una misión próxima.";status.classList.remove("hidden");container.classList.add("hidden");return;}
-      status.classList.add("hidden");container.innerHTML=state.briefs.map(brief=>'<article class="brief-card'+(brief.active?'':' inactive')+'"><div class="brief-card-top"><h3>'+escapeHtml(brief.mission_code)+' · '+escapeHtml(brief.title)+'</h3><span class="pill '+(brief.active?'active':'draft')+'">'+(brief.active?'Activo':'Borrador')+'</span></div><p>'+escapeHtml(brief.objective)+'</p><div class="brief-meta">Actualizado '+escapeHtml(formatUpdated(brief.updated_at))+'<br>'+escapeHtml(brief.updated_by||"")+'</div><button class="edit-brief" type="button" data-brief-id="'+escapeHtml(brief.id)+'">Editar y previsualizar</button></article>').join("");container.classList.remove("hidden");
+      status.classList.add("hidden");container.innerHTML=state.briefs.map(brief=>'<article class="brief-card'+(brief.active?'':' inactive')+'"><div class="brief-card-top"><h3>'+escapeHtml(brief.mission_code)+' · '+escapeHtml(brief.title)+'</h3><span class="pill '+(brief.active?'active':'draft')+'">'+(brief.active?'Activo al cierre':'Borrador')+'</span></div><p>'+escapeHtml(brief.objective)+'</p><div class="brief-meta">Última actualización '+escapeHtml(formatUpdated(brief.updated_at))+'<br>'+escapeHtml(brief.updated_by||"")+'</div><button class="edit-brief" type="button" data-brief-id="'+escapeHtml(brief.id)+'">Ver contenido</button></article>').join("");container.classList.remove("hidden");
     }
 
     async function loadData(){
@@ -584,7 +585,7 @@
 
     $("briefForm").addEventListener("input",renderPreview);
     $("briefForm").addEventListener("submit",async event=>{
-      event.preventDefault();if(state.saving||!db||!state.session)return;
+      event.preventDefault();if(VOA_OPERATION_CLOSED){setMessage("La etapa piloto está cerrada. La biblioteca es únicamente de consulta.","error");return;}if(state.saving||!db||!state.session)return;
       const focus=lines($("focusPoints").value),questions=questionsFromForm();
       if(!value("missionCode")||!value("briefTitle")||!value("objective")){setMessage("Completa la misión, el título y el objetivo.","error");return;}
       if(focus.length<1||focus.length>5){setMessage("Incluye entre uno y cinco puntos de atención, uno por línea.","error");return;}
@@ -602,7 +603,7 @@
     $("clearButton").addEventListener("click",()=>resetForm());$("newBriefButton").addEventListener("click",()=>resetForm());
     $("themeButton").addEventListener("click",toggleTheme);updateThemeButton();
     $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
-    (async()=>{if(!db){$("libraryState").className="error-box";$("libraryState").textContent="No fue posible iniciar la conexión segura.";return;}const sessionResult=await db.auth.getSession();state.session=sessionResult.data.session;if(!state.session){location.replace("./control-voa.html");return;}$("sessionEmail").textContent=state.session.user?.email||"";renderPreview();await loadData();})();
+    (async()=>{if(!db){$("libraryState").className="error-box";$("libraryState").textContent="No fue posible iniciar la conexión segura.";return;}const sessionResult=await db.auth.getSession();state.session=sessionResult.data.session;if(!state.session){location.replace("./control-voa.html");return;}$("sessionEmail").textContent=state.session.user?.email||"";renderPreview();await loadData();if(VOA_OPERATION_CLOSED){$("briefForm").querySelectorAll("input,textarea,button").forEach(control=>{control.disabled=true;});$("newBriefButton").disabled=true;setMessage("Archivo histórico de solo lectura · cierre operativo 1 de septiembre de 2026.","");}})();
   </script>
 </body>
 </html>
