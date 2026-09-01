@@ -431,6 +431,25 @@
       background:var(--navy-soft);
       box-shadow:0 0 0 3px rgba(215,166,58,.18),0 10px 24px rgba(7,17,31,.14);
     }
+    .coordination-summary-btn{
+      background:linear-gradient(135deg,#f5d98a 0%,var(--gold) 100%);
+      color:var(--navy);
+      box-shadow:0 10px 24px rgba(150,104,15,.2);
+    }
+    .coordination-summary-btn:hover,.coordination-summary-btn:focus-visible{
+      background:linear-gradient(135deg,#ffe6a6 0%,#e0b84f 100%);
+      color:var(--navy);
+    }
+    .coordination-summary-btn:disabled{cursor:wait;opacity:.68}
+    .coordination-summary-status{
+      max-width:470px;
+      color:var(--muted);
+      text-align:right;
+      font-size:11px;
+      line-height:1.45;
+    }
+    .coordination-summary-status.success{color:var(--green)}
+    .coordination-summary-status.error{color:var(--red)}
     .directory-btn{
       min-height:46px;
       padding:12px 19px;
@@ -2494,8 +2513,10 @@
         </div>
         <div class="hero-actions">
           <div class="hero-button-row">
+            <button class="new-session-btn coordination-summary-btn" id="sendCoordinationSummaryButton" type="button" aria-describedby="coordinationSummaryStatus">Enviar resumen a Johan</button>
             <button class="new-session-btn" id="newSessionButton" type="button">+ Nueva sesión</button>
           </div>
+          <div class="coordination-summary-status" id="coordinationSummaryStatus" role="status" aria-live="polite">Envío manual: Veyra pedirá confirmación antes de enviarlo.</div>
           <div class="sync" aria-live="polite">
             <strong id="syncLabel">Preparando datos…</strong>
             <span>Actualización automática cada minuto</span>
@@ -3024,6 +3045,7 @@
       summaryRows: [],
       summaryNotification: null,
       instructorSummarySending: false,
+      coordinationSummarySending: false,
       selectedStudentId: null,
       sendingSessionIds: new Set(),
       managingSessionIds: new Set(),
@@ -3910,6 +3932,95 @@
       }catch(_error){
         setInstructorDirectoryMessage("No fue posible copiar automáticamente. Mantén pulsado el texto para copiarlo.","error");
       }
+    }
+
+    function setCoordinationSummaryState(message,type,label){
+      const button = $("sendCoordinationSummaryButton");
+      const status = $("coordinationSummaryStatus");
+      button.disabled = state.coordinationSummarySending;
+      button.textContent = label || "Enviar resumen a Johan";
+      status.textContent = message || "Envío manual: Veyra pedirá confirmación antes de enviarlo.";
+      status.className = "coordination-summary-status" + (type ? " " + type : "");
+    }
+
+    async function sendCoordinationSummary(){
+      if(!db || !state.session || state.coordinationSummarySending) return;
+
+      state.coordinationSummarySending = true;
+      setCoordinationSummaryState("Preparando la vista previa sin enviar nada…","","Preparando…");
+
+      const previewResult = await db.functions.invoke("voa-send-coordination-summary",{
+        body:{action:"preview",recipient_id:1}
+      });
+
+      if(previewResult.error){
+        state.coordinationSummarySending = false;
+        const details = await functionErrorDetails(previewResult.error);
+        const message = details && details.code === "RECIPIENT_NOT_READY"
+          ? "El contacto de Johan no está listo para WhatsApp."
+          : "No fue posible preparar el resumen. No se envió nada.";
+        setCoordinationSummaryState(message,"error");
+        return;
+      }
+
+      const previewData = previewResult.data || {};
+      const previewEntry = Array.isArray(previewData.results) ? previewData.results[0] : null;
+      const preview = previewEntry && previewEntry.preview ? previewEntry.preview : null;
+      if(!previewEntry || !preview){
+        state.coordinationSummarySending = false;
+        setCoordinationSummaryState("No se encontró el destinatario o no fue posible construir el resumen.","error");
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "¿Enviar ahora el resumen ejecutivo por WhatsApp?\n\n" +
+        "Destinatario: " + (previewEntry.recipient_name || "Johan Salas") + "\n" +
+        "Número: " + (previewEntry.phone_masked || "verificado en Veyra") + "\n" +
+        "Semana: " + (previewData.week_label || (previewData.week_start + " al " + previewData.week_end)) + "\n" +
+        "Resumen: " + (preview.metrics || "Información operativa preparada") + "\n\n" +
+        "Este envío es manual y no activa mensajes automáticos para Johan."
+      );
+
+      if(!confirmed){
+        state.coordinationSummarySending = false;
+        setCoordinationSummaryState("Envío cancelado. No se envió ningún mensaje.","");
+        return;
+      }
+
+      setCoordinationSummaryState("Enviando el resumen aprobado a Johan…","","Enviando…");
+      const sendResult = await db.functions.invoke("voa-send-coordination-summary",{
+        body:{
+          action:"send",
+          recipient_id:1,
+          week_start:previewData.week_start
+        }
+      });
+
+      state.coordinationSummarySending = false;
+      if(sendResult.error){
+        const details = await functionErrorDetails(sendResult.error);
+        const message = details && details.code === "UNAUTHORIZED"
+          ? "La sesión administrativa no está autorizada para este envío."
+          : "WhatsApp no confirmó el envío. No lo repitas hasta revisar el estado.";
+        setCoordinationSummaryState(message,"error");
+        return;
+      }
+
+      const sendData = sendResult.data || {};
+      const sendEntry = Array.isArray(sendData.results) ? sendData.results[0] : null;
+      if(sendEntry && sendEntry.sent === true){
+        setCoordinationSummaryState("WhatsApp aceptó el resumen para Johan. El envío seguirá siendo únicamente manual.","success");
+        return;
+      }
+      if(sendEntry && sendEntry.code === "DUPLICATE_PREVENTED"){
+        setCoordinationSummaryState("Veyra evitó un duplicado: este mismo resumen ya fue procesado.","success");
+        return;
+      }
+      if(sendEntry && sendEntry.code === "TEMPLATE_NOT_APPROVED"){
+        setCoordinationSummaryState("Meta todavía no permite usar la plantilla de resumen ejecutivo.","error");
+        return;
+      }
+      setCoordinationSummaryState("WhatsApp no confirmó la aceptación del resumen.","error");
     }
 
     async function openSessionModal(){
@@ -5221,6 +5332,7 @@
     $("sessionRows").addEventListener("click",handleSessionAction);
     $("mobileList").addEventListener("click",handleSessionAction);
     $("newSessionButton").addEventListener("click",openSessionModal);
+    $("sendCoordinationSummaryButton").addEventListener("click",sendCoordinationSummary);
     $("navDirectoryButton").addEventListener("click",function(){
       window.history.replaceState({},document.title,window.location.pathname + window.location.search + "#directorio");
       openDirectoryModal();
