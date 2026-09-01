@@ -20,6 +20,10 @@ FUNCIONES DEL ENTRENADOR
   hacia el fix y la gota mantiene 30 grados dentro del lado protegido sin cruces.
 - CDI/HSI didactico en vivo con rumbo, curso seleccionado, desviacion lateral
   y bandera TO/FROM.
+- Cada demostracion termina al completar la incorporacion y regresar al fix;
+  no superpone un segundo circuito de espera.
+- La guia futura se revela por etapas y el CDI ocupa un area lateral reservada
+  para no cubrir la aeronave ni la trayectoria.
 - Ritmo seleccionable: lento 0,5x, normal 1x o rapido 2x; el valor inicial es 1x.
 - Posicion inicial editable tocando o arrastrando sobre el mapa.
 - Rumbo inicial configurable con deslizador antes de comenzar.
