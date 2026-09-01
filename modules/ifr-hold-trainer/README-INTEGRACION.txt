@@ -10,10 +10,15 @@ ACCESOS RECOMENDADOS
 - Modulo IFR 07: boton "Abrir entrenador"; el simulador no se carga dentro del modulo.
 
 FUNCIONES DEL ENTRENADOR
-- Flujo inicial simplificado en tres pasos y configuracion avanzada plegable.
+- Flujo inicial guiado en cinco pasos y configuracion avanzada plegable.
 - Modo Aprender con tutor guiado en cuatro pasos sobre el mapa.
+- Pausa automatica al primer cruce del fix en Aprender para analizar la maniobra.
 - Modo Practicar con ayudas reducidas y retroalimentacion inmediata de la entrada.
 - Modo Evaluacion con escenario aleatorio, solucion oculta y resultado al final.
+- Demostraciones automaticas de entradas directa, paralela y gota.
+- Ritmo seleccionable: lento 0,5x, normal 1x o rapido 2x; el valor inicial es 1x.
+- Posicion inicial editable tocando o arrastrando sobre el mapa.
+- Rumbo inicial configurable con deslizador antes de comenzar.
 - Esperas estandar y no estandar.
 - Fuente VOR/Fix o RNAV.
 - Entradas directa, paralela y gota.
@@ -26,6 +31,7 @@ FUNCIONES DEL ENTRENADOR
 - Brief dinamico con curso inbound, llegada, sentido de giros, tramo y viento.
 - Historial local de los ultimos 20 intentos con mejor resultado y promedio.
 - Ultimo resultado guardado en localStorage.
+- Los escenarios aleatorios reinician posicion, rumbo, cruces, cronometro y trayectoria.
 
 ALCANCE
 Entrenador academico simplificado. No representa las dimensiones reales del
