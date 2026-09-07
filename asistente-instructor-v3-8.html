@@ -503,6 +503,8 @@
 .flight-frame-wrap{border:1px solid rgba(221,180,93,.35);border-radius:20px;overflow:hidden;background:#0b1421}
 #flightFrame{display:block;width:100%;border:0;min-height:560px;height:620px;background:#0b1421}
 @media(max-width:650px){.workspace-switch{padding:0 16px;gap:0;margin-top:12px}.workspace-tab{flex:1;padding:15px 8px;font-size:14px}#flightWorkspace{padding:24px 16px}.flight-heading{margin-bottom:20px}.flight-heading p{font-size:15px}.flight-frame-wrap{border-radius:15px}}
+/* Compact header for Flight Training. */
+.flight-active .topbar{padding-top:12px;padding-bottom:12px}.flight-active .brand strong{font-size:32px}.flight-active .brand span{font-size:10px}.flight-active .top-title{font-size:10px}.flight-active .back-link{padding:10px 18px}.flight-active .workspace-switch{margin-top:10px}.flight-active .workspace-tab{padding-top:11px;padding-bottom:11px}.flight-active #flightWorkspace{padding-top:16px}.flight-active .flight-heading{margin-bottom:14px}.flight-active .flight-heading h1{font-size:30px}.flight-active .flight-heading .eyebrow{display:none}.flight-active .flight-heading p{font-size:13px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -522,7 +524,7 @@
 </nav>
 <section id="flightWorkspace" role="tabpanel" aria-labelledby="flightTab" hidden>
 <div class="flight-heading"><div><p class="eyebrow">FLIGHT TRAINING</p><h1>Evaluación del piloto</h1><p>EVAL 1 por fases y EVAL 2 por escenarios. Observa al piloto, registra la evidencia y confirma sus competencias y OB.</p></div></div>
-<div class="flight-frame-wrap"><iframe id="flightFrame" title="Flight Training · evaluación del piloto" data-src="./modules/flight-training/index.html?v=5" referrerpolicy="same-origin"></iframe></div>
+<div class="flight-frame-wrap"><iframe id="flightFrame" title="Flight Training · evaluación del piloto" data-src="./modules/flight-training/index.html?v=6" referrerpolicy="same-origin"></iframe></div>
 </section>
 
 <main id="academicWorkspace" role="tabpanel" aria-labelledby="academicTab">
@@ -4945,7 +4947,7 @@ window.VEYRA_KB = (() => {
 const academic=document.getElementById('academicWorkspace'),flight=document.getElementById('flightWorkspace'),frame=document.getElementById('flightFrame');
 const tabs=[document.getElementById('academicTab'),document.getElementById('flightTab')];
 function select(isFlight,updateHash){
-academic.hidden=isFlight;flight.hidden=!isFlight;
+academic.hidden=isFlight;flight.hidden=!isFlight;document.body.classList.toggle('flight-active',isFlight);
 tabs.forEach((tab,i)=>{const selected=(i===1)===isFlight;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;});
 if(isFlight&&!frame.getAttribute('src'))frame.src=frame.dataset.src;
 if(updateHash)history.replaceState(null,'',location.pathname+location.search+(isFlight?'#flight-training':'#academico'));
