@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="same-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://japjyiccjwnhbfpwqtti.supabase.co; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+<title>Veyra · Flight Training</title>
+<link rel="stylesheet" href="./styles.css?v=3">
+</head>
+<body>
+<section id="accessView" class="auth-shell">
+<div id="accessLoading" class="auth-loading" role="status">Abriendo Flight Training…</div>
+<form id="loginForm" class="auth-card" hidden>
+<p class="eyebrow">ASISTENTE DEL INSTRUCTOR</p><h2>Flight Training</h2>
+<p>Entra con tu acceso de Control VOA.</p>
+<label for="loginEmail">Correo</label><input id="loginEmail" name="email" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+<label for="loginPassword">Contraseña</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+<button id="loginButton" class="primary" type="submit">Continuar</button>
+<div id="loginStatus" class="auth-status" role="status"></div>
+<p class="auth-help"><a href="/control-voa.html" target="_top">Recuperar acceso en Control VOA</a></p>
+</form>
+<div id="accessError" class="auth-card" hidden><h2>No pudimos abrir el módulo</h2><p id="accessMessage"></p><button id="retryButton" class="primary" type="button">Volver a intentar</button><button id="changeAccountButton" class="text-button" type="button">Usar otra cuenta</button></div>
+</section>
+<div id="trainingSurface" hidden>
+<div class="workspace-toolbar"><span id="sessionStatus">Flight Training</span><button id="logoutButton" type="button">Cerrar sesión</button></div>
+<div class="shell">
+<aside class="sidebar">
+<nav class="evalnav" aria-label="Evaluaciones">
+<button type="button" data-eval="eval1">EVAL 1<span>Preparación y navegación</span></button>
+<button type="button" data-eval="eval2">EVAL 2<span>Escenarios alternativos</span></button>
+</nav>
+<div id="scenarioBlock" hidden><label for="scenario">Escenario</label><select id="scenario"><option value="s1">1 · Comunicaciones y frustrada</option><option value="s2">2 · Visual y viento</option><option value="s3">3 · Aproximación interrumpida</option></select></div>
+<nav id="eventNav" aria-label="Eventos"></nav>
+<button id="summaryButton" class="summary-link" type="button">Observaciones <span id="recordCount">0</span></button>
+</aside>
+<main id="workspace" tabindex="-1"><div class="workspacehead"><div><p class="eyebrow" id="eyebrow">FLIGHT TRAINING</p><h1 id="viewTitle">EVAL 1</h1></div><span class="tag">EBT</span></div><div id="view"></div></main>
+</div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
+<script src="./domain.js?v=3"></script><script src="./assistant.js?v=3"></script><script src="./app.js?v=3"></script><script src="./access.js?v=3"></script>
+</body></html>
