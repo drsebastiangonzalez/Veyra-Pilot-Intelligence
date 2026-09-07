@@ -522,7 +522,7 @@
 </nav>
 <section id="flightWorkspace" role="tabpanel" aria-labelledby="flightTab" hidden>
 <div class="flight-heading"><div><p class="eyebrow">FLIGHT TRAINING</p><h1>Evaluación del piloto</h1><p>EVAL 1 por fases y EVAL 2 por escenarios. Observa al piloto, registra la evidencia y confirma sus competencias y OB.</p></div></div>
-<div class="flight-frame-wrap"><iframe id="flightFrame" title="Flight Training · evaluación del piloto" data-src="./modules/flight-training/index.html?v=4" referrerpolicy="same-origin"></iframe></div>
+<div class="flight-frame-wrap"><iframe id="flightFrame" title="Flight Training · evaluación del piloto" data-src="./modules/flight-training/index.html?v=5" referrerpolicy="same-origin"></iframe></div>
 </section>
 
 <main id="academicWorkspace" role="tabpanel" aria-labelledby="academicTab">
@@ -4956,6 +4956,12 @@ window.addEventListener('hashchange',()=>select(location.hash==='#flight-trainin
 window.addEventListener('message',event=>{
 if(event.origin!==location.origin||event.source!==frame.contentWindow)return;
 if(event.data?.type==='veyra:flight-height'&&Number.isFinite(event.data.height))frame.style.height=Math.max(560,Math.min(12000,event.data.height+6))+'px';
+if(event.data?.type==='veyra:flight-language'&&['es','en'].includes(event.data.language)){
+const en=event.data.language==='en';flight.lang=event.data.language;
+flight.querySelector('.flight-heading h1').textContent=en?'Pilot assessment':'Evaluación del piloto';
+flight.querySelector('.flight-heading h1+p').textContent=en?'EVAL 1 by flight phase and EVAL 2 by scenario. Record observations and add pilot competencies.':'EVAL 1 por fases y EVAL 2 por escenarios. Registra observaciones y añade las competencias del piloto.';
+frame.title=en?'Flight Training · pilot assessment':'Flight Training · evaluación del piloto';
+}
 if(event.data?.type==='veyra:flight-top'&&!flight.hidden)flight.scrollIntoView({behavior:'smooth',block:'start'});
 });
 select(location.hash==='#flight-training',false);
