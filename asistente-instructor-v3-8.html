@@ -489,6 +489,21 @@
       .report-box { overflow: visible; border: 0; color: #111; background: #fff; white-space: pre-wrap; }
     }
   </style>
+
+<style id="veyra-workspace-tabs">
+[hidden]{display:none!important}
+.workspace-switch{max-width:1180px;margin:24px auto 0;padding:0 28px;display:flex;gap:8px;border-bottom:1px solid rgba(221,180,93,.25)}
+.workspace-tab{appearance:none;font:600 15px/1.4 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:transparent;color:#aeb8c8;border:0;border-radius:0;padding:17px 22px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.workspace-tab[aria-selected="true"]{color:#f0cf82;border-bottom-color:#ddb45d;background:linear-gradient(180deg,transparent,rgba(221,180,93,.06))}
+.workspace-tab:hover{color:#f7f2e9}.workspace-tab:focus-visible{outline:2px solid #ddb45d;outline-offset:3px}
+#flightWorkspace{max-width:1180px;margin:0 auto;padding:30px 28px 40px}
+.flight-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}
+.flight-heading .eyebrow{margin-bottom:9px}.flight-heading h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(30px,4vw,46px);line-height:1.1;margin:0;color:#f7f2e9}
+.flight-heading p{color:#aeb8c8;font-size:16px;margin:12px 0 0;max-width:690px}
+.flight-frame-wrap{border:1px solid rgba(221,180,93,.35);border-radius:20px;overflow:hidden;background:#0b1421}
+#flightFrame{display:block;width:100%;border:0;min-height:560px;height:620px;background:#0b1421}
+@media(max-width:650px){.workspace-switch{padding:0 16px;gap:0;margin-top:12px}.workspace-tab{flex:1;padding:15px 8px;font-size:14px}#flightWorkspace{padding:24px 16px}.flight-heading{margin-bottom:20px}.flight-heading p{font-size:15px}.flight-frame-wrap{border-radius:15px}}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -500,12 +515,22 @@
     <a class="back-link" href="./internal-access.html">Volver</a>
   </header>
 
-  <main>
+  
+<nav class="workspace-switch" role="tablist" aria-label="Área del asistente">
+<button id="academicTab" class="workspace-tab" type="button" role="tab" aria-selected="true" aria-controls="academicWorkspace">Observación académica</button>
+<button id="flightTab" class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="flightWorkspace" tabindex="-1">Flight Training</button>
+</nav>
+<section id="flightWorkspace" role="tabpanel" aria-labelledby="flightTab" hidden>
+<div class="flight-heading"><div><p class="eyebrow">FLIGHT TRAINING</p><h1>Evaluación del instructor</h1><p>Selecciona EVAL 1 o EVAL 2, registra lo observado y revisa las propuestas del asistente.</p></div></div>
+<div class="flight-frame-wrap"><iframe id="flightFrame" title="Flight Training · evaluación del instructor" data-src="./modules/flight-training/index.html?v=3" referrerpolicy="same-origin"></iframe></div>
+</section>
+
+<main id="academicWorkspace" role="tabpanel" aria-labelledby="academicTab">
     <section aria-labelledby="pageTitle">
       <div class="eyebrow">Evidencia antes que inferencia</div>
       <h1 id="pageTitle">Asistente del instructor</h1>
-      <p><a class="btn primary" href="https://veyra-flight-training.sebastian-gonzalez.chatgpt.site" rel="noreferrer">Flight Training · EVAL 1 y EVAL 2</a></p>
-      <p class="lede">Revisión web privada: evaluación del instructor, observación guiada y sugerencias para confirmar. Acceso con tu cuenta de ChatGPT.</p>
+      
+      
       <p class="lede">Selecciona la misión, escribe la observación y revisa los comportamientos sugeridos. El instructor conserva siempre la decisión final.</p>
 
       <div class="status-row" aria-label="Alcance del prototipo">
@@ -4914,5 +4939,27 @@ window.VEYRA_KB = (() => {
 })();
 
   </script>
+
+<script>
+(() => {
+const academic=document.getElementById('academicWorkspace'),flight=document.getElementById('flightWorkspace'),frame=document.getElementById('flightFrame');
+const tabs=[document.getElementById('academicTab'),document.getElementById('flightTab')];
+function select(isFlight,updateHash){
+academic.hidden=isFlight;flight.hidden=!isFlight;
+tabs.forEach((tab,i)=>{const selected=(i===1)===isFlight;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;});
+if(isFlight&&!frame.getAttribute('src'))frame.src=frame.dataset.src;
+if(updateHash)history.replaceState(null,'',location.pathname+location.search+(isFlight?'#flight-training':'#academico'));
+}
+tabs[0].addEventListener('click',()=>select(false,true));tabs[1].addEventListener('click',()=>select(true,true));
+tabs.forEach((tab,i)=>tab.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?1:1-i;tabs[next].focus();select(next===1,true);}));
+window.addEventListener('hashchange',()=>select(location.hash==='#flight-training',false));
+window.addEventListener('message',event=>{
+if(event.origin!==location.origin||event.source!==frame.contentWindow)return;
+if(event.data?.type==='veyra:flight-height'&&Number.isFinite(event.data.height))frame.style.height=Math.max(560,Math.min(12000,event.data.height+6))+'px';
+if(event.data?.type==='veyra:flight-top'&&!flight.hidden)flight.scrollIntoView({behavior:'smooth',block:'start'});
+});
+select(location.hash==='#flight-training',false);
+})();
+</script>
 </body>
 </html>
