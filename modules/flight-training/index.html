@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow"><meta name="referrer" content="same-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://japjyiccjwnhbfpwqtti.supabase.co; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
 <title>Veyra · Flight Training</title>
-<link rel="stylesheet" href="./styles-v7.css?v=9">
+<link rel="stylesheet" href="./styles-v7.css?v=12">
 </head>
 <body>
 <nav class="language-bar" aria-label="Idioma / Language"><span>Flight Training</span><div class="language-switch"><button type="button" data-language="es" aria-pressed="true" lang="es">Español</button><button type="button" data-language="en" aria-pressed="false" lang="en">English</button></div></nav>
@@ -23,7 +23,13 @@
 <div id="accessError" class="auth-card" hidden><h2>No pudimos abrir el módulo</h2><p id="accessMessage"></p><button id="retryButton" class="primary" type="button">Volver a intentar</button><button id="changeAccountButton" class="text-button" type="button">Usar otra cuenta</button></div>
 </section>
 <div id="trainingSurface" hidden>
-<div class="workspace-toolbar"><span id="sessionStatus">Flight Training</span><button id="logoutButton" type="button">Cerrar sesión</button></div>
+<div class="workspace-toolbar"><span id="sessionStatus">Flight Training</span><span>Flight Training · r12</span><button id="logoutButton" type="button">Cerrar sesión</button></div>
+<section class="session-save-bar" aria-label="Mis evaluaciones">
+<label for="sessionTitle">Nombre de la evaluación</label><input id="sessionTitle" maxlength="120" placeholder="Alias o referencia de la sesión" autocomplete="off">
+<span id="cloudStatus" role="status" aria-live="polite">Cargando tus evaluaciones…</span>
+<div class="session-actions"><button id="saveSession" type="button">Guardar ahora</button><button id="mySessions" type="button">Mis evaluaciones</button><button id="newSession" type="button">Nueva evaluación</button><button id="archiveSession" type="button">Archivar</button><button id="copySession" type="button">Guardar una copia</button></div>
+<section id="sessionHistory" hidden><div class="button-row"><h3>Mis evaluaciones</h3><button id="closeHistory" type="button">Cerrar historial</button></div><div id="sessionList"></div><div class="button-row"><button id="previousSessions" type="button">Anterior</button><button id="nextSessions" type="button">Siguiente</button></div></section>
+</section>
 <div class="shell">
 <aside class="sidebar">
 <nav class="evalnav" aria-label="Evaluaciones">
@@ -38,5 +44,5 @@
 </div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2"></script>
-<script src="./domain.js?v=3"></script><script src="./assistant-v4.js?v=4"></script><script src="./competencies-v7.js?v=10"></script><script src="./locale-v7.js?v=10"></script><script src="./app-v7.js?v=9"></script><script src="./access.js?v=3"></script>
+<script src="./domain.js?v=3"></script><script src="./assistant-v4.js?v=4"></script><script src="./competencies-v7.js?v=10"></script><script src="./locale-v7.js?v=12"></script><script src="./app-v7.js?v=12"></script><script src="./session-store.js?v=12"></script><script src="./access.js?v=12"></script>
 </body></html>
