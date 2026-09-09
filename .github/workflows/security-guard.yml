@@ -13,9 +13,13 @@ jobs:
   repository-security:
     name: Repository security guard
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - name: Reject tracked secrets and privileged credentials
         shell: python
@@ -33,15 +37,23 @@ jobs:
               ".mobileprovision", ".ppk"
           }
           secret_names = {
-              "credentials.json", "secrets.json", "id_rsa", "id_ed25519"
+              "credentials.json", "secrets.json", "id_rsa", "id_ed25519",
+              ".npmrc", ".pypirc", ".netrc", "service-account.json",
+              "service_account.json", "google-credentials.json"
           }
 
           content_checks = [
-              ("Supabase secret key", re.compile(r"\bsb_secret_[A-Za-z0-9_-]+")),
+              ("Supabase secret key", re.compile(r"\bsb_secret_[A-Za-z0-9_-]{16,}\b")),
+              ("GitHub access token", re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{20,255}|github_pat_[A-Za-z0-9_]{20,255})\b")),
+              ("OpenAI secret key", re.compile(r"\bsk-(?:proj|svcacct)-[A-Za-z0-9_-]{20,}\b")),
+              ("AWS access key", re.compile(r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b")),
+              ("Stripe live secret", re.compile(r"\bsk_live_[A-Za-z0-9]{16,}\b")),
               ("Private key block", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
               ("Hard-coded privileged credential", re.compile(
-                  r"\b(?:OPENAI_API_KEY|WHATSAPP_ACCESS_TOKEN|META_APP_SECRET|SUPABASE_SERVICE_ROLE_KEY)"
-                  r"\s*=\s*[\"'][^\"'$][^\"']+[\"']"
+                  r"\b(?:OPENAI_API_KEY|OPENAI_KEY|WHATSAPP_ACCESS_TOKEN|WHATSAPP_TOKEN|"
+                  r"META_APP_SECRET|META_ACCESS_TOKEN|SUPABASE_SERVICE_ROLE_KEY|"
+                  r"SUPABASE_SERVICE_ROLE|SERVICE_ROLE_KEY|AWS_SECRET_ACCESS_KEY|"
+                  r"STRIPE_SECRET_KEY)\b\s*=\s*[\"'][^\"'$][^\"']+[\"']"
               )),
           ]
 
@@ -63,6 +75,8 @@ jobs:
                   problems.append((raw, "service-account file tracked"))
               if name.startswith("service_account") and path.suffix.lower() == ".json":
                   problems.append((raw, "service-account file tracked"))
+              if name.startswith("firebase-adminsdk") and path.suffix.lower() == ".json":
+                  problems.append((raw, "Firebase admin credential file tracked"))
 
               if path.suffix.lower() not in text_suffixes:
                   continue
