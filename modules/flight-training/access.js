@@ -24,6 +24,7 @@ async function open(){
     const {data:userData,error:userError}=await db.auth.getUser();
     if(turn!==generation)return;
     if(userError||!userData.user){login('Tu sesión terminó. Vuelve a entrar con tu cuenta de Control VOA.');return;}
+    activeUser=userData.user.id;
     const {data,error}=await db.from('veyra_flight_training_guides').select('id,version,payload').eq('id','flight-training-evals').maybeSingle();
     if(turn!==generation)return;
     if(error)throw Error('No se pudo cargar el contenido. Comprueba la conexión y vuelve a intentar.');
@@ -32,7 +33,14 @@ async function open(){
     window.FTGuide=data.payload;activeUser=userData.user.id;
     $('accessView').hidden=true;$('trainingSurface').hidden=false;
     $('sessionStatus').textContent='Sesión de Veyra activa';
-    if(!started){window.VeyraFlightTrainingStart();started=true;}
+    if(!started){
+      if(!window.FTCreateSessionStore)throw Error('No se pudo cargar el guardado. Actualiza la página.');
+      window.FTSessionStore?.stop();
+      window.FTSessionStore=window.FTCreateSessionStore(db,activeUser);
+      window.FTInitialSession=await window.FTSessionStore.initialize();
+      if(turn!==generation){window.FTSessionStore.stop();return;}
+      window.VeyraFlightTrainingStart();started=true;
+    }
     resize();
   }catch(error){if(turn===generation)fail(error.message||'No fue posible abrir el módulo.');}
   finally{opening=false;$('loginButton').disabled=false;$('loginButton').textContent='Continuar';}
@@ -52,13 +60,14 @@ $('loginForm').onsubmit=async event=>{
 $('retryButton').onclick=open;
 $('changeAccountButton').onclick=()=>login('');
 $('logoutButton').onclick=async()=>{
-  if(!confirm('¿Cerrar sesión? Descarga antes las observaciones que quieras conservar.'))return;
+  if(window.FTSessionStore&&!await window.FTSessionStore.flush())return;
+  if(!confirm('¿Cerrar sesión? Las evaluaciones guardadas permanecen en tu cuenta.'))return;
   await db.auth.signOut({scope:'local'});window.location.reload();
 };
 db?.auth.onAuthStateChange((event,session)=>{
   // Do not await Supabase calls in its auth callback.
-  if(started&&(!session||session.user.id!==activeUser)){
-    generation++;window.FTGuide=null;
+  if(activeUser&&(!session||session.user.id!==activeUser)){
+    generation++;window.FTSessionStore?.stop();window.FTInitialSession=null;window.FTGuide=null;
     $('trainingSurface').replaceChildren();window.location.reload();
   }
 });
