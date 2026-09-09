@@ -1,6 +1,8 @@
 /* Interface translations only. Observations, evidence and aliases retain their original language. */
 globalThis.FTLocale=(()=>{
   const en={
+"Conocimientos: precisa el sistema, limitación o procedimiento y qué dijo o hizo el piloto. Una afirmación general no demuestra un OB específico.":"Knowledge: specify the system, limitation or procedure and what the pilot said or did. A general statement does not establish a specific OB.",
+"Describe una acción u omisión concreta del piloto y su contexto. No se ha confirmado ninguna competencia ni OB automáticamente.":"Describe a specific action or omission by the pilot and its context. No competency or OB has been confirmed automatically.",
 "Corregir texto y sugerir competencias":"Correct text and suggest competencies",
 "competencia propuesta":"suggested competency",
 "competencias propuestas":"suggested competencies",
