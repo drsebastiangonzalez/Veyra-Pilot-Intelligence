@@ -2088,7 +2088,23 @@ function startExam(){
 }
 function renderQuestions(){
   document.getElementById('progress').textContent=' · '+currentQuestions.length+' preguntas';
-  document.getElementById('questionsContainer').innerHTML=currentQuestions.map((q,i)=>`<div class="qcard"><div class="qmeta"><span class="badge">${i+1}</span><span class="badge">${escapeHtml(officialSubject(q.category,q.question))}</span>${q.critical?'<span class="badge">Crítica</span>':''}</div><h2>${escapeHtml(q.question)}</h2>${q.options.map(o=>`<label class="option"><input type="radio" name="q${q.id}" value="${o.key}">${o.key}. ${escapeHtml(o.text)}</label>`).join('')}</div>`).join('');
+  const container=document.getElementById('questionsContainer');
+  container.replaceChildren();
+  currentQuestions.forEach((q,i)=>{
+    const card=document.createElement('div');card.className='qcard';
+    const meta=document.createElement('div');meta.className='qmeta';
+    const addBadge=(text)=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=String(text);meta.append(badge);};
+    addBadge(i+1);addBadge(officialSubject(q.category,q.question));if(q.critical)addBadge('Crítica');
+    const heading=document.createElement('h2');heading.textContent=String(q.question||'');
+    card.append(meta,heading);
+    (q.options||[]).forEach(o=>{
+      const label=document.createElement('label');label.className='option';
+      const input=document.createElement('input');input.type='radio';input.name='q'+String(q.id);input.value=String(o.key||'');
+      label.append(input,document.createTextNode(String(o.key||'')+'. '+String(o.text||'')));
+      card.append(label);
+    });
+    container.append(card);
+  });
 }
 function startTimer(sec){remainingSeconds=sec;updateTimer(sec);clearInterval(timerInterval);timerInterval=setInterval(()=>{remainingSeconds--;updateTimer(remainingSeconds);if(remainingSeconds<=0)submitExam(true);},1000);}
 function updateTimer(sec){document.getElementById('timer').textContent=Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
@@ -2345,10 +2361,7 @@ function renderSubjectBarsForReport(a){
 <script>
 
 function veyraCleanText(value){
-  return String(value ?? '')
-    .replace(/<[^>]*>/g,'')
-    .replace(/\s+/g,' ')
-    .trim();
+  return String(value ?? '').replace(/\s+/g,' ').trim();
 }
 function veyraAnswerPlain(selected, selectedText, qid){
   if(typeof formatAnswerPlain === 'function') return formatAnswerPlain(selected, selectedText, qid);
@@ -2368,77 +2381,85 @@ window.closeVeyraReportPreview = function(){
 };
 window.printAttemptReport = function(i){
   const a=(lastDashboardRows||[])[i];
-  if(!a){ alert('No encontré este intento. Actualiza datos e intenta de nuevo.'); return; }
-
+  if(!a){alert('No encontré este intento. Actualiza datos e intenta de nuevo.');return;}
   const details=(a.answer_detail&&a.answer_detail.length)?enrichAnswers(a.answer_detail):enrichAnswers(a.failed_questions||[]);
   const failed=details.filter(d=>!d.isCorrect);
-  const weak = veyraSubjectStatsFromAttempt(a).filter(w=>Number(w.score||0)<75).sort((x,y)=>Number(x.score||0)-Number(y.score||0));
-  const strong = veyraSubjectStatsFromAttempt(a).filter(w=>Number(w.score||0)>=75).sort((x,y)=>Number(y.score||0)-Number(x.score||0));
-  const fecha=a.date||new Date().toLocaleString('es-CO');
-  const clean=(v)=>String(v??'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
-  const ans=(selected, selectedText, qid)=>{
-    if(typeof formatAnswerPlain==='function') return clean(formatAnswerPlain(selected, selectedText, qid));
-    return clean(selectedText || selected || '');
-  };
-  const interpretation = a.pass
+  const stats=veyraSubjectStatsFromAttempt(a);
+  const strong=stats.filter(w=>Number(w.score||0)>=75).sort((x,y)=>Number(y.score||0)-Number(x.score||0));
+  const priority=stats.filter(w=>Number(w.score||0)<75).sort((x,y)=>Number(x.score||0)-Number(y.score||0));
+  const fecha=a.date||new Date().toISOString();
+  const interpretation=a.pass
     ? 'El estudiante alcanza el criterio mínimo definido para esta evaluación. El resultado puede ser utilizado como insumo para retroalimentación académica, seguimiento del desempeño y continuidad del proceso formativo según criterio del instructor.'
     : 'El estudiante no alcanza el criterio mínimo definido para esta evaluación. Se recomienda realizar retroalimentación dirigida en las materias con menor desempeño antes de avanzar a la siguiente fase del entrenamiento.';
-  const finalRec = a.pass
+  const finalRec=a.pass
     ? 'Mantener el seguimiento académico y reforzar los temas identificados como oportunidades de mejora para consolidar el desempeño previo a fases prácticas.'
     : 'Realizar retroalimentación individual enfocada en los ítems fallados y reforzar las materias de menor desempeño antes de repetir la evaluación, según criterio del instructor.';
-  const bars = veyraSubjectBarsHTMLFromAttempt(a);
-  const failedRows=(failed.length?failed:details).map(d=>`<tr>
-    <td>${clean(d.questionId||'')}</td>
-    <td>${clean(d.category||'')}</td>
-    <td>${clean(d.question||'')}</td>
-    <td>${ans(d.selected,d.selectedText,d.questionId)}</td>
-    <td>${ans(d.correct,d.correctText,d.questionId)}</td>
-    <td><span class="${d.isCorrect?'ok':'bad'}">${d.isCorrect?'Correcta':'Incorrecta'}</span></td>
-  </tr>`).join('');
 
-  const html=`<div id="veyraReportPreview">
-    <div class="reportPreviewActions">
-      <button class="secondary" onclick="closeVeyraReportPreview()">Cerrar reporte</button>
-      <button class="primary" onclick="veyraPrintIndividualReport()">Guardar / imprimir PDF</button>
-    </div>
-    <div class="reportPage">
-      <div class="reportHeader">
-        <div class="reportBrand">Veyra</div>
-        <div class="reportSubbrand">PILOT INTELLIGENCE</div>
-        <div class="reportTitle">Reporte individual de desempeño académico</div>
-        <div class="reportMeta">Plan piloto Pre-Solo · ${veyraFormatDate(fecha)}</div>
-      </div>
-      <div class="reportCard reportSoft">
-        <h2>${clean(a.name||'Estudiante')}</h2>
-        <div class="reportKpis">
-          <div class="reportKpi"><span>Curso</span><b>${clean(a.course||'-')}</b></div>
-          <div class="reportKpi"><span>Evaluador</span><b>${clean(a.instructor||'-')}</b></div>
-          <div class="reportKpi"><span>Nota</span><b>${clean(a.score)}%</b></div>
-          <div class="reportKpi"><span>Resultado</span><b class="${a.pass?'ok':'bad'}">${a.pass?'Cumple':'No cumple'}</b></div>
-        </div>
-      </div>
-      <div class="reportCard"><h3>Interpretación del resultado</h3><p>${interpretation}</p></div>
-      <div class="reportTwo">
-        <div class="reportCard"><h3>Fortalezas identificadas</h3>${veyraStrengthsHTMLFromAttempt(a)}</div>
-        <div class="reportCard"><h3>Áreas prioritarias de refuerzo</h3>${veyraPriorityAreasHTMLFromAttempt(a)}</div>
-      </div>
-      <div class="reportCard"><h3>Desempeño por materia</h3>${veyraSubjectBarsHTMLFromAttempt(a)}</div>
-      <div class="reportCard reportDetailTable">
-        <h2>Detalle de preguntas falladas</h2>
-        <table><thead><tr><th>ID</th><th>Materia</th><th>Pregunta</th><th>Respuesta estudiante</th><th>Respuesta esperada</th><th>Estado</th></tr></thead><tbody>${failedRows||'<tr><td colspan="6">No se registran preguntas falladas.</td></tr>'}</tbody></table>
-      </div>
-      <div class="reportCard"><h3>Recomendación formativa</h3><p>${finalRec}</p></div>
-      <div class="reportCard"><h3>Uso formativo</h3><p>Este reporte se utiliza para retroalimentación académica, seguimiento interno del entrenamiento y toma de decisiones formativas. No reemplaza el criterio del instructor responsable.</p><div class="signature"><b>Veyra Pilot Intelligence</b><br>Aviation assessment and training analytics platform<br>veyrapilot.com</div></div>
-      <div class="reportFooter">Reporte generado automáticamente para uso académico y seguimiento interno.</div>
-    </div>
-  </div>`;
+  const node=(tag,className,text)=>{const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=String(text);return n;};
+  const card=(title,text,className='reportCard')=>{const c=node('div',className);c.append(node('h3','',title));if(text!==undefined)c.append(node('p','',text));return c;};
+  const listCard=(title,items,emptyText)=>{
+    const c=node('div','reportCard');c.append(node('h3','',title));
+    if(!items.length){c.append(node('p','muted',emptyText));return c;}
+    const ul=node('ul');items.forEach(w=>{const relation=w.total==null?'':' ('+w.correct+'/'+w.total+')';ul.append(node('li','',String(w.category||'')+': '+Number(w.score||0)+'%'+relation));});c.append(ul);return c;
+  };
 
   closeVeyraReportPreview();
-  const detail=document.getElementById('attemptDetailCard') || document.body;
-  detail.insertAdjacentHTML('afterend', html);
-  document.getElementById('veyraReportPreview').scrollIntoView({behavior:'smooth', block:'start'});
-};
+  const root=node('div');root.id='veyraReportPreview';
+  const actions=node('div','reportPreviewActions');
+  const close=node('button','secondary','Cerrar reporte');close.type='button';close.onclick=closeVeyraReportPreview;
+  const print=node('button','primary','Guardar / imprimir PDF');print.type='button';print.onclick=veyraPrintIndividualReport;
+  actions.append(close,print);root.append(actions);
 
+  const page=node('div','reportPage');root.append(page);
+  const header=node('div','reportHeader');
+  header.append(node('div','reportBrand','Veyra'),node('div','reportSubbrand','PILOT INTELLIGENCE'),node('div','reportTitle','Reporte individual de desempeño académico'),node('div','reportMeta','Plan piloto Pre-Solo · '+veyraFormatDate(fecha)));
+  page.append(header);
+
+  const summary=node('div','reportCard reportSoft');summary.append(node('h2','',a.name||'Estudiante'));
+  const kpis=node('div','reportKpis');
+  [['Curso',a.course||'-'],['Evaluador',a.instructor||'-'],['Nota',Number(a.score||0)+'%'],['Resultado',a.pass?'Cumple':'No cumple']].forEach(([label,value],idx)=>{
+    const k=node('div','reportKpi');k.append(node('span','',label),node('b',idx===3?(a.pass?'ok':'bad'):'',value));kpis.append(k);
+  });
+  summary.append(kpis);page.append(summary);
+  page.append(card('Interpretación del resultado',interpretation));
+
+  const two=node('div','reportTwo');
+  two.append(listCard('Fortalezas identificadas',strong,'No se identifican materias sobre el criterio mínimo en este intento.'),listCard('Áreas prioritarias de refuerzo',priority,'No se registran áreas críticas de refuerzo en este intento.'));
+  page.append(two);
+
+  const barsCard=node('div','reportCard');barsCard.append(node('h3','','Desempeño por materia'));
+  if(!stats.length){barsCard.append(node('p','muted','Sin desglose por materia disponible.'));}
+  else stats.forEach(w=>{
+    const val=Math.max(0,Math.min(100,Number(w.score||0)));
+    const row=node('div','reportBarrow');
+    const relation=w.total==null?'':' ('+w.correct+'/'+w.total+')';
+    row.append(node('div','reportBarlabel',String(w.category||'')+relation));
+    const track=node('div','bartrack reportBartrack');const fill=node('span');fill.style.width=Math.max(4,val)+'%';fill.style.background=val>=75?'#047857':(val>=50?'#c8a45d':'#b42318');track.append(fill);
+    row.append(track,node('div','reportBarvalue',val+'%'));barsCard.append(row);
+  });
+  page.append(barsCard);
+
+  const detailCard=node('div','reportCard reportDetailTable');detailCard.append(node('h2','','Detalle de preguntas falladas'));
+  const tableEl=node('table');const thead=node('thead');const hr=node('tr');['ID','Materia','Pregunta','Respuesta estudiante','Respuesta esperada','Estado'].forEach(h=>hr.append(node('th','',h)));thead.append(hr);tableEl.append(thead);
+  const tbody=node('tbody');const rows=failed.length?failed:details;
+  if(!rows.length){const tr=node('tr');const td=node('td','','No se registran preguntas falladas.');td.colSpan=6;tr.append(td);tbody.append(tr);}
+  else rows.forEach(d=>{
+    const tr=node('tr');
+    const marked=formatAnswerPlain(d.selected,d.selectedText,d.questionId);
+    const expected=formatAnswerPlain(d.correct,d.correctText,d.questionId);
+    [d.questionId||'',d.category||'',d.question||'',marked,expected].forEach(v=>tr.append(node('td','',v)));
+    const stateTd=node('td');stateTd.append(node('span',d.isCorrect?'ok':'bad',d.isCorrect?'Correcta':'Incorrecta'));tr.append(stateTd);tbody.append(tr);
+  });
+  tableEl.append(tbody);detailCard.append(tableEl);page.append(detailCard);
+  page.append(card('Recomendación formativa',finalRec));
+  const use=card('Uso formativo','Este reporte se utiliza para retroalimentación académica, seguimiento interno del entrenamiento y toma de decisiones formativas. No reemplaza el criterio del instructor responsable.');
+  const signature=node('div','signature');signature.append(node('b','','Veyra Pilot Intelligence'),document.createElement('br'),document.createTextNode('Aviation assessment and training analytics platform'),document.createElement('br'),document.createTextNode('veyrapilot.com'));use.append(signature);page.append(use);
+  page.append(node('div','reportFooter','Reporte generado automáticamente para uso académico y seguimiento interno.'));
+
+  const detail=document.getElementById('attemptDetailCard')||document.body;
+  if(detail.parentNode)detail.parentNode.insertBefore(root,detail.nextSibling);else document.body.append(root);
+  root.scrollIntoView({behavior:'smooth',block:'start'});
+};
 
 
 /* === Veyra v2.7.3 helpers === */
@@ -2472,7 +2493,7 @@ window.addEventListener('afterprint', function(){
 /* === Veyra v2.7.4 subject analysis fix === */
 function veyraSubjectStatsFromAttempt(a){
   function clean(v){
-    return String(v == null ? '' : v).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+    return String(v == null ? '' : v).replace(/\s+/g,' ').trim();
   }
   function isOk(d){
     if(typeof d.isCorrect === 'boolean') return d.isCorrect;
@@ -2548,35 +2569,6 @@ function veyraSubjectStatsFromAttempt(a){
 
   return arr.sort(function(a,b){ return a.score - b.score; });
 }
-function veyraSubjectBarsHTMLFromAttempt(a){
-  const stats = veyraSubjectStatsFromAttempt(a);
-  if(!stats.length) return '<p class="muted">Sin desglose por materia disponible.</p>';
-  return stats.map(function(w){
-    const val = Number(w.score || 0);
-    const color = val >= 75 ? '#047857' : (val >= 50 ? '#c8a45d' : '#b42318');
-    const relation = (w.total == null) ? '' : ' <small style="color:#6b7280">(' + w.correct + '/' + w.total + ')</small>';
-    return '<div class="reportBarrow"><div class="reportBarlabel">' + w.category + relation + '</div><div class="bartrack reportBartrack"><span style="width:' + Math.max(4,val) + '%;background:' + color + '"></span></div><div class="reportBarvalue">' + val + '%</div></div>';
-  }).join('');
-}
-function veyraStrengthsHTMLFromAttempt(a){
-  const stats = veyraSubjectStatsFromAttempt(a).filter(function(x){return Number(x.score || 0) >= 75;}).sort(function(a,b){return b.score-a.score;});
-  if(!stats.length) return '<p class="muted">No se identifican materias sobre el criterio mínimo en este intento.</p>';
-  return '<ul>' + stats.map(function(w){
-    const relation = (w.total == null) ? '' : ' (' + w.correct + '/' + w.total + ')';
-    return '<li>' + w.category + ': ' + Number(w.score || 0) + '%' + relation + '</li>';
-  }).join('') + '</ul>';
-}
-function veyraPriorityAreasHTMLFromAttempt(a){
-  const stats = veyraSubjectStatsFromAttempt(a).filter(function(x){return Number(x.score || 0) < 75;}).sort(function(a,b){return a.score-b.score;});
-  if(!stats.length) return '<p class="muted">No se registran áreas críticas de refuerzo en este intento.</p>';
-  return '<ul>' + stats.map(function(w){
-    const relation = (w.total == null) ? '' : ' (' + w.correct + '/' + w.total + ')';
-    return '<li>' + w.category + ': ' + Number(w.score || 0) + '%' + relation + '</li>';
-  }).join('') + '</ul>';
-}
-
-
-
 /* === Veyra Training Center v2.8.0 JS === */
 const VEYRA_TRAINING_BANK = [{"id": "PPA-AER-001", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "El término 'ángulo de ataque' se define como el ángulo:", "options": [{"key": "A", "text": "Entre la línea de la cuerda del ala y el viento relativo."}, {"key": "B", "text": "Entre el ángulo de ascenso del avión y el horizonte."}, {"key": "C", "text": "Formado por el eje longitudinal del avión y la línea de cuerda del ala."}], "correct": "A", "explanation": "El ángulo de ataque es el ángulo agudo entre el viento relativo y la línea de cuerda del ala."}, {"id": "PPA-AER-002", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "El ángulo entre la línea de cuerda de un perfil aerodinámico y el viento relativo se conoce como el ángulo de:", "options": [{"key": "A", "text": "Sustentación."}, {"key": "B", "text": "Ataque."}, {"key": "C", "text": "Incidencia."}], "correct": "B", "explanation": "El ángulo de ataque es el ángulo agudo entre la línea de cuerda del ala y la dirección del viento relativo."}, {"id": "PPA-AER-003", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "El término 'ángulo de ataque' se define como el ángulo entre:", "options": [{"key": "A", "text": "La cuerda del ala y el viento relativo."}, {"key": "B", "text": "El eje longitudinal del avión y el aire que golpea el perfil aerodinámico."}, {"key": "C", "text": "La línea central del avión y el viento relativo."}], "correct": "A", "explanation": "El ángulo de ataque es el ángulo entre la línea de cuerda del perfil aerodinámico y la dirección del viento relativo."}, {"id": "PPA-AER-004", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Qué enunciado se relaciona con el principio de Bernoulli?", "options": [{"key": "A", "text": "Por cada acción hay una reacción igual y opuesta."}, {"key": "B", "text": "Se genera una fuerza adicional hacia arriba cuando la superficie inferior del ala desvía el aire hacia abajo."}, {"key": "C", "text": "El aire viaja más rápido sobre la superficie superior curva de un perfil aerodinámico reduciendo la presión en la superficie superior."}], "correct": "C", "explanation": "El principio de Bernoulli establece que la presión de un fluido disminuye en los puntos donde aumenta la velocidad del fluido."}, {"id": "PPA-AER-005", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Las cuatro fuerzas que actúan sobre un avión en vuelo son:", "options": [{"key": "A", "text": "Sustentación, peso, empuje, resistencia."}, {"key": "B", "text": "Sustentación, peso, gravedad, empuje."}, {"key": "C", "text": "Sustentación, gravedad, potencia y fricción."}], "correct": "A", "explanation": "Las cuatro fuerzas aerodinámicas básicas son sustentación, peso, empuje y resistencia."}, {"id": "PPA-AER-006", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Cuál es el propósito del timón de un avión?", "options": [{"key": "A", "text": "Controlar la guiñada."}, {"key": "B", "text": "Controlar la tendencia sobre inclinación."}, {"key": "C", "text": "Controlar el alabeo."}], "correct": "A", "explanation": "El timón controla la guiñada; los alerones controlan el alabeo."}, {"id": "PPA-AER-007", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Cuál es la relación de sustentación, resistencia, empuje y peso cuando el avión está en vuelo recto y nivelado?", "options": [{"key": "A", "text": "La sustentación es igual al peso y el empuje es igual a la resistencia."}, {"key": "B", "text": "La sustentación, la resistencia y el peso son iguales al empuje."}, {"key": "C", "text": "La sustentación y el peso son iguales en empuje y a la resistencia."}], "correct": "A", "explanation": "En vuelo recto y nivelado no acelerado, la sustentación iguala al peso y el empuje iguala a la resistencia."}, {"id": "PPA-AER-008", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Cuándo están en equilibrio las cuatro fuerzas que actúan sobre un avión?", "options": [{"key": "A", "text": "Durante un vuelo no acelerado."}, {"key": "B", "text": "Cuando la aeronave acelera."}, {"key": "C", "text": "Cuando la aeronave está en reposo en tierra."}], "correct": "A", "explanation": "En vuelo no acelerado o estable, las fuerzas opuestas están en equilibrio."}, {"id": "PPA-AER-009", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Un avión que se dice que es inherentemente estable:", "options": [{"key": "A", "text": "Será difícil que entre en pérdida."}, {"key": "B", "text": "Requiere menos esfuerzo para controlarlo."}, {"key": "C", "text": "No gira."}], "correct": "B", "explanation": "Un avión estable tiende a volver a su condición original de vuelo después de una perturbación."}, {"id": "PPA-AER-010", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Qué determina la estabilidad longitudinal de un avión?", "options": [{"key": "A", "text": "La ubicación del centro de gravedad con respecto al centro de sustentación."}, {"key": "B", "text": "La efectividad del estabilizador horizontal, el timón y la pestaña de ajuste del timón."}, {"key": "C", "text": "La relación de empuje y sustentación con peso y resistencia."}], "correct": "A", "explanation": "La ubicación del centro de gravedad con respecto al centro de sustentación determina en gran medida la estabilidad longitudinal."}, {"id": "PPA-AER-011", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Qué hace que un avión, excepto una cola en T, se incline hacia abajo cuando se reduce la potencia y los controles no están ajustados?", "options": [{"key": "A", "text": "El CG se desplaza hacia adelante cuando se reduce el empuje y la resistencia."}, {"key": "B", "text": "Se reduce la corriente descendente en los elevadores de la corriente de deslizamiento de la hélice y se reduce la eficacia del elevador."}, {"key": "C", "text": "Cuando el empuje se reduce a menos que el peso, la sustentación también se reduce y las alas ya no pueden soportar el peso."}], "correct": "B", "explanation": "Al reducir potencia disminuye la corriente de deslizamiento sobre el elevador, reduciendo su eficacia y favoreciendo el cabeceo hacia abajo."}, {"id": "PPA-AER-012", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Se ha cargado un avión de tal manera que el CG está detrás del límite posterior. Una característica de vuelo indeseable que un piloto podría experimentar sería:", "options": [{"key": "A", "text": "Una carrera de despegue más larga."}, {"key": "B", "text": "Dificultad para recuperarse de una condición de entrada en pérdida."}, {"key": "C", "text": "Entrada en pérdida a una velocidad aérea superior a la normal."}], "correct": "B", "explanation": "Un CG demasiado atrás reduce la capacidad de recuperación de pérdidas y giros."}, {"id": "PPA-AER-013", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Cargar un avión en el CG más hacia el límite posterior hará que el avión sea:", "options": [{"key": "A", "text": "Menos estable a todas las velocidades."}, {"key": "B", "text": "Menos estable a bajas velocidades, pero más estable a altas velocidades."}, {"key": "C", "text": "Menos estable a altas velocidades, pero más estable a bajas velocidades."}], "correct": "A", "explanation": "Un CG hacia el límite posterior reduce la estabilidad a todas las velocidades por menor efectividad del elevador."}, {"id": "PPA-AER-014", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Los cambios en el centro de presión de un ala afectan a la:", "options": [{"key": "A", "text": "Relación sustentación / resistencia."}, {"key": "B", "text": "Capacidad de sustentación."}, {"key": "C", "text": "Equilibrio aerodinámico y controlabilidad."}], "correct": "C", "explanation": "El movimiento del centro de presión afecta el equilibrio aerodinámico y la capacidad de control de la aeronave."}, {"id": "PPA-AER-015", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "La cantidad de exceso de carga que se puede imponer al ala de un avión depende de la:", "options": [{"key": "A", "text": "Posición del CG."}, {"key": "B", "text": "Velocidad del avión."}, {"key": "C", "text": "Brusquedad a la que se aplica la carga."}], "correct": "B", "explanation": "A altas velocidades, la capacidad de generar cargas adicionales aumenta y puede exceder límites estructurales."}, {"id": "PPA-AER-016", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Qué maniobra de vuelo básica aumenta el factor de carga en un avión en comparación con el vuelo recto y nivelado?", "options": [{"key": "A", "text": "Ascensos."}, {"key": "B", "text": "Virajes."}, {"key": "C", "text": "Entrar en pérdida."}], "correct": "B", "explanation": "En un viraje, el cambio de trayectoria impone carga adicional sobre la estructura del avión."}, {"id": "PPA-AER-017", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿Qué fuerza hace girar un avión?", "options": [{"key": "A", "text": "El componente horizontal de la sustentación."}, {"key": "B", "text": "El componente vertical de la sustentación."}, {"key": "C", "text": "La fuerza centrífuga."}], "correct": "A", "explanation": "En un viraje, la sustentación se inclina y su componente horizontal produce el giro."}, {"id": "PPA-AER-018", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Durante una aproximación a una entrada en pérdida, un factor de carga incrementado hará que el avión:", "options": [{"key": "A", "text": "Entre en pérdida a una velocidad aérea más alta."}, {"key": "B", "text": "Tenga tendencia a girar."}, {"key": "C", "text": "Sea más difícil de controlar."}], "correct": "A", "explanation": "La velocidad de pérdida aumenta en proporción a la raíz cuadrada del factor de carga."}, {"id": "PPA-AER-019", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Seleccione los cuatro fundamentos de vuelo que intervienen en la maniobra de una aeronave:", "options": [{"key": "A", "text": "Potencia, cabeceo, inclinación y compensación de la aeronave."}, {"key": "B", "text": "Arranque, rodaje, despegue y aterrizaje."}, {"key": "C", "text": "Vuelo recto y nivelado, giros, ascensos y descensos."}], "correct": "C", "explanation": "Los fundamentos de vuelo son vuelo recto y nivelado, giros, ascensos y descensos."}, {"id": "PPA-AER-020", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Si una situación de emergencia requiere un aterrizaje a favor del viento, los pilotos deben esperar una:", "options": [{"key": "A", "text": "Velocidad del aire en el momento del aterrizaje, un rodamiento más largo en el terreno y un mejor control durante todo el recorrido."}, {"key": "B", "text": "Velocidad en tierra en el momento del aterrizaje, un rodamiento más largo en el terreno y la probabilidad de sobrepasar el punto de aterrizaje deseado."}, {"key": "C", "text": "Velocidad en tierra en el momento del aterrizaje, un rodamiento más corto en el terreno y la probabilidad de no alcanzar el punto de aterrizaje deseado."}], "correct": "B", "explanation": "Con viento de cola, la velocidad sobre el terreno y la distancia de rodaje aumentan."}, {"id": "PPA-AER-021", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Al ejecutar una aproximación de emergencia para aterrizar en un avión monomotor, es importante mantener una velocidad de planeo constante porque las variaciones en la velocidad de planeo:", "options": [{"key": "A", "text": "Aumentan las posibilidades de que el motor se enfríe."}, {"key": "B", "text": "Aseguran que se mantenga el ángulo de descenso adecuado hasta que entre en la llamarada."}, {"key": "C", "text": "Anulan todos los intentos de precisión en el juicio de distancia de planeo y el punto de aterrizaje."}], "correct": "C", "explanation": "La velocidad de planeo constante permite juzgar mejor la distancia y el punto de aterrizaje."}, {"id": "PPA-AER-022", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "A medida que aumenta la altitud, la velocidad indicada a la que un avión dado se detiene en una configuración particular:", "options": [{"key": "A", "text": "Disminuye a medida que disminuye la velocidad verdadera."}, {"key": "B", "text": "Disminuye a medida que aumenta la velocidad verdadera."}, {"key": "C", "text": "Sigue siendo la misma independientemente de la altitud."}], "correct": "C", "explanation": "La velocidad indicada de pérdida permanece aproximadamente igual para una configuración dada, aunque cambie la velocidad verdadera."}, {"id": "PPA-AER-023", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "¿En qué condiciones de vuelo debe colocarse una aeronave para girar?", "options": [{"key": "A", "text": "Parcialmente en pérdida con un ala baja."}, {"key": "B", "text": "En una espiral empinada en picada."}, {"key": "C", "text": "En pérdida."}], "correct": "C", "explanation": "Un trompo se produce cuando existe pérdida y suficiente control de balanceo o guiñada."}, {"id": "PPA-AER-024", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "Durante un giro hacia la izquierda, ¿qué ala(s) entran en pérdida?", "options": [{"key": "A", "text": "Ambas alas entran en pérdida."}, {"key": "B", "text": "Ninguna ala entra en pérdida."}, {"key": "C", "text": "Solo el ala izquierda entra en pérdida."}], "correct": "A", "explanation": "Durante un giro, ambas alas están en pérdida, aunque una pueda estar en condición más profunda que la otra."}, {"id": "PPA-AER-025", "license": "PPA", "module": "Training Center", "category": "Aerodinámica básica", "question": "El ángulo de ataque en el que el ala de un avión entra en pérdida:", "options": [{"key": "A", "text": "Aumentará si el CG se mueve hacia adelante."}, {"key": "B", "text": "Cambiará con un aumento en el peso bruto."}, {"key": "C", "text": "Sigue siendo la misma independientemente del peso bruto."}], "correct": "C", "explanation": "El ala entra en pérdida al alcanzar su ángulo de ataque crítico; este no cambia por el peso bruto."}];
 

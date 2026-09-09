@@ -406,7 +406,16 @@ leg:'El tramo puede expresarse en tiempo o millas. No sustituyas un criterio por
 turns:'Los giros izquierdos deben quedar identificados; si no, el patrón estándar utiliza derecha.',
 efc:'La altitud limita verticalmente la maniobra y el EFC ayuda a gestionar la continuación.'
 };
-document.querySelectorAll('.brief-card').forEach(b=>b.onclick=()=>{document.querySelectorAll('.brief-card').forEach(x=>x.style.borderColor='');b.style.borderColor='var(--gold)';document.getElementById('briefFeedback').innerHTML=`<div class="status-big">${b.querySelector('h3').textContent}</div>${brief[b.dataset.brief]}`});
+document.querySelectorAll('.brief-card').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.brief-card').forEach(x=>x.style.borderColor='');
+  b.style.borderColor='var(--gold)';
+  const feedback=document.getElementById('briefFeedback');
+  const heading=document.createElement('div');
+  heading.className='status-big';
+  heading.textContent=b.querySelector('h3')?.textContent||'';
+  const detail=document.createTextNode(brief[b.dataset.brief]||'');
+  feedback.replaceChildren(heading,detail);
+});
 
 let scenario='nw';const coords={nw:[-220,-210,135],sw:[-230,210,45],e:[250,20,-90]},correctEntry={nw:'parallel',sw:'teardrop',e:'direct'};
 function updateScenario(){const [x,y,r]=coords[scenario],pl=document.getElementById('arrivalAircraft'),ln=document.getElementById('arrivalLine');pl.setAttribute('transform',`translate(${x} ${y}) rotate(${r})`);ln.setAttribute('x1',x);ln.setAttribute('y1',y);document.getElementById('entryFeedback').className='feedback';document.getElementById('entryFeedback').textContent='Selecciona la entrada recomendada.'}
