@@ -1,0 +1,13 @@
+# Veyra Pilot Intelligence — code ownership
+# All repository changes require review by the repository owner when branch
+# protection/rulesets are configured to require CODEOWNERS approval.
+
+* @drsebastiangonzalez
+
+# Sensitive surfaces
+/modules/flight-training/ @drsebastiangonzalez
+/control-voa.html @drsebastiangonzalez
+/internal-access.html @drsebastiangonzalez
+/training-dashboard.html @drsebastiangonzalez
+/presolo-instructor-dashboard.html @drsebastiangonzalez
+/.github/ @drsebastiangonzalez
