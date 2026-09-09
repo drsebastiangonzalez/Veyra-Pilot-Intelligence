@@ -65,11 +65,13 @@ label b{font-size:14px}
 <button class="dark" onclick="location.href='ppa-practice.html'">Abrir PPA Practice</button>
 <button class="dark" onclick="location.href='pca-practice.html'">Abrir PCA Practice</button>
 <button class="gold" onclick="exportAttemptsCsv()">Exportar CSV</button>
+<button class="ghost" onclick="VeyraAdminAuth.signOut().then(()=>location.replace(VeyraAdminAuth.loginUrl('training-dashboard.html')))">Cerrar sesión</button>
 </div>
 </section>
 <section class="panel"><h2>Últimos intentos</h2><div id="attemptsTable">Cargando...</div></section>
 <section id="detailPanel" class="panel hidden"><h2>Detalle del intento</h2><div id="detailContent"></div></section>
 </main>
+<script src="./internal-admin-auth.js"></script>
 <script>
 const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
 const SUPABASE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
@@ -81,7 +83,7 @@ async function fetchAttempts(){
  const limit=document.getElementById("limitFilter").value||"20";
  let query="/rest/v1/training_attempts?select=id,attempt_id,student_name,course,license,practice_type,score,correct_count,total_questions,time_used_seconds,level_result,category_summary,failed_questions,answer_detail,created_at&order=created_at.desc&limit="+encodeURIComponent(limit);
  if(license) query+="&license=eq."+encodeURIComponent(license);
- const res=await fetch(SUPABASE_URL+query,{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Accept":"application/json"}});
+ const res=await fetch(SUPABASE_URL+query,{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+VeyraAdminAuth.getAccessToken(),"Accept":"application/json"}});
  if(!res.ok){const text=await res.text();throw new Error("HTTP "+res.status+" · "+text)}
  return await res.json();
 }
@@ -169,7 +171,10 @@ async function loadAttempts(){
 document.getElementById("searchInput").addEventListener("input",renderTable);
 document.getElementById("licenseFilter").addEventListener("change",loadAttempts);
 document.getElementById("limitFilter").addEventListener("change",loadAttempts);
-loadAttempts();
+VeyraAdminAuth.ensureAdmin().then(function(ok){
+  if(ok) loadAttempts();
+  else location.replace(VeyraAdminAuth.loginUrl('training-dashboard.html'));
+});
 </script>
 </body>
 
