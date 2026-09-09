@@ -1,6 +1,13 @@
 /* Interface translations only. Observations, evidence and aliases retain their original language. */
 globalThis.FTLocale=(()=>{
   const en={
+"Corregir texto y sugerir competencias":"Correct text and suggest competencies",
+"competencia propuesta":"suggested competency",
+"competencias propuestas":"suggested competencies",
+"Revisa las tarjetas azules y pulsa + para añadir.":"Review the blue cards and press + to add.",
+"No se encontró una asociación clara. Describe una acción concreta del piloto.":"No clear match was found. Describe a specific action by the pilot.",
+"PROPUESTA · Revisar":"SUGGESTED · Review",
+"Basada en tu observación":"Based on your observation",
 "Modo de escritura":"Writing mode","Teclado":"Keyboard","Frases de inicio":"Sentence starters","Completa los corchetes con lo que observaste antes de confirmar.":"Complete the brackets with what you observed before confirming.","Escribe con Apple Pencil dentro del cuadro. Activa Escribir a mano en Ajustes → Apple Pencil del iPad.":"Write inside the box with Apple Pencil. Enable Scribble in Settings \u2192 Apple Pencil on your iPad.","Procedimientos":"Procedures","Comunicación":"Communication","Trabajo en equipo":"Teamwork","Conciencia situacional":"Situation awareness","Carga de trabajo":"Workload","No hay espacio para añadir la frase.":"There is not enough space to add the sentence.",
 "Aplica procedimientos y respeta la normativa durante la operación.":"Applies procedures and follows regulations throughout the operation.",
 "Intercambia información de forma clara, precisa y oportuna.":"Exchanges information clearly, accurately and at the right time.",
