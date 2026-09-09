@@ -216,52 +216,23 @@
   </div>
 </div>
 
+<script src="./internal-admin-auth.js"></script>
 <script>
 
-const PANEL_ACCESS_HASH = "b7245e7fc481105f1761b032bf5200c55ffc4cac10f93f0942cd270ceba73a15";
-async function sha256(value){
-  const bytes = new TextEncoder().encode(value);
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
 function isPanelUnlocked(){
-  return sessionStorage.getItem("veyra_internal_access_unlocked") === "yes"
-    || sessionStorage.getItem("veyra_presolo_panel_unlocked") === "yes";
+  return VeyraAdminAuth.hasSession();
 }
 function showOrHideLock(){
-  const lock = document.getElementById("lockScreen");
-  if(!lock) return;
-  lock.style.display = isPanelUnlocked() ? "none" : "flex";
+  const lock=document.getElementById("lockScreen");
+  if(lock) lock.style.display=isPanelUnlocked()?"none":"flex";
 }
-async function unlockPanel(){
-  const input = document.getElementById("panelPassword");
-  const error = document.getElementById("lockError");
-  try{
-    if(await sha256(input?.value || "") === PANEL_ACCESS_HASH){
-      sessionStorage.setItem("veyra_internal_access_unlocked","yes");
-      sessionStorage.setItem("veyra_presolo_panel_unlocked","yes");
-      showOrHideLock();
-      loadData();
-    }else{
-      if(error) error.textContent = "Contraseña incorrecta.";
-      if(input){ input.value=""; input.focus(); }
-    }
-  }catch{
-    if(error) error.textContent = "No fue posible validar el acceso en este navegador.";
-  }
+function unlockPanel(){
+  location.replace(VeyraAdminAuth.loginUrl('presolo-instructor-dashboard.html'));
 }
-function cerrarPanelInstructor(){
-  sessionStorage.removeItem("veyra_internal_access_unlocked");
-  sessionStorage.removeItem("veyra_presolo_panel_unlocked");
-  showOrHideLock();
+async function cerrarPanelInstructor(){
+  await VeyraAdminAuth.signOut();
+  location.replace(VeyraAdminAuth.loginUrl('presolo-instructor-dashboard.html'));
 }
-document.addEventListener("keydown", function(e){
-  if(e.key === "Enter" && document.getElementById("lockScreen")?.style.display !== "none"){
-    unlockPanel();
-  }
-});
 
 const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
 const SUPABASE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
@@ -358,7 +329,7 @@ async function loadData(){
   document.getElementById("status").textContent="Cargando datos desde exam_results...";
   try{
     let res=await fetch(`${SUPABASE_URL}/rest/v1/exam_results?select=*&order=created_at.desc&limit=${encodeURIComponent(limit)}`,{
-      headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Accept":"application/json"}
+      headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+VeyraAdminAuth.getAccessToken(),"Accept":"application/json"}
     });
     if(!res.ok){
       const err=await res.text();
@@ -500,8 +471,10 @@ function downloadOne(){
   document.addEventListener("input",e=>{ if(e.target && e.target.id===id) filterRows(); });
   document.addEventListener("change",e=>{ if(e.target && e.target.id===id) filterRows(); });
 });
-showOrHideLock();
-if(isPanelUnlocked()) loadData();
+VeyraAdminAuth.ensureAdmin().then(function(ok){
+  if(ok){ showOrHideLock(); loadData(); }
+  else location.replace(VeyraAdminAuth.loginUrl('presolo-instructor-dashboard.html'));
+});
 </script>
 </body>
 
