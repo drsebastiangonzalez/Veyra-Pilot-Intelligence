@@ -1,3 +1,59 @@
+# Temporary / generated
 /tmp/
 __pycache__/
 *.pyc
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+*.env
+*.local
+
+# Private keys, certificates and signing material
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+*.cer
+*.crt
+*.der
+*.csr
+*.ppk
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+
+# Local credentials / service-account material
+credentials.json
+service-account*.json
+service_account*.json
+secrets.json
+.secret*
+*.secret
+
+# Supabase local / generated sensitive state
+.supabase/
+supabase/.temp/
+
+# IDE / OS local files
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+.idea/
+
+# Logs and local databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# Backups and ad-hoc exports that may contain data
+*.bak
+*.backup
+*.dump
+*.sql.gz
