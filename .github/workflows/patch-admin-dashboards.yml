@@ -1,0 +1,31 @@
+name: Patch admin dashboards
+
+on:
+  push:
+    branches:
+      - security/supabase-admin-auth
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-auth-patched]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Apply dashboard auth patch
+        run: python .github/scripts/patch-admin-dashboards.py
+      - name: Commit patched dashboards
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training-dashboard.html presolo-instructor-dashboard.html
+          if git diff --cached --quiet; then
+            echo "No dashboard changes needed."
+          else
+            git commit -m "Secure admin dashboards with Supabase Auth [admin-auth-patched]"
+            git push
+          fi
