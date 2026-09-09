@@ -36,8 +36,23 @@
     ['WLM',/\b(priorizacion|distribucion|delegacion|organizacion|planificacion|sobrecarga|prioritisation|prioritization|distribution|delegation|planning)\b/,/\b(tareas?|trabajo|tiempo|carga|tasks?|workload|time|work)\b/]
   ];
   const nonEvidence=n=>/\b(instructor|evaluador|assessor|debe|deben|debera|deberia|deberian|should|must|creo|parece|supongo|quiza|se espera|se recomienda|tendria|would|could)\b/.test(n)||/\b(no (?:se )?(?:observo|observa|evidencio|evidencia|evaluo|evalua)|sin evidencia|not observed|not assessed|no evidence)\b/.test(n);
+  // Repair typing repetitions against a bounded vocabulary, not arbitrary technical identifiers.
+  const typingWords=('participa participación activamente procedimiento procedimientos comunica comunicación coordina coordinación colabora colaboración coopera cooperación aplica aplicación ejecuta ejecución omite omisión identifica identificación verifica verificación revisa revisión configura configuración mantiene monitorea supervisa prioriza priorización distribuye distribución tareas trabajo conocimiento conocimientos comprende explica limitación limitaciones sistema sistemas amenaza amenazas decisión decisiones resuelve problema problemas situación conciencia entorno energía velocidad altitud trayectoria automatización manual correctamente incorrectamente adecuada adecuado inadecuada inadecuado durante estudiante piloto briefing checklist terreno tráfico equipo información anticipa reconoce detecta participa participates participation actively procedure procedures communicates communication coordinates coordination collaborates collaboration applies executes omits identifies verifies reviews configures maintains monitors prioritises prioritizes tasks workload knowledge understands explains limitations systems threats decisions situation awareness energy speed altitude flight automation manually correctly incorrectly').split(' ');
+  const repetitionKey=w=>A.norm(w).replace(/([a-z])\1+/g,'$1');
+  const byRepetition=new Map();
+  for(const word of new Set(typingWords)){const key=repetitionKey(word);const bucket=byRepetition.get(key)||[];bucket.push(word);byRepetition.set(key,bucket);}
+  const typoWords={partisipa:'participa',particpa:'participa',particpacion:'participación',partisipacion:'participación',participasion:'participación',activamnete:'activamente',proceidmiento:'procedimiento',procedimeinto:'procedimiento',comunicaicon:'comunicación',cooridna:'coordina',identifca:'identifica',verifca:'verifica',conocimineto:'conocimiento',conociminetos:'conocimientos',priorisacion:'priorización'};
+  function repairTyping(raw){
+    return String(raw||'').replace(/\p{L}+/gu,(word,offset,source)=>{
+      if(/[\d_-]/.test(source[offset-1]||'')||/[\d_-]/.test(source[offset+word.length]||''))return word;
+      const n=A.norm(word),matches=byRepetition.get(repetitionKey(word));
+      const replacement=typoWords[n]||(matches?.length===1?matches[0]:null);
+      if(!replacement)return word;
+      return word[0]===word[0].toUpperCase()?replacement[0].toUpperCase()+replacement.slice(1):replacement;
+    });
+  }
   function expandBriefNotes(raw){
-    const normalized=String(raw||'').replace(/\b(partisipacion|participasion|participacion)\b/gi,'participación').replace(/\bprosedimiento(s?)\b/gi,'procedimiento$1');
+    const normalized=repairTyping(raw).replace(/\b(partisipacion|participasion|participacion)\b/gi,'participación').replace(/\bprosedimiento(s?)\b/gi,'procedimiento$1');
     return A.polish(normalized).split(/(?<=[.!?])\s+|\n+/).map(sentence=>{
       if(nonEvidence(A.norm(sentence))||/\?$/.test(sentence))return sentence;
       const subject=sentence.match(/^(El piloto|El estudiante|CM1|CM2|PF|PM)\s*(?::|-)?\s+/i);
