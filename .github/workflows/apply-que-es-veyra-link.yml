@@ -1,0 +1,35 @@
+name: Apply Que es Veyra link
+
+on:
+  push:
+    branches: [content/que-es-veyra-document-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-link:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Connect Conocer Veyra
+        run: python scripts/apply-que-es-veyra-link.py
+      - name: Commit homepage link
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No homepage link changes to commit."
+            exit 0
+          fi
+          git commit -m "Content: connect Conocer Veyra to institutional page"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF_NAME}
