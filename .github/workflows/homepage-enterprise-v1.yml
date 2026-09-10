@@ -22,6 +22,9 @@ jobs:
       - name: Apply approved homepage redesign
         run: python scripts/apply-homepage-enterprise-v1.py
 
+      - name: Polish and validate homepage
+        run: python scripts/polish-homepage-enterprise-v1.py
+
       - name: Commit patched homepage
         env:
           GH_TOKEN: ${{ github.token }}
@@ -33,5 +36,5 @@ jobs:
             echo "No homepage changes to commit."
             exit 0
           fi
-          git commit -m "Apply homepage enterprise redesign [homepage-patch]"
+          git commit -m "Polish homepage enterprise redesign [homepage-patch]"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF_NAME}
