@@ -1,0 +1,40 @@
+name: Patch homepage security links
+
+on:
+  push:
+    branches: [commercial/security-governance-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Patch homepage
+        run: python scripts/patch-security-home.py
+      - name: Validate security links
+        run: |
+          test -f seguridad-gobernanza-ia.html
+          grep -q 'href="seguridad-gobernanza-ia.html">Seguridad & IA</a>' index.html
+          grep -q 'Conoce nuestros principios de seguridad, gobernanza e IA responsable' index.html
+      - name: Commit homepage changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No homepage changes to commit."
+            exit 0
+          fi
+          git commit -m "Commercial: link security governance page from homepage"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF_NAME}
