@@ -1431,7 +1431,7 @@ main{max-width:1180px;}
 .homeCapabilitiesHead h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(44px,4.9vw,68px);font-weight:400;letter-spacing:-.045em;line-height:1.02;margin:0 0 16px;color:#0a1728}
 .homeCapabilitiesHead p{max-width:760px;margin:0 auto;color:#667080;font-size:17px;line-height:1.62}
 .homeCapabilitiesGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:56px}
-.homeCapabilityCard{appearance:none;text-align:left;min-height:205px;border:1px solid #ded6ca;background:#fffdf8;padding:24px;border-radius:0;box-shadow:0 13px 30px rgba(23,31,44,.055);transition:.2s ease;color:#0a1728}
+.homeCapabilityCard{display:block;text-decoration:none;appearance:none;text-align:left;min-height:205px;border:1px solid #ded6ca;background:#fffdf8;padding:24px;border-radius:0;box-shadow:0 13px 30px rgba(23,31,44,.055);transition:.2s ease;color:#0a1728}
 .homeCapabilityCard:hover,.homeCapabilityCard:focus{transform:translateY(-3px);border-color:#c8a45d;box-shadow:0 18px 38px rgba(23,31,44,.09);outline:none}
 .homeCapabilityCard>span{display:grid;place-items:center;width:42px;height:42px;border:1px solid #c8a45d;border-radius:50%;color:#9a712a;font-size:11px;letter-spacing:.09em;font-weight:900;margin-bottom:20px}
 .homeCapabilityCard h3{font-family:Georgia,'Times New Roman',serif;font-size:27px;font-weight:400;margin:0 0 9px;color:#0a1728}
@@ -1607,12 +1607,11 @@ main{max-width:1180px;}
         <p>Una misma plataforma para evaluar, entrenar, registrar evidencia, automatizar tareas y convertir datos en decisiones de entrenamiento.</p>
       </div>
       <div class="homeCapabilitiesGrid">
-        <button type="button" class="homeCapabilityCard" data-cap-open="cap-instructor"><span>01</span><h3>Instructor Assistant</h3><p>Preparación, evidencia y retroalimentación estructurada.</p><b>Explorar →</b></button>
+        <a class="homeCapabilityCard" href="instructor-assistant.html"><span>01</span><h3>Instructor Assistant</h3><p>Observación, evidencia y retroalimentación estructurada.</p><b>Conocer solución →</b></a>
         <button type="button" class="homeCapabilityCard" data-cap-open="cap-records"><span>02</span><h3>Evaluación & Evidencia</h3><p>Resultados, historial y trazabilidad del proceso formativo.</p><b>Explorar →</b></button>
-        <button type="button" class="homeCapabilityCard" data-cap-open="cap-analytics"><span>03</span><h3>Analítica</h3><p>Indicadores por piloto, competencia, misión y grupo.</p><b>Explorar →</b></button>
-        <button type="button" class="homeCapabilityCard" data-cap-open="cap-training"><span>04</span><h3>Training Design</h3><p>Rutas, módulos y contenidos adaptados a cada programa.</p><b>Explorar →</b></button>
-        <button type="button" class="homeCapabilityCard" data-cap-open="cap-voa"><span>05</span><h3>VOA & Automatización</h3><p>Confirmaciones, recordatorios y seguimiento operativo.</p><b>Explorar →</b></button>
-        <button type="button" class="homeCapabilityCard" data-cap-open="cap-custom"><span>06</span><h3>Personalización</h3><p>Flujos, marca, reportes y módulos por organización.</p><b>Explorar →</b></button>
+        <a class="homeCapabilityCard" href="analytics.html"><span>03</span><h3>Analytics</h3><p>Indicadores por piloto, competencia, misión y grupo.</p><b>Conocer solución →</b></a>
+        <a class="homeCapabilityCard" href="training-center.html"><span>04</span><h3>Training Center</h3><p>Rutas, práctica y contenidos antes del simulador y el vuelo.</p><b>Conocer solución →</b></a>
+        <a class="homeCapabilityCard" href="voa.html"><span>05</span><h3>VOA</h3><p>Coordinación de sesiones, confirmaciones y mission briefs.</p><b>Conocer solución →</b></a>
       </div>
 
       <div class="homeCapabilityExplorer" aria-label="Explorador de módulos Veyra">
@@ -1620,8 +1619,8 @@ main{max-width:1180px;}
           <div class="homeCapabilityGroup">Estándar</div>
           <button type="button" class="active" role="tab" aria-selected="true" data-cap-target="cap-instructor">Instructor Assistant</button>
           <button type="button" role="tab" aria-selected="false" data-cap-target="cap-records">Evaluación & Evidencia</button>
-          <button type="button" role="tab" aria-selected="false" data-cap-target="cap-analytics">Analítica</button>
-          <button type="button" role="tab" aria-selected="false" data-cap-target="cap-training">Training Design</button>
+          <button type="button" role="tab" aria-selected="false" data-cap-target="cap-analytics">Analytics</button>
+          <button type="button" role="tab" aria-selected="false" data-cap-target="cap-training">Training Center</button>
           <div class="homeCapabilityGroup smart">Smart</div>
           <button type="button" role="tab" aria-selected="false" data-cap-target="cap-voa">VOA & Automatización</button>
           <button type="button" role="tab" aria-selected="false" data-cap-target="cap-custom">Personalización</button>
