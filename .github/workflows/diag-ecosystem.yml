@@ -1,0 +1,31 @@
+name: Diagnose ecosystem markup
+
+on:
+  push:
+    branches: [fix/ecosystem-svg-local-logos]
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 1
+      - name: Print relevant source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('index.html').read_text(encoding='utf-8')
+          for term in ['Todo tu entrenamiento en perfecta sincronía','cdn.simpleicons.org','Ecosistema tecnológico']:
+              print('\n===== '+term+' =====')
+              p=text.find(term)
+              if p<0:
+                  print('NOT FOUND')
+                  continue
+              print(text[max(0,p-3500):min(len(text),p+6500)])
+          PY
