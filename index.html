@@ -1291,6 +1291,15 @@ main{max-width:1180px;}
 .demoScreen{background:#f7f7f5!important;margin:-36px -22px -64px!important;padding:62px max(28px,calc((100vw - 1160px)/2)) 84px!important}.demoRequestWrap{display:grid;grid-template-columns:.92fr 1.08fr;gap:54px;align-items:start}.demoRequestIntro{position:sticky;top:145px;padding-top:24px}.demoRequestIntro h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(45px,5.2vw,72px);font-weight:400;line-height:.98;letter-spacing:-.05em;margin:10px 0 24px;color:#102033}.demoRequestIntro>p{font-size:17px;line-height:1.68;color:#606c7b;max-width:520px}.demoRequestPoints{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:30px}.demoRequestPoints span{border-top:1px solid #d7d1c4;padding:12px 0;color:#263447;font-size:13px;font-weight:800}.demoMotif{margin-top:42px;display:flex;gap:0;align-items:center}.demoMotif i{display:block;width:56px;height:56px;border-radius:50%;margin-left:-12px;background:#c8a45d;opacity:.22}.demoMotif i:nth-child(2){opacity:.4}.demoMotif i:nth-child(3){opacity:.62}.demoMotif i:nth-child(4){opacity:.9}.demoRequestForm{background:#fff;border:1px solid #ded9cf;padding:34px;box-shadow:0 22px 54px rgba(20,31,45,.07)}.demoFormHeader h2{font-family:Georgia,'Times New Roman',serif;font-size:35px;font-weight:400;color:#102033;margin:0 0 7px}.demoFormHeader p{margin:0 0 26px;color:#6a7483}.demoFormGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.demoFormGrid label{font-size:13px;color:#263447}.demoFormGrid .wide{grid-column:1/-1}.demoFormGrid input,.demoFormGrid select,.demoFormGrid textarea{border-radius:0;margin-top:8px;padding:14px 13px;border:1px solid #d8d7d2;background:#fff;font-size:15px;font-family:inherit}.demoFormGrid textarea{width:100%;min-height:145px;resize:vertical}.demoHoneypot{position:absolute!important;left:-9999px!important}.demoConsent{display:flex!important;gap:10px;align-items:flex-start;margin-top:20px;font-size:13px!important;font-weight:600!important;line-height:1.45;color:#5e6876!important}.demoConsent input{width:auto!important;margin:2px 0 0!important}.demoSubmit{width:100%;margin-top:20px;border-radius:0;background:linear-gradient(135deg,#cda75c,#e3bd6b);color:#111827;padding:16px 18px;text-transform:uppercase;letter-spacing:.08em;font-size:12px}.demoFormStatus{margin-top:14px;min-height:22px;font-size:14px;font-weight:700}.demoFormStatus.ok{color:#047857}.demoFormStatus.err{color:#b42318}
 @media(max-width:900px){.demoRequestWrap{grid-template-columns:1fr}.demoRequestIntro{position:static;padding-top:0}.demoFormGrid{grid-template-columns:1fr}.demoFormGrid .wide{grid-column:auto}.homeFaqContact{flex-direction:column;align-items:flex-start}.techLogo{min-width:160px!important}.homeFaq{padding-left:22px;padding-right:22px}}
 
+
+/* Veyra ecosystem visual fix — unified SVG + local technology assets */
+.homeNetworkMapV2{position:relative!important;min-height:560px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;padding:0!important}
+.homeNetworkSvgV2{width:100%!important;height:auto!important;max-height:650px!important;display:block!important;overflow:visible!important}
+.homeTechLogoTrack .techLogo img{width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;display:block!important;margin:0 auto 14px!important}
+.homeTechLogoTrack .techLogo{min-width:210px!important}
+@media(max-width:900px){.homeNetworkMapV2{min-height:430px!important;overflow:hidden!important}.homeNetworkSvgV2{min-width:720px!important;transform:translateX(-2%) scale(.9);transform-origin:center center}.homeTechLogoTrack .techLogo{min-width:180px!important}}
+@media(max-width:560px){.homeNetworkMapV2{min-height:390px!important}.homeNetworkSvgV2{min-width:660px!important;transform:translateX(-6%) scale(.82)}}
+
 </style>
 
 <style>
@@ -1543,38 +1552,44 @@ main{max-width:1180px;}
         <p>Veyra integra herramientas, personas y datos para crear un flujo de información continuo, seguro y comprensible en un solo ecosistema.</p>
         <button class="homeOutlineCta" type="button" onclick="showScreen('contact')">Ver integraciones <span>→</span></button>
       </div>
-      <div class="homeNetworkMap" aria-label="Red de módulos e integraciones de Veyra">
-        <svg class="homeNetworkLines" viewBox="0 0 1000 640" role="img" aria-label="Conexiones entre Veyra y sus módulos">
+      <div class="homeNetworkMap homeNetworkMapV2" aria-label="Red de módulos e integraciones de Veyra">
+        <svg class="homeNetworkSvgV2" viewBox="0 0 1000 680" role="img" aria-labelledby="veyraNetworkTitle veyraNetworkDesc">
+          <title id="veyraNetworkTitle">Ecosistema conectado Veyra</title>
+          <desc id="veyraNetworkDesc">Veyra conecta Instructor Assistant, LMS, correo, VOA, Training Center, CBTA y EBT, reportes, analítica, integraciones y la app móvil.</desc>
           <defs>
-            <linearGradient id="networkStroke" x1="0" x2="1"><stop offset="0" stop-color="#6c91b7" stop-opacity=".25"/><stop offset=".5" stop-color="#d7ad59" stop-opacity=".85"/><stop offset="1" stop-color="#6c91b7" stop-opacity=".25"/></linearGradient>
+            <radialGradient id="coreGlow" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#17263a"/><stop offset="1" stop-color="#07111f"/></radialGradient>
+            <linearGradient id="edgeGold" x1="0" x2="1"><stop offset="0" stop-color="#557899" stop-opacity=".42"/><stop offset=".5" stop-color="#d7ad59" stop-opacity=".95"/><stop offset="1" stop-color="#557899" stop-opacity=".42"/></linearGradient>
+            <filter id="networkGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
-          <g fill="none" stroke="url(#networkStroke)" stroke-width="2">
-            <path d="M500 320 C500 220 500 125 500 72"/><path d="M500 320 C360 265 275 190 185 125"/>
-            <path d="M500 320 C650 250 745 170 825 125"/><path d="M500 320 C700 305 820 285 910 260"/>
-            <path d="M500 320 C705 370 805 415 875 500"/><path d="M500 320 C590 450 620 510 640 575"/>
-            <path d="M500 320 C420 455 390 525 360 580"/><path d="M500 320 C305 415 230 465 155 520"/>
-            <path d="M500 320 C295 315 195 300 95 280"/><path d="M500 320 C355 215 325 155 300 92"/>
-            <path d="M185 125 C330 120 420 150 500 205"/><path d="M825 125 C700 145 620 175 545 230"/>
-            <path d="M95 280 C240 245 330 250 410 285"/><path d="M910 260 C770 250 680 265 590 295"/>
-            <path d="M155 520 C290 485 375 445 430 385"/><path d="M875 500 C735 475 650 425 575 375"/>
+          <g fill="none" stroke="#5d7997" stroke-opacity=".23" stroke-width="1.5" vector-effect="non-scaling-stroke">
+            <path d="M250 122 Q365 75 500 72"/><path d="M500 72 Q650 72 800 122"/><path d="M800 122 Q900 170 910 260"/><path d="M910 260 Q925 380 870 470"/>
+            <path d="M870 470 Q790 550 675 570"/><path d="M675 570 Q590 620 500 600"/><path d="M500 600 Q415 620 330 570"/><path d="M330 570 Q215 550 140 475"/>
+            <path d="M140 475 Q70 390 90 280"/><path d="M90 280 Q130 170 250 122"/><path d="M250 122 Q390 210 500 320"/><path d="M800 122 Q650 210 500 320"/>
+            <path d="M90 280 Q300 245 500 320"/><path d="M910 260 Q700 245 500 320"/><path d="M140 475 Q325 425 500 320"/><path d="M870 470 Q680 425 500 320"/>
           </g>
-          <g fill="#d7ad59" opacity=".85">
-            <circle cx="500" cy="205" r="5"/><circle cx="410" cy="285" r="4"/><circle cx="590" cy="295" r="4"/>
-            <circle cx="430" cy="385" r="4"/><circle cx="575" cy="375" r="4"/><circle cx="360" cy="205" r="3"/>
-            <circle cx="650" cy="205" r="3"/><circle cx="270" cy="420" r="3"/><circle cx="735" cy="430" r="3"/>
+          <g fill="none" stroke="url(#edgeGold)" stroke-width="2.2" vector-effect="non-scaling-stroke">
+            <path d="M500 320 L500 72"/><path d="M500 320 L250 122"/><path d="M500 320 L800 122"/><path d="M500 320 L910 260"/><path d="M500 320 L870 470"/>
+            <path d="M500 320 L675 570"/><path d="M500 320 L500 600"/><path d="M500 320 L330 570"/><path d="M500 320 L140 475"/><path d="M500 320 L90 280"/>
           </g>
+          <g fill="#d7ad59" opacity=".92"><circle cx="375" cy="196" r="4"/><circle cx="650" cy="197" r="4"/><circle cx="710" cy="290" r="4"/><circle cx="700" cy="395" r="4"/><circle cx="590" cy="475" r="4"/><circle cx="410" cy="480" r="4"/><circle cx="310" cy="402" r="4"/><circle cx="285" cy="290" r="4"/></g>
+          <circle cx="500" cy="320" r="118" fill="#d7ad59" opacity=".08" filter="url(#networkGlow)"/>
+          <circle cx="500" cy="320" r="102" fill="url(#coreGlow)" stroke="#d7ad59" stroke-width="2.2"/>
+          <text x="500" y="314" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="48">Veyra</text>
+          <text x="500" y="344" text-anchor="middle" fill="#d7ad59" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="4">PILOT INTELLIGENCE</text>
+          <g font-family="Arial,sans-serif" text-anchor="middle">
+            <g transform="translate(500 72)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="18" font-weight="700">LMS</text><text y="65" fill="#cbd5e1" font-size="14">Learning</text></g>
+            <g transform="translate(250 122)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">INS</text><text y="65" fill="#cbd5e1" font-size="14">Instructor Assistant</text></g>
+            <g transform="translate(800 122)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="21" font-weight="700">@</text><text y="65" fill="#cbd5e1" font-size="14">E-mail</text></g>
+            <g transform="translate(910 260)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">VOA</text><text y="65" fill="#cbd5e1" font-size="14">Data &amp; Insights</text></g>
+            <g transform="translate(870 470)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">TC</text><text y="65" fill="#cbd5e1" font-size="14">Training Center</text></g>
+            <g transform="translate(675 570)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">CBT</text><text y="65" fill="#cbd5e1" font-size="14">CBTA / EBT</text></g>
+            <g transform="translate(500 600)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">REP</text><text y="65" fill="#cbd5e1" font-size="14">Reportes</text></g>
+            <g transform="translate(330 570)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">ANA</text><text y="65" fill="#cbd5e1" font-size="14">Analytics</text></g>
+            <g transform="translate(140 475)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">API</text><text y="65" fill="#cbd5e1" font-size="14">Integraciones</text></g>
+            <g transform="translate(90 280)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">APP</text><text y="65" fill="#cbd5e1" font-size="14">App móvil</text></g>
+          </g>
+          <path d="M45 662 C265 590 735 590 955 662" fill="none" stroke="#49647d" stroke-opacity=".28" stroke-width="1.4"/>
         </svg>
-        <div class="homeNetworkCore"><strong>Veyra</strong><small>Pilot Intelligence</small></div>
-        <div class="homeNetworkNode n-lms"><b>LMS</b><span>Learning</span></div>
-        <div class="homeNetworkNode n-instructor"><b>INS</b><span>Instructor Assistant</span></div>
-        <div class="homeNetworkNode n-email"><b>@</b><span>E-mail</span></div>
-        <div class="homeNetworkNode n-voa"><b>VOA</b><span>Data & Insights</span></div>
-        <div class="homeNetworkNode n-training"><b>TC</b><span>Training Center</span></div>
-        <div class="homeNetworkNode n-cbta"><b>CBT</b><span>CBTA / EBT</span></div>
-        <div class="homeNetworkNode n-reports"><b>REP</b><span>Reportes</span></div>
-        <div class="homeNetworkNode n-analytics"><b>ANA</b><span>Analytics</span></div>
-        <div class="homeNetworkNode n-api"><b>API</b><span>Integraciones</span></div>
-        <div class="homeNetworkNode n-app"><b>APP</b><span>App móvil</span></div>
       </div>
     </section>
 
@@ -1748,24 +1763,24 @@ main{max-width:1180px;}
       </div>
       <div class="homeTechViewport" aria-label="Tecnologías e integraciones">
         <div class="homeTechTrack homeTechLogoTrack">
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/github/0F172A" alt="GitHub"><small>GitHub</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/supabase/3ECF8E" alt="Supabase"><small>Supabase</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp Business"><small>WhatsApp Business</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/meta/0866FF" alt="Meta"><small>Meta</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/openai/0F172A" alt="OpenAI"><small>OpenAI</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/anthropic/191919" alt="Claude by Anthropic"><small>Claude</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/googledrive/4285F4" alt="Google Drive"><small>Google Drive</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Gmail"><small>Gmail</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/microsoftoutlook/0078D4" alt="Microsoft Outlook"><small>Outlook</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/googlecalendar/4285F4" alt="Google Calendar"><small>Google Calendar</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/apple/111827" alt="Apple iOS"><small>Apple iOS</small></span>
-          <span class="techLogo"><img src="https://cdn.simpleicons.org/resend/111827" alt="Resend"><small>Resend</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/github/0F172A" alt=""><small>GitHub</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/supabase/3ECF8E" alt=""><small>Supabase</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt=""><small>WhatsApp Business</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/meta/0866FF" alt=""><small>Meta</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/openai/0F172A" alt=""><small>OpenAI</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="https://cdn.simpleicons.org/anthropic/191919" alt=""><small>Claude</small></span>
+          <span class="techLogo"><img src="assets/tech/github.svg" alt="GitHub"><small>GitHub</small></span>
+          <span class="techLogo"><img src="assets/tech/supabase.svg" alt="Supabase"><small>Supabase</small></span>
+          <span class="techLogo"><img src="assets/tech/whatsapp.svg" alt="WhatsApp Business"><small>WhatsApp Business</small></span>
+          <span class="techLogo"><img src="assets/tech/meta.svg" alt="Meta"><small>Meta</small></span>
+          <span class="techLogo"><img src="assets/tech/openai.svg" alt="OpenAI"><small>OpenAI</small></span>
+          <span class="techLogo"><img src="assets/tech/anthropic.svg" alt="Claude by Anthropic"><small>Claude</small></span>
+          <span class="techLogo"><img src="assets/tech/googledrive.svg" alt="Google Drive"><small>Google Drive</small></span>
+          <span class="techLogo"><img src="assets/tech/gmail.svg" alt="Gmail"><small>Gmail</small></span>
+          <span class="techLogo"><img src="assets/tech/outlook.svg" alt="Microsoft Outlook"><small>Outlook</small></span>
+          <span class="techLogo"><img src="assets/tech/googlecalendar.svg" alt="Google Calendar"><small>Google Calendar</small></span>
+          <span class="techLogo"><img src="assets/tech/apple.svg" alt="Apple iOS"><small>Apple iOS</small></span>
+          <span class="techLogo"><img src="assets/tech/resend.svg" alt="Resend"><small>Resend</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/github.svg" alt=""><small>GitHub</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/supabase.svg" alt=""><small>Supabase</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/whatsapp.svg" alt=""><small>WhatsApp Business</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/meta.svg" alt=""><small>Meta</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/openai.svg" alt=""><small>OpenAI</small></span>
+          <span class="techLogo" aria-hidden="true"><img src="assets/tech/anthropic.svg" alt=""><small>Claude</small></span>
         </div>
       </div>
     </section>
