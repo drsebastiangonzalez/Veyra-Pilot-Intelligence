@@ -1,14 +1,14 @@
-name: Apply secure training patch
+name: Inspect secure training migration
 
 on:
   push:
     branches: [security/secure-training-bank-v1]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  patch:
+  inspect:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -18,20 +18,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-      - name: Patch practice pages and inspect index
-        run: python scripts/secure-training-patch.py
+      - name: Inspect embedded Pre-Solo bank
+        run: python scripts/inspect-presolo-bank.py
       - name: Syntax check secure adapter
         run: node --check assets/js/secure-training-practice.js
-      - name: Commit patched practice pages
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ppa-practice.html pca-practice.html
-          if git diff --cached --quiet; then
-            echo "No patch changes to commit."
-            exit 0
-          fi
-          git commit -m "Security: route PPA and PCA grading through Edge Function"
-          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF_NAME}
