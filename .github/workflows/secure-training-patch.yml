@@ -1,4 +1,4 @@
-name: Export secure training migration
+name: Finalize secure training migration
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  export:
+  finalize:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -18,20 +18,24 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-      - name: Export embedded Pre-Solo bank
-        run: python scripts/export-presolo-bank.py
-      - name: Syntax check secure adapter
-        run: node --check assets/js/secure-training-practice.js
-      - name: Commit temporary bank chunks
+      - name: Apply final secure training patch
+        run: python scripts/finalize-secure-training.py
+      - name: Syntax check adapters
+        run: |
+          node --check assets/js/secure-training-practice.js
+          node --check assets/js/secure-presolo-exam.js
+      - name: Verify sensitive banks removed from index
+        run: |
+          ! grep -q 'PPA-AER-001' index.html
+          ! grep -q 'VEYRA2026' index.html
+          grep -q '<script id="question-data" type="application/json">\[\]</script>' index.html
+      - name: Commit final files and remove temporary migration artifacts
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tmp-presolo-bank
-          if git diff --cached --quiet; then
-            echo "No export changes to commit."
-            exit 0
-          fi
-          git commit -m "Temporary: export Pre-Solo bank for secure migration"
+          git add index.html ppa-supabase-test.html assets/js/secure-training-practice.js assets/js/secure-presolo-exam.js ppa-practice.html pca-practice.html
+          git rm -rf tmp-presolo-bank scripts/secure-training-patch.py scripts/inspect-presolo-bank.py scripts/export-presolo-bank.py scripts/finalize-secure-training.py .github/workflows/secure-training-patch.yml
+          git commit -m "Security: move assessment grading and question banks server-side"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF_NAME}
