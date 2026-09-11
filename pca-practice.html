@@ -141,7 +141,6 @@
 
 <script>
 const SUPABASE_URL = "https://japjyiccjwnhbfpwqtti.supabase.co";
-const SUPABASE_KEY = "sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
 const TIMER_SECONDS = 45 * 60;
 const QUESTIONS_PER_ATTEMPT = 50;
 
@@ -153,37 +152,7 @@ let endTimeMs = null;
 let startTimeMs = null;
 let timerInterval = null;
 
-async function fetchQuestions(){
-  const url = SUPABASE_URL + "/rest/v1/training_questions?license=eq.PCA&active=eq.true&select=question_code,license,category,question,option_a,option_b,option_c,option_d,option_e,correct_answer,explanation&order=question_code.asc";
-  const res = await fetch(url, {
-    headers: {
-      "apikey": SUPABASE_KEY,
-      "Authorization": "Bearer " + SUPABASE_KEY,
-      "Accept": "application/json"
-    }
-  });
-  if(!res.ok){
-    const text = await res.text();
-    throw new Error("HTTP " + res.status + " · " + text);
-  }
-  const rows = await res.json();
-  return rows.map(r => {
-    const options = [];
-    if(r.option_a) options.push({key:"A", text:r.option_a});
-    if(r.option_b) options.push({key:"B", text:r.option_b});
-    if(r.option_c) options.push({key:"C", text:r.option_c});
-    if(r.option_d) options.push({key:"D", text:r.option_d});
-    if(r.option_e) options.push({key:"E", text:r.option_e});
-    return {
-      id:r.question_code,
-      category:r.category || "Sin categoría",
-      question:r.question,
-      options,
-      correct:r.correct_answer,
-      explanation:r.explanation || ""
-    };
-  });
-}
+async function fetchQuestions(){ return []; }
 
 function shuffle(arr){
   const copy = [...arr];
@@ -581,8 +550,9 @@ window.addEventListener("focus", () => { if(endTimeMs) updateTimer(); });
 window.addEventListener("pageshow", () => { if(endTimeMs) updateTimer(); });
 document.addEventListener("touchstart", () => { if(endTimeMs) updateTimer(); }, {passive:true});
 
-init();
 </script>
+<script src="assets/js/secure-training-practice.js?v=1"></script>
+<script>VeyraSecurePractice.install({license:'PCA',timerKey:'veyra_pca_practice_timer'});</script>
 </body>
 
 <!-- Veyra pca-practice v1.1 robust question shuffle -->
