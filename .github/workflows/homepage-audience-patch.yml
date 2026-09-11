@@ -19,7 +19,15 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
       - name: Patch homepage
-        run: python scripts/patch-homepage-audience.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/patch-homepage-audience.py')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("if 'homeAudiencePaths' not in s:", "if 'class=\"homeAudiencePaths\"' not in s:")
+          p.write_text(s,encoding='utf-8')
+          PY
+          python scripts/patch-homepage-audience.py
       - name: Validate audience architecture
         run: |
           test -f evaluacion-evidencia.html
