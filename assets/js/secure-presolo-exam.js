@@ -42,15 +42,17 @@
       answers[String(q.id)]=el?el.value:'';
     });
     try{
-      const data=await call({
-        action:'submit',session_id:sessionId,answers,
-        student_name:currentMeta.name,course:currentMeta.course,instructor:currentMeta.instructor
+      const data=await call({action:'submit',session_id:sessionId,answers,student_name:currentMeta.name,course:currentMeta.course,instructor:currentMeta.instructor});
+      const returned=Array.isArray(data.details)?data.details:[];
+      const details=returned.map(d=>{
+        const shown=currentQuestions.find(q=>String(q.id)===String(d.questionId));
+        return {...d,options:shown?.options||[]};
       });
       const attempt={
         ...currentMeta,
         score:Number(data.score||0),correct:Number(data.correct||0),total:Number(data.total||0),
         timeSeconds:Number(data.time_used_seconds||0),criticalOk:Boolean(data.critical_ok),pass:Boolean(data.pass),
-        details:Array.isArray(data.details)?data.details:[],weak_topics:data.weak_topics||{},failed_questions:data.failed_questions||[]
+        details,weak_topics:data.weak_topics||{},failed_questions:data.failed_questions||[]
       };
       renderResult(attempt);
       showScreen('result');
