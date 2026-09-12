@@ -27,11 +27,16 @@ const anatomy={
  cargo:['Bodegas forward y aft','Compartimentos de carga delantero y trasero bajo el piso de cabina.'],
  tail:['Empenaje','Estabilizadores vertical y horizontal para estabilidad y control.']
 };
-const familyImages={A318:'assets/a318-user.jpg',A319:'assets/a319-user.jpg',A320:'assets/a320-user.jpg',A321:'assets/a321-user.jpg'};
+const familyImages={
+ A318:'../../a318-family.jpg?v=1',
+ A319:'../../a319-family.jpg?v=1',
+ A320:'../../a320-family.jpg?v=1',
+ A321:'../../a321-family.jpg?v=1'
+};
 function addStyle(doc){
  if(doc.getElementById('veyraRealAircraftStyle'))return;
  const s=doc.createElement('style');s.id='veyraRealAircraftStyle';
- s.textContent='.airbus,.heroLogo,.airbusMark,.heroAirbusMark{display:none!important}.aircraftSilhouette.realAircraft{position:relative;display:block!important;height:auto!important;min-height:0!important;aspect-ratio:16/9;background:#020305!important;overflow:hidden;border:1px solid rgba(215,177,90,.34)}.realAircraft>img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto}.realHot{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:999px;border:2px solid #e4bd63;background:rgba(7,17,31,.88);color:#f5d88c;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 7px 20px rgba(0,0,0,.45)}.realHot:hover,.realHot.active{background:#e4bd63;color:#07111f}.familyPlane.realFamilyPlane{width:100%!important;height:240px!important;background:none!important;position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important}.realFamilyPlane:before,.realFamilyPlane:after{display:none!important}.realFamilyPlane img{max-width:96%;max-height:220px;width:auto;height:auto;object-fit:contain;display:block}.anatomyInfo.realInfo p{margin:6px 0 0;color:#aeb8c7}@media(max-width:700px){.realHot{width:30px;height:30px;font-size:9px}.familyPlane.realFamilyPlane{height:170px!important}.realFamilyPlane img{max-height:155px}}';
+ s.textContent='.airbus,.heroLogo,.airbusMark,.heroAirbusMark{display:none!important}.aircraftSilhouette.realAircraft{position:relative;display:block!important;height:auto!important;min-height:0!important;aspect-ratio:16/9;background:#020305!important;overflow:hidden;border:1px solid rgba(215,177,90,.34)}.realAircraft>img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto}.realHot{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:999px;border:2px solid #e4bd63;background:rgba(7,17,31,.88);color:#f5d88c;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 7px 20px rgba(0,0,0,.45)}.realHot:hover,.realHot.active{background:#e4bd63;color:#07111f}.familyPlane.realFamilyPlane{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:12/5;background:#020305!important;position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important}.realFamilyPlane:before,.realFamilyPlane:after{display:none!important}.realFamilyPlane img{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;image-rendering:auto!important}.anatomyInfo.realInfo p{margin:6px 0 0;color:#aeb8c7}@media(max-width:700px){.realHot{width:30px;height:30px;font-size:9px}}';
  doc.head.appendChild(s);
 }
 function showInfo(doc,key){
@@ -55,8 +60,8 @@ function decorate(){
  const familyPlane=doc.getElementById('familyPlane')||doc.querySelector('.familyPlane');
  if(familyPlane&&familyPlane.dataset.real!=='1'){
   familyPlane.dataset.real='1';familyPlane.classList.add('realFamilyPlane');familyPlane.replaceChildren();
-  const img=doc.createElement('img');img.id='familyUserImage';img.src=familyImages.A320;img.alt='Vista lateral A320';familyPlane.appendChild(img);
-  doc.querySelectorAll('[data-family]').forEach(btn=>btn.addEventListener('click',()=>{const fam=btn.dataset.family;if(!familyImages[fam])return;img.src=familyImages[fam];img.alt='Vista lateral '+fam}));
+  const img=doc.createElement('img');img.id='familyUserImage';img.src=familyImages.A320;img.alt='Vista lateral A320';img.loading='eager';img.decoding='async';familyPlane.appendChild(img);
+  doc.querySelectorAll('[data-family]').forEach(btn=>btn.addEventListener('click',()=>{const fam=String(btn.dataset.family||'').toUpperCase();if(!familyImages[fam])return;img.src=familyImages[fam];img.alt='Vista lateral '+fam;}));
  }
 }
 stage.addEventListener('load',()=>{setTimeout(decorate,80);setTimeout(decorate,350)});
