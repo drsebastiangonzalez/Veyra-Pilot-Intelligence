@@ -24,10 +24,6 @@ function applyHighRes(){
     st.textContent='.realAircraft>img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;image-rendering:auto!important}.realFamilyPlane img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;image-rendering:auto!important}';
     d.head.appendChild(st);
   }
-  const config=d.querySelector('.realAircraft>img');
-  if(config && config.dataset.highres!=='1'){
-    config.src=uris.A320;config.dataset.highres='1';config.alt='Vista lateral A320 en alta resolución para identificar la configuración básica';
-  }
   const family=d.getElementById('familyUserImage');
   if(family){
     if(family.dataset.highres!=='1'){
@@ -43,7 +39,7 @@ function applyHighRes(){
       });
     });
   }
-  return Boolean(config&&family);
+  return Boolean(family);
 }
 function retry(){let n=0;const t=setInterval(()=>{n++;if(applyHighRes()||n>20)clearInterval(t)},150)}
 stage?.addEventListener('load',()=>{ready.then(()=>retry()).catch(err=>console.error('Veyra A320 media load',err))});
