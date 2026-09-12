@@ -2,16 +2,23 @@
   'use strict';
   if (document.getElementById('veyra-operation-frame')) return;
 
-  // Keep the commercial close intact: Veyra en operación first,
-  // then the final "Solicitar demo" CTA, and FAQ as the last section.
-  const anchor = document.querySelector('.homeFinalCta') || document.querySelector('.homeEditorialBand') || document.querySelector('.homeClosing');
+  // Final public-home sequence must be:
+  // Veyra en operación → Solicitar demo → Preguntas frecuentes.
+  const finalCta = document.querySelector('.homeFinalCta');
+  const faq = document.querySelector('#homeFaq');
+  if (finalCta && faq && finalCta.parentNode === faq.parentNode) {
+    const parent = faq.parentNode;
+    if (finalCta.nextElementSibling !== faq) parent.insertBefore(finalCta, faq);
+  }
+
+  const anchor = finalCta || document.querySelector('.homeEditorialBand') || document.querySelector('.homeClosing');
   const story = document.querySelector('.veyraHomeStory');
   if (!anchor && !story) return;
 
   const frame = document.createElement('iframe');
   frame.id = 'veyra-operation-frame';
   frame.title = 'Veyra en operación';
-  frame.src = 'assets/veyra-en-operacion.html?v=4';
+  frame.src = 'assets/veyra-en-operacion.html?v=5';
   frame.loading = 'lazy';
   frame.setAttribute('scrolling', 'no');
   frame.style.display = 'block';
