@@ -35,7 +35,7 @@ frame.addEventListener('load',()=>{
   const apuMap=location?.querySelector('.apuMap');
   if(apuMap){
     apuMap.className='veyraLocationStack';
-    apuMap.innerHTML=`<div class="veyraPhotoFrame"><img src="assets/apu-location-tailcone.jpg?v=1" alt="Ubicación del APU del A320 en el tail cone"><div class="veyraPhotoCaption">Referencia visual de ubicación: el APU se aloja en el cono de cola, detrás del rear pressure bulkhead y fuera del volumen presurizado.</div></div><div class="veyraLocationNotes"><div class="box"><h3>Zona no presurizada</h3><p>El compartimento del APU queda fuera del volumen presurizado.</p></div><div class="box"><h3>Air intake flap</h3><p>MASTER ON no significa arranque instantáneo: primero se prepara el sistema, incluida la admisión.</p></div></div>`;
+    apuMap.innerHTML=`<div class="veyraPhotoFrame"><img src="assets/apu-location-tailcone.jpg?v=2" alt="Ubicación del APU del A320 en el tail cone"><div class="veyraPhotoCaption">Referencia visual de ubicación: el APU se aloja en el cono de cola, detrás del rear pressure bulkhead y fuera del volumen presurizado.</div></div><div class="veyraLocationNotes"><div class="box"><h3>Zona no presurizada</h3><p>El compartimento del APU queda fuera del volumen presurizado.</p></div><div class="box"><h3>Air intake flap</h3><p>MASTER ON no significa arranque instantáneo: primero se prepara el sistema, incluida la admisión.</p></div></div>`;
   }
   const overhead=sectionByEyebrow('08 · OVERHEAD & ECAM');
   const panelGrid=overhead?.querySelector('.twoCol')||overhead?.querySelector('.panelGrid');
@@ -43,7 +43,7 @@ frame.addEventListener('load',()=>{
     const photo=d.createElement('div');
     photo.className='veyraPhotoFrame veyraOverheadPhoto';
     photo.style.marginBottom='18px';
-    photo.innerHTML=`<img src="assets/apu-overhead-ecam.jpg?v=1" alt="Overhead del A320 con referencia al APU GEN"><div class="veyraPhotoCaption">Referencia visual del overhead: APU GEN forma parte de la interfaz eléctrica asociada al APU. MASTER SW y START se encuentran en el panel APU; la supervisión se completa en ECAM/SD.</div>`;
+    photo.innerHTML=`<img src="assets/apu-overhead-ecam.jpg?v=2" alt="Overhead del A320 con referencia al APU GEN"><div class="veyraPhotoCaption">Referencia visual del overhead: APU GEN forma parte de la interfaz eléctrica asociada al APU. MASTER SW y START se encuentran en el panel APU; la supervisión se completa en ECAM/SD.</div>`;
     panelGrid.parentNode.insertBefore(photo,panelGrid);
   }
   d.querySelectorAll('a[href]').forEach(a=>a.target='_top');
