@@ -1,14 +1,17 @@
 (() => {
   'use strict';
   if (document.getElementById('veyra-operation-frame')) return;
-  const anchor = document.querySelector('.homeEditorialBand') || document.querySelector('.homeClosing');
+
+  // Keep the commercial close intact: Veyra en operación first,
+  // then the final "Solicitar demo" CTA, and FAQ as the last section.
+  const anchor = document.querySelector('.homeFinalCta') || document.querySelector('.homeEditorialBand') || document.querySelector('.homeClosing');
   const story = document.querySelector('.veyraHomeStory');
   if (!anchor && !story) return;
 
   const frame = document.createElement('iframe');
   frame.id = 'veyra-operation-frame';
   frame.title = 'Veyra en operación';
-  frame.src = 'assets/veyra-en-operacion.html?v=1';
+  frame.src = 'assets/veyra-en-operacion.html?v=4';
   frame.loading = 'lazy';
   frame.setAttribute('scrolling', 'no');
   frame.style.display = 'block';
