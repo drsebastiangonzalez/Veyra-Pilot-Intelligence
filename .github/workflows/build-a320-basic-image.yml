@@ -9,11 +9,16 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git clone --branch "$GITHUB_REF_NAME" --single-branch "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repo
       - name: Rebuild binary image
         shell: bash
+        working-directory: repo
         run: |
           set -euo pipefail
           mkdir -p modules/a320-intro/assets
@@ -22,6 +27,7 @@ jobs:
           test "$(git hash-object modules/a320-intro/assets/a320-basic-config.webp)" = "9f000a181673983b4c840f7be356baf8da8fb7ac"
       - name: Commit rebuilt image
         shell: bash
+        working-directory: repo
         run: |
           if git diff --quiet -- modules/a320-intro/assets/a320-basic-config.webp; then
             exit 0
@@ -30,4 +36,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add modules/a320-intro/assets/a320-basic-config.webp
           git commit -m "Add A320 basic configuration image"
-          git push
+          git push origin HEAD:"$GITHUB_REF_NAME"
