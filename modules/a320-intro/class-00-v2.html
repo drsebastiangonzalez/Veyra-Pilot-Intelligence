@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#07111f">
+<title>Veyra | A320 Foundations · Clase 0 v2</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#07111f;overflow:hidden}
+iframe{display:block;width:100%;height:100%;border:0;background:#07111f}
+</style>
+</head>
+<body>
+<iframe id="classFrame" title="A320 Foundations · Clase 0" src="class-00.html?v=4"></iframe>
+<script>
+(()=>{
+'use strict';
+
+const frame=document.getElementById('classFrame');
+const selected={};
+const meta={
+'En el A320, el sidestick representa principalmente:':{correct:'Una intención procesada por computadores',anchor:'flybywire'},
+'¿Qué hace posible que el sistema pueda acotar determinadas respuestas?':{correct:'La arquitectura fly-by-wire',anchor:'protections'},
+'Un overhead prácticamente oscuro normalmente indica:':{correct:'Configuración normal',anchor:'darkcockpit'},
+'Un pulsador muestra OFF en blanco. ¿Qué significa?':{correct:'Función desactivada por la tripulación',anchor:'pushbutton'},
+'¿Qué regla se relaciona directamente con comprender los modos de automatización?':{correct:'Understand the FMA at all times',anchor:'goldenrules'},
+'¿Dónde buscarías principalmente un selector de un sistema?':{correct:'Overhead panel',anchor:'cockpit'},
+'¿Dónde se encuentra el FCU?':{correct:'Glareshield',anchor:'cockpit'},
+'¿Cuál es la diferencia principal entre rojo y ámbar?':{correct:'Rojo suele implicar mayor urgencia; ámbar conciencia y atención',anchor:'colors'},
+'¿Qué combinación corresponde a una alerta de nivel 2?':{correct:'Master Caution + single chime',anchor:'alerts'},
+'¿Cuál es la pantalla inferior del ECAM?':{correct:'SD',anchor:'ecam'},
+'¿Cuál describe mejor la lógica básica ECAM?':{correct:'Detecta, alerta, presenta acciones y actualiza',anchor:'ecam'},
+'La numeración ATA sirve principalmente para:':{correct:'Clasificar y localizar información documental',anchor:'ata'}
+};
+
+function make(doc,tag,className,text){
+ const node=doc.createElement(tag);
+ if(className) node.className=className;
+ if(text!==undefined && text!==null) node.textContent=text;
+ return node;
+}
+
+function stripChoice(text){
+ return String(text||'').replace(/^[A-Z]\s*[·.)-]\s*/,'').trim();
+}
+
+function setIds(doc){
+ [...doc.querySelectorAll('main>section')].forEach(sec=>{
+  const eyebrow=sec.querySelector('.eyebrow');
+  const text=(eyebrow?.textContent||'').toUpperCase();
+  if(text.includes('01 ·')) sec.id='flybywire';
+  if(text.includes('02 ·')) sec.id='protections';
+  if(text.includes('03 ·')) sec.id='darkcockpit';
+  if(text.includes('LEER UN PUSHBUTTON')) sec.id='pushbutton';
+  if(text.includes('04 ·')) sec.id='goldenrules';
+  if(text.includes('05 ·')) sec.id='cockpit';
+  if(text.includes('06 ·')) sec.id='colors';
+  if(text.includes('07 ·')) sec.id='alerts';
+  if(text.includes('08 ·')) sec.id='ecam';
+ });
+}
+
+function addPattern(doc,parent,title,body){
+ const card=make(doc,'div','pattern');
+ card.append(make(doc,'b','',title),make(doc,'p','',body));
+ parent.appendChild(card);
+}
+
+function addAta(doc){
+ if(doc.getElementById('ata')) return;
+ const essential=[...doc.querySelectorAll('main>section')].find(sec=>{
+  const e=sec.querySelector('.eyebrow');
+  return (e?.textContent||'').toUpperCase().includes('LO ESENCIAL');
+ });
+ if(!essential) return;
+
+ const section=make(doc,'section','section');
+ section.id='ata';
+ const wrap=make(doc,'div','wrap');
+ const head=make(doc,'div','head');
+ const left=make(doc,'div');
+ left.append(
+  make(doc,'div','eyebrow','10 · ATA COMO MAPA'),
+  make(doc,'h2','', 'ATA organiza la documentación.')
+ );
+ head.append(
+  left,
+  make(doc,'p','lead','Los números ATA ayudan a clasificar y localizar información de sistemas. No definen el orden obligatorio de enseñanza ni la severidad de una alerta.')
+ );
+ const patterns=make(doc,'div','patterns');
+ addPattern(doc,patterns,'ATA 24','Electrical.');
+ addPattern(doc,patterns,'ATA 29','Hydraulic.');
+ addPattern(doc,patterns,'ATA 34','Navigation.');
+ addPattern(doc,patterns,'Idea clave','ATA es un mapa documental estandarizado.');
+ wrap.append(head,patterns);
+ section.appendChild(wrap);
+ essential.parentNode.insertBefore(section,essential);
+}
+
+function addBrand(doc){
+ if(doc.querySelector('.airbusMark')) return;
+
+ const style=make(doc,'style');
+ style.textContent=`
+ .airbusMark{margin-left:auto;margin-right:4px;background:#f1f2f6;padding:8px 14px;display:flex;align-items:center;justify-content:center;min-width:130px}
+ .airbusMark img{display:block;width:104px;height:auto}
+ .heroAirbusMark{display:none;background:#f1f2f6;padding:7px 12px;width:max-content;margin:0 0 20px}
+ .heroAirbusMark img{display:block;width:90px;height:auto}
+ .reviewCompare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
+ .reviewBox{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);padding:10px}
+ .reviewBox small{display:block;color:#8f9bad;text-transform:uppercase;letter-spacing:.12em;font-size:9px;font-weight:900;margin-bottom:4px}
+ .reviewBox strong{font-size:13px}
+ .why{display:block;margin-top:10px}
+ .reviewAction{margin-top:11px;border:1px solid rgba(215,177,90,.45);background:transparent;color:#f0d38d;padding:9px 12px;font-weight:900;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+ .brandLegal{max-width:1120px;margin:20px auto 0;color:#718094;font-size:10px;line-height:1.5}
+ @media(max-width:620px){
+   .airbusMark{display:none}
+   .heroAirbusMark{display:flex}
+   .reviewCompare{grid-template-columns:1fr}
+ }
+ `;
+ doc.head.appendChild(style);
+
+ const top=doc.querySelector('.topin');
+ const tools=doc.querySelector('.tools');
+ if(top&&tools){
+  const mark=make(doc,'div','airbusMark');
+  const img=make(doc,'img');
+  img.alt='Airbus';
+  img.src='assets/airbus-logo.webp';
+  mark.appendChild(img);
+  top.insertBefore(mark,tools);
+ }
+
+ const hero=doc.querySelector('.heroIn');
+ if(hero){
+  const heroMark=make(doc,'div','heroAirbusMark');
+  const img=make(doc,'img');
+  img.alt='Airbus';
+  img.src='assets/airbus-logo.webp';
+  heroMark.appendChild(img);
+  hero.insertBefore(heroMark,hero.firstChild);
+ }
+
+ const last=[...doc.querySelectorAll('main>section')].at(-1);
+ const target=last?.querySelector('.wrap');
+ if(target){
+  target.appendChild(make(
+   doc,
+   'p',
+   'brandLegal',
+   'Material desarrollado en Veyra Pilot Intelligence. Airbus y su logotipo se utilizan con autorización. El FCOM/FCTM y la documentación aprobada del operador prevalecen.'
+  ));
+ }
+}
+
+function reviewBox(doc,label,value){
+ const box=make(doc,'div','reviewBox');
+ box.append(
+  make(doc,'small','',label),
+  make(doc,'strong','',value)
+ );
+ return box;
+}
+
+function enhance(doc){
+ const review=doc.querySelector('#result .review');
+ if(!review) return;
+
+ [...review.children].forEach(card=>{
+  if(card.dataset.enhanced==='1') return;
+  const heading=card.querySelector('b');
+  if(!heading) return;
+
+  const question=heading.textContent.replace(/^[✓↻]\s*/,'').trim();
+  const data=meta[question];
+  if(!data) return;
+
+  const correct=card.classList.contains('good');
+  const explanation=card.querySelector('span')?.textContent||'';
+  const userAnswer=selected[question]||'Sin respuesta registrada';
+
+  card.dataset.enhanced='1';
+  card.replaceChildren();
+
+  card.appendChild(make(doc,'b','',(correct?'✓ ':'↻ ')+question));
+
+  const compare=make(doc,'div','reviewCompare');
+  compare.append(
+   reviewBox(doc,'Tu respuesta',userAnswer),
+   reviewBox(doc,'Respuesta correcta',data.correct)
+  );
+  card.appendChild(compare);
+
+  card.appendChild(make(doc,'span','why',explanation));
+
+  if(!correct){
+   const button=make(doc,'button','reviewAction','Repasar este concepto →');
+   button.type='button';
+   button.addEventListener('click',()=>{
+    doc.getElementById(data.anchor)?.scrollIntoView({behavior:'smooth',block:'start'});
+   });
+   card.appendChild(button);
+  }
+ });
+}
+
+frame.addEventListener('load',()=>{
+ const doc=frame.contentDocument;
+ if(!doc) return;
+
+ setIds(doc);
+ addAta(doc);
+ addBrand(doc);
+
+ doc.addEventListener('click',event=>{
+  const option=event.target.closest('.qopt');
+  if(!option) return;
+  const question=doc.querySelector('#qtext')?.textContent.trim();
+  if(question) selected[question]=stripChoice(option.textContent);
+ },true);
+
+ const result=doc.querySelector('#result');
+ if(result){
+  const observer=new MutationObserver(()=>setTimeout(()=>enhance(doc),0));
+  observer.observe(result,{childList:true,subtree:true});
+  enhance(doc);
+ }
+});
+})();
+</script>
+</body>
+</html>
