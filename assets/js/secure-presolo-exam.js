@@ -75,4 +75,12 @@
     alert('Este módulo se cargará en una siguiente fase.');
   };
   window.startTrainingPractice=function(){ location.href='ppa-practice.html'; };
+
+  if(!document.querySelector('script[data-veyra-operation]')){
+    const showcase=document.createElement('script');
+    showcase.src='assets/js/veyra-en-operacion.js?v=1';
+    showcase.defer=true;
+    showcase.dataset.veyraOperation='true';
+    document.head.appendChild(showcase);
+  }
 })();
