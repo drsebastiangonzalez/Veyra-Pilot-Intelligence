@@ -78,7 +78,7 @@
 
   if(!document.querySelector('script[data-veyra-operation]')){
     const showcase=document.createElement('script');
-    showcase.src='assets/js/veyra-en-operacion.js?v=1';
+    showcase.src='assets/js/veyra-en-operacion.js?v=2';
     showcase.defer=true;
     showcase.dataset.veyraOperation='true';
     document.head.appendChild(showcase);
