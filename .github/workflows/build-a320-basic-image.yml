@@ -1,0 +1,33 @@
+name: Build A320 basic image
+on:
+  push:
+    branches:
+      - fix/a320-class1-basic-aircraft
+permissions:
+  contents: write
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild binary image
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p modules/a320-intro/assets
+          cat .tmp-a320/*.b64 | base64 --decode > modules/a320-intro/assets/a320-basic-config.webp
+          test "$(wc -c < modules/a320-intro/assets/a320-basic-config.webp | tr -d ' ')" = "23962"
+          test "$(git hash-object modules/a320-intro/assets/a320-basic-config.webp)" = "9f000a181673983b4c840f7be356baf8da8fb7ac"
+      - name: Commit rebuilt image
+        shell: bash
+        run: |
+          if git diff --quiet -- modules/a320-intro/assets/a320-basic-config.webp; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add modules/a320-intro/assets/a320-basic-config.webp
+          git commit -m "Add A320 basic configuration image"
+          git push
