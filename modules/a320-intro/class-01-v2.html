@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#07111f">
+<title>Veyra | A320 Foundations · Clase 1</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111f}
+iframe{display:block;width:100%;height:100%;border:0;background:#07111f}
+</style>
+</head>
+<body>
+<iframe id="stage" title="A320 Foundations · Clase 1 · Aircraft General" src="class-01.html?v=2"></iframe>
+<script>
+(()=>{
+'use strict';
+const stage=document.getElementById('stage');
+const anatomy={
+ nose:['Nariz / radome','El radome protege el radar meteorológico y no forma parte del volumen presurizado.'],
+ cockpit:['Cabina de vuelo','Zona de trabajo de la tripulación técnica, integrada al volumen presurizado del fuselaje.'],
+ fuselage:['Fuselaje','Aloja cockpit, cabina de pasajeros, bodegas y gran parte de los sistemas.'],
+ engines:['Motores','Dos turbofanes de alto bypass instalados bajo el ala en pilones.'],
+ wing:['Ala baja en flecha','Superficie sustentadora principal; integra dispositivos hipersustentadores y spoilers.'],
+ gear:['Tren triciclo retráctil','Tren de nariz y dos conjuntos principales.'],
+ cargo:['Bodegas forward y aft','Compartimentos de carga delantero y trasero bajo el piso de cabina.'],
+ tail:['Empenaje','Estabilizadores vertical y horizontal para estabilidad y control.']
+};
+const familyImages={A318:'assets/a318-user.jpg',A319:'assets/a319-user.jpg',A320:'assets/a320-user.jpg',A321:'assets/a321-user.jpg'};
+function addStyle(doc){
+ if(doc.getElementById('veyraRealAircraftStyle'))return;
+ const s=doc.createElement('style');s.id='veyraRealAircraftStyle';
+ s.textContent='.heroLogo{display:none!important}.aircraftSilhouette.realAircraft{position:relative;display:block!important;height:auto!important;min-height:0!important;aspect-ratio:3/2;background:#020305!important;overflow:hidden;border:1px solid rgba(215,177,90,.34)}.realAircraft>img{display:block;width:100%;height:100%;object-fit:contain}.realHot{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:999px;border:2px solid #e4bd63;background:rgba(7,17,31,.88);color:#f5d88c;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 7px 20px rgba(0,0,0,.45)}.realHot:hover,.realHot.active{background:#e4bd63;color:#07111f}.familyPlane.realFamilyPlane{width:100%!important;height:240px!important;background:none!important;position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important}.realFamilyPlane:before,.realFamilyPlane:after{display:none!important}.realFamilyPlane img{max-width:96%;max-height:220px;width:auto;height:auto;object-fit:contain;display:block}.anatomyInfo.realInfo p{margin:6px 0 0;color:#aeb8c7}@media(max-width:700px){.realHot{width:30px;height:30px;font-size:9px}.familyPlane.realFamilyPlane{height:170px!important}.realFamilyPlane img{max-height:155px}}';
+ doc.head.appendChild(s);
+}
+function showInfo(doc,key){
+ const box=doc.getElementById('anatomyInfo');if(!box||!anatomy[key])return;
+ box.classList.add('realInfo');box.replaceChildren();
+ const b=doc.createElement('b');b.textContent=anatomy[key][0];
+ const p=doc.createElement('p');p.textContent=anatomy[key][1];
+ box.append(b,p);
+}
+function decorate(){
+ let doc;try{doc=stage.contentDocument}catch(_){return}if(!doc||!doc.body)return;
+ addStyle(doc);doc.querySelectorAll('.heroLogo').forEach(el=>el.remove());
+ const sil=doc.querySelector('.aircraftSilhouette');
+ if(sil&&sil.dataset.real!=='1'){
+  sil.dataset.real='1';sil.classList.add('realAircraft');sil.replaceChildren();
+  const img=doc.createElement('img');img.src='assets/a320-user.jpg';img.alt='Vista lateral del A320 para identificar su configuración básica';img.loading='eager';sil.appendChild(img);
+  const pts=[['nose','1','10%','52%'],['cockpit','2','20%','45%'],['fuselage','3','38%','44%'],['engines','4','45%','66%'],['wing','5','57%','45%'],['gear','6','54%','73%'],['cargo','7','73%','53%'],['tail','8','88%','34%']];
+  pts.forEach(([key,label,left,top])=>{const b=doc.createElement('button');b.type='button';b.className='realHot';b.textContent=label;b.style.left=left;b.style.top=top;b.setAttribute('aria-label',anatomy[key][0]);b.addEventListener('click',()=>{sil.querySelectorAll('.realHot').forEach(x=>x.classList.remove('active'));b.classList.add('active');showInfo(doc,key)});sil.appendChild(b)});
+  showInfo(doc,'fuselage');
+ }
+ const familyPlane=doc.getElementById('familyPlane')||doc.querySelector('.familyPlane');
+ if(familyPlane&&familyPlane.dataset.real!=='1'){
+  familyPlane.dataset.real='1';familyPlane.classList.add('realFamilyPlane');familyPlane.replaceChildren();
+  const img=doc.createElement('img');img.id='familyUserImage';img.src=familyImages.A320;img.alt='Vista lateral A320';familyPlane.appendChild(img);
+  doc.querySelectorAll('[data-family]').forEach(btn=>btn.addEventListener('click',()=>{const fam=btn.dataset.family;if(!familyImages[fam])return;img.src=familyImages[fam];img.alt='Vista lateral '+fam}));
+ }
+}
+stage.addEventListener('load',()=>{setTimeout(decorate,80);setTimeout(decorate,350)});
+})();
+</script>
+</body>
+</html>
