@@ -46,6 +46,46 @@ frame.addEventListener('load',()=>{
     photo.innerHTML=`<img src="assets/apu-overhead-ecam.jpg?v=2" alt="Overhead del A320 con referencia al APU GEN"><div class="veyraPhotoCaption">Referencia visual del overhead: APU GEN forma parte de la interfaz eléctrica asociada al APU. MASTER SW y START se encuentran en el panel APU; la supervisión se completa en ECAM/SD.</div>`;
     panelGrid.parentNode.insertBefore(photo,panelGrid);
   }
+
+  const quizFix={
+    '¿Cuál es la función principal del APU?':{correct:1,feedback:'Es una fuente de servicios, no de propulsión.'},
+    '¿Qué dos productos entrega?':{correct:0,feedback:'APU GEN y APU BLEED pertenecen a sistemas distintos.'},
+    '¿Qué hace el ECB?':{correct:1,feedback:'El ECB automatiza y protege.'},
+    '¿Por qué MASTER ON no significa arranque instantáneo?':{correct:0,feedback:'Hay una preparación previa a la secuencia.'},
+    '¿Qué significa AVAIL?':{correct:0,feedback:'AVAIL indica disponibilidad; cada servicio depende de su configuración.'},
+    '¿APU GEN y APU BLEED pueden gestionarse por separado?':{correct:0,feedback:'Son servicios diferentes.'},
+    'Ante pérdida del APU, ¿qué pregunta ayuda más?':{correct:1,feedback:'La consecuencia se analiza en Electrical y Pneumatic.'},
+    '¿Los límites son idénticos para electricidad y bleed?':{correct:1,feedback:'Las funciones pueden tener envelopes distintos.'}
+  };
+  const answers=d.getElementById('answers');
+  const question=d.getElementById('question');
+  const qfb=d.getElementById('qfb');
+  if(answers&&question&&qfb){
+    const wireQuiz=()=>{
+      const cfg=quizFix[question.textContent.trim()];
+      if(!cfg)return;
+      answers.dataset.veyraLocked='0';
+      [...answers.querySelectorAll('.answer')].forEach((b,i)=>{
+        b.onclick=()=>{
+          if(answers.dataset.veyraLocked==='1')return;
+          answers.dataset.veyraLocked='1';
+          [...answers.querySelectorAll('.answer')].forEach((x,n)=>{
+            x.classList.remove('ok','no');
+            x.removeAttribute('aria-current');
+            if(n===cfg.correct)x.classList.add('ok');
+            if(n===i&&n!==cfg.correct)x.classList.add('no');
+            if(n===i)x.setAttribute('aria-current','true');
+          });
+          qfb.textContent=cfg.feedback;
+          qfb.classList.add('show');
+        };
+      });
+    };
+    const observer=new MutationObserver(()=>queueMicrotask(wireQuiz));
+    observer.observe(answers,{childList:true});
+    wireQuiz();
+  }
+
   d.querySelectorAll('a[href]').forEach(a=>a.target='_top');
 });
 })();
