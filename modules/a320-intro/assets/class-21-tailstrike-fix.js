@@ -3,7 +3,7 @@
   const section=eye?.closest('section');
   if(!section)return;
 
-  const planeSrc='assets/class-21-a320-tailstrike-approved.webp?v=1';
+  const planeSrc='assets/class-21-a320-tailstrike-approved.jpg?v=2';
   const style=document.createElement('style');
   style.id='class21-tailstrike-v4-style';
   style.textContent=`
@@ -39,7 +39,7 @@
       <div class="tsv4-stage" id="tsv4Stage" data-state="compressed">
         <div class="tsv4-canvas">
           <div class="tsv4-metric">RUNWAY · MLG REFERENCE · FUSELAGE ATTITUDE · TAIL CONTACT</div>
-          <div class="tsv4-aircraft"><img src="${planeSrc}" alt="A320 side profile"></div>
+          <div class="tsv4-aircraft"><img src="${planeSrc}" alt="" aria-hidden="true"></div>
           <svg class="tsv4-geometry" viewBox="0 0 1000 390" preserveAspectRatio="none" aria-hidden="true">
             <line class="tsv4-runway" x1="35" y1="300" x2="965" y2="300"/>
             <line class="tsv4-reference" x1="500" y1="300" x2="355" y2="300"/>
