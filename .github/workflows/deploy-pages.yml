@@ -28,6 +28,11 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Copy Pages build to writable staging
+        run: |
+          rm -rf ./_site_publish
+          mkdir -p ./_site_publish
+          cp -a ./_site/. ./_site_publish/
       - name: Assemble static A320 review manual
         run: |
           python - <<'PY'
@@ -36,7 +41,7 @@ jobs:
           import gzip
           import hashlib
 
-          root = Path('_site/modules/a320-intro/review-bb7715104404796ad908')
+          root = Path('_site_publish/modules/a320-intro/review-bb7715104404796ad908')
           data_dir = root / 'manual-data'
           parts = [
               ('c1.txt', 10000),
@@ -83,7 +88,7 @@ jobs:
           print(f'Assembled static A320 review manual: {len(html_bytes)} bytes, SHA-256 {digest}')
           PY
       - name: Package Pages artifact
-        run: tar --dereference --hard-dereference --directory "./_site" -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git --exclude=.github .
+        run: tar --dereference --hard-dereference --directory "./_site_publish" -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git --exclude=.github .
       - name: Upload Pages artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
