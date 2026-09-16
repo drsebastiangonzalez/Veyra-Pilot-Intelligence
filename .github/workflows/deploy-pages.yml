@@ -28,6 +28,60 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Assemble static A320 review manual
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import gzip
+          import hashlib
+
+          root = Path('_site/modules/a320-intro/review-bb7715104404796ad908')
+          data_dir = root / 'manual-data'
+          parts = [
+              ('c1.txt', 10000),
+              ('c1b.txt', 10000),
+              ('c1c.txt', 10000),
+              ('c02.txt', 10000),
+              ('c02b.txt', 10000),
+              ('c03.txt', 20000),
+              ('c04.txt', 20000),
+              ('c05.txt', 20000),
+              ('c06.txt', 20000),
+              ('c07.txt', 20000),
+              ('c08.txt', 14428),
+          ]
+          expected_b64_length = 164428
+          expected_html_sha256 = '60363a4aeb789f6123b180791a02b08d1257674ca0faa8975ed53282a036bc5c'
+
+          chunks = []
+          for filename, take in parts:
+              text = (data_dir / filename).read_text(encoding='utf-8').strip()
+              if len(text) < take:
+                  raise RuntimeError(f'{filename} is incomplete: {len(text)} < {take}')
+              chunks.append(text[:take])
+
+          payload = ''.join(chunks)
+          if len(payload) != expected_b64_length:
+              raise RuntimeError(
+                  f'Unexpected A320 manual payload length: {len(payload)} != {expected_b64_length}'
+              )
+
+          compressed = base64.b64decode(payload, validate=True)
+          html_bytes = gzip.decompress(compressed)
+          digest = hashlib.sha256(html_bytes).hexdigest()
+          if digest != expected_html_sha256:
+              raise RuntimeError(
+                  f'A320 manual SHA-256 mismatch: {digest} != {expected_html_sha256}'
+              )
+
+          html = html_bytes.decode('utf-8')
+          if 'A320 Foundations Manual v1.0 Review' not in html:
+              raise RuntimeError('A320 manual title validation failed')
+
+          (root / 'manual.html').write_text(html, encoding='utf-8')
+          print(f'Assembled static A320 review manual: {len(html_bytes)} bytes, SHA-256 {digest}')
+          PY
       - name: Package Pages artifact
         run: tar --dereference --hard-dereference --directory "./_site" -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git --exclude=.github .
       - name: Upload Pages artifact
