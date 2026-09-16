@@ -6,9 +6,43 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#07111f">
 <title>Veyra | A320 Foundations · Clase 1</title>
-<style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111f}iframe{display:block;width:100%;height:100%;border:0;background:#07111f}</style>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111f}
+iframe{display:block;width:100%;height:100%;border:0;background:#07111f;visibility:hidden;opacity:0;transition:opacity .12s ease}
+iframe.ready{visibility:visible;opacity:1}
+</style>
 </head>
 <body>
-<iframe id="stage" title="A320 Foundations · Clase 1 · Aircraft General" src="class-01-v2.html?v=7"></iframe>
+<iframe id="stage" title="A320 Foundations · Clase 1 · Aircraft General"></iframe>
+<script>
+(()=>{
+'use strict';
+const stage=document.getElementById('stage');
+const build=new URLSearchParams(location.search).get('v')||'class01-cache-20260915';
+const version=encodeURIComponent(build);
+let revealed=false;
+const reveal=()=>{if(revealed)return;revealed=true;stage.classList.add('ready')};
+
+stage.addEventListener('load',()=>{
+ try{
+  const outer=stage.contentDocument;
+  const inner=outer?.getElementById('stage');
+  if(!inner){setTimeout(reveal,120);return;}
+
+  const showAfterInnerLoad=()=>setTimeout(reveal,450);
+  inner.addEventListener('load',showAfterInnerLoad,{once:true});
+
+  const current=inner.getAttribute('src')||'';
+  const target='class-01.html?v='+version;
+  if(current!==target){inner.src=target;}
+  else{showAfterInnerLoad();}
+ }catch(_){setTimeout(reveal,600);}
+},{once:true});
+
+// Fail-safe: never leave the class hidden if a browser suppresses a nested load event.
+setTimeout(reveal,4000);
+stage.src='class-01-v2.html?v='+version;
+})();
+</script>
 </body>
 </html>
