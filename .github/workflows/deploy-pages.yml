@@ -128,9 +128,12 @@ jobs:
                'A320 Foundations v1.0 queda cerrado como base gratuita estable. El siguiente paso es diseñar el acceso público/registro y, por separado, la arquitectura de A320 Procedures & Operations como capa avanzada.'),
           ]
           for old, new in hub_replacements:
-              if old not in hub:
-                  raise RuntimeError(f'A320 Review Hub finalization marker not found: {old}')
-              hub = hub.replace(old, new)
+              if old in hub:
+                  hub = hub.replace(old, new)
+              elif new not in hub:
+                  raise RuntimeError(
+                      f'A320 Review Hub marker is neither source nor finalized value: {old}'
+                  )
           hub_path.write_text(hub, encoding='utf-8')
 
           print(
