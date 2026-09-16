@@ -15,35 +15,41 @@
 <body><div class="load"><div class="box"><div class="veyra">Veyra</div><div class="tag">A320 FOUNDATIONS · MANUAL v1.0 CANDIDATE</div><div class="status" id="status">Preparando el manual de revisión…</div><div class="bar" id="bar"><i></i></div><a class="back" href="./">← Volver al Review Hub</a></div></div>
 <script>
 (async()=>{
- const parts=[
-  ['c1.txt',10000],
-  ['c1b.txt',10000],
-  ['c1c.txt',10000],
-  ['c02.txt',10000],
-  ['c02b.txt',10000],
-  ['c03.txt',20000],
-  ['c04.txt',20000],
-  ['c05.txt',20000],
-  ['c06.txt',20000],
-  ['c07.txt',20000],
-  ['c08.txt',14428]
- ];
+ const files=['c1.txt','c1b.txt','c1c.txt','c02.txt','c02b.txt','c03.txt','c04.txt','c05.txt','c06.txt','c07.txt','c08.txt'];
  const EXPECTED_B64_LENGTH=164428;
  const status=document.getElementById('status');
+ function overlap(a,b){
+  const max=Math.min(a.length,b.length);
+  const s=b.slice(0,max)+'#'+a.slice(-max);
+  const pi=new Uint32Array(s.length);
+  for(let i=1;i<s.length;i++){
+   let j=pi[i-1];
+   while(j>0&&s[i]!==s[j]) j=pi[j-1];
+   if(s[i]===s[j]) j++;
+   pi[i]=j;
+  }
+  return Math.min(pi[s.length-1],max);
+ }
  try{
   if(typeof DecompressionStream==='undefined') throw new Error('Este navegador no soporta DecompressionStream. Actualiza Safari/iOS para abrir el manual.');
   const chunks=[];
-  for(let i=0;i<parts.length;i++){
-   const [file,take]=parts[i];
-   status.textContent=`Cargando manual… ${i+1} / ${parts.length}`;
-   const r=await fetch('manual-data/'+file+'?v=2',{cache:'no-store'});
+  for(let i=0;i<files.length;i++){
+   const file=files[i];
+   status.textContent=`Cargando manual… ${i+1} / ${files.length}`;
+   const r=await fetch('manual-data/'+file+'?v=3',{cache:'no-store'});
    if(!r.ok) throw new Error('No se pudo cargar '+file+' ('+r.status+')');
    const text=(await r.text()).trim();
-   if(text.length<take) throw new Error(file+' está incompleto ('+text.length+' / '+take+')');
-   chunks.push(text.slice(0,take));
+   if(!text) throw new Error(file+' está vacío');
+   chunks.push(text);
   }
-  const b64=chunks.join('');
-  if(b64.length!==EXPECTED_B64_LENGTH) throw new Error('Longitud de datos inesperada ('+b64.length+' / '+EXPECTED_B64_LENGTH+')');
+  status.textContent='Reconstruyendo manual…';
+  let b64=chunks[0];
+  for(let i=1;i<chunks.length;i++){
+   const n=overlap(b64,chunks[i]);
+   if(n<32) throw new Error('No se encontró continuidad entre '+files[i-1]+' y '+files[i]);
+   b64+=chunks[i].slice(n);
+  }
+  if(b64.length!==EXPECTED_B64_LENGTH) throw new Error('Longitud reconstruida inesperada ('+b64.length+' / '+EXPECTED_B64_LENGTH+')');
   status.textContent='Abriendo manual…';
   const raw=atob(b64);
   const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
