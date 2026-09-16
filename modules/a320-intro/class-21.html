@@ -12,7 +12,8 @@
 <div class="loading">LOADING CLASE 21…</div>
 <script>
 (async()=>{
-  const build=new URLSearchParams(location.search).get('v')||'a320-foundations-v1';
+  const params=new URLSearchParams(location.search);
+  const build=params.get('v')||params.get('review')||'a320-foundations-v1';
   const version=encodeURIComponent(build);
   const rewriteAssets=html=>html.replace(/((?:src|href)=["']assets\/[^"'?]+)(?:\?v=[^"']*)?(["'])/g,(m,p,q)=>p+'?v='+version+q);
   try{
