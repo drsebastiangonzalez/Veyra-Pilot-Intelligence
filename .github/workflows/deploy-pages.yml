@@ -33,7 +33,7 @@ jobs:
           rm -rf ./_site_publish
           mkdir -p ./_site_publish
           cp -a ./_site/. ./_site_publish/
-      - name: Assemble static A320 review manual
+      - name: Assemble static A320 Foundations v1.0 manual
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -57,7 +57,8 @@ jobs:
               ('c08.txt', 14428),
           ]
           expected_b64_length = 164428
-          expected_html_sha256 = '60363a4aeb789f6123b180791a02b08d1257674ca0faa8975ed53282a036bc5c'
+          expected_candidate_sha256 = '60363a4aeb789f6123b180791a02b08d1257674ca0faa8975ed53282a036bc5c'
+          expected_final_sha256 = '12dd8012f636523f8acf4bc04f5e63f44f38bf1ad17829e301dc6e846f0668f9'
 
           chunks = []
           for filename, take in parts:
@@ -73,19 +74,67 @@ jobs:
               )
 
           compressed = base64.b64decode(payload, validate=True)
-          html_bytes = gzip.decompress(compressed)
-          digest = hashlib.sha256(html_bytes).hexdigest()
-          if digest != expected_html_sha256:
+          candidate_bytes = gzip.decompress(compressed)
+          candidate_digest = hashlib.sha256(candidate_bytes).hexdigest()
+          if candidate_digest != expected_candidate_sha256:
               raise RuntimeError(
-                  f'A320 manual SHA-256 mismatch: {digest} != {expected_html_sha256}'
+                  f'A320 candidate manual SHA-256 mismatch: {candidate_digest} != {expected_candidate_sha256}'
               )
 
-          html = html_bytes.decode('utf-8')
+          html = candidate_bytes.decode('utf-8')
           if 'A320 Foundations Manual v1.0 Review' not in html:
-              raise RuntimeError('A320 manual title validation failed')
+              raise RuntimeError('A320 candidate manual title validation failed')
+
+          replacements = [
+              ('<title>Veyra · A320 Foundations Manual v1.0 Review</title>',
+               '<title>Veyra · A320 Foundations Study Manual v1.0</title>'),
+              ('<span>Manual de Estudio · Candidate Review</span>',
+               '<span>Manual de Estudio · v1.0</span>'),
+              ('<div class="reviewFlag">CANDIDATE FOR REVIEW · NOT YET PUBLIC NAVIGATION</div>',
+               '<div class="reviewFlag">STUDY MANUAL v1.0 · FREE EDITION</div>'),
+              ('<strong>Versión:</strong> 1.0 · Candidate for Review<br/>',
+               '<strong>Versión:</strong> 1.0 · Final<br/>'),
+              ('<strong>Revisión técnica y editorial:</strong> 15/09/2026<br/>',
+               '<strong>Revisión técnica y editorial:</strong> 16/09/2026<br/>'),
+          ]
+          for old, new in replacements:
+              if old not in html:
+                  raise RuntimeError(f'A320 manual finalization marker not found: {old}')
+              html = html.replace(old, new)
+
+          final_bytes = html.encode('utf-8')
+          final_digest = hashlib.sha256(final_bytes).hexdigest()
+          if final_digest != expected_final_sha256:
+              raise RuntimeError(
+                  f'A320 final manual SHA-256 mismatch: {final_digest} != {expected_final_sha256}'
+              )
+          if 'A320 Foundations Study Manual v1.0' not in html or 'Candidate' in html or 'CANDIDATE' in html:
+              raise RuntimeError('A320 final manual metadata validation failed')
 
           (root / 'manual.html').write_text(html, encoding='utf-8')
-          print(f'Assembled static A320 review manual: {len(html_bytes)} bytes, SHA-256 {digest}')
+
+          hub_path = root / 'index.html'
+          hub = hub_path.read_text(encoding='utf-8')
+          hub_replacements = [
+              ('Manual de Estudio A320 Foundations · v1.0 Candidate',
+               'Manual de Estudio A320 Foundations · v1.0'),
+              ('Versión corregida y alineada con Class 00–22. Ya está integrada en este entorno de revisión para validar contenido, estructura y referencias antes de fijarla como v1.0 definitiva.',
+               'Versión final aprobada y alineada con Class 00–22, referencias cruzadas y anexos. Foundations queda cerrado como base gratuita estable.'),
+              ('data-title="normal procedures"', 'data-title="normal procedures foundations"'),
+              ('<div class="name">Normal Procedures</div>', '<div class="name">Normal Procedures Foundations</div>'),
+              ('Siguiente paso editorial: revisar este Manual de Estudio y, cuando quede aprobado, definir su versión definitiva y después diseñar el acceso público/registro sin exponer esta ruta de revisión.',
+               'A320 Foundations v1.0 queda cerrado como base gratuita estable. El siguiente paso es diseñar el acceso público/registro y, por separado, la arquitectura de A320 Procedures & Operations como capa avanzada.'),
+          ]
+          for old, new in hub_replacements:
+              if old not in hub:
+                  raise RuntimeError(f'A320 Review Hub finalization marker not found: {old}')
+              hub = hub.replace(old, new)
+          hub_path.write_text(hub, encoding='utf-8')
+
+          print(
+              f'Assembled A320 Foundations Study Manual v1.0: '
+              f'{len(final_bytes)} bytes, SHA-256 {final_digest}'
+          )
           PY
       - name: Package Pages artifact
         run: tar --dereference --hard-dereference --directory "./_site_publish" -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git --exclude=.github .

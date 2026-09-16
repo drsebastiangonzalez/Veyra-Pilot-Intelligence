@@ -7,12 +7,12 @@
 <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#07111f">
-<title>Veyra · A320 Foundations Manual v1.0 Review</title>
+<title>Veyra · A320 Foundations Study Manual v1.0</title>
 <style>
 :root{--bg:#07111f;--ink:#f7f4ed;--muted:#9fb0c3;--gold:#d7b15a;--cyan:#67d7df;--line:rgba(255,255,255,.09)}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 82% 4%,rgba(103,215,223,.08),transparent 28%),linear-gradient(#050b13,var(--bg));color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.load{min-height:100vh;display:grid;place-items:center;padding:24px}.box{max-width:620px;width:100%;border:1px solid var(--line);border-radius:22px;padding:30px;background:rgba(255,255,255,.025);text-align:center}.veyra{font:2rem Georgia,serif}.tag{margin-top:8px;color:var(--gold);font-size:.72rem;letter-spacing:.16em;font-weight:800}.status{margin-top:24px;color:var(--muted);line-height:1.6}.bar{height:3px;margin-top:20px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:14%;background:linear-gradient(90deg,var(--gold),var(--cyan));animation:run 1.3s ease-in-out infinite alternate}.error{color:#f0c8c8}.back{display:inline-block;margin-top:18px;color:var(--cyan);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:9px 13px}@keyframes run{to{width:100%}}
 </style>
 </head>
-<body><div class="load"><div class="box"><div class="veyra">Veyra</div><div class="tag">A320 FOUNDATIONS · MANUAL v1.0 CANDIDATE</div><div class="status" id="status">Preparando el manual de revisión…</div><div class="bar" id="bar"><i></i></div><a class="back" href="./">← Volver al Review Hub</a></div></div>
+<body><div class="load"><div class="box"><div class="veyra">Veyra</div><div class="tag">A320 FOUNDATIONS · STUDY MANUAL v1.0</div><div class="status" id="status">Preparando el manual v1.0…</div><div class="bar" id="bar"><i></i></div><a class="back" href="./">← Volver al Review Hub</a></div></div>
 <script>
 (async()=>{
  const files=['c1.txt','c1b.txt','c1c.txt','c02.txt','c02b.txt','c03.txt','c04.txt','c05.txt','c06.txt','c07.txt','c08.txt'];
@@ -39,12 +39,29 @@
   }
   return out;
  }
+ function finalize(html){
+  const replacements=[
+   ['<title>Veyra · A320 Foundations Manual v1.0 Review</title>','<title>Veyra · A320 Foundations Study Manual v1.0</title>'],
+   ['<span>Manual de Estudio · Candidate Review</span>','<span>Manual de Estudio · v1.0</span>'],
+   ['<div class="reviewFlag">CANDIDATE FOR REVIEW · NOT YET PUBLIC NAVIGATION</div>','<div class="reviewFlag">STUDY MANUAL v1.0 · FREE EDITION</div>'],
+   ['<strong>Versión:</strong> 1.0 · Candidate for Review<br/>','<strong>Versión:</strong> 1.0 · Final<br/>'],
+   ['<strong>Revisión técnica y editorial:</strong> 15/09/2026<br/>','<strong>Revisión técnica y editorial:</strong> 16/09/2026<br/>']
+  ];
+  for(const [oldText,newText] of replacements){
+   if(!html.includes(oldText)) throw new Error('No se encontró un marcador de cierre editorial del manual.');
+   html=html.replace(oldText,newText);
+  }
+  if(!html.includes('A320 Foundations Study Manual v1.0')||html.includes('Candidate')||html.includes('CANDIDATE')){
+   throw new Error('La versión final del manual no pasó la validación editorial.');
+  }
+  return html;
+ }
  try{
   if(typeof DecompressionStream==='undefined') throw new Error('Este navegador no soporta DecompressionStream. Actualiza Safari/iOS para abrir el manual.');
   const chunks=[];
   for(let i=0;i<files.length;i++){
    status.textContent=`Cargando manual… ${i+1} / ${files.length}`;
-   const r=await fetch('manual-data/'+files[i]+'?v=5',{cache:'no-store'});
+   const r=await fetch('manual-data/'+files[i]+'?v=6',{cache:'no-store'});
    if(!r.ok) throw new Error('No se pudo cargar '+files[i]+' ('+r.status+')');
    const text=(await r.text()).trim();
    if(!text) throw new Error(files[i]+' está vacío');
@@ -60,13 +77,13 @@
    try{
     const candidate=await inflate(b64);
     if(/^<!doctype html>/i.test(candidate.trim()) && candidate.includes('A320 Foundations Manual v1.0 Review')){
-     html=candidate;ok=true;break;
+     html=finalize(candidate);ok=true;break;
     }
     lastError='La variante '+(mask+1)+' no corresponde al manual esperado';
    }catch(err){lastError=err&&err.message?err.message:String(err);}
   }
   if(!ok) throw new Error('No se pudo reconstruir el paquete del manual con las 8 variantes de borde'+(lastError?': '+lastError:''));
-  status.textContent='Abriendo manual…';
+  status.textContent='Abriendo manual v1.0…';
   document.open();document.write(html);document.close();
  }catch(e){
   console.error(e);document.getElementById('bar').style.display='none';status.className='status error';status.textContent='No fue posible abrir el manual: '+e.message;
