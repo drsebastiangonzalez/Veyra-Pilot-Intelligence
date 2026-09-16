@@ -120,6 +120,8 @@ jobs:
                'Manual de Estudio A320 Foundations · v1.0'),
               ('Versión corregida y alineada con Class 00–22. Ya está integrada en este entorno de revisión para validar contenido, estructura y referencias antes de fijarla como v1.0 definitiva.',
                'Versión final aprobada y alineada con Class 00–22, referencias cruzadas y anexos. Foundations queda cerrado como base gratuita estable.'),
+              ('data-path="../class-00.html"', 'data-path="../class-00-v3.html"'),
+              ('data-path="../class-01.html"', 'data-path="../class-01-v3.html"'),
               ('data-title="normal procedures"', 'data-title="normal procedures foundations"'),
               ('<div class="name">Normal Procedures</div>', '<div class="name">Normal Procedures Foundations</div>'),
               ('Siguiente paso editorial: revisar este Manual de Estudio y, cuando quede aprobado, definir su versión definitiva y después diseñar el acceso público/registro sin exponer esta ruta de revisión.',
