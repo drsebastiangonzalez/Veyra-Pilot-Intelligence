@@ -18,7 +18,8 @@ iframe.ready{visibility:visible;opacity:1}
 (()=>{
 'use strict';
 const stage=document.getElementById('stage');
-const build=new URLSearchParams(location.search).get('v')||'class01-cache-20260915';
+const params=new URLSearchParams(location.search);
+const build=params.get('v')||params.get('review')||'class01-cache-20260915';
 const version=encodeURIComponent(build);
 let revealed=false;
 const reveal=()=>{if(revealed)return;revealed=true;stage.classList.add('ready')};
