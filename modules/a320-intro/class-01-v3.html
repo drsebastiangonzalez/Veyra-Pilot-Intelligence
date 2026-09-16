@@ -19,10 +19,40 @@ iframe.ready{visibility:visible;opacity:1}
 'use strict';
 const stage=document.getElementById('stage');
 const params=new URLSearchParams(location.search);
-const build=params.get('v')||params.get('review')||'class01-cache-20260915';
+const build=params.get('v')||params.get('review')||'class01-cache-20260916';
 const version=encodeURIComponent(build);
 let revealed=false;
 const reveal=()=>{if(revealed)return;revealed=true;stage.classList.add('ready')};
+
+function cleanCore(inner){
+ try{
+  const core=inner?.contentDocument;
+  if(!core?.head||!core.body)return false;
+  let guard=core.getElementById('veyraClass01LogoGuard');
+  if(!guard){
+   guard=core.createElement('style');
+   guard.id='veyraClass01LogoGuard';
+   guard.textContent='.airbus,.heroLogo,.airbusMark,.heroAirbusMark,img[src*="airbus-logo"]{display:none!important}';
+   core.head.appendChild(guard);
+  }
+  core.querySelectorAll('.airbus,.heroLogo,.airbusMark,.heroAirbusMark,img[src*="airbus-logo"]').forEach(el=>el.remove());
+  return true;
+ }catch(_){return false;}
+}
+
+function revealWhenClean(inner){
+ let tries=0;
+ const check=()=>{
+  const cleaned=cleanCore(inner);
+  if(cleaned||tries++>=12){
+   if(cleaned)setTimeout(()=>cleanCore(inner),120);
+   reveal();
+   return;
+  }
+  setTimeout(check,50);
+ };
+ check();
+}
 
 stage.addEventListener('load',()=>{
  try{
@@ -30,7 +60,7 @@ stage.addEventListener('load',()=>{
   const inner=outer?.getElementById('stage');
   if(!inner){setTimeout(reveal,120);return;}
 
-  const showAfterInnerLoad=()=>setTimeout(reveal,450);
+  const showAfterInnerLoad=()=>revealWhenClean(inner);
   inner.addEventListener('load',showAfterInnerLoad,{once:true});
 
   const current=inner.getAttribute('src')||'';
