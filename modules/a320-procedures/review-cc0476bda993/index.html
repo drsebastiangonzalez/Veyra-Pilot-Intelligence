@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Entrenador interactivo de los flujos de preparación de cabina del Airbus A320 — Veyra Pilot Intelligence.">\n<meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">\n<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<style>:root{color-scheme:dark}html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Flow Patterns A320</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap">
+
+<style>
+:root{
+  --ink:#05070B; --surface:#070B12; --surface-2:#0B1014;
+  --raised:#111823; --raised-2:#18202C;
+  --gold:#C8A45D; --gold-bright:#D8B25E; --gold-pale:#F0D58E;
+  --ivory:#F6F1E6; --muted:#938C7A; --muted-2:#6A6559;
+  --line:rgba(200,164,93,.16); --line-soft:rgba(246,241,230,.07);
+  --pf:#D8B25E; --pm:#7FB2BF; --ok:#7FBF9A; --err:#C4705E;
+  --serif:'Lora',Georgia,'Times New Roman',serif;
+  --sans:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --maxw:1240px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--ivory);font-family:var(--sans);
+  font-weight:300;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;margin:0;text-wrap:balance;letter-spacing:.01em}
+p{margin:0} button{font-family:inherit;color:inherit} a{color:var(--gold-bright)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:rgba(5,7,11,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-block:14px}
+.mark{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.mark .v{font-family:var(--serif);font-size:23px;letter-spacing:.16em;color:var(--gold-pale)}
+.mark .sub{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.mod{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  font-weight:500;border-left:1px solid var(--line);padding-left:16px}
+
+.hero{padding-block:44px 30px;border-bottom:1px solid var(--line-soft)}
+.eyebrow{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:16px}
+.hero h1{font-size:clamp(30px,5.4vw,46px);line-height:1.12;max-width:16ch}
+.hero h1 em{font-style:italic;color:var(--gold-pale)}
+.hero .lede{margin-top:18px;max-width:62ch;color:#CFC8B8;font-size:16px}
+.stats{display:flex;gap:30px;flex-wrap:wrap;margin-top:26px}
+.stat .n{font-family:var(--serif);font-size:26px;color:var(--gold-pale);font-variant-numeric:tabular-nums}
+.stat .l{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+
+.tabsbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 57px);z-index:30;
+  background:rgba(7,11,18,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+.tab{flex:0 0 auto;display:flex;align-items:center;gap:9px;background:none;border:1px solid transparent;
+  border-radius:3px;padding:8px 13px;cursor:pointer;white-space:nowrap;font-size:12.5px;font-weight:400;
+  color:var(--muted);transition:color .18s,border-color .18s,background .18s}
+.tab:hover{color:var(--ivory)}
+.tab[aria-selected="true"]{color:var(--ivory);border-color:var(--line);background:var(--raised)}
+.tab .idx{font-family:var(--serif);font-size:11px;color:var(--gold);border:1px solid var(--line);
+  border-radius:50%;width:20px;height:20px;display:grid;place-items:center;flex:0 0 auto}
+.tab[aria-selected="true"] .idx{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.tab .done{color:var(--ok);font-size:12px;line-height:1}
+
+.flow{padding-block:34px 70px}
+.flowhead{margin-bottom:26px}
+.rolerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  padding:4px 10px;border-radius:2px;border:1px solid currentColor}
+.chip.pf{color:var(--pf)} .chip.pm{color:var(--pm)}
+.ata{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.flowhead h2{font-size:clamp(23px,3.6vw,32px);line-height:1.2}
+.flowhead .purpose{margin-top:12px;max-width:64ch;color:#CFC8B8}
+
+.split{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:34px;align-items:start}
+.split>*{min-width:0}
+@media(max-width:960px){.split{grid-template-columns:1fr;gap:26px}}
+.diagwrap{position:sticky;top:130px}
+@media(max-width:960px){.diagwrap{position:static}}
+
+.diagcard{background:linear-gradient(180deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);border-radius:4px;padding:16px}
+.diagcard .cap{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);
+  font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.orient{font-size:11px;color:var(--muted-2);margin-bottom:12px;font-style:italic}
+.diagscroll{overflow-x:auto}
+svg.panel{display:block;width:100%;height:auto;min-width:330px}
+svg.panel text{font-family:var(--sans)}
+.frame{fill:none;stroke:var(--line);stroke-width:.35}
+.zone rect{fill:var(--raised);stroke:var(--line-soft);stroke-width:.3}
+.zone text{fill:var(--muted-2);font-weight:500;letter-spacing:.06em}
+.zone.lit rect{fill:var(--raised-2);stroke:rgba(200,164,93,.45)}
+.zone.lit text{fill:var(--muted)}
+.sweep{fill:none;stroke:var(--gold);stroke-width:.5;opacity:.38;stroke-linejoin:round;stroke-linecap:round}
+.sweep.head{opacity:.55}
+.dot{cursor:pointer}
+.dot circle{fill:var(--surface);stroke:var(--gold);stroke-width:.45;transition:fill .15s,stroke .15s}
+.dot text{fill:var(--gold);font-weight:600;text-anchor:middle;pointer-events:none}
+.dot:hover circle,.dot.active circle{fill:var(--gold)}
+.dot:hover text,.dot.active text{fill:var(--ink)}
+.dot.checked circle{stroke:var(--ok)}
+.dot.pm circle{stroke:var(--pm)} .dot.pm text{fill:var(--pm)}
+.dot.pm:hover circle,.dot.pm.active circle{fill:var(--pm)}
+.dot.hit circle{fill:var(--gold);stroke:var(--gold-bright)} .dot.hit text{fill:var(--ink)}
+.dot.miss circle{fill:var(--err);stroke:var(--err)} .dot.miss text{fill:var(--ink)}
+#tip rect{fill:var(--ink);stroke:var(--gold);stroke-width:.3}
+#tip text{fill:var(--gold-pale);font-weight:500;text-anchor:middle}
+.zone .glass{fill:#070A10;stroke:rgba(200,164,93,.13);stroke-width:.22}
+.zone.lit .glass{stroke:rgba(200,164,93,.3)}
+.zone .part{fill:var(--surface);stroke:var(--line-soft);stroke-width:.28}
+.zone.lit .part{stroke:rgba(200,164,93,.35)}
+.g-pb{fill:#0A0F16;stroke:rgba(246,241,230,.15);stroke-width:.24}
+.zone.lit .g-pb{stroke:rgba(200,164,93,.4)}
+.g-knob{fill:#141B26;stroke:rgba(246,241,230,.2);stroke-width:.28}
+.zone.lit .g-knob{stroke:rgba(200,164,93,.45)}
+.g-tick{stroke:rgba(246,241,230,.28);stroke-width:.24;stroke-linecap:round}
+.zone.lit .g-tick{stroke:rgba(240,213,142,.5)}
+.g-fire{fill:rgba(196,112,94,.42);stroke:rgba(214,120,100,.85);stroke-width:.32}
+.g-guard{fill:rgba(196,112,94,.24);stroke:rgba(196,112,94,.6);stroke-width:.3}
+.g-lamp{fill:#0A0F16;stroke:rgba(246,241,230,.18);stroke-width:.22}
+.shell{fill:rgba(17,24,35,.5);stroke:var(--line);stroke-width:.4}
+.bay{fill:none;stroke:rgba(246,241,230,.05);stroke-width:.3}
+.divider{stroke:var(--line);stroke-width:.3;stroke-dasharray:1.2 1.2}
+.axis{fill:var(--muted-2);font-weight:500;letter-spacing:.14em}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.legend b{color:var(--gold);font-weight:500}
+
+/* intro */
+.intro{padding-block:34px 70px}
+.sect{margin-top:42px}
+.sect:first-child{margin-top:0}
+.sectnum{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);
+  font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sectnum::after{content:"";flex:1;height:1px;background:var(--line)}
+.sect h3{font-size:clamp(20px,3vw,26px);line-height:1.25;max-width:26ch}
+.sect p{margin-top:14px;color:#CFC8B8;max-width:68ch}
+.sect p+p{margin-top:12px}
+.lead{font-size:16.5px;color:#DCD5C5!important}
+.pull{font-family:var(--serif);font-size:clamp(18px,2.6vw,22px);line-height:1.45;color:var(--gold-pale);
+  border-left:2px solid var(--gold);padding-left:20px;margin-top:22px;max-width:44ch}
+.bul{margin-top:16px;display:grid;gap:13px;max-width:68ch}
+.bul li{list-style:none;padding-left:20px;position:relative;color:#CFC8B8}
+.bul li::before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;
+  border:1px solid var(--gold);transform:rotate(45deg)}
+.bul b{color:var(--ivory);font-weight:500}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+@media(max-width:700px){.vs{grid-template-columns:1fr}}
+.vscard{border:1px solid var(--line);border-radius:3px;padding:18px;background:var(--surface-2)}
+.vscard .tag{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.vscard h4{font-size:17px;margin:8px 0 10px}
+.vscard ul{margin:0;padding:0}
+.vscard li{list-style:none;font-size:13.5px;color:#C5BEAE;padding:6px 0;border-top:1px solid var(--line-soft)}
+.vscard li:first-child{border-top:0}
+.zmap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;margin-top:22px;align-items:start}
+@media(max-width:860px){.zmap{grid-template-columns:1fr}}
+.ztab{width:100%;border-collapse:collapse;font-size:13.5px}
+.ztab th{text-align:left;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);
+  font-weight:500;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+.ztab td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line-soft);color:#C5BEAE;vertical-align:top}
+.ztab td:first-child{color:var(--ivory);font-weight:400;white-space:nowrap}
+.ztab .fl{color:var(--gold);font-size:11.5px;white-space:nowrap}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+@media(max-width:700px){.roles{grid-template-columns:1fr}}
+.rolecard{border:1px solid var(--line);border-left-width:2px;border-radius:0 3px 3px 0;padding:18px;background:var(--surface-2)}
+.rolecard.pf{border-left-color:var(--pf)} .rolecard.pm{border-left-color:var(--pm)}
+.rolecard .who{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.rolecard.pf .who{color:var(--pf)} .rolecard.pm .who{color:var(--pm)}
+.rolecard h4{font-size:16px;margin:8px 0 8px}
+.rolecard p{font-size:13.5px;color:#C5BEAE;margin:0}
+.steps{margin-top:22px;display:grid;gap:2px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line-soft)}
+.step:first-child{border-top:1px solid var(--line)}
+.step .sn{font-family:var(--serif);font-size:26px;color:var(--gold);line-height:1;
+  font-variant-numeric:tabular-nums;min-width:1.4ch}
+.step h4{font-size:16px;margin-bottom:6px}
+.step p{font-size:13.5px;color:#C5BEAE;margin:0;max-width:60ch}
+.step .how{margin-top:8px;font-size:11.5px;letter-spacing:.06em;color:var(--muted-2)}
+.gostrip{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:34px;padding-top:24px;
+  border-top:1px solid var(--line)}
+.gobtn{background:var(--gold);color:var(--ink);border:1px solid var(--gold);border-radius:3px;
+  padding:11px 22px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer}
+.gobtn:hover{background:var(--gold-pale);border-color:var(--gold-pale)}
+.gostrip span{font-size:12.5px;color:var(--muted)}
+.listhead{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.listhead h3{font-size:17px}
+.progress{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
+.bar{width:88px;height:3px;background:var(--line-soft);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.group{margin-bottom:20px}
+.grouplbl{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+  font-weight:500;margin-bottom:9px;display:flex;align-items:center;gap:9px}
+.grouplbl::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.item{border-bottom:1px solid var(--line-soft)}
+.itemrow{display:flex;align-items:flex-start;gap:11px;width:100%;background:none;border:0;
+  padding:11px 4px;text-align:left;cursor:pointer;transition:background .15s}
+.itemrow:hover{background:rgba(246,241,230,.026)}
+.item.active .itemrow{background:rgba(216,178,94,.07)}
+.tick{flex:0 0 auto;width:17px;height:17px;margin-top:3px;border:1px solid var(--line);border-radius:2px;
+  display:grid;place-items:center;cursor:pointer;background:none;padding:0;color:transparent;font-size:11px;
+  line-height:1;transition:border-color .15s,color .15s,background .15s}
+.tick:hover{border-color:var(--gold)}
+.tick[aria-pressed="true"]{background:rgba(127,191,154,.14);border-color:var(--ok);color:var(--ok)}
+.seq{flex:0 0 auto;font-family:var(--serif);font-size:12px;color:var(--gold);width:17px;text-align:center;
+  margin-top:2px;font-variant-numeric:tabular-nums}
+.item.pm .seq{color:var(--pm)}
+.body{flex:1;min-width:0}
+.call{display:flex;align-items:baseline;gap:6px;width:100%;font-size:13.5px;font-weight:400;letter-spacing:.02em}
+.call .n{color:var(--ivory);white-space:nowrap}
+.call .lead{flex:1;border-bottom:1px dotted rgba(246,241,230,.22);transform:translateY(-4px);min-width:14px}
+.call .v{color:var(--gold-pale);font-weight:500;white-space:nowrap}
+.metaline{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.panelname{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.star{font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--gold);
+  border:1px solid var(--line);border-radius:2px;padding:1px 6px}
+.caret{flex:0 0 auto;color:var(--muted-2);font-size:11px;margin-top:4px;transition:transform .2s}
+.item.open .caret{transform:rotate(90deg)}
+.why{padding:0 4px 15px 56px;font-size:13.5px;color:#C5BEAE;line-height:1.7}
+.why .tag{display:inline-block;margin-top:9px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;border-left:2px solid var(--line);padding-left:9px}
+@media(max-width:520px){.why{padding-left:32px}}
+
+.note{border:1px solid var(--line);border-left:2px solid var(--gold);background:rgba(200,164,93,.045);
+  border-radius:0 3px 3px 0;padding:14px 16px;margin-top:18px;font-size:13.5px;color:#CFC8B8}
+.note b{color:var(--ivory);font-weight:500}
+.note.warn{border-left-color:var(--err);background:rgba(196,112,94,.06)}
+
+.practicebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line-soft)}
+.pbtn{background:none;border:1px solid var(--line);border-radius:3px;padding:8px 15px;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--gold-pale);cursor:pointer;
+  transition:background .18s,border-color .18s}
+.pbtn:hover{background:rgba(200,164,93,.1);border-color:var(--gold)}
+.pbtn[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.pstatus{font-size:12px;color:var(--muted);flex:1;min-width:150px}
+.pstatus b{color:var(--ivory);font-weight:500}
+.pstatus .good{color:var(--ok)} .pstatus .bad{color:var(--err)}
+
+footer{border-top:1px solid var(--line);padding-block:30px 46px;margin-top:20px}
+.foot{display:flex;gap:26px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start}
+.foot p{font-size:11.5px;color:var(--muted-2);max-width:60ch;line-height:1.75}
+.foot .fm{font-family:var(--serif);font-size:16px;letter-spacing:.16em;color:var(--gold);white-space:nowrap}
+*:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="mark"><span class="v">VEYRA</span><span class="sub">Pilot Intelligence</span></div>
+    <span class="mod">A320 · Flow Patterns</span>
+  </div>
+</header>
+
+<section class="wrap hero">
+  <div class="eyebrow">Módulo operacional · Bloque 1 de 4</div>
+  <h1>Preparación de cabina, <em>barrido a barrido</em></h1>
+  <p class="lede">Los cuatro flujos de <i>cockpit preparation</i> del A320 sobre el esquema real de la cabina. Cada ítem está donde está el panel, porque un flujo no se aprende leyendo: se aprende con la mano.</p>
+  <div class="stats">
+    <div class="stat"><div class="n">4</div><div class="l">Flujos</div></div>
+    <div class="stat"><div class="n" id="s-items">0</div><div class="l">Ítems</div></div>
+    <div class="stat"><div class="n" id="s-done">0%</div><div class="l">Completado</div></div>
+  </div>
+</section>
+
+<nav class="tabsbar"><div class="wrap"><div class="tabs" id="tabs" role="tablist"></div></div></nav>
+<main class="wrap" id="main"></main>
+
+<footer class="wrap">
+  <div class="foot">
+    <p><b style="color:var(--ivory);font-weight:500">Material de estudio.</b> No sustituye al FCOM, al FCTM ni a los procedimientos del operador. Los esquemas de cabina son <b style="color:var(--ivory);font-weight:500">diagramas originales de Veyra</b>: reproducen la disposición y el orden de barrido, no las proporciones exactas del panel, que varían según estándar de fabricación. Verifique siempre contra la documentación de su compañía.</p>
+    <span class="fm">VEYRA</span>
+  </div>
+</footer>
+
+<script>
+/* ============ DIAGRAMAS DE CABINA ============
+   Coordenadas en un lienzo 0-100 de ancho. Para mover un panel
+   basta con cambiar x / y / w / h de su zona, o x / y de un ítem. */
+
+const DIAG={
+ zonas:{
+  vb:[100,86],litAll:true,
+  orient:"Corte funcional de la cabina. Cada zona gobierna una clase distinta de cosas.",
+  axis:[{x:50,y:3.2,t:"◄  ARRIBA  ·  SISTEMAS"},{x:50,y:85,t:"ABAJO Y ADELANTE  ·  VUELO  ►"}],
+  zones:[
+   {x:14,y:6,w:72,h:15,l:"OVERHEAD  ·  LOS SISTEMAS",ctl:[["pb","pb","knob","pb","knob","pb"]]},
+   {x:14,y:24,w:72,h:10,l:"GLARESHIELD  ·  LA TRAYECTORIA",ctl:[["knob","knob","pb","knob","knob"]]},
+   {x:14,y:37,w:72,h:15,l:"PANEL FRONTAL  ·  LA INFORMACIÓN",sh:"screen"},
+   {x:4,y:55,w:22,h:26,l:"CONSOLA CM1",sh:"seat",r:2},
+   {x:30,y:55,w:40,h:26,l:"PEDESTAL  ·  EMPUJE Y COMUNICACIONES",sh:"lever"},
+   {x:74,y:55,w:22,h:26,l:"CONSOLA CM2",sh:"seat",r:2}
+  ]},
+ ovhd:{
+  vb:[100,150],
+  orient:"Panel superior, visto desde los asientos mirando hacia arriba. Arriba del esquema = adelante, hacia el parabrisas. Las figuras representan el tipo de mando: pulsador, selector giratorio o mando protegido.",
+  axis:[{x:50,y:11.2,t:"◄  ADELANTE  ·  PARABRISAS"},{x:50,y:147,t:"ATRÁS  ·  CABEZA DEL PILOTO  ►"}],
+  bays:[{x:2,y:12.2,w:27,h:130},{x:30.5,y:12.2,w:39,h:108},{x:71,y:12.2,w:27,h:80}],
+  divider:11,
+  zones:[
+   {id:"MAINT",x:31,y:2,w:38,h:7.5,l:"PANEL DE MANTENIMIENTO",ctl:[["pb","pb","pb"]]},
+
+   {id:"CALLSC",x:2.5,y:13,w:26,h:8.4,l:"FLT INT · PA  (CAPT)",ctl:[["knob","pb","pb"]]},
+   {id:"ADIRS",x:2.5,y:23,w:26,h:8.4,l:"ADIRS",ctl:[["pb","pb","pb"]]},
+   {id:"FMS",x:2.5,y:33,w:26,h:8.4,l:"FMS",ctl:[["pb","pb"]]},
+   {id:"AIRDATA",x:2.5,y:43,w:26,h:8.4,l:"AIR DATA",ctl:[["pb","pb","pb"]]},
+   {id:"AUDIO",x:2.5,y:53,w:26,h:8.4,l:"AUDIO",ctl:[["knob","knob","pb"]]},
+   {id:"ACARS",x:2.5,y:63,w:26,h:8.4,l:"ACARS",ctl:[["pb","pb","pb"]]},
+   {id:"DFDR",x:2.5,y:73,w:26,h:8.4,l:"DFDR",ctl:[["pb","pb"]]},
+   {id:"FLTCTL1",x:2.5,y:83,w:26,h:8.4,l:"FLT CTL",ctl:[["pb","pb","pb"]]},
+   {id:"EMERELEC",x:2.5,y:93,w:26,h:8.4,l:"EMER ELEC PWR",ctl:[["pb","guard","knob"]]},
+   {id:"GPWS",x:2.5,y:103,w:26,h:8.4,l:"GPWS",ctl:[["pb","pb","pb","pb","pb"]]},
+   {id:"RCDR",x:2.5,y:113,w:26,h:8.4,l:"RCDR",ctl:[["knob","knob"]]},
+   {id:"OXY",x:2.5,y:123,w:26,h:8.4,l:"OXYGEN",ctl:[["guard","pb","pb"]]},
+   {id:"CALLS",x:2.5,y:133,w:26,h:8.4,l:"CALLS",ctl:[["pb","pb","pb","pb","pb"]]},
+
+   {id:"EVAC",x:31,y:13,w:38,h:9,l:"EVAC",ctl:[["knob","pb"]]},
+   {id:"FIRE",x:31,y:24,w:38,h:14,l:"FIRE  ·  ENG 1  ·  APU  ·  ENG 2",ctl:[["fire","fire","fire"],["pb","pb","pb","pb"]]},
+   {id:"ELEC",x:31,y:40,w:38,h:20,l:"ELEC",ctl:[["pb","pb","pb","pb"],["pb","pb","pb","pb"],["pb","pb","pb","pb"]]},
+   {id:"FUEL",x:31,y:62,w:38,h:16,l:"FUEL",ctl:[["pb","pb","pb","pb"],["pb","knob","pb"]]},
+   {id:"AIRCOND",x:31,y:80,w:38,h:16,l:"AIR COND",ctl:[["pb","knob","knob","knob","pb"],["pb","knob","pb"]]},
+   {id:"ANTIICE",x:31,y:98,w:15,h:9.4,l:"ANTI ICE",ctl:[["pb","pb","pb"]]},
+   {id:"PROBEW",x:47,y:98,w:10,h:9.4,l:"PROBE",ctl:[["pb"]]},
+   {id:"CABPRESS",x:58,y:98,w:11,h:9.4,l:"CAB PRESS",ctl:[["knob","pb"]]},
+   {id:"EXTLT",x:31,y:109.5,w:16,h:9.4,l:"EXT LT",ctl:[["pb","pb","pb","pb"]]},
+   {id:"INTLT",x:48,y:109.5,w:9,h:9.4,l:"INT LT",ctl:[["knob","pb"]]},
+   {id:"SIGNS",x:58,y:109.5,w:11,h:9.4,l:"SIGNS",ctl:[["knob","knob","knob"]]},
+
+   {id:"CALLSF",x:71.5,y:13,w:26,h:8.4,l:"FLT INT · PA  (F/O)",ctl:[["pb","knob","pb"]]},
+   {id:"CARGO",x:71.5,y:23,w:26,h:8.4,l:"CARGO SMOKE",ctl:[["pb","pb","pb"]]},
+   {id:"VENT",x:71.5,y:33,w:26,h:8.4,l:"VENTILATION",ctl:[["pb","pb"]]},
+   {id:"CABTEMP",x:71.5,y:43,w:26,h:8.4,l:"CABIN TEMP",ctl:[["knob"]]},
+   {id:"HYD",x:71.5,y:53,w:26,h:8.4,l:"HYD",ctl:[["pb","pb","pb"]]},
+   {id:"FLTCTL2",x:71.5,y:63,w:26,h:8.4,l:"FLT CTL",ctl:[["pb","pb"]]},
+   {id:"WIPER",x:71.5,y:73,w:26,h:8.4,l:"WIPER",ctl:[["knob","knob"]]},
+   {id:"RAIN",x:71.5,y:83,w:26,h:8.4,l:"RAIN RPLNT",ctl:[["knob"]]}
+  ]},
+ ctr:{
+  vb:[100,44],
+  orient:"Panel frontal, visto desde los asientos. El ISIS y el reloj van entre el ND del capitán y el ECAM; el tren y el A/SKID, entre el ECAM y el ND del primer oficial.",
+  zones:[
+   {x:1.5,y:6,w:14,h:32,l:"PFD CM1",sh:"screen"},
+   {x:16.8,y:6,w:14,h:32,l:"ND CM1",sh:"screen"},
+   {x:32.1,y:6,w:10,h:11,l:"ISIS",sh:"screen"},
+   {x:32.1,y:18.5,w:10,h:9,l:"CLOCK"},
+   {x:32.1,y:29,w:10,h:9,l:"BRK PR"},
+   {x:43.4,y:6,w:13,h:15,l:"EWD",sh:"screen"},
+   {x:43.4,y:22.5,w:13,h:15.5,l:"SD",sh:"screen"},
+   {x:57.7,y:6,w:11,h:11,l:"LDG GEAR"},
+   {x:57.7,y:18.5,w:11,h:9,l:"A/SKID"},
+   {x:57.7,y:29,w:11,h:9,l:"GEAR IND"},
+   {x:70,y:6,w:14,h:32,l:"ND CM2",sh:"screen"},
+   {x:85,y:6,w:13.8,h:32,l:"PFD CM2",sh:"screen"}
+  ]},
+ ped:{
+  vb:[100,92],
+  orient:"Consola central, vista desde arriba. Arriba del esquema = adelante. El pedestal se estrecha hacia atrás.",
+  shell:"17,2 83,2 81,86 19,86",
+  axis:[{x:50,y:90,t:"ATRÁS  ►"}],
+  zones:[
+   {x:38,y:6,w:24,h:9,l:"SWITCHING"},
+   {x:38,y:17,w:24,h:6,l:"ECP"},
+   {x:20,y:25,w:22,h:14,l:"MCDU 1",sh:"screen"},{x:58,y:25,w:22,h:14,l:"MCDU 2",sh:"screen"},
+   {x:41,y:25,w:18,h:21,l:"THRUST LEVERS",sh:"lever"},
+   {x:20,y:41,w:22,h:5,l:"RMP 1"},{x:58,y:41,w:22,h:5,l:"RMP 2"},
+   {x:20,y:48,w:20,h:9,l:"ACP 1"},{x:41,y:48,w:18,h:9,l:"ENG MASTER · MODE"},{x:60,y:48,w:20,h:9,l:"ACP 2"},
+   {x:20,y:59,w:19,h:7,l:"SPD BRK"},{x:41,y:59,w:18,h:9,l:"PARK BRK"},{x:60,y:59,w:19,h:7,l:"FLAPS"},
+   {x:20,y:70,w:19,h:9,l:"CKPT DOOR"},{x:41,y:70,w:18,h:9,l:"GRAVITY GEAR"},{x:60,y:70,w:19,h:9,l:"ATC / TCAS"}
+  ]},
+ final:{
+  vb:[100,70],
+  orient:"Planta de la cabina de mando. Arriba del esquema = adelante. Cada tripulante barre primero el glareshield y después su lado.",
+  zones:[
+   {x:8,y:5,w:84,h:10,l:"GLARESHIELD  ·  FCU  ·  EFIS",r:3},
+   {x:8,y:18,w:32,h:11,l:"PANEL CM1"},{x:42,y:18,w:16,h:11,l:"ECAM",sh:"screen"},{x:60,y:18,w:32,h:11,l:"PANEL CM2"},
+   {x:3,y:33,w:13,h:29,l:"CONSOLA CM1"},{x:84,y:33,w:13,h:29,l:"CONSOLA CM2"},
+   {x:21,y:37,w:15,h:23,l:"CM1",sh:"seat",r:2.5},{x:64,y:37,w:15,h:23,l:"CM2",sh:"seat",r:2.5},
+   {x:41,y:33,w:18,h:29,l:"PEDESTAL"}
+  ]}
+};
+
+const FLOWS=[
+{
+ id:"ovhd",n:1,short:"Overhead Panel",dg:"ovhd",
+ title:"Cockpit Preparation — Panel Superior",role:"PF",
+ purpose:"El barrido más largo de la preparación. Tres recorridos ascendentes que configuran los sistemas del avión y, al terminar, dejan el panel superior a oscuras: cualquier luz encendida al final del flujo es un punto que revisar.",
+ scan:"Tres barridos ascendentes",
+ sweeps:["Barrido 1 · Columna izquierda","Barrido 2 · Columna central","Barrido 3 · Columna derecha"],
+ notes:[
+  {t:"warn",h:"Parada en tránsito",b:"Si la parada es <b>asegurada</b> o hay <b>cambio de tripulación</b>, se ejecutan todas las acciones. En una <b>parada en tránsito</b> solo se ejecutan las marcadas con <b>✻</b> en el QRH."},
+  {t:"",h:"El sentido del barrido",b:"Los tres recorridos van <b>de abajo hacia arriba</b>, es decir desde los paneles más próximos a la cabeza del piloto hacia el parabrisas. Se extinguen <b>todas las luces blancas</b> a medida que se avanza, y el panel de mantenimiento cierra el barrido central con <b>todas las luces apagadas</b>."}
+ ],
+ items:[
+  {sw:0,zid:"RCDR",ci:[0,0],s:"RCDR",n:"RCDR GND CTL",v:"ON",t:1,
+   w:"Habilita el control en tierra de los registradores. Va marcado para tránsito porque el registro debe quedar activo en cualquier escala, no solo cuando se prepara el avión desde cero.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,zid:"RCDR",ci:[0,1],s:"RCDR",n:"CVR TEST pb",v:"PRESS",t:0,
+   w:"Comprueba el registrador de voz de cabina. No aporta nada al vuelo en curso, pero es requisito de aeronavegabilidad y lo primero que se busca después de un suceso.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,zid:"AUDIO",ci:[0,0],s:"AUDIO",n:"AUDIO SWITCHING",v:"NORM",t:0,
+   w:"Devuelve cada puesto a su fuente de audio normal. Si quedó conmutado de un vuelo anterior, el piloto oiría por una vía que no corresponde y el problema se detecta tarde, normalmente ya en frecuencia con el control.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,zid:"ADIRS",ci:[0,1],s:"ADIRS",n:"ALL IR MODE sel",v:"NAV",t:1,
+   w:"Cierra el barrido izquierdo arrancando el alineamiento de las tres unidades inerciales. Cada IR mide su propio movimiento y la rotación de la Tierra para determinar dónde está el norte, así que <b>el avión no debe moverse durante el proceso</b>: cualquier desplazamiento contamina la medición y compromete la navegación de todo el vuelo.",r:"Manual A320 · cap. 14 — Navegación"},
+
+  {sw:1,zid:"EXTLT",ci:[0,0],s:"EXT LT",n:"STROBE",v:"AUTO",t:0,
+   w:"En <b>AUTO</b> las estroboscópicas se encienden solas cuando el avión pasa a configuración de vuelo. Es automatización deliberada: elimina el olvido más frecuente en la carrera de despegue.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:1,zid:"EXTLT",ci:[0,1],s:"EXT LT",n:"BEACON",v:"OFF",t:0,
+   w:"Permanece <b>apagado</b> durante toda la preparación. No es una luz más: encendido significa <b>«los motores van a girar»</b> y es la señal al personal de tierra para alejarse de las zonas de aspiración y chorro. Se enciende justo antes del arranque, ni un minuto antes.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:1,zid:"EXTLT",ci:[0,3],s:"EXT LT",n:"REMAINING EXT LT",v:"AS RQRD",t:0,
+   w:"El resto de la iluminación exterior según necesidad y hora del día. Las de alta intensidad —aterrizaje y despegue— se dejan para su fase, porque consumen y se ven desde muy lejos.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:1,zid:"SIGNS",ci:[0,0],s:"SIGNS",n:"SIGNS",v:"ON / AUTO",t:1,
+   w:"Señales de cinturones y de no fumar / salida. Gestionadas por el CIDS, son la vía por la que la cabina de mando comunica estado a los pasajeros sin hablar.",r:"Manual A320 · cap. 15 y 19"},
+  {sw:1,zid:"SIGNS",ci:[0,2],s:"SIGNS",n:"EMER EXIT LT",v:"ARM",t:1,
+   w:"<b>ARM</b>, no <b>ON</b>. La iluminación de emergencia tiene baterías propias, independientes del sistema eléctrico del avión. En ARM está <b>lista sin consumir</b>, y se enciende sola si se pierde la alimentación normal; dejarla en ON agota unas baterías de autonomía limitada que se necesitan precisamente en una evacuación.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:1,zid:"CABPRESS",ci:[0,0],s:"CABIN PRESS",n:"LDG ELEV",v:"AUTO",t:0,
+   w:"En <b>AUTO</b> el controlador toma la elevación del aeropuerto de destino del FMGS y construye con ella el programa de presurización. Es lo que le permite <b>repartir el cambio de presión a lo largo de todo el descenso</b> en lugar de reaccionar a la altitud del momento.",r:"Manual A320 · cap. 6 — Presurización"},
+  {sw:1,zid:"PROBEW",ci:[0,0],s:"PROBE / WINDOW HEAT",n:"PROBE / WINDOW HEAT",v:"AUTO",t:0,
+   w:"Su criticidad se entiende al revés: una sonda helada <b>no avisa de falla, entrega un dato falso</b>, y sin velocidad fiable el avión no puede proteger nada. Es también lo único que impide que una misma causa —el mismo hielo— inutilice las tres fuentes a la vez.",r:"Manual A320 · cap. 7 y 14"},
+  {sw:1,zid:"AIRCOND",ci:[1,1],s:"AIR COND",n:"PACK FLOW",v:"AS RQRD",t:1,
+   w:"Caudal de los packs según ocupación y temperatura exterior. Más caudal cuesta más aire sangrado y, con él, más combustible: no es una preferencia de confort, es una decisión con efecto en el consumo.",r:"Manual A320 · cap. 6 — Aire acondicionado"},
+  {sw:1,zid:"ELEC",ci:[0,1],s:"ELEC",n:"BAT",v:"CHECK",t:0,
+   w:"Verifica la tensión de ambas baterías. Son las que sostienen la barra esencial durante la transición a configuración de emergencia y las que permiten arrancar el APU sin ninguna otra fuente: una batería baja no es un detalle de mantenimiento.",r:"Manual A320 · cap. 2 — Sistema eléctrico"},
+  {sw:1,zid:"ELEC",ci:[2,1],s:"ELEC",n:"ELEC PANEL",v:"CHECK",t:0,
+   w:"Confirma la configuración eléctrica de partida. Con el avión alimentado desde tierra o desde el APU, el panel debe estar apagado salvo lo deliberado: las dos redes independientes, sin acoplar en paralelo.",r:"Manual A320 · cap. 2 — Sistema eléctrico"},
+  {sw:1,zid:"FIRE",ci:[0,0],s:"FIRE",n:"ENG FIRE",v:"CHECK / TEST",t:0,
+   w:"Prueba los bucles de detección de incendio de motor. Cada zona tiene <b>dos bucles independientes</b> y la alerta exige que ambos detecten —o que uno haya fallado y el otro detecte—. Esa doble coincidencia es lo que elimina las falsas alarmas; la prueba es lo que confirma que ambos bucles siguen vivos.",r:"Manual A320 · cap. 16 — Incendios"},
+  {sw:1,zid:"EVAC",ci:[0,0],s:"EVAC",n:"CAPT & PURS / CAPT",v:"AS RQRD",t:0,
+   w:"Define quién queda facultado para iniciar la señal de evacuación: solo el comandante, o comandante y jefe de cabina. Es una decisión de coordinación de tripulación, y por eso va según el procedimiento del operador.",r:"Manual A320 · cap. 18 — Puertas y salidas"},
+  {sw:1,zid:"MAINT",ci:[0,1],s:"MAINT",n:"MAINT PANEL",v:"CHECK",t:0,
+   w:"Cierra el barrido central, ya sobre el overhead posterior: todas las luces del panel de mantenimiento <b>apagadas</b>. Es la comprobación que da sentido a la regla del <i>dark cockpit</i> — a partir de aquí, cualquier luz encendida significa algo.",r:"Manual A320 · cap. 0 — Filosofía Airbus"},
+
+  {sw:2,zid:"VENT",ci:[0,0],s:"VENTILATION",n:"VENT",v:"CHECK",t:0,
+   w:"Ventilación de aviónica: un circuito separado del de cabina, silencioso y crítico. Sin refrigeración, los computadores del avión empiezan a fallar, y por eso tiene alertas propias en lugar de compartir las del aire acondicionado.",r:"Manual A320 · cap. 6 — Ventilación"},
+  {sw:2,zid:"CALLSF",ci:[0,1],s:"CALLS  (F/O)",n:"PA",v:"RECEPT",t:0,
+   w:"Deja el aviso a pasajeros en recepción. El PA tiene prioridad jerárquica —cabina de mando por encima de tripulación de cabina, y esta por encima de lo pregrabado—, de modo que un aviso desde aquí corta cualquier otro que esté sonando.",r:"Manual A320 · cap. 15 — Comunicaciones"}
+  ]
+},
+{
+ id:"ctr",n:2,short:"Center Instrument Panel",dg:"ctr",
+ title:"Cockpit Preparation — Panel Central de Instrumentos",role:"PF",
+ purpose:"El flujo más corto de los cuatro: tres ítems, todos marcados para tránsito. El barrido recorre las dos columnas estrechas que flanquean el ECAM, de izquierda a derecha.",
+ scan:"Un barrido, izquierda a derecha",
+ sweeps:["Barrido único · izquierda a derecha"],
+ notes:[
+  {t:"",h:"Los tres son de tránsito",b:"Los tres ítems llevan <b>✻</b>: se ejecutan también en parada en tránsito. No es casual — los tres afectan a capacidades que se usan en los primeros segundos del siguiente vuelo."}
+ ],
+ items:[
+  {sw:0,x:37.1,y:12.5,s:"ISIS",n:"ISIS",v:"CHECK",t:1,
+   w:"Los instrumentos de reserva. Su valor está en que <b>no comparten nada</b> con el sistema principal: fuente de datos propia y alimentación propia. Es el mismo principio que el respaldo mecánico de los mandos de vuelo o la extensión por gravedad del tren — el último nivel de respaldo debe ser independiente, no una copia del primero.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,x:37.1,y:24.6,s:"CLOCK",n:"CLOCK",v:"CHECK / SET",t:1,
+   w:"Referencia horaria común de la cabina. Alimenta registradores y tiempos operacionales, y es la base de cualquier reconstrucción posterior de lo ocurrido.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,x:63.2,y:24.6,s:"A/SKID & N/W STRG",n:"A/SKID & N/W STRG sw",v:"ON",t:1,
+   w:"Habilita antiskid y dirección de rueda de nariz. El antiskid mantiene cada rueda <b>justo por debajo del bloqueo</b>, que es donde se obtiene la máxima deceleración: una rueda bloqueada no frena mejor, frena peor y revienta el neumático. Sin él, la distancia de parada aumenta de forma significativa — y eso se descubre en el aterrizaje, no aquí.",r:"Manual A320 · cap. 10 — Tren y frenos"}
+ ]
+},
+{
+ id:"ped",n:3,short:"Pedestal",dg:"ped",
+ title:"Cockpit Preparation — Pedestal",role:"PF",
+ purpose:"Tres barridos descendentes sobre la consola central. Es el flujo que deja el avión en configuración segura de tierra: motores cortados, empuje en ralentí y tren asegurado.",
+ scan:"Tres barridos descendentes",
+ sweeps:["Barrido 1 · Lado izquierdo","Barrido 2 · Eje central","Barrido 3 · Lado derecho"],
+ notes:[
+  {t:"",h:"Configuración segura de tierra",b:"Los ítems marcados con <b>✻</b> son los que definen el estado seguro del avión en rampa. Se verifican también en tránsito porque un solo elemento fuera de posición —una palanca de empuje que no esté en ralentí, un <i>engine master</i> en ON— cambia lo que ocurre en el siguiente arranque."}
+ ],
+ items:[
+  {sw:0,x:30,y:54.1,s:"ACP",n:"ACP",v:"CHECK",t:0,
+   w:"Panel de control de audio. Aquí vive la precaución más repetida del avión: <b>INT</b> sirve únicamente para hablar con quien está conectado <b>en la nariz</b>; para cualquier otro puerto se usa <b>SVC</b> — que además comparten los tripulantes de cabina entre sí, de modo que mecánico, pilotos y auxiliares pueden acabar en el mismo canal. La pregunta correcta no es «¿con quién hablo?» sino <b>«¿dónde está conectado?»</b>.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,x:29.5,y:76.1,s:"CKPT DOOR",n:"CKPT DOOR",v:"CHECK",t:0,
+   w:"Verifica el sistema de la puerta de cabina de mando. Lleva paneles de descompresión que ceden ante una diferencia brusca de presión entre cabina de mando y cabina de pasajeros, para evitar daño estructural.",r:"Manual A320 · cap. 18 — Puertas y salidas"},
+
+  {sw:1,x:50,y:12.1,s:"SWITCHING",n:"SWITCHING PANEL",v:"NORM",t:0,
+   w:"Devuelve las pantallas a su asignación estándar. Cualquier DMC puede alimentar cualquier pantalla, así que una conmutación heredada del vuelo anterior no se manifiesta como falla: simplemente la información aparece donde no se la espera.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:1,x:50,y:35,s:"THRUST",n:"THRUST levers",v:"IDLE",t:1,
+   w:"Las palancas no se mueven solas en este avión: su posición <b>fija el techo de empuje</b> que el automatismo puede usar, no el empuje actual. En ralentí, ese techo es el mínimo — punto de partida obligado antes de cualquier arranque.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:1,x:46,y:54.1,s:"ENG MASTER",n:"ENG MASTER sw",v:"OFF",t:1,
+   w:"Corta el suministro de combustible a los motores. Es el interruptor que decide si hay o no motor, y su posición en OFF es la condición previa a toda la secuencia de arranque.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:1,x:54,y:54.1,s:"ENG MODE",n:"ENG MODE sel",v:"NORM",t:1,
+   w:"En <b>NORM</b> el FADEC gestiona la ignición según su propia lógica. Las posiciones <i>CRANK</i> e <i>IGN/START</i> tienen usos concretos, y dejarlas seleccionadas altera el comportamiento del motor en el momento menos oportuno.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:1,x:50,y:65.1,s:"PARK BRK",n:"PARK BRK",v:"AS RQRD",t:1,
+   w:"La presión la mantiene el <b>acumulador amarillo</b>, por lo que funciona con las bombas paradas y el avión apagado. La precaución que no está escrita en el panel: <b>no se aplica con los frenos muy calientes</b> — sin rotación ni ventilación, el calor se concentra en un punto del disco.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+  {sw:1,x:50,y:76.1,s:"GRAVITY GEAR",n:"GRAVITY GEAR EXTN",v:"CHECK STOWED",t:0,
+   w:"La manivela de extensión por gravedad, recogida en su alojamiento. Es un sistema <b>puramente mecánico</b> —sin hidráulico, sin electricidad, sin computadores— y su uso es <b>irreversible en vuelo</b>: una vez extendido así, el tren no vuelve a retraerse hasta que mantenimiento lo repone en tierra. Comprobar que está estibada es comprobar que nadie la ha tocado.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+
+  {sw:2,x:69.5,y:76.1,s:"ATC",n:"ATC",v:"SET / STBY",t:1,
+   w:"Código de transpondedor cargado y el sistema en espera. El avión lleva <b>cuatro antenas de transpondedor</b> —dos arriba y dos abajo— precisamente para no dejar puntos ciegos en la cobertura, pero eso no sirve de nada si el código no está puesto antes de rodar.",r:"Manual A320 · cap. 14 — Navegación"}
+ ]
+},
+{
+ id:"final",n:4,short:"Final Cockpit Prep",dg:"final",
+ title:"Cockpit Preparation — Preparación Final",role:"PM",
+ purpose:"El único flujo de este bloque que ejecutan los dos pilotos, y el único que se hace con ambos sentados. Cierra la preparación con una verificación cruzada de los datos de performance y un barrido simétrico de cada puesto.",
+ scan:"Verificación cruzada + barrido simétrico",
+ sweeps:["PM · verificación previa","CM1 y CM2 · barrido SOP"],
+ notes:[
+  {t:"",h:"Con ambos pilotos sentados",b:"Este flujo <b>no se inicia</b> hasta que los dos pilotos están en sus puestos. Su valor está en que es el primer momento del vuelo en que existe <b>verificación cruzada real</b>: dos personas mirando los mismos datos de forma independiente."},
+  {t:"",h:"Barrido simétrico",b:"Cada tripulante recorre primero el <b>glareshield</b> y después su <b>consola lateral y panel de instrumentos</b>, según el SOP del operador. La simetría es deliberada: los dos puestos quedan configurados igual, y cualquier diferencia se hace visible."}
+ ],
+ items:[
+  {sw:0,x:46,y:42,s:"MCDU",n:"FMS PREPARATION",v:"CHECK",t:0,pm:1,
+   w:"El PM revisa la programación completa del FMS hecha por el PF: ruta, performance, pesos. Es una lectura independiente, no una confirmación de cortesía — el objetivo es que dos cabezas hayan llegado por separado a los mismos números.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,x:54,y:42,s:"MCDU / EFB",n:"EFB / MCDU GREEN DOT",v:"COMPARE",t:0,pm:1,
+   w:"Se compara la <i>green dot</i> calculada por el EFB con la que muestra el MCDU. Son <b>dos cálculos independientes</b> a partir de fuentes distintas: si coinciden, el peso y la configuración cargados son coherentes. Es la comprobación que atrapa un error de peso antes de que se convierta en un problema de performance en el despegue.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:1,x:50,y:11.1,s:"GLARESHIELD",n:"GLARESHIELD",v:"SOP",t:0,
+   w:"Primer tramo del barrido de cada puesto: FCU, paneles EFIS y luces de Master Warning y Master Caution. Es donde se fija lo que el avión va a hacer —altitud, rumbo, velocidad— y donde se verá si algo no va como se espera.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:1,x:9.5,y:45,s:"CONSOLA CM1",n:"LATERAL CONSOLES / INSTRUMENT PANELS",v:"SOP",t:0,
+   w:"Segundo tramo: consola lateral y panel de instrumentos de cada tripulante, en ambos puestos de forma simétrica. Cierra la preparación dejando los dos lados en configuración idéntica, que es la condición para que una discrepancia posterior signifique algo.",r:"Manual A320 · cap. 13 — Indicación y registro"}
+ ]
+}
+];
+
+const KEY="veyra.a320.flows.v1";
+let store={};
+try{store=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){store={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+let current=-1,practice=null;
+
+FLOWS.forEach(f=>{
+  const c={};
+  f.items.forEach((it,i)=>{it.id=f.id+"-"+i;c[it.sw]=(c[it.sw]||0)+1;it.k=c[it.sw]});
+});
+const TOTAL=FLOWS.reduce((a,f)=>a+f.items.length,0);
+document.getElementById("s-items").textContent=TOTAL;
+const isDone=id=>!!store[id];
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+/* ---------- esquema de cabina ---------- */
+function fit(l,w,mx){return Math.max(1,Math.min(mx||1.75,(w-2.4)/(l.length*0.66)))}
+function rowsOf(z){const c=z.ctl;if(!c)return[];return Array.isArray(c[0])?c:[c]}
+function ctlPos(z,r,c){
+  const rows=rowsOf(z),row=rows[r]||rows[0]||[],n=Math.max(row.length,1);
+  const P=Math.min(5.0,(z.w-4.4)/Math.max(n-1,1));
+  const sx=z.x+z.w/2-(n-1)*P/2;
+  return{x:sx+c*P,y:z.y+6+r*5.0};
+}
+function glyph(t,cx,cy){
+  if(t==="knob")return `<circle class="g-knob" cx="${cx}" cy="${cy}" r="1.75"/><line class="g-tick" x1="${cx}" y1="${cy-.2}" x2="${cx}" y2="${cy-1.65}"/>`;
+  if(t==="fire")return `<rect class="g-fire" x="${cx-2.3}" y="${cy-1.7}" width="4.6" height="3.4" rx=".6"/>`;
+  if(t==="guard")return `<rect class="g-guard" x="${cx-1.9}" y="${cy-1.7}" width="3.8" height="3.4" rx=".5"/><line class="g-tick" x1="${cx-1.9}" y1="${cy-.5}" x2="${cx+1.9}" y2="${cy-.5}"/>`;
+  if(t==="lamp")return `<circle class="g-lamp" cx="${cx}" cy="${cy}" r="1.2"/>`;
+  return `<rect class="g-pb" x="${cx-1.8}" y="${cy-1.6}" width="3.6" height="3.2" rx=".5"/><line class="g-tick" x1="${cx-.9}" y1="${cy+.75}" x2="${cx+.9}" y2="${cy+.75}"/>`;
+}
+function resolve(f){
+  const d=DIAG[f.dg],by={};
+  d.zones.forEach(z=>{if(z.id)by[z.id]=z});
+  f.items.forEach(it=>{
+    if(it.zid&&by[it.zid]){const c=it.ci||[0,0],pt=ctlPos(by[it.zid],c[0],c[1]);it._x=pt.x;it._y=pt.y}
+    else{it._x=it.x;it._y=it.y}
+  });
+}
+
+function buildSVG(f){
+  const d=DIAG[f.dg],[W,H]=d.vb;
+  resolve(f);
+  let s=`<svg class="panel" viewBox="0 0 ${W} ${H}" role="img" aria-label="Esquema de cabina — ${f.title}">`;
+  if(d.shell) s+=`<polygon class="shell" points="${d.shell}"/>`;
+  else s+=`<rect class="frame" x=".5" y=".5" width="${W-1}" height="${H-1}" rx="1.5"/>`;
+  (d.bays||[]).forEach(b=>{s+=`<rect class="bay" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1"/>`});
+  if(d.divider) s+=`<line class="divider" x1="6" y1="${d.divider}" x2="${W-6}" y2="${d.divider}"/>`;
+  (d.axis||[]).forEach(a=>{s+=`<text class="axis" x="${a.x}" y="${a.y}" font-size="1.7" text-anchor="middle">${esc(a.t)}</text>`});
+
+  d.zones.forEach(z=>{
+    const on=d.litAll||f.items.some(i=>i._x>=z.x-.6&&i._x<=z.x+z.w+.6&&i._y>=z.y-.6&&i._y<=z.y+z.h+.6);
+    s+=`<g class="zone${on?" lit":""}">`;
+    s+=`<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="${z.r||1}"/>`;
+    if(z.sh==="screen")
+      s+=`<rect class="glass" x="${z.x+.9}" y="${z.y+3.5}" width="${z.w-1.8}" height="${Math.max(z.h-4.4,1.2)}" rx=".5"/>`;
+    if(z.sh==="lever"){
+      const cy=z.y+4.5,hh=z.h-7;
+      s+=`<rect class="part" x="${z.x+z.w/2-4.6}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
+      s+=`<rect class="part" x="${z.x+z.w/2+1.2}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
+    }
+    if(z.sh==="seat")
+      s+=`<rect class="part" x="${z.x+1.6}" y="${z.y+3.4}" width="${z.w-3.2}" height="${z.h-5}" rx="2"/>`;
+    rowsOf(z).forEach((row,r)=>row.forEach((t,c)=>{const q=ctlPos(z,r,c);s+=glyph(t,q.x,q.y)}));
+    s+=`<text x="${z.x+1.5}" y="${z.y+2.6}" font-size="${fit(z.l,z.w).toFixed(2)}">${esc(z.l)}</text></g>`;
+  });
+
+  f.sweeps.forEach((_,si)=>{
+    const g=f.items.filter(i=>i.sw===si);
+    if(g.length<2)return;
+    s+=`<polyline class="sweep" points="${g.map(i=>i._x+","+i._y).join(" ")}"/>`;
+    const a=g[g.length-2],b=g[g.length-1];
+    const dx=b._x-a._x,dy=b._y-a._y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,px=-uy,py=ux;
+    const tx=b._x-ux*2.6,ty=b._y-uy*2.6;
+    s+=`<polyline class="sweep head" points="${tx+px*1.3},${ty+py*1.3} ${b._x-ux*.2},${b._y-uy*.2} ${tx-px*1.3},${ty-py*1.3}"/>`;
+  });
+
+  f.items.forEach(it=>{
+    s+=`<g class="dot${it.pm?" pm":""}${isDone(it.id)?" checked":""}" data-id="${it.id}" tabindex="0" role="button" aria-label="${esc(it.n)}">`;
+    s+=`<circle cx="${it._x}" cy="${it._y}" r="2.7"/>`;
+    s+=`<text x="${it._x}" y="${it._y+.85}" font-size="2.3">${it.k}</text></g>`;
+  });
+  s+=`<g id="tip"></g></svg>`;
+  return s;
+}
+
+function buildList(f){
+  let h="";
+  f.sweeps.forEach((sl,si)=>{
+    const g=f.items.filter(i=>i.sw===si);
+    if(!g.length)return;
+    h+=`<div class="group"><div class="grouplbl">${sl}</div>`;
+    g.forEach(it=>{
+      h+=`<div class="item${it.pm?" pm":""}" data-id="${it.id}">
+        <div style="display:flex;align-items:flex-start;gap:11px">
+          <button class="tick" id="tick-${it.id}" aria-pressed="${isDone(it.id)}" aria-label="Marcar ${esc(it.n)}">✓</button>
+          <button class="itemrow" data-row="${it.id}" aria-expanded="false">
+            <span class="seq">${it.k}</span>
+            <span class="body">
+              <span class="call"><span class="n">${esc(it.n)}</span><span class="lead"></span><span class="v">${esc(it.v)}</span></span>
+              <span class="metaline"><span class="panelname">${esc(it.s)}</span>${it.t?'<span class="star">✻ tránsito</span>':''}</span>
+            </span>
+            <span class="caret">›</span>
+          </button>
+        </div>
+        <div class="why" hidden>${it.w}<br><span class="tag">${it.r}</span></div>
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+  return h;
+}
+
+const INTRO_ZONES=[
+ ["Overhead","Los <b>sistemas</b>: eléctrico, hidráulico, combustible, aire, antihielo, fuego, luces, APU","Flujo 1"],
+ ["Glareshield","La <b>trayectoria</b>: FCU, paneles EFIS y las luces de Master Warning y Master Caution","Flujo 4"],
+ ["Panel frontal","La <b>información</b>: PFD, ND, ECAM, ISIS, reloj, tren","Flujo 2"],
+ ["Pedestal","<b>Empuje</b>, comunicaciones y configuración: palancas, MCDU, RMP, ACP, ATC","Flujo 3"],
+ ["Consolas laterales","<b>Sidestick</b>, tiller y audio de cada puesto","Flujo 4"]
+];
+
+function renderIntro(){
+  const stub={dg:"zonas",items:[],sweeps:[],title:"Zonas de la cabina"};
+  document.getElementById("main").innerHTML=`
+  <section class="intro">
+    <div class="flowhead">
+      <div class="rolerow"><span class="ata">Módulo 0 · Fundamentos</span></div>
+      <h2>Antes del primer barrido</h2>
+      <p class="purpose lead">Cinco ideas que hay que tener claras antes de memorizar un solo ítem. Sin ellas, un flujo es una lista de cosas que tocar; con ellas, es una herramienta.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">01 · Qué es un flow</div>
+      <h3>Un recorrido del panel, no una lista de acciones</h3>
+      <p>Un <i>flow pattern</i> es un <b style="color:var(--ivory);font-weight:500">recorrido físico del panel, memorizado y siempre igual</b>, que deja una zona de la cabina configurada para la fase que viene.</p>
+      <ul class="bul">
+        <li><b>Es físico.</b> Sigue la geografía del panel, no el orden lógico de los sistemas. Por eso el barrido del overhead toca el eléctrico y el aire acondicionado seguidos: están uno encima del otro.</li>
+        <li><b>Es fijo.</b> El mismo recorrido siempre — avión lleno o vacío, de día o de noche, con prisa o sin ella. Su valor está en que no se decide sobre la marcha.</li>
+        <li><b>Es completo.</b> Si se recorre entero, no queda nada sin tocar en esa zona. La cobertura la garantiza el recorrido, no la memoria de los ítems.</li>
+      </ul>
+      <p class="pull">Un flow se hace con la mano. La lista de chequeo se hace con la vista.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">02 · Flow y checklist</div>
+      <h3>La lista no sustituye al flujo, y el flujo no sustituye a la lista</h3>
+      <p>Son dos instrumentos con funciones distintas. Confundirlos es el error más común al empezar en el avión.</p>
+      <div class="vs">
+        <div class="vscard">
+          <div class="tag">El flujo</div><h4>Hace el trabajo</h4>
+          <ul>
+            <li>Recorrido completo de la zona</li>
+            <li>Se ejecuta <b style="color:var(--ivory);font-weight:500">de memoria</b></li>
+            <li>Toca <b style="color:var(--ivory);font-weight:500">todos</b> los ítems</li>
+            <li>Orden geográfico</li>
+          </ul>
+        </div>
+        <div class="vscard">
+          <div class="tag">La lista de chequeo</div><h4>Comprueba el trabajo</h4>
+          <ul>
+            <li>Solo los <b style="color:var(--ivory);font-weight:500">puntos críticos</b></li>
+            <li>Se <b style="color:var(--ivory);font-weight:500">lee</b>, en voz alta</li>
+            <li>Confirma lo ya hecho</li>
+            <li>Orden de prioridad</li>
+          </ul>
+        </div>
+      </div>
+      <p class="pull">La lista de chequeo no es la forma de hacer el trabajo: es la forma de comprobar que se hizo.</p>
+      <p>De ahí el error a evitar: <b style="color:var(--ivory);font-weight:500">configurar el avión leyendo la lista</b>. Tiene dos consecuencias. La primera, que se salta por el panel en un orden que no corresponde a ninguna geografía. La segunda, más grave: <b style="color:var(--ivory);font-weight:500">todo lo que la lista no menciona queda sin configurar</b>. La lista es corta precisamente porque presupone que el flujo ya se hizo.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">03 · El sentido del barrido</div>
+      <h3>Por qué el recorrido es geográfico y no lógico</h3>
+      <ul class="bul">
+        <li><b>La memoria de posición es más fiable que la de secuencia.</b> La mano encuentra el panel aunque la cabeza esté ocupada con la radio o con el despacho.</li>
+        <li><b>No deja huecos.</b> Un recorrido continuo cubre la zona entera; una lista de ítems sueltos no garantiza cobertura.</li>
+        <li><b>Resiste la interrupción.</b> Si cortan el barrido a mitad, se sabe dónde se estaba, porque el punto de retorno es <i>un lugar</i>, no un número.</li>
+      </ul>
+      <p>En la preparación de cabina, el <b style="color:var(--ivory);font-weight:500">overhead se barre en sentido ascendente</b> —desde los paneles próximos a la cabeza del piloto hacia el parabrisas— y el <b style="color:var(--ivory);font-weight:500">pedestal en sentido descendente</b>. En cada esquema de este módulo la flecha indica el sentido.</p>
+      <div class="note"><b>El cierre del barrido.</b> Al terminar un flujo, <b>el panel debe quedar apagado</b> salvo lo que se haya activado a propósito. Cualquier luz encendida al final es un punto que revisar — es la verificación más rápida que existe en este avión, y la razón práctica de toda la filosofía de <i>dark cockpit</i>.</div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">04 · Zonas de la cabina</div>
+      <h3>Cada zona gobierna una clase distinta de cosas</h3>
+      <p>Los flujos no están repartidos por sistema, sino por <b style="color:var(--ivory);font-weight:500">zona física</b>. Saber qué se controla en cada zona permite predecir dónde estará un mando antes de buscarlo.</p>
+      <div class="zmap">
+        <div class="diagcard">
+          <div class="cap"><span>Zonas funcionales</span><span>Veyra</span></div>
+          <div class="diagscroll">${buildSVG(stub)}</div>
+        </div>
+        <div>
+          <table class="ztab">
+            <thead><tr><th>Zona</th><th>Qué se controla</th><th>Flujo</th></tr></thead>
+            <tbody>${INTRO_ZONES.map(z=>`<tr><td>${z[0]}</td><td>${z[1]}</td><td class="fl">${z[2]}</td></tr>`).join("")}</tbody>
+          </table>
+          <p class="pull" style="margin-top:24px">Los sistemas se controlan arriba. El vuelo se controla abajo y adelante.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">05 · PF y PM</div>
+      <h3>Un reparto de tareas, no una jerarquía</h3>
+      <div class="roles">
+        <div class="rolecard pf"><div class="who">PF · Pilot Flying</div>
+          <h4>Vuela el avión</h4>
+          <p>Manda la trayectoria: configuración, automatismos, empuje. En la preparación de cabina ejecuta <b style="color:var(--ivory);font-weight:500">los tres barridos de configuración</b> — overhead, panel frontal y pedestal.</p></div>
+        <div class="rolecard pm"><div class="who">PM · Pilot Monitoring</div>
+          <h4>Vigila y comunica</h4>
+          <p>Supervisa lo que hace el PF, lee las listas, habla con el control y ejecuta lo que el PF le pide. En este bloque aparece en la <b style="color:var(--ivory);font-weight:500">preparación final</b>, donde revisa el FMS y compara la <i>green dot</i>.</p></div>
+      </div>
+      <p>El punto que conviene fijar: <b style="color:var(--ivory);font-weight:500">PF y PM no son el capitán y el primer oficial</b>. Un comandante puede ser PM y un primer oficial PF; el reparto se acuerda sector a sector. Lo que define quién hace qué en un flujo es el <b style="color:var(--ivory);font-weight:500">rol</b>, no el asiento ni la antigüedad.</p>
+      <div class="note"><b>En este entrenador.</b> Los ítems del <b style="color:var(--pf)">PF van en oro</b> y los del <b style="color:var(--pm)">PM en cian</b>, tanto en el esquema como en la lista. Cada flujo lleva su rol en la etiqueta del encabezado.</div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">06 · Cómo se entrena en Veyra</div>
+      <h3>Tres capas, en este orden</h3>
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div>
+          <h4>Reconocer</h4>
+          <p>Ubicar cada ítem sobre el panel al que pertenece. El esquema de cabina y la secuencia numerada trabajan sincronizados: al tocar un punto se abre su acción, y al revés.</p>
+          <div class="how">Esquema de cabina + secuencia de acciones</div></div></div>
+        <div class="step"><div class="sn">2</div><div>
+          <h4>Entender</h4>
+          <p>Cada ítem abre su razón operacional, con la referencia al capítulo correspondiente del Manual de Sistemas A320. Un flujo que se entiende se olvida menos, y sobre todo se reconstruye si se pierde el hilo.</p>
+          <div class="how">El porqué de cada acción + referencia cruzada al manual</div></div></div>
+        <div class="step"><div class="sn">3</div><div>
+          <h4>Automatizar</h4>
+          <p>El modo práctica oculta los números del esquema y exige tocar los puntos <b style="color:var(--ivory);font-weight:500">en orden de barrido</b>, sobre la geometría real de la cabina. Autocorrige y cuenta los errores.</p>
+          <div class="how">Modo práctica + checklist con progreso guardado</div></div></div>
+      </div>
+      <div class="note"><b>Recomendación de uso.</b> Tres pasadas por flujo: la primera leyendo los porqués, la segunda marcando el checklist, la tercera en modo práctica hasta cerrar con cero errores. Y una advertencia honesta: esto entrena <b>la secuencia y la ubicación</b>. El gesto real y el ritmo se entrenan en simulador.</div>
+    </div>
+
+    <div class="gostrip">
+      <button class="gobtn" id="go">Empezar con el flujo 1</button>
+      <span>Panel superior · 19 ítems · tres barridos ascendentes</span>
+    </div>
+  </section>`;
+  document.getElementById("go").onclick=()=>{current=0;practice=null;render();window.scrollTo({top:0,behavior:"smooth"})};
+}
+
+function renderTabs(){
+  const t=document.getElementById("tabs");
+  t.innerHTML=`<button class="tab" role="tab" data-i="-1" aria-selected="${current<0}">
+      <span class="idx">0</span>Fundamentos</button>`+FLOWS.map((f,i)=>{
+    const done=f.items.every(it=>isDone(it.id));
+    return `<button class="tab" role="tab" data-i="${i}" aria-selected="${i===current}">
+      <span class="idx">${f.n}</span>${f.short}${done?'<span class="done">✓</span>':''}</button>`;
+  }).join("");
+  t.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{current=+b.dataset.i;practice=null;render()});
+}
+function renderStats(){
+  const d=FLOWS.reduce((a,f)=>a+f.items.filter(it=>isDone(it.id)).length,0);
+  document.getElementById("s-done").textContent=Math.round(d/TOTAL*100)+"%";
+}
+
+function render(){
+  renderTabs();renderStats();
+  if(current<0){renderIntro();return}
+  const f=FLOWS[current],d=DIAG[f.dg];
+  const done=f.items.filter(it=>isDone(it.id)).length;
+  document.getElementById("main").innerHTML=`
+  <section class="flow">
+    <div class="flowhead">
+      <div class="rolerow">
+        <span class="chip ${f.role==='PM'?'pm':'pf'}">${f.role==='PM'?'PM + PF':'PF'}</span>
+        <span class="ata">${f.scan}</span>
+      </div>
+      <h2>${f.title}</h2>
+      <p class="purpose">${f.purpose}</p>
+    </div>
+    <div class="split">
+      <div class="diagwrap">
+        <div class="diagcard">
+          <div class="cap"><span>Esquema de cabina</span><span>Veyra</span></div>
+          <p class="orient">${d.orient}</p>
+          <div class="diagscroll">${buildSVG(f)}</div>
+          <div class="legend">
+            <span><b>●</b> Ítem del flujo</span>
+            <span><b>—›</b> Sentido del barrido</span>
+            <span>Panel iluminado = interviene en este flujo</span>
+          </div>
+          <div class="practicebar">
+            <button class="pbtn" id="pbtn" aria-pressed="false">Modo práctica</button>
+            <span class="pstatus" id="pstatus">Toca un punto del esquema para ver la acción y su porqué.</span>
+          </div>
+        </div>
+        ${f.notes.map(n=>`<div class="note ${n.t}"><b>${n.h}.</b> ${n.b}</div>`).join("")}
+      </div>
+      <div>
+        <div class="listhead">
+          <h3>Secuencia de acciones</h3>
+          <div class="progress"><span id="pc">${done}/${f.items.length}</span>
+            <span class="bar"><i id="pbar" style="width:${done/f.items.length*100}%"></i></span></div>
+        </div>
+        ${buildList(f)}
+      </div>
+    </div>
+  </section>`;
+  wire(f);renderStats();
+}
+
+function wire(f){
+  const main=document.getElementById("main");
+  main.querySelectorAll(".dot").forEach(b=>{
+    const id=b.dataset.id;
+    const act=()=>practice?guess(f,id):focusItem(id,true);
+    b.onclick=act;
+    b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}};
+    b.onmouseenter=()=>{if(!practice)setActive(f,id)};
+    b.onmouseleave=()=>{if(!practice)setActive(f,null)};
+  });
+  main.querySelectorAll(".itemrow").forEach(r=>{
+    const id=r.dataset.row;
+    r.onclick=()=>{
+      const it=main.querySelector(`.item[data-id="${id}"]`);
+      const open=it.classList.toggle("open");
+      it.querySelector(".why").hidden=!open;
+      r.setAttribute("aria-expanded",open);
+    };
+    r.onmouseenter=()=>{if(!practice)setActive(f,id)};
+    r.onmouseleave=()=>{if(!practice)setActive(f,null)};
+  });
+  main.querySelectorAll(".tick").forEach(t=>{
+    const id=t.id.replace("tick-","");
+    t.onclick=e=>{
+      e.stopPropagation();
+      store[id]=!store[id];if(!store[id])delete store[id];save();
+      t.setAttribute("aria-pressed",!!store[id]);
+      main.querySelector(`.dot[data-id="${id}"]`)?.classList.toggle("checked",!!store[id]);
+      const d=f.items.filter(i=>isDone(i.id)).length;
+      main.querySelector("#pc").textContent=d+"/"+f.items.length;
+      main.querySelector("#pbar").style.width=(d/f.items.length*100)+"%";
+      renderTabs();renderStats();
+    };
+  });
+  document.getElementById("pbtn").onclick=()=>togglePractice(f);
+}
+
+function setActive(f,id){
+  document.querySelectorAll(".dot,.item").forEach(e=>e.classList.toggle("active",!!id&&e.dataset.id===id));
+  const tip=document.getElementById("tip");
+  if(!tip)return;
+  tip.innerHTML="";
+  if(!id)return;
+  const it=f.items.find(x=>x.id===id);if(!it)return;
+  const [W]=DIAG[f.dg].vb;
+  const txt=it.s,w=Math.max(txt.length*1.25+3,12),above=it._y>9;
+  let x=Math.min(Math.max(it._x,w/2+1),W-w/2-1);
+  const y=above?it._y-6.6:it._y+3.4;
+  tip.innerHTML=`<rect x="${x-w/2}" y="${y}" width="${w}" height="4.6" rx=".8"/>
+    <text x="${x}" y="${y+3.2}" font-size="2.1">${esc(txt)}</text>`;
+}
+function focusItem(id,scroll){
+  const it=document.querySelector(`.item[data-id="${id}"]`);
+  if(!it)return;
+  if(!it.classList.contains("open"))it.querySelector(".itemrow").click();
+  setActive(FLOWS[current],id);
+  if(scroll)it.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function togglePractice(f){
+  const btn=document.getElementById("pbtn");
+  if(practice){practice=null;btn.setAttribute("aria-pressed","false");btn.textContent="Modo práctica";render();return}
+  practice={i:0,err:0,order:f.items.map(it=>it.id)};
+  btn.setAttribute("aria-pressed","true");btn.textContent="Salir de práctica";
+  document.getElementById("tip").innerHTML="";
+  document.querySelectorAll(".dot").forEach(b=>{
+    b.classList.remove("hit","miss","checked");
+    b.querySelector("text").textContent="";
+  });
+  msg(`<b>1 de ${f.items.length}.</b> Toca los puntos <b>en orden de barrido</b>. Los números están ocultos.`);
+}
+function msg(h){document.getElementById("pstatus").innerHTML=h}
+
+function guess(f,id){
+  const want=practice.order[practice.i];
+  const b=document.querySelector(`.dot[data-id="${id}"]`);
+  if(id===want){
+    const it=f.items.find(x=>x.id===id);
+    b.classList.add("hit");
+    b.querySelector("text").textContent=it.k;
+    practice.i++;
+    if(practice.i>=practice.order.length){
+      const n=practice.order.length;
+      msg(`<span class="good">Secuencia completa.</span> <b>${n}/${n}</b> en orden · <b class="${practice.err?'bad':'good'}">${practice.err}</b> ${practice.err===1?'error':'errores'}.`);
+      practice=null;
+      const btn=document.getElementById("pbtn");
+      btn.setAttribute("aria-pressed","false");btn.textContent="Repetir práctica";
+      btn.onclick=()=>togglePractice(f);
+    }else{
+      msg(`<b>${practice.i+1} de ${practice.order.length}.</b> Siguiente punto del barrido. Errores: <b class="${practice.err?'bad':''}">${practice.err}</b>`);
+    }
+  }else{
+    practice.err++;b.classList.add("miss");
+    setTimeout(()=>b.classList.remove("miss"),420);
+    const it=f.items.find(x=>x.id===want);
+    msg(`<span class="bad">Ese no.</span> El siguiente es <b>${esc(it.s)}</b> — ${esc(it.n)}. Errores: <b class="bad">${practice.err}</b>`);
+  }
+}
+render();
+</script>
+
+</body>
+</html>
