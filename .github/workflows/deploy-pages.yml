@@ -113,7 +113,10 @@ jobs:
 
           (root / 'manual.html').write_text(html, encoding='utf-8')
 
-          hub_path = root / 'index.html'
+          # The visible Review Hub now lives in index-core.html; index.html is a
+          # lightweight review-navigation wrapper. Finalize metadata in the core
+          # document so the wrapper remains intact.
+          hub_path = root / 'index-core.html'
           hub = hub_path.read_text(encoding='utf-8')
           hub_replacements = [
               ('Manual de Estudio A320 Foundations · v1.0 Candidate',
