@@ -11,5 +11,36 @@
 <body>
 <iframe id="stage" title="A320 Foundations · Clase 0" src="class-00-v2.html?v=10"></iframe>
 <script src="class-00-highres.js?v=3"></script>
+<script>
+(()=>{
+'use strict';
+const stage=document.getElementById('stage');
+function patchQuizEntry(){
+  try{
+    const wrapper=stage.contentDocument;
+    if(!wrapper) return;
+    const inner=wrapper.getElementById('classFrame');
+    if(!inner) return;
+    const apply=()=>{
+      try{
+        const doc=inner.contentDocument;
+        if(!doc) return;
+        const jump=[...doc.querySelectorAll('a.primary[href="#quiz"]')].find(a=>/iniciar\s+quiz/i.test(a.textContent||''));
+        if(jump) jump.remove();
+        const start=doc.getElementById('startQuiz');
+        if(start) start.textContent='Iniciar quiz →';
+      }catch(_){ }
+    };
+    if(inner.dataset.veyraQuizEntryPatched!=='1'){
+      inner.dataset.veyraQuizEntryPatched='1';
+      inner.addEventListener('load',apply);
+    }
+    apply();
+  }catch(_){ }
+}
+stage.addEventListener('load',patchQuizEntry);
+patchQuizEntry();
+})();
+</script>
 </body>
 </html>
