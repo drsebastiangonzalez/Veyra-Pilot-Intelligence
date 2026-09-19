@@ -1047,9 +1047,31 @@ const FLOWS=[
 ];
 
 const KEY="veyra.a320.flows.v1";
+const APP_BRIDGE_SCHEMA=1;
+const APP_MODULE_ID="a320.flow-patterns";
+const APP_CONTENT_VERSION="2026.09.19";
 let store={};
 try{store=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){store={}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+function appPost(type,payload={}){
+  try{
+    const handler=window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.veyraApp;
+    if(handler)handler.postMessage({schema:APP_BRIDGE_SCHEMA,moduleId:APP_MODULE_ID,contentVersion:APP_CONTENT_VERSION,type,payload});
+  }catch(_){}
+}
+function progressSnapshot(){
+  const completed=FLOWS.reduce((a,f)=>a+f.items.filter(it=>!!store[it.id]).length,0);
+  return{
+    completedItems:completed,
+    totalItems:TOTAL,
+    percent:TOTAL?Math.round(completed/TOTAL*100):0,
+    completedFlows:FLOWS.filter(f=>f.items.every(it=>!!store[it.id])).map(f=>f.id),
+    currentFlow:current>=0&&FLOWS[current]?FLOWS[current].id:null
+  };
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}
+  appPost("progress_changed",progressSnapshot());
+}
 let current=-1,practice=null;
 
 FLOWS.forEach(f=>{
@@ -1315,8 +1337,9 @@ function renderStats(){
 
 function render(){
   renderTabs();renderStats();
-  if(current<0){renderIntro();return}
+  if(current<0){renderIntro();appPost("view_changed",{view:"fundamentals"});return}
   const f=FLOWS[current],d=DIAG[f.dg];
+  appPost("flow_opened",{flowId:f.id,flowNumber:f.n,title:f.title});
   const done=f.items.filter(it=>isDone(it.id)).length;
   document.getElementById("main").innerHTML=`
   <section class="flow">
@@ -1422,6 +1445,7 @@ function togglePractice(f){
   const btn=document.getElementById("pbtn");
   if(practice){practice=null;btn.setAttribute("aria-pressed","false");btn.textContent="Modo práctica";render();return}
   practice={i:0,err:0,order:f.items.map(it=>it.id)};
+  appPost("practice_started",{flowId:f.id,totalItems:f.items.length});
   btn.setAttribute("aria-pressed","true");btn.textContent="Salir de práctica";
   document.getElementById("tip").innerHTML="";
   document.querySelectorAll(".dot").forEach(b=>{
@@ -1443,6 +1467,7 @@ function guess(f,id){
     if(practice.i>=practice.order.length){
       const n=practice.order.length;
       msg(`<span class="good">Secuencia completa.</span> <b>${n}/${n}</b> en orden · <b class="${practice.err?'bad':'good'}">${practice.err}</b> ${practice.err===1?'error':'errores'}.`);
+      appPost("practice_completed",{flowId:f.id,totalItems:n,errors:practice.err});
       practice=null;
       const btn=document.getElementById("pbtn");
       btn.setAttribute("aria-pressed","false");btn.textContent="Repetir práctica";
@@ -1458,6 +1483,8 @@ function guess(f,id){
   }
 }
 render();
+appPost("module_ready",progressSnapshot());
+window.VeyraA320Module={schema:APP_BRIDGE_SCHEMA,moduleId:APP_MODULE_ID,contentVersion:APP_CONTENT_VERSION,getProgress:progressSnapshot};
 </script>
 
 </body>

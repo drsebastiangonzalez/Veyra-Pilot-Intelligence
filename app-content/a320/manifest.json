@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "product": "veyra-pilot-intelligence",
+  "learningPath": {
+    "id": "a320",
+    "title": "Airbus A320",
+    "status": "in_development",
+    "sections": [
+      {
+        "id": "foundations",
+        "title": "A320 Foundations",
+        "access": "free_authenticated",
+        "contentType": "web_module",
+        "version": "1.0",
+        "source": {
+          "resolver": "repository",
+          "path": "modules/a320-intro"
+        },
+        "offline": {
+          "policy": "cache_after_first_open"
+        }
+      },
+      {
+        "id": "procedures-operations",
+        "title": "A320 Procedures & Operations",
+        "access": "entitlement",
+        "entitlement": "a320_procedures",
+        "status": "in_development",
+        "modules": [
+          {
+            "id": "flow-patterns",
+            "title": "Flow Patterns",
+            "contentType": "web_module",
+            "version": "2026.09.19",
+            "source": {
+              "resolver": "signed_asset",
+              "assetId": "a320-procedures-flow-patterns"
+            },
+            "offline": {
+              "policy": "download_after_entitlement"
+            },
+            "bridge": {
+              "schema": 1,
+              "handler": "veyraApp",
+              "events": [
+                "module_ready",
+                "view_changed",
+                "flow_opened",
+                "progress_changed",
+                "practice_started",
+                "practice_completed"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
