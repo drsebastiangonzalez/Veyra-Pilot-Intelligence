@@ -1000,3 +1000,465 @@ const FLOWS=[
    w:"Tres mandos, un solo objetivo: bajar. <b>ALT</b> girar y tirar a la altitud de seguridad; <b>HDG</b> girar y tirar si hay que salir de la aerovía; <b>SPD</b> tirar. Tirar entrega el control del parámetro al piloto. Y la altitud a la que se va no es 10 000 por costumbre: es <b>la mayor entre la de seguridad respecto al terreno y la respirable</b>.",r:"Manual A320 · cap. 12 — Auto Flight"},
   {sw:0,x:14,y:38,s:"PFD CM1",n:"FMA",v:"ANNOUNCE",t:0,
    w:"El PF canta el FMA. En una maniobra de memoria, ejecutada con máscara puesta y con la alarma sonando, el FMA es la única prueba de que <b>el avión entendió lo que se le pidió</b>. Cantarlo no es formalismo: es lo que permite al PM comprobar sin tener que preguntar.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,x:50,y:67,s:"THRUST",n:"THR LEVERS  (si A/THR no está activo)",v:"IDLE",t:0,
+   w:"Condicional. Con A/THR activo el empuje va solo a ralentí al tirar de la velocidad. Si no lo está, lo hace el piloto — y hay que hacerlo <b>antes</b> de sacar aerofrenos, porque descender con empuje puesto y frenar con aerofrenos a la vez es gastar combustible para no bajar.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:0,zid:"SPDBRK",ci:[0,1],s:"SPD BRK",n:"SPD BRK",v:"FULL",t:0,
+   w:"Aerofrenos al máximo: es lo que convierte un descenso rápido en <i>el</i> descenso de emergencia. Conviene saber lo que se va a sentir — el avión vibra, el ruido sube y la sensación es desagradable; nada de eso es un fallo. Lo que sí hay que vigilar es <b>no exceder la velocidad máxima</b> mientras se baja.",r:"Manual A320 · cap. 11 — Mandos de vuelo"},
+
+  {sw:1,pm:1,x:87.5,y:60,s:"CONSOLA CM2",n:"CREW OXY MASK",v:"USE",t:0,
+   w:"El mismo gesto que el PF, y a la vez. La regla es que <b>nadie espera a nadie</b>: cada piloto se protege primero. A nivel de crucero, el tiempo útil de conciencia sin oxígeno se mide en segundos, no en minutos.",r:"Manual A320 · cap. 17 — Oxígeno"},
+  {sw:1,pm:1,zid:"SIGNS",ci:[0,0],s:"SIGNS",n:"SIGNS",v:"ON",t:0,
+   w:"Cinturones y no fumar encendidos. En un descenso de emergencia la cabina de pasaje está con las máscaras caídas y el avión bajando fuerte: la señal <b>es</b> la instrucción de sentarse, y es lo único que la tripulación de cabina va a recibir hasta que haya tiempo para hablar.",r:"Manual A320 · cap. 15 y 19"},
+  {sw:1,pm:1,x:86,y:38,s:"PFD CM2",n:"FMA",v:"CHECK",t:0,
+   w:"El PM comprueba lo que el PF acaba de cantar. Es el cierre del lazo: uno anuncia lo que pidió, el otro confirma lo que el avión hizo. Si las dos cosas no coinciden, este es el punto donde se descubre — y todavía queda altitud para arreglarlo.",r:"Manual A320 · cap. 12 — Auto Flight"}
+ ]
+},
+{
+ id:"rto",n:16,short:"Rejected Takeoff",dg:"cabina",blk:"Bloque 5 · No normales",
+ title:"Rejected Takeoff",role:"CAPT + F/O",
+ purpose:"El único flujo del módulo que no se reparte por PF y PM sino por puesto: el comandante para el avión, el primer oficial vigila y canta. La decisión de abortar es del comandante y se anuncia con una sola palabra.",
+ scan:"Dos barridos · CAPT y F/O",
+ sweeps:["CAPT · parar el avión","F/O · vigilar, cantar y preparar"],
+ notes:[
+  {t:"warn",h:"«STOP!»",b:"La maniobra empieza con una llamada, no con un mando: el comandante anuncia <b>«STOP!»</b> y <b>toma el control</b>, vuele quien vuele. No es cortesía de procedimiento — es lo que elimina cualquier duda sobre quién está frenando el avión. Si no se dice, nadie puede dar por hecho que alguien más lo está haciendo."},
+  {t:"",h:"Por puesto, no por rol",b:"En este flujo el oro es el <b>comandante</b> y el azul el <b>primer oficial</b>, no el PF y el PM. Es el único caso del módulo en que el reparto cambia de criterio, y por eso conviene entrenarlo aparte: quien estuviera volando deja de volar en el instante en que se anuncia la parada."},
+  {t:"",h:"Lo que canta el F/O no es decorativo",b:"<b>«REVERSE GREEN»</b> confirma que las reversas han desplegado y están dando empuje. <b>«DECEL»</b> confirma que el avión <b>está desacelerando de verdad</b>, no solo que el autobrake está armado. Son las dos comprobaciones que dicen si la parada está funcionando — y si alguna falla, el comandante tiene que enterarse mientras todavía queda pista."}
+ ],
+ items:[
+  {sw:0,x:50,y:67,s:"THRUST",n:"ALL THRUST LEVERS",v:"IDLE · REV MAX AVAIL",t:0,
+   w:"Todas las palancas a ralentí y reversa máxima disponible. El resto del frenado ya está en marcha por sí solo: los <i>ground spoilers</i> se despliegan con el movimiento de las palancas hacia atrás, y ese despliegue <b>dispara el autobrake MAX</b> que se armó en rodaje. El comandante frena; el avión ya estaba preparado para frenar.",r:"Manual A320 · cap. 8 y 10"},
+  {sw:0,zid:"PARKBRK",ci:[0,0],s:"PARK BRK",n:"CON EL AVIÓN DETENIDO",v:"REV STOW · PARK BRK ON",t:0,
+   w:"Con el avión parado: reversas recogidas y freno de parking puesto. El orden importa — recoger las reversas antes de soltar los pedales evita que el avión se mueva, y el freno de parking es lo que permite <b>quitar las manos de los pedales</b> para atender lo que venga, que puede ser un ECAM, una evacuación o las dos cosas.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+  {sw:0,zid:"ACPCALLS",ci:[0,0],s:"ACP · RMP",n:"PA: «ATTENTION! CREW AT STATION»",v:"ANNOUNCE",t:0,
+   w:"El aviso que la tripulación de cabina está esperando. Significa: <b>ha pasado algo, quedaos en vuestro puesto y no iniciéis nada</b>. Sin él, una tripulación que acaba de sentir una frenada violenta tiene que decidir sola — y lo que puede decidir por su cuenta es abrir puertas.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,x:50,y:42,s:"ECAM",n:"«ECAM ACTIONS»",v:"ORDER",t:0,
+   w:"Con el avión parado y frenado, el comandante ordena las acciones ECAM. Es el punto en que la maniobra de memoria termina y empieza el procedimiento leído: a partir de aquí ya no se actúa de cabeza, se actúa sobre lo que muestra la pantalla.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+
+  {sw:1,pm:1,x:50,y:33.5,s:"E/WD",n:"«REVERSE GREEN»",v:"CALL",t:0,
+   w:"Confirma, leído en el E/WD, que las reversas han desplegado y están dando empuje. Es una comprobación, no una cortesía: una reversa que no despliega cambia la distancia de parada, y el comandante necesita saberlo mientras todavía puede hacer algo con esa información.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:1,pm:1,x:73,y:38,s:"PFD · ND CM2",n:"«DECEL»",v:"CALL",t:0,
+   w:"Confirma que el avión <b>está desacelerando de verdad</b>. Que el autobrake esté armado no es lo mismo que que esté frenando, y la llamada existe precisamente para separar las dos cosas. Si no se puede cantar DECEL, hay que pasar a frenado manual.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+  {sw:1,pm:1,zid:"ACPCALLS",ci:[0,2],s:"ACP · RMP",n:"«AIRBUS ___, STOPPING»",v:"RADIO",t:0,
+   w:"El aviso a control con el indicativo y una sola palabra útil. La torre necesita saber que el avión se queda en la pista para cerrarla y lanzar los servicios. Es corto a propósito: en ese momento la frecuencia es de la tripulación, y todo lo que no sea imprescindible estorba.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:1,pm:1,x:87.5,y:68,s:"CONSOLA · QRH",n:"EMERGENCY EVACUATION PROC",v:"LOCATE",t:0,
+   w:"Localizar el procedimiento de evacuación, no ejecutarlo. La diferencia es deliberada: buscar el papel cuesta segundos que ahora sobran y después no existen. Si la evacuación acaba siendo necesaria, el procedimiento ya está en la mano; si no lo es, no se ha perdido nada.",r:"Manual A320 · cap. 18 — Puertas y salidas"}
+ ]
+}
+];
+
+const KEY="veyra.a320.flows.v1";
+let store={};
+try{store=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){store={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+let current=-1,practice=null;
+
+FLOWS.forEach(f=>{
+  const c={};
+  f.items.forEach((it,i)=>{it.id=f.id+"-"+i;c[it.sw]=(c[it.sw]||0)+1;it.k=c[it.sw]});
+});
+const TOTAL=FLOWS.reduce((a,f)=>a+f.items.length,0);
+document.getElementById("s-items").textContent=TOTAL;
+document.getElementById("s-flows").textContent=FLOWS.length;
+const isDone=id=>!!store[id];
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+/* ---------- esquema de cabina ---------- */
+function fit(l,w,mx){return Math.max(1,Math.min(mx||1.75,(w-2.4)/(l.length*0.66)))}
+function rowsOf(z){const c=z.ctl;if(!c)return[];return Array.isArray(c[0])?c:[c]}
+function ctlPos(z,r,c){
+  const rows=rowsOf(z),row=rows[r]||rows[0]||[],n=Math.max(row.length,1);
+  const P=Math.min(5.0,(z.w-4.4)/Math.max(n-1,1));
+  const sx=z.x+z.w/2-(n-1)*P/2;
+  return{x:sx+c*P,y:z.y+6+r*5.0};
+}
+function glyph(t,cx,cy){
+  if(t==="knob")return `<circle class="g-knob" cx="${cx}" cy="${cy}" r="1.75"/><line class="g-tick" x1="${cx}" y1="${cy-.2}" x2="${cx}" y2="${cy-1.65}"/>`;
+  if(t==="fire")return `<rect class="g-fire" x="${cx-2.3}" y="${cy-1.7}" width="4.6" height="3.4" rx=".6"/>`;
+  if(t==="guard")return `<rect class="g-guard" x="${cx-1.9}" y="${cy-1.7}" width="3.8" height="3.4" rx=".5"/><line class="g-tick" x1="${cx-1.9}" y1="${cy-.5}" x2="${cx+1.9}" y2="${cy-.5}"/>`;
+  if(t==="lamp")return `<circle class="g-lamp" cx="${cx}" cy="${cy}" r="1.2"/>`;
+  return `<rect class="g-pb" x="${cx-1.8}" y="${cy-1.6}" width="3.6" height="3.2" rx=".5"/><line class="g-tick" x1="${cx-.9}" y1="${cy+.75}" x2="${cx+.9}" y2="${cy+.75}"/>`;
+}
+function resolve(f){
+  const d=DIAG[f.dg],by={};
+  d.zones.forEach(z=>{if(z.id)by[z.id]=z});
+  f.items.forEach(it=>{
+    if(it.zid&&by[it.zid]){const c=it.ci||[0,0],pt=ctlPos(by[it.zid],c[0],c[1]);it._x=pt.x;it._y=pt.y}
+    else{it._x=it.x;it._y=it.y}
+  });
+}
+
+function buildSVG(f){
+  const d=DIAG[f.dg],[W,H]=d.vb;
+  resolve(f);
+  let s=`<svg class="panel" viewBox="0 0 ${W} ${H}" role="img" aria-label="Esquema de cabina — ${f.title}">`;
+  if(d.shell) s+=`<polygon class="shell" points="${d.shell}"/>`;
+  else s+=`<rect class="frame" x=".5" y=".5" width="${W-1}" height="${H-1}" rx="1.5"/>`;
+  (d.bays||[]).forEach(b=>{s+=`<rect class="bay" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1"/>`});
+  (d.pad||[]).forEach(g=>{for(let r=0;r<g.rows;r++)for(let c=0;c<g.cols;c++){
+    s+=`<rect class="g-pb" x="${g.x+c*g.px}" y="${g.y+r*g.py}" width="${g.w}" height="${g.h}" rx=".5"/>`}});
+  if(d.divider) s+=`<line class="divider" x1="6" y1="${d.divider}" x2="${W-6}" y2="${d.divider}"/>`;
+  (d.axis||[]).forEach(a=>{s+=`<text class="axis" x="${a.x}" y="${a.y}" font-size="1.7" text-anchor="middle">${esc(a.t)}</text>`});
+
+  d.zones.forEach(z=>{
+    const on=d.litAll||f.items.some(i=>i._x>=z.x-.6&&i._x<=z.x+z.w+.6&&i._y>=z.y-.6&&i._y<=z.y+z.h+.6);
+    s+=`<g class="zone${on?" lit":""}">`;
+    s+=`<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="${z.r||1}"/>`;
+    if(z.sh==="screen")
+      s+=`<rect class="glass" x="${z.x+.9}" y="${z.y+3.5}" width="${z.w-1.8}" height="${Math.max(z.h-4.4,1.2)}" rx=".5"/>`;
+    if(z.sh==="lever"){
+      const cy=z.y+4.5,hh=z.h-7;
+      s+=`<rect class="part" x="${z.x+z.w/2-4.6}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
+      s+=`<rect class="part" x="${z.x+z.w/2+1.2}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
+    }
+    if(z.sh==="seat")
+      s+=`<rect class="part" x="${z.x+1.6}" y="${z.y+3.4}" width="${z.w-3.2}" height="${z.h-5}" rx="2"/>`;
+    rowsOf(z).forEach((row,r)=>row.forEach((t,c)=>{const q=ctlPos(z,r,c);s+=glyph(t,q.x,q.y)}));
+    s+=`<text x="${z.x+1.5}" y="${z.y+2.6}" font-size="${fit(z.l,z.w).toFixed(2)}">${esc(z.l)}</text></g>`;
+  });
+
+  f.sweeps.forEach((_,si)=>{
+    const g=f.items.filter(i=>i.sw===si);
+    if(g.length<2)return;
+    const apm=g.every(i=>i.pm)?" pm":"";
+    s+=`<polyline class="sweep${apm}" points="${g.map(i=>i._x+","+i._y).join(" ")}"/>`;
+    const a=g[g.length-2],b=g[g.length-1];
+    const dx=b._x-a._x,dy=b._y-a._y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,px=-uy,py=ux;
+    const tx=b._x-ux*2.6,ty=b._y-uy*2.6;
+    s+=`<polyline class="sweep head${apm}" points="${tx+px*1.3},${ty+py*1.3} ${b._x-ux*.2},${b._y-uy*.2} ${tx-px*1.3},${ty-py*1.3}"/>`;
+  });
+
+  f.items.forEach(it=>{
+    s+=`<g class="dot${it.pm?" pm":""}${isDone(it.id)?" checked":""}" data-id="${it.id}" tabindex="0" role="button" aria-label="${esc(it.n)}">`;
+    s+=`<circle cx="${it._x}" cy="${it._y}" r="2.7"/>`;
+    s+=`<text x="${it._x}" y="${it._y+.85}" font-size="2.3">${it.k}</text></g>`;
+  });
+  s+=`<g id="tip"></g></svg>`;
+  return s;
+}
+
+function buildList(f){
+  let h="";
+  f.sweeps.forEach((sl,si)=>{
+    const g=f.items.filter(i=>i.sw===si);
+    if(!g.length)return;
+    h+=`<div class="group"><div class="grouplbl">${sl}</div>`;
+    g.forEach(it=>{
+      h+=`<div class="item${it.pm?" pm":""}" data-id="${it.id}">
+        <div style="display:flex;align-items:flex-start;gap:11px">
+          <button class="tick" id="tick-${it.id}" aria-pressed="${isDone(it.id)}" aria-label="Marcar ${esc(it.n)}">✓</button>
+          <button class="itemrow" data-row="${it.id}" aria-expanded="false">
+            <span class="seq">${it.k}</span>
+            <span class="body">
+              <span class="call"><span class="n">${esc(it.n)}</span><span class="lead"></span><span class="v">${esc(it.v)}</span></span>
+              <span class="metaline"><span class="panelname">${esc(it.s)}</span>${it.t?'<span class="star">✻ tránsito</span>':''}</span>
+            </span>
+            <span class="caret">›</span>
+          </button>
+        </div>
+        <div class="why" hidden>${it.w}<br><span class="tag">${it.r}</span></div>
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+  return h;
+}
+
+const INTRO_ZONES=[
+ ["Overhead","Los <b>sistemas</b>: eléctrico, hidráulico, combustible, aire, antihielo, fuego, luces, APU","Flujo 1"],
+ ["Glareshield","La <b>trayectoria</b>: FCU, paneles EFIS y las luces de Master Warning y Master Caution","Flujo 4"],
+ ["Panel frontal","La <b>información</b>: PFD, ND, ECAM, ISIS, reloj, tren","Flujo 2"],
+ ["Pedestal","<b>Empuje</b>, comunicaciones y configuración: palancas, MCDU, RMP, ACP, ATC","Flujo 3"],
+ ["Consolas laterales","<b>Sidestick</b>, tiller y audio de cada puesto","Flujo 4"]
+];
+
+function renderIntro(){
+  const stub={dg:"zonas",items:[],sweeps:[],title:"Zonas de la cabina"};
+  document.getElementById("main").innerHTML=`
+  <section class="intro">
+    <div class="flowhead">
+      <div class="rolerow"><span class="ata">Módulo 0 · Fundamentos</span></div>
+      <h2>Antes del primer barrido</h2>
+      <p class="purpose lead">Cinco ideas que hay que tener claras antes de memorizar un solo ítem. Sin ellas, un flujo es una lista de cosas que tocar; con ellas, es una herramienta.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">01 · Qué es un flow</div>
+      <h3>Un recorrido del panel, no una lista de acciones</h3>
+      <p>Un <i>flow pattern</i> es un <b style="color:var(--ivory);font-weight:500">recorrido físico del panel, memorizado y siempre igual</b>, que deja una zona de la cabina configurada para la fase que viene.</p>
+      <ul class="bul">
+        <li><b>Es físico.</b> Sigue la geografía del panel, no el orden lógico de los sistemas. Por eso el barrido del overhead toca el eléctrico y el aire acondicionado seguidos: están uno encima del otro.</li>
+        <li><b>Es fijo.</b> El mismo recorrido siempre — avión lleno o vacío, de día o de noche, con prisa o sin ella. Su valor está en que no se decide sobre la marcha.</li>
+        <li><b>Es completo.</b> Si se recorre entero, no queda nada sin tocar en esa zona. La cobertura la garantiza el recorrido, no la memoria de los ítems.</li>
+      </ul>
+      <p class="pull">Un flow se hace con la mano. La lista de chequeo se hace con la vista.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">02 · Flow y checklist</div>
+      <h3>La lista no sustituye al flujo, y el flujo no sustituye a la lista</h3>
+      <p>Son dos instrumentos con funciones distintas. Confundirlos es el error más común al empezar en el avión.</p>
+      <div class="vs">
+        <div class="vscard">
+          <div class="tag">El flujo</div><h4>Hace el trabajo</h4>
+          <ul>
+            <li>Recorrido completo de la zona</li>
+            <li>Se ejecuta <b style="color:var(--ivory);font-weight:500">de memoria</b></li>
+            <li>Toca <b style="color:var(--ivory);font-weight:500">todos</b> los ítems</li>
+            <li>Orden geográfico</li>
+          </ul>
+        </div>
+        <div class="vscard">
+          <div class="tag">La lista de chequeo</div><h4>Comprueba el trabajo</h4>
+          <ul>
+            <li>Solo los <b style="color:var(--ivory);font-weight:500">puntos críticos</b></li>
+            <li>Se <b style="color:var(--ivory);font-weight:500">lee</b>, en voz alta</li>
+            <li>Confirma lo ya hecho</li>
+            <li>Orden de prioridad</li>
+          </ul>
+        </div>
+      </div>
+      <p class="pull">La lista de chequeo no es la forma de hacer el trabajo: es la forma de comprobar que se hizo.</p>
+      <p>De ahí el error a evitar: <b style="color:var(--ivory);font-weight:500">configurar el avión leyendo la lista</b>. Tiene dos consecuencias. La primera, que se salta por el panel en un orden que no corresponde a ninguna geografía. La segunda, más grave: <b style="color:var(--ivory);font-weight:500">todo lo que la lista no menciona queda sin configurar</b>. La lista es corta precisamente porque presupone que el flujo ya se hizo.</p>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">03 · El sentido del barrido</div>
+      <h3>Por qué el recorrido es geográfico y no lógico</h3>
+      <ul class="bul">
+        <li><b>La memoria de posición es más fiable que la de secuencia.</b> La mano encuentra el panel aunque la cabeza esté ocupada con la radio o con el despacho.</li>
+        <li><b>No deja huecos.</b> Un recorrido continuo cubre la zona entera; una lista de ítems sueltos no garantiza cobertura.</li>
+        <li><b>Resiste la interrupción.</b> Si cortan el barrido a mitad, se sabe dónde se estaba, porque el punto de retorno es <i>un lugar</i>, no un número.</li>
+      </ul>
+      <p>En la preparación de cabina, el <b style="color:var(--ivory);font-weight:500">overhead se barre en sentido ascendente</b> —desde los paneles próximos a la cabeza del piloto hacia el parabrisas— y el <b style="color:var(--ivory);font-weight:500">pedestal en sentido descendente</b>. En cada esquema de este módulo la flecha indica el sentido.</p>
+      <div class="note"><b>El cierre del barrido.</b> Al terminar un flujo, <b>el panel debe quedar apagado</b> salvo lo que se haya activado a propósito. Cualquier luz encendida al final es un punto que revisar — es la verificación más rápida que existe en este avión, y la razón práctica de toda la filosofía de <i>dark cockpit</i>.</div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">04 · Zonas de la cabina</div>
+      <h3>Cada zona gobierna una clase distinta de cosas</h3>
+      <p>Los flujos no están repartidos por sistema, sino por <b style="color:var(--ivory);font-weight:500">zona física</b>. Saber qué se controla en cada zona permite predecir dónde estará un mando antes de buscarlo.</p>
+      <div class="zmap">
+        <div class="diagcard">
+          <div class="cap"><span>Zonas funcionales</span><span>Veyra</span></div>
+          <div class="diagscroll">${buildSVG(stub)}</div>
+        </div>
+        <div>
+          <table class="ztab">
+            <thead><tr><th>Zona</th><th>Qué se controla</th><th>Flujo</th></tr></thead>
+            <tbody>${INTRO_ZONES.map(z=>`<tr><td>${z[0]}</td><td>${z[1]}</td><td class="fl">${z[2]}</td></tr>`).join("")}</tbody>
+          </table>
+          <p class="pull" style="margin-top:24px">Los sistemas se controlan arriba. El vuelo se controla abajo y adelante.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">05 · PF y PM</div>
+      <h3>Un reparto de tareas, no una jerarquía</h3>
+      <div class="roles">
+        <div class="rolecard pf"><div class="who">PF · Pilot Flying</div>
+          <h4>Vuela el avión</h4>
+          <p>Manda la trayectoria: configuración, automatismos, empuje. En la preparación de cabina ejecuta <b style="color:var(--ivory);font-weight:500">los tres barridos de configuración</b> — overhead, panel frontal y pedestal.</p></div>
+        <div class="rolecard pm"><div class="who">PM · Pilot Monitoring</div>
+          <h4>Vigila y comunica</h4>
+          <p>Supervisa lo que hace el PF, lee las listas, habla con el control y ejecuta lo que el PF le pide. En este bloque aparece en la <b style="color:var(--ivory);font-weight:500">preparación final</b>, donde revisa el FMS y compara la <i>green dot</i>.</p></div>
+      </div>
+      <p>El punto que conviene fijar: <b style="color:var(--ivory);font-weight:500">PF y PM no son el capitán y el primer oficial</b>. Un comandante puede ser PM y un primer oficial PF; el reparto se acuerda sector a sector. Lo que define quién hace qué en un flujo es el <b style="color:var(--ivory);font-weight:500">rol</b>, no el asiento ni la antigüedad.</p>
+      <div class="note"><b>En este entrenador.</b> Los ítems del <b style="color:var(--pf)">PF van en oro</b> y los del <b style="color:var(--pm)">PM en cian</b>, tanto en el esquema como en la lista. Cada flujo lleva su rol en la etiqueta del encabezado.</div>
+    </div>
+
+    <div class="sect">
+      <div class="sectnum">06 · Cómo se entrena en Veyra</div>
+      <h3>Tres capas, en este orden</h3>
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div>
+          <h4>Reconocer</h4>
+          <p>Ubicar cada ítem sobre el panel al que pertenece. El esquema de cabina y la secuencia numerada trabajan sincronizados: al tocar un punto se abre su acción, y al revés.</p>
+          <div class="how">Esquema de cabina + secuencia de acciones</div></div></div>
+        <div class="step"><div class="sn">2</div><div>
+          <h4>Entender</h4>
+          <p>Cada ítem abre su razón operacional, con la referencia al capítulo correspondiente del Manual de Sistemas A320. Un flujo que se entiende se olvida menos, y sobre todo se reconstruye si se pierde el hilo.</p>
+          <div class="how">El porqué de cada acción + referencia cruzada al manual</div></div></div>
+        <div class="step"><div class="sn">3</div><div>
+          <h4>Automatizar</h4>
+          <p>El modo práctica oculta los números del esquema y exige tocar los puntos <b style="color:var(--ivory);font-weight:500">en orden de barrido</b>, sobre la geometría real de la cabina. Autocorrige y cuenta los errores.</p>
+          <div class="how">Modo práctica + checklist con progreso guardado</div></div></div>
+      </div>
+      <div class="note"><b>Recomendación de uso.</b> Tres pasadas por flujo: la primera leyendo los porqués, la segunda marcando el checklist, la tercera en modo práctica hasta cerrar con cero errores. Y una advertencia honesta: esto entrena <b>la secuencia y la ubicación</b>. El gesto real y el ritmo se entrenan en simulador.</div>
+    </div>
+
+    <div class="gostrip">
+      <button class="gobtn" id="go">Empezar con el flujo 1</button>
+      <span>Panel superior · 19 ítems · tres barridos ascendentes</span>
+    </div>
+  </section>`;
+  document.getElementById("go").onclick=()=>{current=0;practice=null;render();window.scrollTo({top:0,behavior:"smooth"})};
+}
+
+function renderTabs(){
+  const t=document.getElementById("tabs");
+  let h=`<button class="tab" role="tab" data-i="-1" aria-selected="${current<0}">
+      <span class="idx">0</span>Fundamentos</button>`,blk="";
+  FLOWS.forEach((f,i)=>{
+    if(f.blk&&f.blk!==blk){blk=f.blk;h+=`<span class="tabsep">${blk}</span>`}
+    const done=f.items.every(it=>isDone(it.id));
+    h+=`<button class="tab" role="tab" data-i="${i}" aria-selected="${i===current}">
+      <span class="idx">${f.n}</span>${f.short}${done?'<span class="done">✓</span>':''}</button>`;
+  });
+  t.innerHTML=h;
+  t.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{current=+b.dataset.i;practice=null;render();window.scrollTo({top:0,behavior:"smooth"})});
+}
+function renderStats(){
+  const d=FLOWS.reduce((a,f)=>a+f.items.filter(it=>isDone(it.id)).length,0);
+  document.getElementById("s-done").textContent=Math.round(d/TOTAL*100)+"%";
+}
+
+function render(){
+  renderTabs();renderStats();
+  if(current<0){renderIntro();return}
+  const f=FLOWS[current],d=DIAG[f.dg];
+  const done=f.items.filter(it=>isDone(it.id)).length;
+  document.getElementById("main").innerHTML=`
+  <section class="flow">
+    <div class="flowhead">
+      <div class="rolerow">
+        <span class="chip ${f.role==='PF'?'pf':'pm'}">${f.role}</span>
+        <span class="ata">${f.scan}</span>
+      </div>
+      <h2>${f.title}</h2>
+      <p class="purpose">${f.purpose}</p>
+    </div>
+    <div class="split">
+      <div class="diagwrap">
+        <div class="diagcard">
+          <div class="cap"><span>${d.cap||"Esquema de cabina"}</span><span>Veyra</span></div>
+          <p class="orient">${d.orient}</p>
+          <div class="diagscroll">${buildSVG(f)}</div>
+          <div class="legend">
+            <span><b>●</b> Ítem del flujo</span>
+            <span><b>—›</b> Sentido del barrido</span>
+            <span>${d.leg||"Panel iluminado = interviene en este flujo"}</span>
+          </div>
+          <div class="practicebar">
+            <button class="pbtn" id="pbtn" aria-pressed="false">Modo práctica</button>
+            <span class="pstatus" id="pstatus">Toca un punto del esquema para ver la acción y su porqué.</span>
+          </div>
+        </div>
+        ${f.notes.map(n=>`<div class="note ${n.t}"><b>${n.h}.</b> ${n.b}</div>`).join("")}
+      </div>
+      <div>
+        <div class="listhead">
+          <h3>Secuencia de acciones</h3>
+          <div class="progress"><span id="pc">${done}/${f.items.length}</span>
+            <span class="bar"><i id="pbar" style="width:${done/f.items.length*100}%"></i></span></div>
+        </div>
+        ${buildList(f)}
+      </div>
+    </div>
+  </section>`;
+  wire(f);renderStats();
+}
+
+function wire(f){
+  const main=document.getElementById("main");
+  main.querySelectorAll(".dot").forEach(b=>{
+    const id=b.dataset.id;
+    const act=()=>practice?guess(f,id):focusItem(id,true);
+    b.onclick=act;
+    b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}};
+    b.onmouseenter=()=>{if(!practice)setActive(f,id)};
+    b.onmouseleave=()=>{if(!practice)setActive(f,null)};
+  });
+  main.querySelectorAll(".itemrow").forEach(r=>{
+    const id=r.dataset.row;
+    r.onclick=()=>{
+      const it=main.querySelector(`.item[data-id="${id}"]`);
+      const open=it.classList.toggle("open");
+      it.querySelector(".why").hidden=!open;
+      r.setAttribute("aria-expanded",open);
+    };
+    r.onmouseenter=()=>{if(!practice)setActive(f,id)};
+    r.onmouseleave=()=>{if(!practice)setActive(f,null)};
+  });
+  main.querySelectorAll(".tick").forEach(t=>{
+    const id=t.id.replace("tick-","");
+    t.onclick=e=>{
+      e.stopPropagation();
+      store[id]=!store[id];if(!store[id])delete store[id];save();
+      t.setAttribute("aria-pressed",!!store[id]);
+      main.querySelector(`.dot[data-id="${id}"]`)?.classList.toggle("checked",!!store[id]);
+      const d=f.items.filter(i=>isDone(i.id)).length;
+      main.querySelector("#pc").textContent=d+"/"+f.items.length;
+      main.querySelector("#pbar").style.width=(d/f.items.length*100)+"%";
+      renderTabs();renderStats();
+    };
+  });
+  document.getElementById("pbtn").onclick=()=>togglePractice(f);
+}
+
+function setActive(f,id){
+  document.querySelectorAll(".dot,.item").forEach(e=>e.classList.toggle("active",!!id&&e.dataset.id===id));
+  const tip=document.getElementById("tip");
+  if(!tip)return;
+  tip.innerHTML="";
+  if(!id)return;
+  const it=f.items.find(x=>x.id===id);if(!it)return;
+  const [W]=DIAG[f.dg].vb;
+  const txt=it.s,w=Math.max(txt.length*1.25+3,12),above=it._y>9;
+  let x=Math.min(Math.max(it._x,w/2+1),W-w/2-1);
+  const y=above?it._y-6.6:it._y+3.4;
+  tip.innerHTML=`<rect x="${x-w/2}" y="${y}" width="${w}" height="4.6" rx=".8"/>
+    <text x="${x}" y="${y+3.2}" font-size="2.1">${esc(txt)}</text>`;
+}
+function focusItem(id,scroll){
+  const it=document.querySelector(`.item[data-id="${id}"]`);
+  if(!it)return;
+  if(!it.classList.contains("open"))it.querySelector(".itemrow").click();
+  setActive(FLOWS[current],id);
+  if(scroll)it.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function togglePractice(f){
+  const btn=document.getElementById("pbtn");
+  if(practice){practice=null;btn.setAttribute("aria-pressed","false");btn.textContent="Modo práctica";render();return}
+  practice={i:0,err:0,order:f.items.map(it=>it.id)};
+  btn.setAttribute("aria-pressed","true");btn.textContent="Salir de práctica";
+  document.getElementById("tip").innerHTML="";
+  document.querySelectorAll(".dot").forEach(b=>{
+    b.classList.remove("hit","miss","checked");
+    b.querySelector("text").textContent="";
+  });
+  msg(`<b>1 de ${f.items.length}.</b> Toca los puntos <b>en orden de barrido</b>. Los números están ocultos.`);
+}
+function msg(h){document.getElementById("pstatus").innerHTML=h}
+
+function guess(f,id){
+  const want=practice.order[practice.i];
+  const b=document.querySelector(`.dot[data-id="${id}"]`);
+  if(id===want){
+    const it=f.items.find(x=>x.id===id);
+    b.classList.add("hit");
+    b.querySelector("text").textContent=it.k;
+    practice.i++;
+    if(practice.i>=practice.order.length){
+      const n=practice.order.length;
+      msg(`<span class="good">Secuencia completa.</span> <b>${n}/${n}</b> en orden · <b class="${practice.err?'bad':'good'}">${practice.err}</b> ${practice.err===1?'error':'errores'}.`);
+      practice=null;
+      const btn=document.getElementById("pbtn");
+      btn.setAttribute("aria-pressed","false");btn.textContent="Repetir práctica";
+      btn.onclick=()=>togglePractice(f);
+    }else{
+      msg(`<b>${practice.i+1} de ${practice.order.length}.</b> Siguiente punto del barrido. Errores: <b class="${practice.err?'bad':''}">${practice.err}</b>`);
+    }
+  }else{
+    practice.err++;b.classList.add("miss");
+    setTimeout(()=>b.classList.remove("miss"),420);
+    const it=f.items.find(x=>x.id===want);
+    msg(`<span class="bad">Ese no.</span> El siguiente es <b>${esc(it.s)}</b> — ${esc(it.n)}. Errores: <b class="bad">${practice.err}</b>`);
+  }
+}
+render();
+</script>
+
+</body>
+</html>
