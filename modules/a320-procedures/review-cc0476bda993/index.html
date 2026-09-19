@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Entrenador interactivo de los flujos de preparación de cabina del Airbus A320 — Veyra Pilot Intelligence.">
+<meta name="description" content="Veyra · Entrenador interactivo de Flow Patterns del Airbus A320: fundamentos y dieciséis flujos sobre el esquema real de la cabina.">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <style>:root{color-scheme:dark}html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -61,6 +61,9 @@ p{margin:0} button{font-family:inherit;color:inherit} a{color:var(--gold-bright)
   border-radius:50%;width:20px;height:20px;display:grid;place-items:center;flex:0 0 auto}
 .tab[aria-selected="true"] .idx{background:var(--gold);color:var(--ink);border-color:var(--gold)}
 .tab .done{color:var(--ok);font-size:12px;line-height:1}
+.tabsep{flex:0 0 auto;display:flex;align-items:center;white-space:nowrap;margin-left:6px;padding-left:12px;
+  border-left:1px solid var(--line);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-2);font-weight:500}
 
 .flow{padding-block:34px 70px}
 .flowhead{margin-bottom:26px}
@@ -93,6 +96,7 @@ svg.panel text{font-family:var(--sans)}
 .zone.lit text{fill:var(--muted)}
 .sweep{fill:none;stroke:var(--gold);stroke-width:.5;opacity:.38;stroke-linejoin:round;stroke-linecap:round}
 .sweep.head{opacity:.55}
+.sweep.pm{stroke:var(--pm)}
 .dot{cursor:pointer}
 .dot circle{fill:var(--surface);stroke:var(--gold);stroke-width:.45;transition:fill .15s,stroke .15s}
 .dot text{fill:var(--gold);font-weight:600;text-anchor:middle;pointer-events:none}
@@ -205,10 +209,10 @@ svg.panel text{font-family:var(--sans)}
   margin-top:2px;font-variant-numeric:tabular-nums}
 .item.pm .seq{color:var(--pm)}
 .body{flex:1;min-width:0}
-.call{display:flex;align-items:baseline;gap:6px;width:100%;font-size:13.5px;font-weight:400;letter-spacing:.02em}
-.call .n{color:var(--ivory);white-space:nowrap}
+.call{display:flex;align-items:baseline;gap:6px;width:100%;flex-wrap:wrap;font-size:13.5px;font-weight:400;letter-spacing:.02em}
+.call .n{color:var(--ivory);overflow-wrap:anywhere}
 .call .lead{flex:1;border-bottom:1px dotted rgba(246,241,230,.22);transform:translateY(-4px);min-width:14px}
-.call .v{color:var(--gold-pale);font-weight:500;white-space:nowrap}
+.call .v{color:var(--gold-pale);font-weight:500;overflow-wrap:anywhere}
 .metaline{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:4px}
 .panelname{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
 .star{font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--gold);
@@ -254,11 +258,11 @@ footer{border-top:1px solid var(--line);padding-block:30px 46px;margin-top:20px}
 </header>
 
 <section class="wrap hero">
-  <div class="eyebrow">Módulo operacional · Bloque 1 de 4</div>
+  <div class="eyebrow">Módulo operacional · Fundamentos + cinco bloques</div>
   <h1>Preparación de cabina, <em>barrido a barrido</em></h1>
-  <p class="lede">Los cuatro flujos de <i>cockpit preparation</i> del A320 sobre el esquema real de la cabina. Cada ítem está donde está el panel, porque un flujo no se aprende leyendo: se aprende con la mano.</p>
+  <p class="lede">Los flujos del A320 sobre el esquema real de la cabina. Cada ítem está donde está el mando, porque un flujo no se aprende leyendo: se aprende con la mano.</p>
   <div class="stats">
-    <div class="stat"><div class="n">4</div><div class="l">Flujos</div></div>
+    <div class="stat"><div class="n" id="s-flows">0</div><div class="l">Flujos</div></div>
     <div class="stat"><div class="n" id="s-items">0</div><div class="l">Ítems</div></div>
     <div class="stat"><div class="n" id="s-done">0%</div><div class="l">Completado</div></div>
   </div>
@@ -280,6 +284,122 @@ footer{border-top:1px solid var(--line);padding-block:30px 46px;margin-top:20px}
    basta con cambiar x / y / w / h de su zona, o x / y de un ítem. */
 
 const DIAG={
+ cabina:{
+  vb:[100,112],
+  orient:"Cabina completa, vista desde los asientos. Estos flujos ya no viven en un solo panel: recorren overhead, glareshield, panel frontal y pedestal.",
+  bays:[{x:9,y:2.5,w:82,h:14},{x:25,y:49,w:50,h:60}],
+  zones:[
+   {id:"ANTIICE",x:10.5,y:4,w:16,h:9,l:"ANTI ICE",ctl:[["pb","pb","pb"]]},
+   {id:"AIRCOND",x:28,y:4,w:19,h:9,l:"AIR COND",ctl:[["pb","pb","knob","pb"]]},
+   {id:"APU",x:48.5,y:4,w:11,h:9,l:"APU",ctl:[["pb","pb"]]},
+   {id:"EXTLT",x:61,y:4,w:16,h:9,l:"EXT LT",ctl:[["pb","pb","pb","pb"]]},
+   {id:"SIGNS",x:78.5,y:4,w:12,h:9,l:"SIGNS",ctl:[["knob","knob","knob"]]},
+
+   {id:"EFIS1",x:9,y:19,w:17,h:8,l:"EFIS CM1",ctl:[["knob","pb","pb"]]},
+   {id:"FCU",x:28,y:19,w:44,h:8,l:"FCU",ctl:[["knob","knob","knob","knob"]]},
+   {id:"EFIS2",x:74,y:19,w:17,h:8,l:"EFIS CM2",ctl:[["knob","pb","pb"]]},
+
+   {id:"PFD1",x:8,y:30,w:12,h:16,l:"PFD CM1",sh:"screen"},
+   {id:"ND1",x:21,y:30,w:12,h:16,l:"ND CM1",sh:"screen"},
+   {id:"ISIS",x:34,y:30,w:6.5,h:16,l:"ISIS"},
+   {id:"ECAM",x:41.5,y:30,w:17,h:16,l:"ECAM",sh:"screen"},
+   {id:"ABGEAR",x:59.5,y:30,w:6.5,h:16,l:"A/BRK",ctl:[["pb"],["pb"]]},
+   {id:"ND2",x:67,y:30,w:12,h:16,l:"ND CM2",sh:"screen"},
+   {id:"PFD2",x:80,y:30,w:12,h:16,l:"PFD CM2",sh:"screen"},
+
+   {id:"CONS1",x:3,y:50,w:19,h:30,l:"CONSOLA CM1",sh:"seat",r:2},
+   {id:"SLIDEFB",x:78,y:50,w:19,h:30,l:"CONSOLA · EFB CM2",ctl:[["pb","pb"]]},
+
+   {id:"ECP",x:33,y:51,w:34,h:8,l:"ECP · T.O CONFIG",ctl:[["pb","pb","pb","pb","pb"]]},
+   {id:"MCDU1",x:26,y:61,w:15,h:12,l:"MCDU 1",sh:"screen"},
+   {id:"THRUST",x:44,y:61,w:12,h:12,l:"THRUST",sh:"lever"},
+   {id:"MCDU2",x:59,y:61,w:15,h:12,l:"MCDU 2",sh:"screen"},
+   {id:"ACPCALLS",x:26,y:75,w:15,h:9,l:"ACP · RMP",ctl:[["pb","pb","pb"]]},
+   {id:"ENGMODE",x:44,y:75,w:12,h:9,l:"ENG MODE",ctl:[["knob"]]},
+   {id:"ATCTCAS",x:59,y:75,w:15,h:9,l:"ATC · TCAS",ctl:[["pb","knob","pb"]]},
+   {id:"SPDBRK",x:26,y:86,w:15,h:9,l:"SPD BRK",ctl:[["pb","pb"]]},
+   {id:"TRIM",x:44,y:86,w:12,h:9,l:"TRIM",ctl:[["knob","knob"]]},
+   {id:"FLAPSZ",x:59,y:86,w:15,h:9,l:"FLAPS",ctl:[["pb"]]},
+   {id:"RADAR",x:26,y:97,w:15,h:9,l:"RADAR · PWS",ctl:[["knob","pb"]]},
+   {id:"PARKBRK",x:44,y:97,w:12,h:9,l:"PARK BRK · GRAV",ctl:[["knob","pb"]]},
+   {id:"CKPTD",x:59,y:97,w:15,h:9,l:"CKPT DOOR",ctl:[["pb","pb"]]}
+  ]},
+ fmsinit:{
+  vb:[100,93],
+  cap:"MCDU · secuencia D-I-F-R-I-P",
+  leg:"Bloque iluminado = interviene en este flujo",
+  orient:"Arriba, lo que hay que tener <b>antes</b> de tocar el MCDU. Abajo, el MCDU: la carga del FMS se hace pulsando teclas de función en un orden fijo, y ese orden es el barrido.",
+  bays:[{x:4,y:2,w:92,h:15},{x:5,y:74,w:90,h:15}],
+  pad:[{x:8.5,y:22,cols:1,rows:6,px:0,py:4.2,w:6,h:2.6},
+       {x:85.5,y:22,cols:1,rows:6,px:0,py:4.2,w:6,h:2.6},
+       {x:7.5,y:75.3,cols:8,rows:4,px:11,py:3.3,w:8.5,h:2.6}],
+  zones:[
+   {id:"RMPZ",x:7,y:4,w:26,h:11,l:"RMP",ctl:[["knob","pb","pb"]]},
+   {id:"AIRF",x:36,y:4,w:26,h:11,l:"DATOS DE AERÓDROMO"},
+   {id:"CHART",x:65,y:4,w:28,h:11,l:"CARTAS · CLIPBOARD"},
+
+   {id:"SCR2",x:17,y:20,w:66,h:26,l:"MCDU · PÁGINA ACTIVA",sh:"screen"},
+
+   {id:"K_DIR",x:6,y:50,w:10.8,h:10,l:"DIR"},
+   {id:"K_PROG",x:18.8,y:50,w:10.8,h:10,l:"PROG"},
+   {id:"K_PERF",x:31.6,y:50,w:10.8,h:10,l:"PERF"},
+   {id:"K_INIT",x:44.4,y:50,w:10.8,h:10,l:"INIT"},
+   {id:"K_DATA",x:57.2,y:50,w:10.8,h:10,l:"DATA"},
+   {id:"K_BLK",x:70,y:50,w:10.8,h:10,l:""},
+   {id:"K_BRT",x:82.8,y:50,w:10.8,h:10,l:"BRT"},
+
+   {id:"K_FPLN",x:6,y:61.5,w:10.8,h:10,l:"F-PLN"},
+   {id:"K_RADNAV",x:18.8,y:61.5,w:10.8,h:10,l:"RAD NAV"},
+   {id:"K_FUELP",x:31.6,y:61.5,w:10.8,h:10,l:"FUEL PRED"},
+   {id:"K_SECF",x:44.4,y:61.5,w:10.8,h:10,l:"SEC F-PLN"},
+   {id:"K_ATCC",x:57.2,y:61.5,w:10.8,h:10,l:"ATC COMM"},
+   {id:"K_MENU",x:70,y:61.5,w:10.8,h:10,l:"MCDU MENU"},
+   {id:"K_DIM",x:82.8,y:61.5,w:10.8,h:10,l:"DIM"}
+  ]},
+ mcdu:{
+  vb:[100,72],
+  cap:"MCDU · teclas de función",
+  leg:"Tecla iluminada = interviene en este flujo",
+  orient:"MCDU, la unidad de diálogo con el FMS. Este flujo no recorre paneles: recorre <b>teclas de función</b>, y cada tecla abre una página distinta del sistema de gestión de vuelo.",
+  bays:[{x:5,y:53,w:90,h:16.5}],
+  pad:[{x:7.5,y:5,cols:1,rows:6,px:0,py:4.4,w:6,h:2.6},
+       {x:86.5,y:5,cols:1,rows:6,px:0,py:4.4,w:6,h:2.6},
+       {x:7.5,y:54.5,cols:8,rows:4,px:11,py:3.7,w:8.5,h:2.8}],
+  zones:[
+   {id:"SCR",x:17,y:3,w:66,h:28,l:"PÁGINA ACTIVA",sh:"screen"},
+
+   {id:"DIR",x:6,y:33,w:10.8,h:8,l:"DIR"},
+   {id:"PROG",x:18.8,y:33,w:10.8,h:8,l:"PROG"},
+   {id:"PERF",x:31.6,y:33,w:10.8,h:8,l:"PERF"},
+   {id:"INIT",x:44.4,y:33,w:10.8,h:8,l:"INIT"},
+   {id:"DATA",x:57.2,y:33,w:10.8,h:8,l:"DATA"},
+   {id:"BLK",x:70,y:33,w:10.8,h:8,l:""},
+   {id:"BRT",x:82.8,y:33,w:10.8,h:8,l:"BRT"},
+
+   {id:"FPLN",x:6,y:43,w:10.8,h:8,l:"F-PLN"},
+   {id:"RADNAV",x:18.8,y:43,w:10.8,h:8,l:"RAD NAV"},
+   {id:"FUELP",x:31.6,y:43,w:10.8,h:8,l:"FUEL PRED"},
+   {id:"SECF",x:44.4,y:43,w:10.8,h:8,l:"SEC F-PLN"},
+   {id:"ATCC",x:57.2,y:43,w:10.8,h:8,l:"ATC COMM"},
+   {id:"MENU",x:70,y:43,w:10.8,h:8,l:"MCDU MENU"},
+   {id:"DIM",x:82.8,y:43,w:10.8,h:8,l:"DIM"}
+  ]},
+ briefing:{
+  vb:[100,88],litAll:true,
+  cap:"Estructura del briefing",
+  leg:"Los cinco elementos, en orden de exposición",
+  orient:"Este flujo no tiene panel: es <b>verbal</b>. El esquema es la estructura del briefing — el orden en que el PF expone y el PM escucha.",
+  zones:[
+   {id:"B1",x:7,y:3,w:86,h:12,l:"01 · ESTADO DEL AVIÓN · NOTAM · METEOROLOGÍA"},
+   {id:"B2",x:7,y:18,w:86,h:12,l:"02 · PREDICCIÓN DE COMBUSTIBLE"},
+   {id:"B3",x:7,y:33,w:86,h:23,l:"03 · TRAYECTORIA"},
+   {id:"T1",x:10,y:43.5,w:19,h:9,l:"DESCENSO"},
+   {id:"T2",x:31,y:43.5,w:19,h:9,l:"ESPERA"},
+   {id:"T3",x:52,y:43.5,w:19,h:9,l:"APROXIMACIÓN"},
+   {id:"T4",x:73,y:43.5,w:17,h:9,l:"FRUSTRADA"},
+   {id:"B4",x:7,y:59,w:86,h:12,l:"04 · ATERRIZAJE"},
+   {id:"B5",x:7,y:74,w:86,h:12,l:"05 · RADIONAV"}
+  ]},
  zonas:{
   vb:[100,86],litAll:true,
   orient:"Corte funcional de la cabina. Cada zona gobierna una clase distinta de cosas.",
@@ -296,26 +416,27 @@ const DIAG={
   vb:[100,150],
   orient:"Panel superior, visto desde los asientos mirando hacia arriba. Arriba del esquema = adelante, hacia el parabrisas. Las figuras representan el tipo de mando: pulsador, selector giratorio o mando protegido.",
   axis:[{x:50,y:11.2,t:"◄  ADELANTE  ·  PARABRISAS"},{x:50,y:147,t:"ATRÁS  ·  CABEZA DEL PILOTO  ►"}],
-  bays:[{x:2,y:12.2,w:27,h:130},{x:30.5,y:12.2,w:39,h:108},{x:71,y:12.2,w:27,h:80}],
+  bays:[{x:2,y:12.2,w:27,h:131},{x:30.5,y:12.2,w:39,h:108},{x:71,y:12.2,w:27,h:80}],
   divider:11,
   zones:[
    {id:"MAINT",x:31,y:2,w:38,h:7.5,l:"PANEL DE MANTENIMIENTO",ctl:[["pb","pb","pb"]]},
 
    {id:"CALLSC",x:2.5,y:13,w:26,h:8.4,l:"FLT INT · PA  (CAPT)",ctl:[["knob","pb","pb"]]},
-   {id:"ADIRS",x:2.5,y:23,w:26,h:8.4,l:"ADIRS",ctl:[["pb","pb","pb"]]},
-   {id:"FMS",x:2.5,y:33,w:26,h:8.4,l:"FMS",ctl:[["pb","pb"]]},
-   {id:"AIRDATA",x:2.5,y:43,w:26,h:8.4,l:"AIR DATA",ctl:[["pb","pb","pb"]]},
-   {id:"AUDIO",x:2.5,y:53,w:26,h:8.4,l:"AUDIO",ctl:[["knob","knob","pb"]]},
-   {id:"ACARS",x:2.5,y:63,w:26,h:8.4,l:"ACARS",ctl:[["pb","pb","pb"]]},
-   {id:"DFDR",x:2.5,y:73,w:26,h:8.4,l:"DFDR",ctl:[["pb","pb"]]},
-   {id:"FLTCTL1",x:2.5,y:83,w:26,h:8.4,l:"FLT CTL",ctl:[["pb","pb","pb"]]},
-   {id:"EMERELEC",x:2.5,y:93,w:26,h:8.4,l:"EMER ELEC PWR",ctl:[["pb","guard","knob"]]},
-   {id:"GPWS",x:2.5,y:103,w:26,h:8.4,l:"GPWS",ctl:[["pb","pb","pb","pb","pb"]]},
-   {id:"RCDR",x:2.5,y:113,w:26,h:8.4,l:"RCDR",ctl:[["knob","knob"]]},
-   {id:"OXY",x:2.5,y:123,w:26,h:8.4,l:"OXYGEN",ctl:[["guard","pb","pb"]]},
-   {id:"CALLS",x:2.5,y:133,w:26,h:8.4,l:"CALLS",ctl:[["pb","pb","pb","pb","pb"]]},
+   {id:"ADIRS",x:2.5,y:22.3,w:26,h:8.4,l:"ADIRS",ctl:[["pb","pb","pb"]]},
+   {id:"EVAC",x:2.5,y:31.6,w:26,h:8.4,l:"EVAC",ctl:[["pb","pb","knob"]]},
+   {id:"FMS",x:2.5,y:40.9,w:26,h:8.4,l:"FMS",ctl:[["pb","pb"]]},
+   {id:"AIRDATA",x:2.5,y:50.2,w:26,h:8.4,l:"AIR DATA",ctl:[["pb","pb","pb"]]},
+   {id:"AUDIO",x:2.5,y:59.5,w:26,h:8.4,l:"AUDIO  (ACP)",ctl:[["knob","knob","pb"]]},
+   {id:"ACARS",x:2.5,y:68.8,w:26,h:8.4,l:"ACARS",ctl:[["pb","pb","pb"]]},
+   {id:"DFDR",x:2.5,y:78.1,w:26,h:8.4,l:"DFDR",ctl:[["pb","pb"]]},
+   {id:"FLTCTL1",x:2.5,y:87.4,w:26,h:8.4,l:"FLT CTL",ctl:[["pb","pb","pb"]]},
+   {id:"EMERELEC",x:2.5,y:96.7,w:26,h:8.4,l:"EMER ELEC PWR",ctl:[["pb","guard","knob"]]},
+   {id:"GPWS",x:2.5,y:106,w:26,h:8.4,l:"GPWS",ctl:[["pb","pb","pb","pb","pb"]]},
+   {id:"RCDR",x:2.5,y:115.3,w:26,h:8.4,l:"RCDR",ctl:[["knob","pb","pb"]]},
+   {id:"OXY",x:2.5,y:124.6,w:26,h:8.4,l:"OXYGEN",ctl:[["guard","pb","pb"]]},
+   {id:"CALLS",x:2.5,y:133.9,w:26,h:8.4,l:"CALLS",ctl:[["pb","pb","pb","pb","pb"]]},
 
-   {id:"EVAC",x:31,y:13,w:38,h:9,l:"EVAC",ctl:[["knob","pb"]]},
+   {id:"AUDSW",x:31,y:13,w:38,h:9,l:"AUDIO SWITCHING",ctl:[["knob","knob","knob"]]},
    {id:"FIRE",x:31,y:24,w:38,h:14,l:"FIRE  ·  ENG 1  ·  APU  ·  ENG 2",ctl:[["fire","fire","fire"],["pb","pb","pb","pb"]]},
    {id:"ELEC",x:31,y:40,w:38,h:20,l:"ELEC",ctl:[["pb","pb","pb","pb"],["pb","pb","pb","pb"],["pb","pb","pb","pb"]]},
    {id:"FUEL",x:31,y:62,w:38,h:16,l:"FUEL",ctl:[["pb","pb","pb","pb"],["pb","knob","pb"]]},
@@ -338,18 +459,18 @@ const DIAG={
   ]},
  ctr:{
   vb:[100,44],
-  orient:"Panel frontal, visto desde los asientos. El ISIS y el reloj van entre el ND del capitán y el ECAM; el tren y el A/SKID, entre el ECAM y el ND del primer oficial.",
+  orient:"Panel frontal, visto desde los asientos. En la columna estrecha izquierda, el <b>ISIS</b> y bajo él el <b>DDRMI</b>. En la derecha, de arriba abajo: <b>tren y BRK FAN</b>, <b>AUTO BRK y A/SKID</b>, el <b>reloj</b> y la <b>presión de frenos</b>.",
   zones:[
    {x:1.5,y:6,w:14,h:32,l:"PFD CM1",sh:"screen"},
    {x:16.8,y:6,w:14,h:32,l:"ND CM1",sh:"screen"},
-   {x:32.1,y:6,w:10,h:11,l:"ISIS",sh:"screen"},
-   {x:32.1,y:18.5,w:10,h:9,l:"CLOCK"},
-   {x:32.1,y:29,w:10,h:9,l:"BRK PR"},
+   {x:32.1,y:6,w:10,h:14,l:"ISIS",sh:"screen"},
+   {x:32.1,y:21.5,w:10,h:16.5,l:"DDRMI"},
    {x:43.4,y:6,w:13,h:15,l:"EWD",sh:"screen"},
    {x:43.4,y:22.5,w:13,h:15.5,l:"SD",sh:"screen"},
-   {x:57.7,y:6,w:11,h:11,l:"LDG GEAR"},
-   {x:57.7,y:18.5,w:11,h:9,l:"A/SKID"},
-   {x:57.7,y:29,w:11,h:9,l:"GEAR IND"},
+   {x:57.7,y:6,w:11,h:7.5,l:"LDG GEAR"},
+   {x:57.7,y:14.5,w:11,h:9,l:"A/SKID"},
+   {x:57.7,y:24.5,w:11,h:8,l:"CLOCK"},
+   {x:57.7,y:33.5,w:11,h:4.5,l:"BRK PR"},
    {x:70,y:6,w:14,h:32,l:"ND CM2",sh:"screen"},
    {x:85,y:6,w:13.8,h:32,l:"PFD CM2",sh:"screen"}
   ]},
@@ -369,35 +490,52 @@ const DIAG={
    {x:20,y:70,w:19,h:9,l:"CKPT DOOR"},{x:41,y:70,w:18,h:9,l:"GRAVITY GEAR"},{x:60,y:70,w:19,h:9,l:"ATC / TCAS"}
   ]},
  final:{
-  vb:[100,70],
-  orient:"Planta de la cabina de mando. Arriba del esquema = adelante. Cada tripulante barre primero el glareshield y después su lado.",
+  vb:[100,96],
+  cap:"Glareshield · paneles · consolas",
+  orient:"Los dos puestos a la vez. Arriba el <b>glareshield</b> —EFIS de cada lado y el FCU en el centro—; en medio los paneles de instrumentos; abajo las <b>consolas laterales</b>. Cada tripulante barre su lado, y los dos a la vez.",
+  bays:[{x:1.5,y:1,w:97,h:19},{x:1.5,y:48,w:97,h:46}],
   zones:[
-   {x:8,y:5,w:84,h:10,l:"GLARESHIELD  ·  FCU  ·  EFIS",r:3},
-   {x:8,y:18,w:32,h:11,l:"PANEL CM1"},{x:42,y:18,w:16,h:11,l:"ECAM",sh:"screen"},{x:60,y:18,w:32,h:11,l:"PANEL CM2"},
-   {x:3,y:33,w:13,h:29,l:"CONSOLA CM1"},{x:84,y:33,w:13,h:29,l:"CONSOLA CM2"},
-   {x:21,y:37,w:15,h:23,l:"CM1",sh:"seat",r:2.5},{x:64,y:37,w:15,h:23,l:"CM2",sh:"seat",r:2.5},
-   {x:41,y:33,w:18,h:29,l:"PEDESTAL"}
+   {id:"EFIS1",x:4,y:3,w:28,h:15,l:"EFIS CM1",ctl:[["knob","pb","pb"],["knob","knob","pb"]]},
+   {id:"FCU",x:35,y:3,w:30,h:15,l:"FCU",ctl:[["knob","knob","knob","knob"]]},
+   {id:"EFIS2",x:68,y:3,w:28,h:15,l:"EFIS CM2",ctl:[["knob","pb","pb"],["knob","knob","pb"]]},
+
+   {id:"BRT1",x:3,y:23,w:8,h:10,l:"BRT",ctl:[["knob"]]},
+   {id:"PFD1",x:12,y:23,w:14,h:23,l:"PFD CM1",sh:"screen"},
+   {id:"ND1",x:27,y:23,w:14,h:23,l:"ND CM1",sh:"screen"},
+   {id:"ECAM",x:42,y:23,w:16,h:23,l:"ECAM",sh:"screen"},
+   {id:"ND2",x:59,y:23,w:14,h:23,l:"ND CM2",sh:"screen"},
+   {id:"PFD2",x:74,y:23,w:14,h:23,l:"PFD CM2",sh:"screen"},
+   {id:"BRT2",x:89,y:23,w:8,h:10,l:"BRT",ctl:[["knob"]]},
+
+   {id:"CONS1",x:3,y:50,w:22,h:42,l:"CONSOLA CM1",ctl:[["pb","knob"]]},
+   {id:"SEAT1",x:27,y:52,w:14,h:34,l:"CM1",sh:"seat",r:2.5},
+   {id:"ECP",x:43,y:50,w:14,h:11,l:"ECP",ctl:[["pb","pb","pb"]]},
+   {id:"MCDU",x:43,y:63,w:14,h:29,l:"MCDU",sh:"screen"},
+   {id:"SEAT2",x:59,y:52,w:14,h:34,l:"CM2",sh:"seat",r:2.5},
+   {id:"CONS2",x:75,y:50,w:22,h:42,l:"CONSOLA CM2",ctl:[["pb","knob"]]}
   ]}
 };
 
 const FLOWS=[
 {
- id:"ovhd",n:1,short:"Overhead Panel",dg:"ovhd",
+ id:"ovhd",n:1,short:"Overhead Panel",dg:"ovhd",blk:"Bloque 1 · Preparación",
  title:"Cockpit Preparation — Panel Superior",role:"PF",
- purpose:"El barrido más largo de la preparación. Tres recorridos ascendentes que configuran los sistemas del avión y, al terminar, dejan el panel superior a oscuras: cualquier luz encendida al final del flujo es un punto que revisar.",
- scan:"Tres barridos ascendentes",
- sweeps:["Barrido 1 · Columna izquierda","Barrido 2 · Columna central","Barrido 3 · Columna derecha"],
+ purpose:"El barrido más largo de la preparación. Tres recorridos ascendentes —izquierda, centro y derecha— que configuran los sistemas del avión y, al terminar, dejan el panel superior a oscuras: cualquier luz encendida al final del flujo es un punto que revisar.",
+ scan:"Tres barridos ascendentes + panel de mantenimiento",
+ sweeps:["Barrido 1 · Columna izquierda","Barrido 2 · Columna central","Barrido 3 · Columna derecha","Aparte · Panel de mantenimiento"],
  notes:[
   {t:"warn",h:"Parada en tránsito",b:"Si la parada es <b>asegurada</b> o hay <b>cambio de tripulación</b>, se ejecutan todas las acciones. En una <b>parada en tránsito</b> solo se ejecutan las marcadas con <b>✻</b> en el QRH."},
-  {t:"",h:"El sentido del barrido",b:"Los tres recorridos van <b>de abajo hacia arriba</b>, es decir desde los paneles más próximos a la cabeza del piloto hacia el parabrisas. Se extinguen <b>todas las luces blancas</b> a medida que se avanza, y el panel de mantenimiento cierra el barrido central con <b>todas las luces apagadas</b>."}
+  {t:"",h:"Izquierda a derecha, y de abajo hacia arriba",b:"El orden tiene dos ejes y los dos importan. Las <b>columnas se recorren de izquierda a derecha</b>: primero la del comandante, después la central de sistemas, y por último la derecha. Y dentro de cada columna el recorrido va <b>de abajo hacia arriba</b>, desde los paneles más próximos a la cabeza del piloto hacia el parabrisas. Nunca al revés, y nunca saltando de una columna a otra."},
+  {t:"",h:"El barrido apaga luces",b:"Durante la secuencia se <b>extinguen todas las luces blancas</b> que se vayan encontrando. Es la operación que construye el <i>dark cockpit</i>: no se trata de comprobar que el panel está bien, sino de <b>dejarlo apagado</b>, de modo que a partir de ese momento cualquier luz signifique algo."},
+  {t:"",h:"El panel de mantenimiento va aparte",b:"<b>MAINT PANEL … CHECK</b> no pertenece a ninguno de los tres barridos: es una comprobación propia, con todas sus luces <b>apagadas</b>. Está separado porque el panel de mantenimiento no se configura — solo se verifica que nadie dejó nada activado en tierra."}
  ],
  items:[
+  {sw:0,zid:"RCDR",ci:[0,2],s:"RCDR",n:"CVR TEST pb",v:"PRESS",t:0,
+   w:"Comprueba el registrador de voz de cabina. No aporta nada al vuelo en curso, pero es requisito de aeronavegabilidad y lo primero que se busca después de un suceso.",r:"Manual A320 · cap. 13 — Indicación y registro"},
   {sw:0,zid:"RCDR",ci:[0,0],s:"RCDR",n:"RCDR GND CTL",v:"ON",t:1,
    w:"Habilita el control en tierra de los registradores. Va marcado para tránsito porque el registro debe quedar activo en cualquier escala, no solo cuando se prepara el avión desde cero.",r:"Manual A320 · cap. 13 — Indicación y registro"},
-  {sw:0,zid:"RCDR",ci:[0,1],s:"RCDR",n:"CVR TEST pb",v:"PRESS",t:0,
-   w:"Comprueba el registrador de voz de cabina. No aporta nada al vuelo en curso, pero es requisito de aeronavegabilidad y lo primero que se busca después de un suceso.",r:"Manual A320 · cap. 13 — Indicación y registro"},
-  {sw:0,zid:"AUDIO",ci:[0,0],s:"AUDIO",n:"AUDIO SWITCHING",v:"NORM",t:0,
-   w:"Devuelve cada puesto a su fuente de audio normal. Si quedó conmutado de un vuelo anterior, el piloto oiría por una vía que no corresponde y el problema se detecta tarde, normalmente ya en frecuencia con el control.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,zid:"EVAC",ci:[0,2],s:"EVAC",n:"CAPT & PURS / CAPT",v:"AS RQRD",t:0,
+   w:"Define quién queda facultado para iniciar la señal de evacuación: solo el comandante, o comandante y jefe de cabina. Es una decisión de coordinación de tripulación, y por eso va según el procedimiento del operador.",r:"Manual A320 · cap. 18 — Puertas y salidas"},
   {sw:0,zid:"ADIRS",ci:[0,1],s:"ADIRS",n:"ALL IR MODE sel",v:"NAV",t:1,
    w:"Cierra el barrido izquierdo arrancando el alineamiento de las tres unidades inerciales. Cada IR mide su propio movimiento y la rotación de la Tierra para determinar dónde está el norte, así que <b>el avión no debe moverse durante el proceso</b>: cualquier desplazamiento contamina la medición y compromete la navegación de todo el vuelo.",r:"Manual A320 · cap. 14 — Navegación"},
 
@@ -417,43 +555,45 @@ const FLOWS=[
    w:"Su criticidad se entiende al revés: una sonda helada <b>no avisa de falla, entrega un dato falso</b>, y sin velocidad fiable el avión no puede proteger nada. Es también lo único que impide que una misma causa —el mismo hielo— inutilice las tres fuentes a la vez.",r:"Manual A320 · cap. 7 y 14"},
   {sw:1,zid:"AIRCOND",ci:[1,1],s:"AIR COND",n:"PACK FLOW",v:"AS RQRD",t:1,
    w:"Caudal de los packs según ocupación y temperatura exterior. Más caudal cuesta más aire sangrado y, con él, más combustible: no es una preferencia de confort, es una decisión con efecto en el consumo.",r:"Manual A320 · cap. 6 — Aire acondicionado"},
-  {sw:1,zid:"ELEC",ci:[0,1],s:"ELEC",n:"BAT",v:"CHECK",t:0,
-   w:"Verifica la tensión de ambas baterías. Son las que sostienen la barra esencial durante la transición a configuración de emergencia y las que permiten arrancar el APU sin ninguna otra fuente: una batería baja no es un detalle de mantenimiento.",r:"Manual A320 · cap. 2 — Sistema eléctrico"},
   {sw:1,zid:"ELEC",ci:[2,1],s:"ELEC",n:"ELEC PANEL",v:"CHECK",t:0,
    w:"Confirma la configuración eléctrica de partida. Con el avión alimentado desde tierra o desde el APU, el panel debe estar apagado salvo lo deliberado: las dos redes independientes, sin acoplar en paralelo.",r:"Manual A320 · cap. 2 — Sistema eléctrico"},
+  {sw:1,zid:"ELEC",ci:[0,1],s:"ELEC",n:"BAT",v:"CHECK",t:0,
+   w:"Verifica la tensión de ambas baterías. Son las que sostienen la barra esencial durante la transición a configuración de emergencia y las que permiten arrancar el APU sin ninguna otra fuente: una batería baja no es un detalle de mantenimiento.",r:"Manual A320 · cap. 2 — Sistema eléctrico"},
   {sw:1,zid:"FIRE",ci:[0,0],s:"FIRE",n:"ENG FIRE",v:"CHECK / TEST",t:0,
    w:"Prueba los bucles de detección de incendio de motor. Cada zona tiene <b>dos bucles independientes</b> y la alerta exige que ambos detecten —o que uno haya fallado y el otro detecte—. Esa doble coincidencia es lo que elimina las falsas alarmas; la prueba es lo que confirma que ambos bucles siguen vivos.",r:"Manual A320 · cap. 16 — Incendios"},
-  {sw:1,zid:"EVAC",ci:[0,0],s:"EVAC",n:"CAPT & PURS / CAPT",v:"AS RQRD",t:0,
-   w:"Define quién queda facultado para iniciar la señal de evacuación: solo el comandante, o comandante y jefe de cabina. Es una decisión de coordinación de tripulación, y por eso va según el procedimiento del operador.",r:"Manual A320 · cap. 18 — Puertas y salidas"},
-  {sw:1,zid:"MAINT",ci:[0,1],s:"MAINT",n:"MAINT PANEL",v:"CHECK",t:0,
-   w:"Cierra el barrido central, ya sobre el overhead posterior: todas las luces del panel de mantenimiento <b>apagadas</b>. Es la comprobación que da sentido a la regla del <i>dark cockpit</i> — a partir de aquí, cualquier luz encendida significa algo.",r:"Manual A320 · cap. 0 — Filosofía Airbus"},
+  {sw:1,zid:"AUDSW",ci:[0,1],s:"AUDIO SWITCHING",n:"AUDIO SWITCHING",v:"NORM",t:0,
+   w:"Cierra el barrido central, ya en el extremo delantero del overhead. Devuelve cada puesto a su fuente de audio normal: si quedó conmutado de un vuelo anterior, el piloto oiría por una vía que no corresponde, y eso se descubre tarde — normalmente ya en frecuencia con el control.",r:"Manual A320 · cap. 15 — Comunicaciones"},
 
   {sw:2,zid:"VENT",ci:[0,0],s:"VENTILATION",n:"VENT",v:"CHECK",t:0,
    w:"Ventilación de aviónica: un circuito separado del de cabina, silencioso y crítico. Sin refrigeración, los computadores del avión empiezan a fallar, y por eso tiene alertas propias en lugar de compartir las del aire acondicionado.",r:"Manual A320 · cap. 6 — Ventilación"},
-  {sw:2,zid:"CALLSF",ci:[0,1],s:"CALLS  (F/O)",n:"PA",v:"RECEPT",t:0,
-   w:"Deja el aviso a pasajeros en recepción. El PA tiene prioridad jerárquica —cabina de mando por encima de tripulación de cabina, y esta por encima de lo pregrabado—, de modo que un aviso desde aquí corta cualquier otro que esté sonando.",r:"Manual A320 · cap. 15 — Comunicaciones"}
-  ]
+  {sw:2,zid:"CALLSF",ci:[0,1],s:"FLT INT · PA  (F/O)",n:"PA",v:"RECEPT",t:0,
+   w:"Deja el aviso a pasajeros en recepción. El PA tiene prioridad jerárquica —cabina de mando por encima de tripulación de cabina, y esta por encima de lo pregrabado—, de modo que un aviso desde aquí corta cualquier otro que esté sonando.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+
+  {sw:3,zid:"MAINT",ci:[0,1],s:"PANEL DE MANTENIMIENTO",n:"MAINT PANEL",v:"CHECK · ALL LIGHTS OFF",t:0,
+   w:"Comprobación aparte de los tres barridos: todas las luces del panel de mantenimiento <b>apagadas</b>. Aquí viven mandos que solo usa tierra —alimentación de servicio, corte de ventilación, inhibiciones— y una luz encendida significa que algo quedó puesto desde el mantenimiento. Es la comprobación que da sentido a la regla del <i>dark cockpit</i>: a partir de aquí, cualquier luz encendida significa algo.",r:"Manual A320 · cap. 0 — Filosofía Airbus"}
+ ]
 },
 {
- id:"ctr",n:2,short:"Center Instrument Panel",dg:"ctr",
+ id:"ctr",n:2,short:"Center Instrument Panel",dg:"ctr",blk:"Bloque 1 · Preparación",
  title:"Cockpit Preparation — Panel Central de Instrumentos",role:"PF",
- purpose:"El flujo más corto de los cuatro: tres ítems, todos marcados para tránsito. El barrido recorre las dos columnas estrechas que flanquean el ECAM, de izquierda a derecha.",
- scan:"Un barrido, izquierda a derecha",
+ purpose:"El flujo más corto de los cuatro: tres ítems, los tres marcados para tránsito. El barrido sale de la columna estrecha izquierda, cruza por debajo del ECAM hasta la derecha y ahí sube — primero el reloj, después el A/SKID.",
+ scan:"Un barrido · izquierda a derecha",
  sweeps:["Barrido único · izquierda a derecha"],
  notes:[
-  {t:"",h:"Los tres son de tránsito",b:"Los tres ítems llevan <b>✻</b>: se ejecutan también en parada en tránsito. No es casual — los tres afectan a capacidades que se usan en los primeros segundos del siguiente vuelo."}
+  {t:"",h:"Los tres son de tránsito",b:"Los tres ítems llevan <b>✻</b>: se ejecutan también en parada en tránsito. No es casual — los tres afectan a capacidades que se usan en los primeros segundos del siguiente vuelo."},
+  {t:"",h:"El reloj está a la derecha, no bajo el ISIS",b:"Es la confusión típica de quien lo estudia sobre papel. En la columna estrecha <b>izquierda</b> están el ISIS y, debajo, el DDRMI. El <b>reloj vive en la columna derecha</b>, justo <b>debajo del A/SKID & N/W STRG</b>, con la presión de frenos más abajo. Por eso el barrido no baja por la izquierda: cruza por debajo del ECAM y sube por la derecha."}
  ],
  items:[
-  {sw:0,x:37.1,y:12.5,s:"ISIS",n:"ISIS",v:"CHECK",t:1,
+  {sw:0,x:37.1,y:13,s:"ISIS",n:"ISIS",v:"CHECK",t:1,
    w:"Los instrumentos de reserva. Su valor está en que <b>no comparten nada</b> con el sistema principal: fuente de datos propia y alimentación propia. Es el mismo principio que el respaldo mecánico de los mandos de vuelo o la extensión por gravedad del tren — el último nivel de respaldo debe ser independiente, no una copia del primero.",r:"Manual A320 · cap. 13 — Indicación y registro"},
-  {sw:0,x:37.1,y:24.6,s:"CLOCK",n:"CLOCK",v:"CHECK / SET",t:1,
+  {sw:0,x:63.2,y:30.3,s:"CLOCK",n:"CLOCK",v:"CHECK / SET",t:1,
    w:"Referencia horaria común de la cabina. Alimenta registradores y tiempos operacionales, y es la base de cualquier reconstrucción posterior de lo ocurrido.",r:"Manual A320 · cap. 13 — Indicación y registro"},
-  {sw:0,x:63.2,y:24.6,s:"A/SKID & N/W STRG",n:"A/SKID & N/W STRG sw",v:"ON",t:1,
+  {sw:0,x:63.2,y:20.5,s:"A/SKID & N/W STRG",n:"A/SKID & N/W STRG sw",v:"ON",t:1,
    w:"Habilita antiskid y dirección de rueda de nariz. El antiskid mantiene cada rueda <b>justo por debajo del bloqueo</b>, que es donde se obtiene la máxima deceleración: una rueda bloqueada no frena mejor, frena peor y revienta el neumático. Sin él, la distancia de parada aumenta de forma significativa — y eso se descubre en el aterrizaje, no aquí.",r:"Manual A320 · cap. 10 — Tren y frenos"}
  ]
 },
 {
- id:"ped",n:3,short:"Pedestal",dg:"ped",
+ id:"ped",n:3,short:"Pedestal",dg:"ped",blk:"Bloque 1 · Preparación",
  title:"Cockpit Preparation — Pedestal",role:"PF",
  purpose:"Tres barridos descendentes sobre la consola central. Es el flujo que deja el avión en configuración segura de tierra: motores cortados, empuje en ralentí y tren asegurado.",
  scan:"Tres barridos descendentes",
@@ -485,434 +625,378 @@ const FLOWS=[
  ]
 },
 {
- id:"final",n:4,short:"Final Cockpit Prep",dg:"final",
- title:"Cockpit Preparation — Preparación Final",role:"PM",
- purpose:"El único flujo de este bloque que ejecutan los dos pilotos, y el único que se hace con ambos sentados. Cierra la preparación con una verificación cruzada de los datos de performance y un barrido simétrico de cada puesto.",
- scan:"Verificación cruzada + barrido simétrico",
- sweeps:["PM · verificación previa","CM1 y CM2 · barrido SOP"],
+ id:"fmsinit",n:4,short:"FMS Preparation",dg:"fmsinit",blk:"Bloque 1 · Preparación",
+ title:"Cockpit Preparation — FMS Preparation",role:"PF",
+ purpose:"La carga del FMS, y lo que hay que tener antes de empezarla. Cuatro acciones del PF y, dentro de la última, la secuencia fija de siete páginas del MCDU que todo el mundo conoce por su regla mnemotécnica: D-I-F-R-I-P.",
+ scan:"Dos tramos · PF",
+ sweeps:["Antes de tocar el MCDU","MCDU · D-I-F-R-I-P"],
  notes:[
-  {t:"",h:"Con ambos pilotos sentados",b:"Este flujo <b>no se inicia</b> hasta que los dos pilotos están en sus puestos. Su valor está en que es el primer momento del vuelo en que existe <b>verificación cruzada real</b>: dos personas mirando los mismos datos de forma independiente."},
-  {t:"",h:"Barrido simétrico",b:"Cada tripulante recorre primero el <b>glareshield</b> y después su <b>consola lateral y panel de instrumentos</b>, según el SOP del operador. La simetría es deliberada: los dos puestos quedan configurados igual, y cualquier diferencia se hace visible."}
+  {t:"",h:"D-I-F-R-I-P",b:"La regla del orden de carga: <b>D</b>ATA (página STATUS) · <b>I</b>NIT A · <b>F</b>-PLN · <b>R</b>AD NAV · <b>I</b>NIT B · <b>P</b>ERF. El plan secundario se intercala después del F-PLN. No es una lista de páginas que visitar: es una <b>cadena de dependencias</b>, porque cada página consume datos que introdujo la anterior."},
+  {t:"warn",h:"El FMS no avisa de lo que está mal",b:"Es la diferencia de fondo entre este flujo y los de panel. Un pulsador mal puesto deja una luz encendida; <b>un dato mal tecleado no deja ninguna señal</b>. Una distancia que no cuadra, una restricción inventada o una base de datos caducada se ven en pantalla exactamente igual que lo correcto. Por eso todas las comprobaciones de este flujo son <b>contra una fuente externa</b>: el plan computarizado, la carta, el EFB."},
+  {t:"",h:"Lo hace el PF; el PM lo verifica después",b:"La lámina de origen deja la columna del PM vacía: la preparación del FMS es <b>del PF</b>. La verificación llega en el flujo siguiente, la <i>Final Cockpit Preparation</i>, donde el PM comprueba la preparación completa y <b>compara la green dot del MCDU con la del EFB</b> — una fuente independiente contra otra."}
  ],
  items:[
-  {sw:0,x:46,y:42,s:"MCDU",n:"FMS PREPARATION",v:"CHECK",t:0,pm:1,
-   w:"El PM revisa la programación completa del FMS hecha por el PF: ruta, performance, pesos. Es una lectura independiente, no una confirmación de cortesía — el objetivo es que dos cabezas hayan llegado por separado a los mismos números.",r:"Manual A320 · cap. 12 — Auto Flight"},
-  {sw:0,x:54,y:42,s:"MCDU / EFB",n:"EFB / MCDU GREEN DOT",v:"COMPARE",t:0,pm:1,
-   w:"Se compara la <i>green dot</i> calculada por el EFB con la que muestra el MCDU. Son <b>dos cálculos independientes</b> a partir de fuentes distintas: si coinciden, el peso y la configuración cargados son coherentes. Es la comprobación que atrapa un error de peso antes de que se convierta en un problema de performance en el despegue.",r:"Manual A320 · cap. 12 — Auto Flight"},
-  {sw:1,x:50,y:11.1,s:"GLARESHIELD",n:"GLARESHIELD",v:"SOP",t:0,
-   w:"Primer tramo del barrido de cada puesto: FCU, paneles EFIS y luces de Master Warning y Master Caution. Es donde se fija lo que el avión va a hacer —altitud, rumbo, velocidad— y donde se verá si algo no va como se espera.",r:"Manual A320 · cap. 12 — Auto Flight"},
-  {sw:1,x:9.5,y:45,s:"CONSOLA CM1",n:"LATERAL CONSOLES / INSTRUMENT PANELS",v:"SOP",t:0,
-   w:"Segundo tramo: consola lateral y panel de instrumentos de cada tripulante, en ambos puestos de forma simétrica. Cierra la preparación dejando los dos lados en configuración idéntica, que es la condición para que una discrepancia posterior signifique algo.",r:"Manual A320 · cap. 13 — Indicación y registro"}
+  {sw:0,x:20,y:11,s:"RMP · pedestal",n:"RMP",v:"SET",t:0,
+   w:"Las frecuencias de partida en el panel de gestión de radio. Va primero por una razón encadenada: es lo que permite <b>escuchar el ATIS</b>, y del ATIS salen los datos que alimentan todo lo demás — pista en uso, QNH, temperatura y viento.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,x:49,y:11,s:"Documentación",n:"AIRFIELD DATA",v:"OBTAIN",t:1,
+   w:"Datos del aeródromo: ATIS, estado de la pista, NOTAM, condiciones de salida. Son los <b>datos de entrada</b> del cálculo de despegue y de la carga del FMS. Todo lo que se teclee después vale exactamente lo que valgan estos.",r:"Manual A320 · cap. 22 — Procedimientos normales"},
+  {sw:0,x:79,y:11,s:"Cartas",n:"NAV CHART CLIPBOARD",v:"PREPARE",t:1,
+   w:"Cartas de salida a la vista y en orden, en papel o en el EFB. No es cuestión de orden: la carta es <b>la fuente independiente</b> contra la que se va a verificar el plan cargado en el FMS. Si la única referencia es la pantalla, no hay verificación — hay lectura.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,x:50,y:33,s:"MCDU",n:"FMS",v:"PREPARE",t:1,
+   w:"Aquí empieza la carga propiamente dicha, y se hace <b>siempre en el mismo orden</b>: la secuencia <b>D-I-F-R-I-P</b> del tramo siguiente. El orden no es costumbre — cada página necesita datos que introdujo la anterior, y saltarse una deja la siguiente incompleta sin que nada lo avise.",r:"Manual A320 · cap. 12 — Auto Flight"},
+
+  {sw:1,x:62.6,y:56.5,s:"DATA · STATUS",n:"STATUS PAGE",v:"CHECK",t:0,
+   w:"La <b>D</b> de DIFRIP, y la única página que se <b>comprueba</b> en lugar de rellenarse. Dice qué base de datos de navegación está activa y hasta cuándo es válida. Una base caducada invalida todo lo que se cargue después: los procedimientos seguirán apareciendo en pantalla, pero no serán los publicados.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:1,x:46.5,y:56.5,s:"INIT",n:"INIT A PAGE",v:"FILL",t:0,
+   w:"<b>I</b>. Ruta —de dónde a dónde—, alterno, número de vuelo, alineamiento de las inerciales y viento de crucero. Es la página que <b>da identidad al vuelo</b> dentro del FMS: hasta aquí, el avión no sabe a dónde va.",r:"Manual A320 · cap. 12 y 14"},
+  {sw:1,x:11.4,y:68,s:"F-PLN",n:"F-PLN A PAGE",v:"FILL · CHECK",t:0,
+   w:"<b>F</b>. El plan de vuelo: SID, ruta, STAR y restricciones. La lámina de origen detalla tres comprobaciones, y las tres son contra algo externo. <b>Una:</b> verificar el plan en <b>modo PLAN del ND</b> contra el plan computarizado. <b>Dos:</b> comprobar la <b>DIST TO DEST</b> frente a la distancia total calculada — cualquier discrepancia afecta a la gestión de combustible. <b>Tres:</b> contrastar las restricciones con las cartas, porque si el FM lleva información errónea <b>el avión volará una trayectoria no deseada</b>, y el cruce con la carta (SID, STAR) es lo único que lo impide.",r:"Manual A320 · cap. 12 y 14"},
+  {sw:1,x:49.8,y:68,s:"SEC F-PLN",n:"SEC F-PLN PAGE",v:"FILL",t:0,
+   w:"El plan secundario, normalmente para el regreso al aeropuerto de salida o para una pista alternativa. Cargarlo cuesta un minuto ahora y cero segundos después: cuando haga falta, se activa con una tecla.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:1,x:24.2,y:68,s:"RAD NAV",n:"RAD NAV PAGE",v:"FILL",t:0,
+   w:"<b>R</b>. Radioayudas de la salida. El FMS sintoniza por su cuenta lo que cree necesario; lo que exija el procedimiento se pone a mano. Y el ident se comprueba — una frecuencia correcta no garantiza la instalación correcta.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,x:53.1,y:56.5,s:"INIT  (2.ª página)",n:"INIT B PAGE",v:"FILL",t:0,
+   w:"<b>I</b>. Se vuelve a INIT, ahora a su segunda página: <b>peso cero combustible, combustible a bordo y reservas</b>. Con eso el FMS calcula peso, centrado y predicciones. Es la página que convierte una ruta en un vuelo con números.",r:"Manual A320 · cap. 9 y 12"},
+  {sw:1,x:37,y:56.5,s:"PERF",n:"PERF PAGES",v:"FILL",t:0,
+   w:"<b>P</b>. Las páginas de actuaciones, empezando por <b>PERF T.O</b>: V1, VR, V2, FLEX o TOGA, y las altitudes de reducción y aceleración. Cierra la secuencia porque necesita todo lo anterior — sin peso no hay velocidades, y sin plan de vuelo no hay pista.",r:"Manual A320 · cap. 22 — Procedimientos normales"}
  ]
-}
-];
+},
+{
+ id:"final",n:5,short:"Final Cockpit Prep",dg:"final",blk:"Bloque 1 · Preparación",
+ title:"Cockpit Preparation — Preparación Final",role:"PM + PF",
+ purpose:"El único flujo del bloque que ejecutan los dos pilotos, y el único que no empieza hasta que ambos están sentados. Una verificación cruzada de la preparación del FMS y, después, dos barridos simétricos y simultáneos: glareshield primero, consola y panel de instrumentos después.",
+ scan:"Verificación cruzada + dos barridos simétricos",
+ sweeps:["PM · comprobación previa","1 · Glareshield — PF","1 · Glareshield — PM","2 · Consolas y paneles — PF","2 · Consolas y paneles — PM"],
+ notes:[
+  {t:"",h:"Con ambos pilotos sentados",b:"Este flujo <b>no se inicia</b> hasta que los dos pilotos están en sus puestos. Ahí está su valor: es el primer momento del vuelo en que existe <b>verificación cruzada real</b> — dos personas mirando los mismos datos de forma independiente, y dos puestos quedando configurados en paralelo."},
+  {t:"",h:"Dos barridos idénticos, uno por puesto",b:"Cada tripulante recorre <b>primero el glareshield y después su consola y su panel de instrumentos</b>, en su propio lado y al mismo tiempo que el otro. La lista es la misma salvo tres diferencias, y las tres tienen explicación: el <b>FCU lo pone solo el PF</b> porque es único y compartido; el PF cierra en el <b>ECP</b> llamando a las páginas CAB PRESS y STATUS, y el PM en el <b>MCDU</b> comprobando el alineamiento inercial. Todo lo demás se hace dos veces a propósito, para que cualquier diferencia entre los dos puestos signifique algo."},
+  {t:"warn",h:"La prueba de la máscara: avisar antes a tierra",b:"<b>Antes</b> de probar la máscara hay que advertir al personal de tierra conectado al intercomunicador: la prueba mete un <b>ruido fuerte en los auriculares</b> y puede dañarles el oído. Y <b>después</b> de la prueba, o al guardar la máscara, verificar dos cosas: que el selector <b>N/100 % quede bloqueado abajo en la posición 100 %</b>, y que el selector de presión <b>EMERGENCY no haya quedado girado a la derecha</b> — en esa posición la máscara queda en sobrepresión permanente."},
+  {t:"",h:"Pulsar para mirar, no para cambiar",b:"Los últimos ítems de los dos puestos son de un tipo distinto a todo lo anterior: <b>se pulsa una tecla para llamar a una página, y se lee lo que dice</b>. El <b>PRESS</b> y el <b>STS</b> del ECP, y el <b>DATA</b> del MCDU, no configuran nada del avión — abren la pantalla donde está la respuesta. Conviene guardarlos en la memoria como lo que son, porque se parecen en el gesto a los ítems que sí mueven un sistema y no se parecen en nada más."},
+  {t:"",h:"El brillo del ND decide lo que se ve del tiempo",b:"El <b>anillo exterior</b> del mando de brillo del ND gobierna la imagen de <b>radar meteorológico y terreno</b>, y va al máximo. Cuando no se ajusta bien, esa información se ve débil o no se ve — y el riesgo no es estético: es que la tripulación concluya que el cielo está limpio cuando lo que está oscuro es la pantalla."}
+ ],
+ items:[
+  {sw:0,pm:1,x:47,y:70,s:"MCDU",n:"FMS PREPARATION",v:"CHECK",t:0,
+   w:"El PM revisa la programación completa del FMS hecha por el PF: ruta, performance, pesos. Es una lectura independiente, no una confirmación de cortesía — el objetivo es que dos cabezas hayan llegado por separado a los mismos números.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,pm:1,x:53,y:70,s:"MCDU · EFB",n:"EFB / MCDU GREEN DOT",v:"COMPARE",t:0,
+   w:"Se compara la <i>green dot</i> calculada por el EFB con la que muestra el MCDU. Son <b>dos cálculos independientes</b> desde fuentes distintas: si coinciden, el peso y la configuración cargados son coherentes. Es la comprobación que atrapa un error de peso antes de que se convierta en un problema de performance en el despegue.",r:"Manual A320 · cap. 12 — Auto Flight"},
 
-const KEY="veyra.a320.flows.v1";
-let store={};
-try{store=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){store={}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
-let current=-1,practice=null;
+  {sw:1,zid:"EFIS1",ci:[0,0],s:"EFIS CM1",n:"BARO REF",v:"SET",t:1,
+   w:"El reglaje altimétrico de salida, en el panel EFIS de cada puesto. Se pone en los dos y tiene que ser el mismo: un BARO distinto en cada PFD es una discrepancia de altitud entre pilotos que no salta a la vista hasta que uno canta una cifra que el otro no ve.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,zid:"EFIS1",ci:[0,1],s:"EFIS CM1",n:"FD",v:"CHECK ON",t:1,
+   w:"Director de vuelo encendido. En el A320 tenerlo puesto <b>no obliga a seguirlo</b>, pero determina lo que muestra el FMA y cómo se comporta el A/THR: con el FD apagado en los dos lados, el empuje pasa a modo velocidad. Comprobarlo aquí evita descubrirlo en el aire.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:1,zid:"EFIS1",ci:[0,2],s:"EFIS CM1",n:"LS",v:"AS RQRD",t:1,
+   w:"Presentación de localizador y senda en el PFD, según lo previsto para la salida. Normalmente no hace falta en despegue — y precisamente por eso es el pulsador que se queda puesto, o quitado, del vuelo anterior.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,zid:"EFIS1",ci:[1,0],s:"EFIS CM1",n:"ND MODE AND RANGE",v:"AS RQRD",t:1,
+   w:"Modo y alcance de la pantalla de navegación para la salida: normalmente ARC o ROSE NAV y un rango corto, porque lo que importa está cerca. Un rango grande en despegue llena la pantalla de información que no se va a mirar.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,zid:"EFIS1",ci:[1,1],s:"EFIS CM1",n:"EFIS OPTIONS",v:"CSTR",t:1,
+   w:"<b>CSTR</b>: restricciones de altitud y velocidad visibles en el ND. En salida es la opción que importa, porque un SID es en el fondo una lista de restricciones — y verlas en pantalla es lo que permite anticiparlas en lugar de perseguirlas.",r:"Manual A320 · cap. 12 y 14"},
+  {sw:1,zid:"EFIS1",ci:[1,2],s:"EFIS CM1",n:"ADF/VOR SELECTOR",v:"AS RQRD",t:1,
+   w:"Qué aguja se presenta en el ND: ADF o VOR. Es pequeño y se pasa por alto, pero una aguja apuntando a una estación que no es la briefada crea una referencia falsa justo cuando se vuela con la mirada dentro.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,zid:"FCU",ci:[0,1],s:"FCU",n:"FCU",v:"SET",t:1,
+   w:"Altitud inicial autorizada, rumbo y velocidad de la salida. Es el <b>único ítem del glareshield que hace solo el PF</b>, y la razón es física: el FCU es uno y está compartido. Si lo tocaran los dos, el segundo borraría lo que puso el primero.",r:"Manual A320 · cap. 12 — Auto Flight"},
 
-FLOWS.forEach(f=>{
-  const c={};
-  f.items.forEach((it,i)=>{it.id=f.id+"-"+i;c[it.sw]=(c[it.sw]||0)+1;it.k=c[it.sw]});
-});
-const TOTAL=FLOWS.reduce((a,f)=>a+f.items.length,0);
-document.getElementById("s-items").textContent=TOTAL;
-const isDone=id=>!!store[id];
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  {sw:2,pm:1,zid:"EFIS2",ci:[0,0],s:"EFIS CM2",n:"BARO REF",v:"SET",t:1,
+   w:"El mismo reglaje que el del capitán, puesto de forma independiente. Que los dos lo introduzcan por separado y coincidan es lo que convierte una cifra en una comprobación.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:2,pm:1,zid:"EFIS2",ci:[0,1],s:"EFIS CM2",n:"FD",v:"CHECK ON",t:1,
+   w:"Los dos directores encendidos. El detalle que importa: el modo del A/THR depende del estado de <b>ambos</b> FD, no del propio — si los dos se apagan, el empuje cambia de modo. Por eso este ítem es de los dos puestos.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:2,pm:1,zid:"EFIS2",ci:[0,2],s:"EFIS CM2",n:"LS",v:"AS RQRD",t:1,
+   w:"Según lo briefado, y a ser posible igual que el otro lado: si un PFD muestra desviaciones y el otro no, los dos pilotos dejan de tener la misma referencia.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:2,pm:1,zid:"EFIS2",ci:[1,0],s:"EFIS CM2",n:"ND MODE AND RANGE",v:"AS RQRD",t:1,
+   w:"Modo y alcance según la salida. Es habitual —y correcto— que los dos ND lleven <b>rangos distintos</b>, uno corto y otro largo, cuando así se ha acordado. Lo que no vale es que la diferencia sea por descuido.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:2,pm:1,zid:"EFIS2",ci:[1,1],s:"EFIS CM2",n:"EFIS OPTIONS",v:"CSTR",t:1,
+   w:"CSTR también en este lado. Ver las restricciones es la condición para que el PM pueda cantar una desviación <b>antes</b> de que llegue a ser una desviación.",r:"Manual A320 · cap. 12 y 14"},
+  {sw:2,pm:1,zid:"EFIS2",ci:[1,2],s:"EFIS CM2",n:"ADF/VOR SELECTOR",v:"AS RQRD",t:1,
+   w:"Lo mismo en el puesto derecho. Y el barrido del glareshield <b>termina aquí</b>: el FCU no se repite, porque es único y ya lo ha puesto el PF.",r:"Manual A320 · cap. 14 — Navegación"},
 
-/* ---------- esquema de cabina ---------- */
-function fit(l,w,mx){return Math.max(1,Math.min(mx||1.75,(w-2.4)/(l.length*0.66)))}
-function rowsOf(z){const c=z.ctl;if(!c)return[];return Array.isArray(c[0])?c:[c]}
-function ctlPos(z,r,c){
-  const rows=rowsOf(z),row=rows[r]||rows[0]||[],n=Math.max(row.length,1);
-  const P=Math.min(5.0,(z.w-4.4)/Math.max(n-1,1));
-  const sx=z.x+z.w/2-(n-1)*P/2;
-  return{x:sx+c*P,y:z.y+6+r*5.0};
-}
-function glyph(t,cx,cy){
-  if(t==="knob")return `<circle class="g-knob" cx="${cx}" cy="${cy}" r="1.75"/><line class="g-tick" x1="${cx}" y1="${cy-.2}" x2="${cx}" y2="${cy-1.65}"/>`;
-  if(t==="fire")return `<rect class="g-fire" x="${cx-2.3}" y="${cy-1.7}" width="4.6" height="3.4" rx=".6"/>`;
-  if(t==="guard")return `<rect class="g-guard" x="${cx-1.9}" y="${cy-1.7}" width="3.8" height="3.4" rx=".5"/><line class="g-tick" x1="${cx-1.9}" y1="${cy-.5}" x2="${cx+1.9}" y2="${cy-.5}"/>`;
-  if(t==="lamp")return `<circle class="g-lamp" cx="${cx}" cy="${cy}" r="1.2"/>`;
-  return `<rect class="g-pb" x="${cx-1.8}" y="${cy-1.6}" width="3.6" height="3.2" rx=".5"/><line class="g-tick" x1="${cx-.9}" y1="${cy+.75}" x2="${cx+.9}" y2="${cy+.75}"/>`;
-}
-function resolve(f){
-  const d=DIAG[f.dg],by={};
-  d.zones.forEach(z=>{if(z.id)by[z.id]=z});
-  f.items.forEach(it=>{
-    if(it.zid&&by[it.zid]){const c=it.ci||[0,0],pt=ctlPos(by[it.zid],c[0],c[1]);it._x=pt.x;it._y=pt.y}
-    else{it._x=it.x;it._y=it.y}
-  });
-}
+  {sw:3,zid:"CONS1",ci:[0,0],s:"CONSOLA CM1",n:"OXYGEN MASK",v:"TEST",t:0,
+   w:"Prueba de la máscara de oxígeno de tripulación. <b>Antes</b>, avisar al personal de tierra conectado al intercomunicador: la prueba mete un ruido fuerte en los auriculares. <b>Después</b> —y al guardarla— verificar que el selector <b>N/100 % queda bloqueado abajo en 100 %</b> y que el de presión <b>EMERGENCY no ha quedado girado a la derecha</b>: en esa posición la máscara queda en sobrepresión permanente y vacía la botella sin que nadie lo note.",r:"Manual A320 · cap. 17 — Oxígeno"},
+  {sw:3,zid:"BRT1",ci:[0,0],s:"Brillo PFD · ND",n:"PFD-ND BRIGHTNESS",v:"ADJUST",t:0,
+   w:"Brillo de las dos pantallas. Con un detalle que la lámina de origen destaca aparte: el <b>anillo exterior</b> del mando del ND gobierna la imagen de <b>radar y terreno</b>, y debe quedar al máximo. Mal ajustado, la meteorología se ve débil o no se ve — y lo que se concluye entonces es que no hay nada.",r:"Manual A320 · cap. 14 y 19"},
+  {sw:3,zid:"CONS1",ci:[0,1],s:"CONSOLA CM1",n:"LOUDSPEAKER KNOB",v:"SET",t:0,
+   w:"Volumen del altavoz. Es el respaldo del auricular: si el piloto se quita la diadema o esta falla, el altavoz es lo que mantiene la escucha. A cero, esa red de seguridad no existe y nadie se entera hasta que se pierde una llamada.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:3,x:26.5,y:35,s:"PFD · ND CM1",n:"PFD / ND",v:"CHECK",t:1,
+   w:"Comprobación de las propias pantallas: que muestran lo que deben, sin banderas ni información ausente. Es el momento de descubrir un display degradado — con el avión parado y con tiempo para resolverlo.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:3,zid:"ECP",ci:[0,0],s:"ECP",n:"PRESS pb",v:"PRESS",t:1,
+   w:"En el panel de control del ECAM se pulsa <b>PRESS</b>, que llama a la página <b>CAB PRESS</b> del System Display. No es un ítem de configuración: es el gesto de <b>ir a mirar</b>. El ECAM muestra por defecto la página que corresponde a la fase, y para ver otra concreta hay que pedirla.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:3,x:47,y:30,s:"ECAM · CAB PRESS",n:"LDG ELEV AUTO",v:"CHECK DISPLAYED",t:1,
+   w:"En la página CAB PRESS debe aparecer <b>LDG ELEV AUTO</b>. Es la confirmación de lo que se seleccionó en el overhead, pero ahora <b>vista en el sistema</b> y no en el mando: el controlador de presurización está tomando la elevación de destino del FMGS. Se comprueba en este momento y no antes porque hasta ahora el FMS no tenía destino cargado.",r:"Manual A320 · cap. 6 — Presurización"},
+  {sw:3,zid:"ECP",ci:[0,2],s:"ECP",n:"STS pb",v:"PRESS",t:1,
+   w:"Se pulsa <b>STS</b> para llamar a la página STATUS. Igual que el anterior: el pulsador no cambia nada del avión — abre la página donde está la respuesta.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:3,x:47,y:41,s:"ECAM · STATUS",n:"INOP SYS",v:"CHECK COMPATIBLE WITH MEL",t:1,
+   w:"La lista <b>INOP SYS</b> dice qué está inoperativo ahora mismo. Pero la comprobación no es leerla: es <b>contrastarla con la MEL</b>. Lo que decide si el vuelo puede salir no es que haya fallos —casi siempre hay alguno—, sino que <b>todos estén amparados por la lista de equipo mínimo</b>, con sus condiciones y sus limitaciones aplicadas. Es la última barrera antes de pedir puesta en marcha, y es documental antes que técnica.",r:"Manual A320 · cap. 13 y 21"},
 
-function buildSVG(f){
-  const d=DIAG[f.dg],[W,H]=d.vb;
-  resolve(f);
-  let s=`<svg class="panel" viewBox="0 0 ${W} ${H}" role="img" aria-label="Esquema de cabina — ${f.title}">`;
-  if(d.shell) s+=`<polygon class="shell" points="${d.shell}"/>`;
-  else s+=`<rect class="frame" x=".5" y=".5" width="${W-1}" height="${H-1}" rx="1.5"/>`;
-  (d.bays||[]).forEach(b=>{s+=`<rect class="bay" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1"/>`});
-  if(d.divider) s+=`<line class="divider" x1="6" y1="${d.divider}" x2="${W-6}" y2="${d.divider}"/>`;
-  (d.axis||[]).forEach(a=>{s+=`<text class="axis" x="${a.x}" y="${a.y}" font-size="1.7" text-anchor="middle">${esc(a.t)}</text>`});
+  {sw:4,pm:1,zid:"CONS2",ci:[0,0],s:"CONSOLA CM2",n:"OXYGEN MASK",v:"TEST",t:0,
+   w:"La misma prueba en el puesto derecho, con la misma precaución previa hacia el personal de tierra y las mismas dos verificaciones al terminar: <b>N/100 % bloqueado en 100 %</b> y <b>EMERGENCY sin girar</b>.",r:"Manual A320 · cap. 17 — Oxígeno"},
+  {sw:4,pm:1,zid:"BRT2",ci:[0,0],s:"Brillo PFD · ND",n:"PFD-ND BRIGHTNESS",v:"ADJUST",t:0,
+   w:"Mismo ajuste en el lado derecho, y el mismo detalle del anillo exterior del ND al máximo. Importa especialmente en este puesto: el PM es quien suele llevar el radar y quien va a cantar lo que vea en él.",r:"Manual A320 · cap. 14 y 19"},
+  {sw:4,pm:1,zid:"CONS2",ci:[0,1],s:"CONSOLA CM2",n:"LOUDSPEAKER KNOB",v:"SET",t:0,
+   w:"Altavoz del puesto derecho. Que los dos estén puestos es lo que hace que una llamada del control se oiga aunque los dos pilotos estén hablando entre sí.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:4,pm:1,x:73.5,y:35,s:"PFD · ND CM2",n:"PFD / ND",v:"CHECK",t:1,
+   w:"Las pantallas del puesto derecho. Aquí la comprobación tiene un valor añadido: si un lado muestra algo distinto del otro, la diferencia aparece justo ahora, con los dos pilotos mirando a la vez.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:4,pm:1,x:47,y:78,s:"MCDU",n:"IRS ALIGN",v:"CHECK",t:1,
+   w:"Comprobar que las tres inerciales han <b>terminado su alineamiento</b>. Cierra el hilo que empezó en el primer flujo, cuando se pusieron en NAV: el proceso tarda varios minutos y <b>el avión no debe haberse movido</b> durante ese tiempo. Si no ha terminado no hay navegación, y eso condiciona la hora de puesta en marcha, no solo un panel. La comprobación tiene tres pasos, y son los tres siguientes.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:4,pm:1,x:53,y:78,s:"MCDU · DATA",n:"DATA key",v:"PRESS",t:0,
+   w:"Tecla <b>DATA</b> del MCDU: la puerta a la información de posición y de base de datos. Primer paso de la comprobación.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:4,pm:1,x:47,y:86,s:"MCDU · POSITION MONITOR",n:"POSITION MONITOR page",v:"DISPLAY",t:0,
+   w:"La página <b>POSITION MONITOR</b> enfrenta las posiciones que calculan las distintas fuentes: FMGEC 1, FMGEC 2, GPIRS y cada inercial por separado. Es donde se ve, en una sola pantalla, si todas están de acuerdo sobre dónde está el avión.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:4,pm:1,x:53,y:86,s:"MCDU · POSITION MONITOR",n:"IRS",v:"NAV MODE · DIST < 5 NM",t:0,
+   w:"Dos cosas, las dos en la misma línea de la pantalla. <b>NAV</b>: las tres inerciales han terminado de alinearse y están navegando — si alguna sigue en ALIGN, no hay navegación completa. Y la <b>distancia</b> de cada una respecto a la posición del FMS: <b>menos de 5 NM</b>. Una deriva mayor indica un alineamiento degradado, y a partir de ahí la posición que muestra el avión deja de ser fiable en esa misma medida.",r:"Manual A320 · cap. 14 — Navegación"}
+ ]
+},
+{
+ id:"astart",n:6,short:"After Start",dg:"cabina",blk:"Bloque 2 · Salida",
+ title:"After Start",role:"PF + PM",
+ purpose:"El primer flujo que ejecutan los dos pilotos a la vez, y el primero que recorre toda la cabina. Devuelve el avión a configuración de vuelo después del arranque: el APU se libera, los sistemas pasan a depender de los motores y los mandos quedan puestos para el despegue.",
+ scan:"Dos barridos simultáneos · PF y PM",
+ sweeps:["PF · sistemas y APU","PM · mandos de vuelo"],
+ notes:[
+  {t:"",h:"Los dos a la vez",b:"PF y PM ejecutan <b>sus dos barridos en paralelo</b>, no uno detrás de otro. Ambos terminan en el mismo sitio —la página <b>STATUS</b>— y esa coincidencia es deliberada: es el punto de verificación cruzada del flujo."},
+  {t:"",h:"Lo que cambia respecto a la preparación",b:"Hasta ahora el avión vivía del APU y de la potencia externa. A partir de este flujo vive <b>de sus motores</b>: su generación, su hidráulico y su aire. El flujo es, en el fondo, la transición entre esas dos situaciones."}
+ ],
+ items:[
+  {sw:0,zid:"ENGMODE",ci:[0,0],s:"ENG MODE",n:"ENG MODE SEL",v:"NORM",t:0,
+   w:"Terminado el arranque, el selector vuelve a <b>NORM</b> y el FADEC recupera su lógica propia de ignición. Dejarlo en <i>IGN/START</i> mantendría la ignición continua sin necesidad, con el desgaste que eso supone.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:0,zid:"AIRCOND",ci:[0,2],s:"AIR COND",n:"APU BLEED",v:"OFF",t:0,
+   w:"Con ambos motores en marcha, su <i>bleed</i> asume el suministro del colector. El APU deja de hacer falta como fuente de aire: mientras su válvula esté abierta <b>tiene prioridad</b> y mantiene cerradas las de los motores, así que cerrarla es lo que devuelve el sistema a su configuración normal.",r:"Manual A320 · cap. 5 — Aire neumático"},
+  {sw:0,zid:"ANTIICE",ci:[0,1],s:"ANTI ICE",n:"ENG ANTI-ICE",v:"AS RQRD",t:0,
+   w:"Si hay condiciones de engelamiento se conecta <b>primero el de motor</b>: el hielo desprendido del labio de admisión sería ingerido, y esa es la amenaza más inmediata. Al conectarlo el motor cambia — sube el ralentí, entra ignición continua y <b>baja el empuje disponible</b>—, y eso entra en el cálculo de despegue.",r:"Manual A320 · cap. 7 — Hielo y lluvia"},
+  {sw:0,zid:"ANTIICE",ci:[0,0],s:"ANTI ICE",n:"WING ANTI-ICE",v:"AS RQRD",t:0,
+   w:"Después del de motor, nunca antes. Consume <i>bleed</i> del colector y, en tierra, su activación funciona <b>solo como prueba breve</b>: sin flujo de aire que refrigere, un uso prolongado dañaría la estructura del borde de ataque.",r:"Manual A320 · cap. 7 — Hielo y lluvia"},
+  {sw:0,zid:"APU",ci:[0,0],s:"APU",n:"APU MASTER-SWITCH",v:"OFF",t:0,
+   w:"Ya no se necesita ni su aire ni su electricidad. El ECB conduce la parada y <b>mantiene la compuerta de admisión abierta durante un periodo de refrigeración</b> antes de cerrarla: que no se cierre de inmediato es normal, no una falla.",r:"Manual A320 · cap. 4 — APU"},
+  {sw:0,x:50,y:38,s:"ECAM",n:"STATUS",v:"CHECK",t:0,
+   w:"Cierra el barrido del PF. La página STATUS no dice qué falló: dice <b>qué queda</b>. Es la respuesta a la pregunta que importa antes de moverse — <i>¿con qué avión voy a rodar y despegar?</i>",r:"Manual A320 · cap. 13 — Indicación y registro"},
 
-  d.zones.forEach(z=>{
-    const on=d.litAll||f.items.some(i=>i._x>=z.x-.6&&i._x<=z.x+z.w+.6&&i._y>=z.y-.6&&i._y<=z.y+z.h+.6);
-    s+=`<g class="zone${on?" lit":""}">`;
-    s+=`<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="${z.r||1}"/>`;
-    if(z.sh==="screen")
-      s+=`<rect class="glass" x="${z.x+.9}" y="${z.y+3.5}" width="${z.w-1.8}" height="${Math.max(z.h-4.4,1.2)}" rx=".5"/>`;
-    if(z.sh==="lever"){
-      const cy=z.y+4.5,hh=z.h-7;
-      s+=`<rect class="part" x="${z.x+z.w/2-4.6}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
-      s+=`<rect class="part" x="${z.x+z.w/2+1.2}" y="${cy}" width="3.4" height="${hh}" rx="1.6"/>`;
-    }
-    if(z.sh==="seat")
-      s+=`<rect class="part" x="${z.x+1.6}" y="${z.y+3.4}" width="${z.w-3.2}" height="${z.h-5}" rx="2"/>`;
-    rowsOf(z).forEach((row,r)=>row.forEach((t,c)=>{const q=ctlPos(z,r,c);s+=glyph(t,q.x,q.y)}));
-    s+=`<text x="${z.x+1.5}" y="${z.y+2.6}" font-size="${fit(z.l,z.w).toFixed(2)}">${esc(z.l)}</text></g>`;
-  });
+  {sw:1,pm:1,zid:"SPDBRK",ci:[0,0],s:"SPD BRK",n:"GROUND SPOILERS",v:"ARM",t:0,
+   w:"Armados, se despliegan solos en la toma. Conviene recordar qué hacen: <b>no frenan</b> — destruyen sustentación y con ello <b>cargan el peso del avión sobre las ruedas</b>, que es lo que permite que los frenos muerdan. Además su despliegue es lo que <b>dispara el autobrake</b>.",r:"Manual A320 · cap. 11 y 10"},
+  {sw:1,pm:1,zid:"TRIM",ci:[0,0],s:"TRIM",n:"RUDDER TRIM",v:"ZERO",t:0,
+   w:"Se parte de cero. Un trim de timón residual del vuelo anterior introduciría guiñada justo en la carrera de despegue, cuando el avión es más sensible y hay menos margen para corregir.",r:"Manual A320 · cap. 11 — Mandos de vuelo"},
+  {sw:1,pm:1,zid:"FLAPSZ",ci:[0,0],s:"FLAPS",n:"FLAPS",v:"T.O CONFIG",t:0,
+   w:"La configuración de despegue calculada para este peso y esta pista. Una misma posición de palanca puede dar configuraciones distintas según la fase, así que se selecciona la del cálculo, no la de costumbre.",r:"Manual A320 · cap. 11 — Mandos de vuelo"},
+  {sw:1,pm:1,zid:"TRIM",ci:[0,1],s:"TRIM",n:"PITCH TRIM",v:"T.O",t:0,
+   w:"El THS se ajusta al <b>centro de gravedad del despegue</b>, que sale de la hoja de carga. Un trim mal puesto cambia la fuerza necesaria en la rotación: de menos, el avión cuesta de rotar; de más, rota solo — y esto último es causa conocida de <i>tail strike</i>.",r:"Manual A320 · cap. 11 y 1"},
+  {sw:1,pm:1,x:50,y:43,s:"ECAM",n:"STATUS",v:"CHECK",t:0,
+   w:"El PM cierra en la misma página que el PF. <b>Dos lecturas independientes del mismo estado</b>: si uno de los dos ve algo que el otro pasó por alto, aquí es donde aparece.",r:"Manual A320 · cap. 13 — Indicación y registro"}
+ ]
+},
+{
+ id:"taxi",n:7,short:"Taxi",dg:"cabina",blk:"Bloque 2 · Salida",
+ title:"Taxi",role:"PM",
+ purpose:"Barrido del PM durante el rodaje. Arma lo que va a hacer falta en el despegue y termina con las dos comprobaciones que cierran la configuración: la prueba de T.O CONFIG y el MEMO limpio.",
+ scan:"Un barrido · PM",
+ sweeps:["PM · barrido único"],
+ notes:[
+  {t:"",h:"Se hace rodando, no parado",b:"Es un flujo que compite con la atención al exterior. Por eso es corto y por eso el PF sigue volando el avión: en el A320 el elemento más limitante en un viraje es <b>la punta del ala</b> —salvo en el A321, donde es la cola— y de noche hay que ver hacia dónde se gira."},
+  {t:"",h:"Las dos últimas son verificaciones",b:"Los cuatro primeros ítems <b>configuran</b>. <b>T.O CONFIG</b> y <b>T.O MEMO</b> no configuran nada: comprueban que todo lo anterior está bien. Es el mismo principio de flujo y lista de chequeo, dentro de un mismo barrido."}
+ ],
+ items:[
+  {sw:0,pm:1,zid:"RADAR",ci:[0,0],s:"RADAR · PWS",n:"RADAR / PWS",v:"AS RQRD",t:0,
+   w:"Radar meteorológico y detección predictiva de cizalladura. Conviene tener presente su límite: <b>el radar detecta agua, no turbulencia</b> — una zona seca y turbulenta no aparece. El PWS, en cambio, avisa de cizalladura <b>antes</b> de encontrarla, y por eso interesa activo ya en rodaje.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"ATCTCAS",ci:[0,0],s:"ATC · TCAS",n:"ATC",v:"SET",t:0,
+   w:"Código de transpondedor puesto y el sistema listo para pista. El avión lleva <b>cuatro antenas de transpondedor</b> —dos arriba y dos abajo— para no dejar puntos ciegos, pero nada de eso sirve si el código no está cargado antes de entrar.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"EFIS2",ci:[0,1],s:"EFIS CM2",n:"TERR ON ND",v:"AS RQRD",t:0,
+   w:"El terreno en la pantalla de navegación es la diferencia entre el GPWS clásico y el mejorado: el clásico avisa de lo que el avión <b>ya tiene debajo</b>; con la base de datos de terreno, avisa de <b>lo que va a encontrarse</b>.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"ABGEAR",ci:[0,0],s:"A/BRK",n:"AUTO-BRAKE",v:"MAX",t:0,
+   w:"<b>MAX</b> es el ajuste de despegue abortado. Se arma antes de necesitarlo y se dispara con el <b>despliegue de los ground spoilers</b>, no con el contacto de las ruedas. Los pedales de freno siempre lo desarman: la tripulación puede sobreponerse en cualquier momento.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+  {sw:0,pm:1,zid:"ECP",ci:[0,2],s:"ECP",n:"T.O CONFIG",v:"PRESS",t:0,
+   w:"La prueba de configuración de despegue. El avión <b>compara lo que está configurado con lo que el FMS espera</b> y canta lo que no cuadra. Se hace en tierra, con tiempo para resolverlo — descubrir una discrepancia de configuración alineado en pista es tarde.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,pm:1,x:50,y:34,s:"ECAM",n:"T.O MEMO",v:"CHECK · NO BLUE",t:0,
+   w:"La zona MEMO del EWD lista lo que falta por configurar. Cuando todo está en su sitio, <b>no queda ninguna línea azul</b>. Es la comprobación visual más rápida que existe antes de entrar a pista, y funciona exactamente igual que el <i>dark cockpit</i>: la ausencia de información <b>es</b> la información.",r:"Manual A320 · cap. 13 — Indicación y registro"}
+ ]
+},
+{
+ id:"btakeoff",n:8,short:"Before Takeoff",dg:"cabina",blk:"Bloque 2 · Salida",
+ title:"Before Takeoff",role:"PM",
+ purpose:"El último filtro antes de un punto sin retorno. Siete ítems del PM que dejan la cabina despejada, la tripulación avisada y el avión con la pista correcta cargada.",
+ scan:"Un barrido · PM",
+ sweeps:["PM · barrido único"],
+ notes:[
+  {t:"warn",h:"Y cuando corresponda",b:"Al ejecutar este flujo, y cuando la situación lo requiera: <b>APPROACH PATH … CLEARED OF TRAFFIC</b>. Comprobar visualmente que la senda de aproximación está libre antes de ocupar la pista. No es un ítem del panel: es una mirada por la ventanilla."},
+  {t:"",h:"Tres de los siete no tocan un sistema",b:"Mesa recogida, tripulación avisada y pista confirmada no configuran nada del avión. Están en el flujo porque son las tres cosas que, si fallan, <b>no tienen solución después de aplicar empuje</b>."}
+ ],
+ items:[
+  {sw:0,pm:1,zid:"ATCTCAS",ci:[0,2],s:"ATC · TCAS",n:"TCAS",v:"TA/RA",t:0,
+   w:"Se pasa a vigilancia completa. Dos antenas —una arriba y una abajo— para cubrir el espacio sin puntos ciegos. Y la regla que no se negocia: <b>una RA ordena una maniobra y tiene prioridad sobre la instrucción del control</b>, porque el TCAS coordina la maniobra con el otro avión y el controlador no está en ese circuito.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"ACPCALLS",ci:[0,1],s:"ACP · RMP",n:"CABIN CREW",v:"ADVISE",t:0,
+   w:"Aviso a la tripulación de cabina de que el despegue es inminente, para que estén sentados y asegurados. Es coordinación, no configuración — pero es la única forma de que la cabina sepa lo que va a pasar en los próximos treinta segundos.",r:"Manual A320 · cap. 15 — Comunicaciones"},
+  {sw:0,pm:1,zid:"ENGMODE",ci:[0,0],s:"ENG MODE",n:"ENG MODE SEL",v:"AS RQRD",t:0,
+   w:"Ante lluvia fuerte, granizo o condiciones severas se selecciona <b>IGN</b>: la ignición continua protege contra el apagado del motor por ingestión de agua. Es una de las pocas decisiones del flujo que depende de mirar por la ventanilla, no un panel.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:0,pm:1,zid:"SLIDEFB",ci:[0,0],s:"MESA · EFB",n:"SLIDING TABLE",v:"STOWED",t:0,
+   w:"Mesa recogida. Con la mesa desplegada, el piloto <b>no puede salir del asiento</b> y tiene el acceso al pedestal comprometido. En un despegue abortado o una evacuación, eso cuesta segundos que no existen.",r:"—"},
+  {sw:0,pm:1,zid:"SLIDEFB",ci:[0,1],s:"MESA · EFB",n:"EFB TRANSMITTING MODE",v:"AS RQRD",t:0,
+   w:"Modo de transmisión del EFB según el procedimiento del operador. Lo relevante operacionalmente es que el EFB ya cumplió su papel en la preparación: fue la <b>fuente independiente</b> con la que se comparó la <i>green dot</i> del MCDU.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,pm:1,x:73,y:38,s:"ND CM2",n:"TAKEOFF RUNWAY",v:"CONFIRM",t:0,
+   w:"Confirmar que la pista cargada en el FMS es <b>la pista en la que se está</b>, y desde la intersección correcta. Es la última barrera contra el despegue desde una pista equivocada o con menos distancia de la calculada — un error que no da ninguna indicación en cabina, porque desde el punto de vista del avión no hay nada anómalo.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,pm:1,zid:"AIRCOND",ci:[0,0],s:"AIR COND",n:"PACK 1 + 2",v:"AS RQRD",t:0,
+   w:"Según el procedimiento de despegue, los packs pueden ir <b>apagados</b>. La razón es de empuje: el aire sangrado que consumen se descuenta directamente del motor, así que cerrarlos devuelve prestaciones justo en la fase donde más se necesitan. La contrapartida es que la cabina deja de renovarse durante unos minutos.",r:"Manual A320 · cap. 5 y 6"}
+ ]
+},
+{
+ id:"atkoff",n:9,short:"After Takeoff",dg:"cabina",blk:"Bloque 3 · Ascenso",
+ title:"After Takeoff",role:"PM",
+ purpose:"Cuatro ítems del PM que devuelven el avión a configuración de ascenso en cuanto hay margen. Es el flujo más corto del módulo y el que más disciplina exige: cae en la fase de mayor carga de trabajo del vuelo, y por eso tiene que salir sin pensarlo.",
+ scan:"Un barrido · PM",
+ sweeps:["PM · barrido único"],
+ notes:[
+  {t:"warn",h:"No se hace en el primer segundo",b:"El flujo se ejecuta <b>cuando el PF lo ordena</b>, normalmente con el ascenso ya establecido y el tren y los flaps recogidos. Antes de eso el PM tiene tareas que no admiten distracción: vigilar parámetros, cantar altitudes y llevar la radio. Adelantar el flujo es la forma clásica de perder de vista el avión."},
+  {t:"",h:"Sube, baja y vuelve a subir",b:"El barrido va del overhead al pedestal y regresa al overhead. Rompe la regla geográfica del resto de flujos porque aquí el orden lo manda <b>la prioridad del sistema</b>: primero se libera el APU —que era la fuente de reserva de aire y electricidad— y el antihielo se deja para el final, porque su respuesta depende de lo que el avión se vaya encontrando al subir."}
+ ],
+ items:[
+  {sw:0,pm:1,zid:"AIRCOND",ci:[0,2],s:"AIR COND · APU",n:"APU BLEED / MASTER SW",v:"OFF",t:0,
+   w:"Dos pulsadores en paneles contiguos, tratados como un solo ítem porque comparten una sola razón. Si el APU se mantuvo en marcha para el despegue —caso típico del despegue con <i>packs</i> apagados, donde el aire de cabina sale del APU en vez de los motores—, este es el momento de soltarlo: con el avión limpio y en ascenso, los motores sostienen aire y electricidad de sobra. El orden importa: <b>primero el BLEED, después el MASTER SW</b>, porque parar la máquina con su válvula abierta deja el colector sin la fuente que estaba priorizando.",r:"Manual A320 · cap. 4 y 5"},
+  {sw:0,pm:1,zid:"ENGMODE",ci:[0,0],s:"ENG MODE",n:"ENG MODE SEL",v:"NORM",t:0,
+   w:"Vuelve a <b>NORM</b> si se había seleccionado <i>IGN</i> para el despegue por lluvia fuerte, granizo o pista contaminada. La ignición continua es una protección puntual, no un estado de crucero: mantenerla sin necesidad desgasta bujías y excitadores sin aportar nada una vez fuera de la precipitación.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:0,pm:1,zid:"ATCTCAS",ci:[0,2],s:"ATC · TCAS",n:"TCAS",v:"AS RQRD",t:0,
+   w:"El TCAS pasa a la modalidad de ascenso que fije el operador. El fondo del asunto: algunos procedimientos limitan a <b>TA ONLY</b> en despegue para evitar avisos espurios con tráfico en pistas paralelas, y esa limitación deja de tener sentido en cuanto el avión está en el aire. Lo que no cambia nunca es la regla: <b>una RA ordena una maniobra y tiene prioridad sobre la instrucción del control</b>.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"ANTIICE",ci:[0,1],s:"ANTI ICE",n:"ENG ANTI-ICE",v:"AS RQRD",t:0,
+   w:"Último ítem, y el único cuya respuesta no se sabe de antemano: depende de lo que haya fuera. La referencia es <b>temperatura y humedad visible</b>, no la sensación. Y conviene tener presente el precio: el antihielo de motor sangra aire del compresor, sube el ralentí y <b>reduce el empuje disponible</b> justo en la fase en la que se está pidiendo ascenso.",r:"Manual A320 · cap. 7 — Hielo y lluvia"}
+ ]
+},
+{
+ id:"climb10",n:10,short:"Climb 10 000 ft",dg:"cabina",blk:"Bloque 3 · Ascenso",
+ title:"Climb 10 000 ft",role:"PM + PF",
+ purpose:"El flujo del paso por 10 000 pies en ascenso. Marca el final de la fase estéril: cambia la iluminación exterior, se libera la cabina de pasajeros y las pantallas pasan de configuración de salida a configuración de ruta.",
+ scan:"Un barrido · PM, con un ítem del PF",
+ sweeps:["Barrido único · PM, salvo el ítem 3 (PF)"],
+ notes:[
+  {t:"",h:"10 000 pies no es una altitud, es un umbral",b:"Es la frontera entre la fase de alta densidad de tráfico y el vuelo en ruta. Por debajo, el avión tiene que <b>ser visto</b> (luces), la cabina va <b>sentada</b> (cinturones) y la tripulación está en <i>sterile cockpit</i>. Por encima, las tres cosas se relajan. El flujo no es más que la traducción física de ese cambio."},
+  {t:"",h:"Un ítem es del PF",b:"El <b>EFIS OPT</b> —las opciones del ND: CSTR, VOR/ADF, WPT, NDB, ARPT— lo selecciona el <b>PF</b> en su propio panel, porque es su presentación y no la del PM. Es la primera vez en el módulo que un ítem del PF aparece embebido en un barrido del PM: fíjese, porque en llegada esto se vuelve la norma."}
+ ],
+ items:[
+  {sw:0,pm:1,zid:"EXTLT",ci:[0,2],s:"EXT LT",n:"LAND LIGHTS",v:"RETRACT · OFF",t:0,
+   w:"Las luces de aterrizaje del A320 son <b>escamoteables</b>: se retraen dentro del intradós. Por debajo de 10 000 pies van desplegadas y encendidas porque ahí su función es que <b>a este avión lo vean</b>, no ver. Por encima no aportan visibilidad y sí resistencia y vida de lámpara, de modo que se recogen.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:0,pm:1,zid:"SIGNS",ci:[0,0],s:"SIGNS",n:"SEAT BELTS",v:"AS RQRD",t:0,
+   w:"Apagar la señal es <b>una autorización</b>: libera a la tripulación de cabina para empezar el servicio y a los pasajeros para levantarse. Por eso no es automática a 10 000 pies — depende de la turbulencia prevista y de lo briefado. Y encenderla y apagarla sin motivo tiene un coste real: la señal deja de significar nada.",r:"Manual A320 · cap. 15 y 19"},
+  {sw:0,zid:"EFIS1",ci:[0,2],s:"EFIS CM1",n:"EFIS OPT",v:"AS RQRD",t:0,
+   w:"El PF reconfigura su ND para la ruta. En salida interesan las restricciones y los puntos del SID; en ruta interesan otras cosas, o ninguna, porque una pantalla saturada de símbolos es una pantalla que ya no se lee. <b>Cada opción encendida cuesta legibilidad</b>: la pregunta no es qué se puede mostrar, sino qué se va a mirar.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,x:50,y:38,s:"ECAM",n:"MEMO",v:"CHECK",t:0,
+   w:"Con el avión limpio y por encima del umbral, la zona MEMO del EWD debe quedar <b>limpia</b>. Cualquier línea que sobreviva es algo que se dejó puesto: luces, señales, antihielo. Funciona igual que el <i>dark cockpit</i> del overhead — la ausencia de información es la información.",r:"Manual A320 · cap. 13 — Indicación y registro"},
+  {sw:0,pm:1,x:66.5,y:67,s:"MCDU 2",n:"NAVAIDS · SEC F-PLN · OPT/MAX ALT",v:"CHECK",t:0,
+   w:"Tres comprobaciones en el MCDU, y las tres miran hacia adelante. <b>NAVAIDS</b>: con qué radioayudas se está posicionando el FMS y si conviene desactivar alguna. <b>SEC F-PLN</b>: el plan secundario preparado para lo que pueda venir — un regreso, un alterno. <b>OPT / MAX ALT</b>: el nivel óptimo frente al máximo alcanzable con el peso actual, que es la diferencia entre pedir un nivel y pedir <i>el</i> nivel.",r:"Manual A320 · cap. 12 — Auto Flight"}
+ ]
+},
+{
+ id:"fmsprep",n:11,short:"Descent FMS Prep",dg:"mcdu",blk:"Bloque 4 · Llegada",
+ title:"Descent — FMS Preparation",role:"PF",
+ purpose:"La preparación del FMS para la llegada. No es un barrido de panel: es un recorrido por seis teclas de función del MCDU, y cada una responde una pregunta distinta sobre cómo va a terminar este vuelo.",
+ scan:"Un recorrido · seis teclas de función",
+ sweeps:["Recorrido del teclado de función"],
+ notes:[
+  {t:"",h:"Se hace antes de bajar, no bajando",b:"La preparación del FMS se completa <b>en crucero</b>, con tiempo y con el avión estable. Una vez iniciado el descenso la carga de trabajo sube y el MCDU compite con la radio, el tráfico y la trayectoria. Un FMS que se termina de preparar pasando 15 000 pies es un FMS que se prepara mal."},
+  {t:"warn",h:"OAT y QNH en la página PERF APPR",b:"La lámina de origen lo señala expresamente: <b>una entrada errónea de OAT o de QNH en PERF APPR puede provocar un descenso de emergencia indebido</b>, porque el control de presurización calcula mal el segmento de descenso y la cabina reacciona a una altitud que no es la real. Dos cifras tecleadas sin mirar, y el avión gestiona la presurización contra un destino equivocado."}
+ ],
+ items:[
+  {sw:0,x:11.4,y:48.2,s:"F-PLN",n:"F-PLN",v:"REVISE",t:0,
+   w:"Revisiones laterales y verticales de la llegada: la STAR que se va a volar, el enlace con la aproximación, las restricciones de altitud y velocidad. Es donde el plan de vuelo deja de ser el que se cargó en rampa y pasa a ser <b>el que realmente se va a volar</b>.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,x:24.2,y:48.2,s:"RAD NAV",n:"RAD NAV",v:"SELECT · CHECK IDENT",t:0,
+   w:"Selección o deselección de radioayudas y —esto es lo que más se salta— <b>comprobación de los identificadores en PFD y ND</b>. El FMS sintoniza por frecuencia; lo que confirma que la frecuencia corresponde a la instalación correcta es el ident, no el número.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,x:24.2,y:38.2,s:"PROG",n:"PROG",v:"NAV ACCURACY",t:0,
+   w:"La página PROG es donde vive la precisión de navegación durante el descenso: posición del FMS, precisión requerida y precisión estimada. Es la referencia que decide si la aproximación prevista <b>sigue siendo posible</b> cuando la navegación se degrada.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,x:37,y:38.2,s:"PERF",n:"PERF",v:"DES · APPR · GO AROUND",t:0,
+   w:"Tres páginas que completar: <b>DES</b>, el perfil de descenso; <b>APPR</b>, con viento, temperatura, QNH, mínimos y configuración de aterrizaje; y <b>GO AROUND</b>, con la altitud de aceleración y el escalón de motor y al aire. Aquí es donde OAT y QNH tienen que entrar bien — véase la advertencia.",r:"Manual A320 · cap. 12 y 6"},
+  {sw:0,x:37,y:48.2,s:"FUEL PRED",n:"FUEL PRED",v:"CHECK EXTRA",t:0,
+   w:"El combustible extra es lo que dice <b>cuánto tiempo se puede esperar</b> en destino antes de tener que desviarse. No es un dato de curiosidad: es el que convierte «hay demora» en una decisión concreta, y se mira antes de que el control pregunte.",r:"Manual A320 · cap. 9 — Combustible"},
+  {sw:0,x:49.8,y:48.2,s:"SEC F-PLN",n:"SEC F-PLN",v:"COPY · REVISE",t:0,
+   w:"Se copia el plan activo y se revisa el secundario según las circunstancias: otra aproximación, un circling, el alterno. El valor del secundario no está en tenerlo cargado — está en poder <b>activarlo con una tecla</b> en el momento en que ya no hay tiempo para teclear.",r:"Manual A320 · cap. 12 — Auto Flight"}
+ ]
+},
+{
+ id:"appbrief",n:12,short:"Approach Briefing",dg:"briefing",blk:"Bloque 4 · Llegada",
+ title:"Approach Briefing",role:"PF",
+ purpose:"El PF expone al PM lo que piensa hacer. Cinco elementos, en orden, y una regla que la lámina de origen pone por delante de todo lo demás: práctico, pertinente y conciso.",
+ scan:"Cinco elementos · exposición del PF",
+ sweeps:["Estructura del briefing"],
+ notes:[
+  {t:"",h:"El objetivo no es cubrir la lista",b:"La lámina de origen lo resume en una línea: el PF informa al PM de <b>su curso de acción previsto</b>. No es un recitado de la carta. Un briefing que repite lo que los dos están viendo en la pantalla consume atención sin crear entendimiento; uno útil dice <b>qué va a hacer este piloto, en este avión, hoy</b>, y dónde espera que aparezcan los problemas."},
+  {t:"warn",h:"Guía y navegación degradadas",b:"La nota de la lámina, literal en su intención: <b>la gestión de una guía o una navegación degradadas debe considerarse y repasarse en el briefing</b>. No solo qué se hace si todo funciona, sino qué se hace si falta el ILS, si se pierde GPS PRIMARY o si el piloto automático se desconecta. Es la parte que se salta cuando hay prisa, y la única que sirve cuando algo se tuerce."}
+ ],
+ items:[
+  {sw:0,x:50,y:10,s:"01 · Estado y entorno",n:"A/C STATUS · NOTAM · METEO",v:"REVIEW",t:0,
+   w:"Qué avión se está volando —fallos diferidos, MEL, limitaciones— y en qué entorno va a aterrizar: NOTAM del aeropuerto y de las ayudas, meteorología real y tendencia. Los tres condicionan todo lo que viene después, y por eso van primero: <b>no se puede briefar una aproximación sin saber con qué y dónde</b>.",r:"Manual A320 · cap. 21 — Limitaciones"},
+  {sw:0,x:50,y:25,s:"02 · Combustible",n:"FUEL PREDICTION",v:"REVIEW",t:0,
+   w:"El combustible previsto en destino y el extra disponible. Define el margen real: cuánto se puede esperar, si el alterno sigue siendo alcanzable y en qué momento una demora deja de ser una molestia y pasa a ser una decisión.",r:"Manual A320 · cap. 9 — Combustible"},
+  {sw:0,x:50,y:38,s:"03 · Trayectoria",n:"TRAYECTORIA",v:"DESCENT · HOLDING · APPR · G/A",t:0,
+   w:"El bloque central, y el único con cuatro partes. <b>Descenso</b>: el perfil y los puntos que lo condicionan. <b>Espera</b>, si es relevante. <b>Aproximación</b>: tipo, mínimos, altitudes y configuración. Y <b>motor y al aire</b>: trayectoria, altitud de aceleración y qué se hace después. El go-around se briefa siempre, porque es la maniobra que <b>se ejecuta sin tiempo para pensarla</b>.",r:"Manual A320 · cap. 22 — Procedimientos normales"},
+  {sw:0,x:50,y:66,s:"04 · Aterrizaje",n:"LANDING",v:"REVIEW",t:0,
+   w:"Configuración, autobrake, uso de reversa, salida prevista y estado de la pista. Es lo que decide si el avión va a parar donde se planeó — y lo que evita descubrir en la carrera de aterrizaje que la salida briefada quedó atrás.",r:"Manual A320 · cap. 10 — Tren y frenos"},
+  {sw:0,x:50,y:81,s:"05 · Radionav",n:"RADIONAV",v:"REVIEW",t:0,
+   w:"Qué ayudas se van a usar, cómo están sintonizadas y qué pasa si una falla. Cierra el briefing enlazando con lo que se acaba de preparar en el MCDU: aquí se comprueba que <b>lo dicho y lo tecleado coinciden</b>.",r:"Manual A320 · cap. 14 — Navegación"}
+ ]
+},
+{
+ id:"desc10",n:13,short:"Descent 10 000 ft",dg:"cabina",blk:"Bloque 4 · Llegada",
+ title:"Descent 10 000 ft",role:"PF + PM",
+ purpose:"El espejo del flujo de ascenso, con una diferencia importante: aquí barren los dos pilotos a la vez, cada uno su lado, y el resultado tiene que quedar simétrico. A partir de este punto la aproximación ya está en marcha.",
+ scan:"Dos barridos simultáneos · PF y PM",
+ sweeps:["PF · pantallas y precisión de navegación","PM · luces, pantallas y motores"],
+ notes:[
+  {t:"",h:"Simetría, no duplicación",b:"PF y PM ejecutan <b>los mismos dos ítems</b> —EFIS y LS— cada uno en su panel. No es redundancia: es la condición para que las dos pantallas muestren lo mismo. Si a partir de aquí los dos ND difieren, la diferencia <b>significa algo</b>, y esa es exactamente la propiedad que se quiere tener en aproximación."},
+  {t:"warn",h:"NAV ACCY solo si se pierde GPS PRIMARY",b:"El ítem <b>NAV ACCY</b> del PF es <b>condicional</b>. Con GPS PRIMARY disponible no hay nada que comprobar. Cuando se pierde, el FMS pasa a posicionarse por radioayudas e inercial —con un error que crece con el tiempo— y hay que verificar en el MCDU si la precisión disponible cubre el requisito del procedimiento previsto. Si no lo cubre, el procedimiento cambia."}
+ ],
+ items:[
+  {sw:0,zid:"EFIS1",ci:[0,0],s:"EFIS CM1",n:"EFIS",v:"SET",t:0,
+   w:"Configuración de la pantalla para la llegada: rango, modo y opciones. Es el momento de <b>bajar el rango</b> —un ND en 160 NM no muestra nada útil de una aproximación— y de encender solo lo que se va a mirar: restricciones y radioayudas del procedimiento.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,zid:"EFIS1",ci:[0,1],s:"EFIS CM1",n:"LS",v:"AS RQRD",t:0,
+   w:"El pulsador <b>LS</b> trae al PFD la presentación de localizador y senda. Se selecciona pronto, con tiempo, por una razón concreta: con LS puesto las desviaciones aparecen <b>antes de que importen</b>, y eso permite descubrir una sintonía equivocada mientras todavía hay margen para corregirla.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,x:33.5,y:67,s:"MCDU 1",n:"NAV ACCY  (si se pierde GPS PRIMARY)",v:"CHECK",t:0,
+   w:"Condicional. Sin GPS PRIMARY, la posición del FMS depende de radioayudas e inercial y su error crece con el tiempo. La comprobación en el MCDU dice si la precisión disponible cubre el requisito del procedimiento. <b>No es un trámite</b>: es lo que decide si la aproximación prevista sigue siendo viable.",r:"Manual A320 · cap. 14 — Navegación"},
 
-  f.sweeps.forEach((_,si)=>{
-    const g=f.items.filter(i=>i.sw===si);
-    if(g.length<2)return;
-    s+=`<polyline class="sweep" points="${g.map(i=>i._x+","+i._y).join(" ")}"/>`;
-    const a=g[g.length-2],b=g[g.length-1];
-    const dx=b._x-a._x,dy=b._y-a._y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,px=-uy,py=ux;
-    const tx=b._x-ux*2.6,ty=b._y-uy*2.6;
-    s+=`<polyline class="sweep head" points="${tx+px*1.3},${ty+py*1.3} ${b._x-ux*.2},${b._y-uy*.2} ${tx-px*1.3},${ty-py*1.3}"/>`;
-  });
-
-  f.items.forEach(it=>{
-    s+=`<g class="dot${it.pm?" pm":""}${isDone(it.id)?" checked":""}" data-id="${it.id}" tabindex="0" role="button" aria-label="${esc(it.n)}">`;
-    s+=`<circle cx="${it._x}" cy="${it._y}" r="2.7"/>`;
-    s+=`<text x="${it._x}" y="${it._y+.85}" font-size="2.3">${it.k}</text></g>`;
-  });
-  s+=`<g id="tip"></g></svg>`;
-  return s;
-}
-
-function buildList(f){
-  let h="";
-  f.sweeps.forEach((sl,si)=>{
-    const g=f.items.filter(i=>i.sw===si);
-    if(!g.length)return;
-    h+=`<div class="group"><div class="grouplbl">${sl}</div>`;
-    g.forEach(it=>{
-      h+=`<div class="item${it.pm?" pm":""}" data-id="${it.id}">
-        <div style="display:flex;align-items:flex-start;gap:11px">
-          <button class="tick" id="tick-${it.id}" aria-pressed="${isDone(it.id)}" aria-label="Marcar ${esc(it.n)}">✓</button>
-          <button class="itemrow" data-row="${it.id}" aria-expanded="false">
-            <span class="seq">${it.k}</span>
-            <span class="body">
-              <span class="call"><span class="n">${esc(it.n)}</span><span class="lead"></span><span class="v">${esc(it.v)}</span></span>
-              <span class="metaline"><span class="panelname">${esc(it.s)}</span>${it.t?'<span class="star">✻ tránsito</span>':''}</span>
-            </span>
-            <span class="caret">›</span>
-          </button>
-        </div>
-        <div class="why" hidden>${it.w}<br><span class="tag">${it.r}</span></div>
-      </div>`;
-    });
-    h+=`</div>`;
-  });
-  return h;
-}
-
-const INTRO_ZONES=[
- ["Overhead","Los <b>sistemas</b>: eléctrico, hidráulico, combustible, aire, antihielo, fuego, luces, APU","Flujo 1"],
- ["Glareshield","La <b>trayectoria</b>: FCU, paneles EFIS y las luces de Master Warning y Master Caution","Flujo 4"],
- ["Panel frontal","La <b>información</b>: PFD, ND, ECAM, ISIS, reloj, tren","Flujo 2"],
- ["Pedestal","<b>Empuje</b>, comunicaciones y configuración: palancas, MCDU, RMP, ACP, ATC","Flujo 3"],
- ["Consolas laterales","<b>Sidestick</b>, tiller y audio de cada puesto","Flujo 4"]
-];
-
-function renderIntro(){
-  const stub={dg:"zonas",items:[],sweeps:[],title:"Zonas de la cabina"};
-  document.getElementById("main").innerHTML=`
-  <section class="intro">
-    <div class="flowhead">
-      <div class="rolerow"><span class="ata">Módulo 0 · Fundamentos</span></div>
-      <h2>Antes del primer barrido</h2>
-      <p class="purpose lead">Cinco ideas que hay que tener claras antes de memorizar un solo ítem. Sin ellas, un flujo es una lista de cosas que tocar; con ellas, es una herramienta.</p>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">01 · Qué es un flow</div>
-      <h3>Un recorrido del panel, no una lista de acciones</h3>
-      <p>Un <i>flow pattern</i> es un <b style="color:var(--ivory);font-weight:500">recorrido físico del panel, memorizado y siempre igual</b>, que deja una zona de la cabina configurada para la fase que viene.</p>
-      <ul class="bul">
-        <li><b>Es físico.</b> Sigue la geografía del panel, no el orden lógico de los sistemas. Por eso el barrido del overhead toca el eléctrico y el aire acondicionado seguidos: están uno encima del otro.</li>
-        <li><b>Es fijo.</b> El mismo recorrido siempre — avión lleno o vacío, de día o de noche, con prisa o sin ella. Su valor está en que no se decide sobre la marcha.</li>
-        <li><b>Es completo.</b> Si se recorre entero, no queda nada sin tocar en esa zona. La cobertura la garantiza el recorrido, no la memoria de los ítems.</li>
-      </ul>
-      <p class="pull">Un flow se hace con la mano. La lista de chequeo se hace con la vista.</p>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">02 · Flow y checklist</div>
-      <h3>La lista no sustituye al flujo, y el flujo no sustituye a la lista</h3>
-      <p>Son dos instrumentos con funciones distintas. Confundirlos es el error más común al empezar en el avión.</p>
-      <div class="vs">
-        <div class="vscard">
-          <div class="tag">El flujo</div><h4>Hace el trabajo</h4>
-          <ul>
-            <li>Recorrido completo de la zona</li>
-            <li>Se ejecuta <b style="color:var(--ivory);font-weight:500">de memoria</b></li>
-            <li>Toca <b style="color:var(--ivory);font-weight:500">todos</b> los ítems</li>
-            <li>Orden geográfico</li>
-          </ul>
-        </div>
-        <div class="vscard">
-          <div class="tag">La lista de chequeo</div><h4>Comprueba el trabajo</h4>
-          <ul>
-            <li>Solo los <b style="color:var(--ivory);font-weight:500">puntos críticos</b></li>
-            <li>Se <b style="color:var(--ivory);font-weight:500">lee</b>, en voz alta</li>
-            <li>Confirma lo ya hecho</li>
-            <li>Orden de prioridad</li>
-          </ul>
-        </div>
-      </div>
-      <p class="pull">La lista de chequeo no es la forma de hacer el trabajo: es la forma de comprobar que se hizo.</p>
-      <p>De ahí el error a evitar: <b style="color:var(--ivory);font-weight:500">configurar el avión leyendo la lista</b>. Tiene dos consecuencias. La primera, que se salta por el panel en un orden que no corresponde a ninguna geografía. La segunda, más grave: <b style="color:var(--ivory);font-weight:500">todo lo que la lista no menciona queda sin configurar</b>. La lista es corta precisamente porque presupone que el flujo ya se hizo.</p>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">03 · El sentido del barrido</div>
-      <h3>Por qué el recorrido es geográfico y no lógico</h3>
-      <ul class="bul">
-        <li><b>La memoria de posición es más fiable que la de secuencia.</b> La mano encuentra el panel aunque la cabeza esté ocupada con la radio o con el despacho.</li>
-        <li><b>No deja huecos.</b> Un recorrido continuo cubre la zona entera; una lista de ítems sueltos no garantiza cobertura.</li>
-        <li><b>Resiste la interrupción.</b> Si cortan el barrido a mitad, se sabe dónde se estaba, porque el punto de retorno es <i>un lugar</i>, no un número.</li>
-      </ul>
-      <p>En la preparación de cabina, el <b style="color:var(--ivory);font-weight:500">overhead se barre en sentido ascendente</b> —desde los paneles próximos a la cabeza del piloto hacia el parabrisas— y el <b style="color:var(--ivory);font-weight:500">pedestal en sentido descendente</b>. En cada esquema de este módulo la flecha indica el sentido.</p>
-      <div class="note"><b>El cierre del barrido.</b> Al terminar un flujo, <b>el panel debe quedar apagado</b> salvo lo que se haya activado a propósito. Cualquier luz encendida al final es un punto que revisar — es la verificación más rápida que existe en este avión, y la razón práctica de toda la filosofía de <i>dark cockpit</i>.</div>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">04 · Zonas de la cabina</div>
-      <h3>Cada zona gobierna una clase distinta de cosas</h3>
-      <p>Los flujos no están repartidos por sistema, sino por <b style="color:var(--ivory);font-weight:500">zona física</b>. Saber qué se controla en cada zona permite predecir dónde estará un mando antes de buscarlo.</p>
-      <div class="zmap">
-        <div class="diagcard">
-          <div class="cap"><span>Zonas funcionales</span><span>Veyra</span></div>
-          <div class="diagscroll">${buildSVG(stub)}</div>
-        </div>
-        <div>
-          <table class="ztab">
-            <thead><tr><th>Zona</th><th>Qué se controla</th><th>Flujo</th></tr></thead>
-            <tbody>${INTRO_ZONES.map(z=>`<tr><td>${z[0]}</td><td>${z[1]}</td><td class="fl">${z[2]}</td></tr>`).join("")}</tbody>
-          </table>
-          <p class="pull" style="margin-top:24px">Los sistemas se controlan arriba. El vuelo se controla abajo y adelante.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">05 · PF y PM</div>
-      <h3>Un reparto de tareas, no una jerarquía</h3>
-      <div class="roles">
-        <div class="rolecard pf"><div class="who">PF · Pilot Flying</div>
-          <h4>Vuela el avión</h4>
-          <p>Manda la trayectoria: configuración, automatismos, empuje. En la preparación de cabina ejecuta <b style="color:var(--ivory);font-weight:500">los tres barridos de configuración</b> — overhead, panel frontal y pedestal.</p></div>
-        <div class="rolecard pm"><div class="who">PM · Pilot Monitoring</div>
-          <h4>Vigila y comunica</h4>
-          <p>Supervisa lo que hace el PF, lee las listas, habla con el control y ejecuta lo que el PF le pide. En este bloque aparece en la <b style="color:var(--ivory);font-weight:500">preparación final</b>, donde revisa el FMS y compara la <i>green dot</i>.</p></div>
-      </div>
-      <p>El punto que conviene fijar: <b style="color:var(--ivory);font-weight:500">PF y PM no son el capitán y el primer oficial</b>. Un comandante puede ser PM y un primer oficial PF; el reparto se acuerda sector a sector. Lo que define quién hace qué en un flujo es el <b style="color:var(--ivory);font-weight:500">rol</b>, no el asiento ni la antigüedad.</p>
-      <div class="note"><b>En este entrenador.</b> Los ítems del <b style="color:var(--pf)">PF van en oro</b> y los del <b style="color:var(--pm)">PM en cian</b>, tanto en el esquema como en la lista. Cada flujo lleva su rol en la etiqueta del encabezado.</div>
-    </div>
-
-    <div class="sect">
-      <div class="sectnum">06 · Cómo se entrena en Veyra</div>
-      <h3>Tres capas, en este orden</h3>
-      <div class="steps">
-        <div class="step"><div class="sn">1</div><div>
-          <h4>Reconocer</h4>
-          <p>Ubicar cada ítem sobre el panel al que pertenece. El esquema de cabina y la secuencia numerada trabajan sincronizados: al tocar un punto se abre su acción, y al revés.</p>
-          <div class="how">Esquema de cabina + secuencia de acciones</div></div></div>
-        <div class="step"><div class="sn">2</div><div>
-          <h4>Entender</h4>
-          <p>Cada ítem abre su razón operacional, con la referencia al capítulo correspondiente del Manual de Sistemas A320. Un flujo que se entiende se olvida menos, y sobre todo se reconstruye si se pierde el hilo.</p>
-          <div class="how">El porqué de cada acción + referencia cruzada al manual</div></div></div>
-        <div class="step"><div class="sn">3</div><div>
-          <h4>Automatizar</h4>
-          <p>El modo práctica oculta los números del esquema y exige tocar los puntos <b style="color:var(--ivory);font-weight:500">en orden de barrido</b>, sobre la geometría real de la cabina. Autocorrige y cuenta los errores.</p>
-          <div class="how">Modo práctica + checklist con progreso guardado</div></div></div>
-      </div>
-      <div class="note"><b>Recomendación de uso.</b> Tres pasadas por flujo: la primera leyendo los porqués, la segunda marcando el checklist, la tercera en modo práctica hasta cerrar con cero errores. Y una advertencia honesta: esto entrena <b>la secuencia y la ubicación</b>. El gesto real y el ritmo se entrenan en simulador.</div>
-    </div>
-
-    <div class="gostrip">
-      <button class="gobtn" id="go">Empezar con el flujo 1</button>
-      <span>Panel superior · 19 ítems · tres barridos ascendentes</span>
-    </div>
-  </section>`;
-  document.getElementById("go").onclick=()=>{current=0;practice=null;render();window.scrollTo({top:0,behavior:"smooth"})};
-}
-
-function renderTabs(){
-  const t=document.getElementById("tabs");
-  t.innerHTML=`<button class="tab" role="tab" data-i="-1" aria-selected="${current<0}">
-      <span class="idx">0</span>Fundamentos</button>`+FLOWS.map((f,i)=>{
-    const done=f.items.every(it=>isDone(it.id));
-    return `<button class="tab" role="tab" data-i="${i}" aria-selected="${i===current}">
-      <span class="idx">${f.n}</span>${f.short}${done?'<span class="done">✓</span>':''}</button>`;
-  }).join("");
-  t.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{current=+b.dataset.i;practice=null;render()});
-}
-function renderStats(){
-  const d=FLOWS.reduce((a,f)=>a+f.items.filter(it=>isDone(it.id)).length,0);
-  document.getElementById("s-done").textContent=Math.round(d/TOTAL*100)+"%";
-}
-
-function render(){
-  renderTabs();renderStats();
-  if(current<0){renderIntro();return}
-  const f=FLOWS[current],d=DIAG[f.dg];
-  const done=f.items.filter(it=>isDone(it.id)).length;
-  document.getElementById("main").innerHTML=`
-  <section class="flow">
-    <div class="flowhead">
-      <div class="rolerow">
-        <span class="chip ${f.role==='PM'?'pm':'pf'}">${f.role==='PM'?'PM + PF':'PF'}</span>
-        <span class="ata">${f.scan}</span>
-      </div>
-      <h2>${f.title}</h2>
-      <p class="purpose">${f.purpose}</p>
-    </div>
-    <div class="split">
-      <div class="diagwrap">
-        <div class="diagcard">
-          <div class="cap"><span>Esquema de cabina</span><span>Veyra</span></div>
-          <p class="orient">${d.orient}</p>
-          <div class="diagscroll">${buildSVG(f)}</div>
-          <div class="legend">
-            <span><b>●</b> Ítem del flujo</span>
-            <span><b>—›</b> Sentido del barrido</span>
-            <span>Panel iluminado = interviene en este flujo</span>
-          </div>
-          <div class="practicebar">
-            <button class="pbtn" id="pbtn" aria-pressed="false">Modo práctica</button>
-            <span class="pstatus" id="pstatus">Toca un punto del esquema para ver la acción y su porqué.</span>
-          </div>
-        </div>
-        ${f.notes.map(n=>`<div class="note ${n.t}"><b>${n.h}.</b> ${n.b}</div>`).join("")}
-      </div>
-      <div>
-        <div class="listhead">
-          <h3>Secuencia de acciones</h3>
-          <div class="progress"><span id="pc">${done}/${f.items.length}</span>
-            <span class="bar"><i id="pbar" style="width:${done/f.items.length*100}%"></i></span></div>
-        </div>
-        ${buildList(f)}
-      </div>
-    </div>
-  </section>`;
-  wire(f);renderStats();
-}
-
-function wire(f){
-  const main=document.getElementById("main");
-  main.querySelectorAll(".dot").forEach(b=>{
-    const id=b.dataset.id;
-    const act=()=>practice?guess(f,id):focusItem(id,true);
-    b.onclick=act;
-    b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}};
-    b.onmouseenter=()=>{if(!practice)setActive(f,id)};
-    b.onmouseleave=()=>{if(!practice)setActive(f,null)};
-  });
-  main.querySelectorAll(".itemrow").forEach(r=>{
-    const id=r.dataset.row;
-    r.onclick=()=>{
-      const it=main.querySelector(`.item[data-id="${id}"]`);
-      const open=it.classList.toggle("open");
-      it.querySelector(".why").hidden=!open;
-      r.setAttribute("aria-expanded",open);
-    };
-    r.onmouseenter=()=>{if(!practice)setActive(f,id)};
-    r.onmouseleave=()=>{if(!practice)setActive(f,null)};
-  });
-  main.querySelectorAll(".tick").forEach(t=>{
-    const id=t.id.replace("tick-","");
-    t.onclick=e=>{
-      e.stopPropagation();
-      store[id]=!store[id];if(!store[id])delete store[id];save();
-      t.setAttribute("aria-pressed",!!store[id]);
-      main.querySelector(`.dot[data-id="${id}"]`)?.classList.toggle("checked",!!store[id]);
-      const d=f.items.filter(i=>isDone(i.id)).length;
-      main.querySelector("#pc").textContent=d+"/"+f.items.length;
-      main.querySelector("#pbar").style.width=(d/f.items.length*100)+"%";
-      renderTabs();renderStats();
-    };
-  });
-  document.getElementById("pbtn").onclick=()=>togglePractice(f);
-}
-
-function setActive(f,id){
-  document.querySelectorAll(".dot,.item").forEach(e=>e.classList.toggle("active",!!id&&e.dataset.id===id));
-  const tip=document.getElementById("tip");
-  if(!tip)return;
-  tip.innerHTML="";
-  if(!id)return;
-  const it=f.items.find(x=>x.id===id);if(!it)return;
-  const [W]=DIAG[f.dg].vb;
-  const txt=it.s,w=Math.max(txt.length*1.25+3,12),above=it._y>9;
-  let x=Math.min(Math.max(it._x,w/2+1),W-w/2-1);
-  const y=above?it._y-6.6:it._y+3.4;
-  tip.innerHTML=`<rect x="${x-w/2}" y="${y}" width="${w}" height="4.6" rx=".8"/>
-    <text x="${x}" y="${y+3.2}" font-size="2.1">${esc(txt)}</text>`;
-}
-function focusItem(id,scroll){
-  const it=document.querySelector(`.item[data-id="${id}"]`);
-  if(!it)return;
-  if(!it.classList.contains("open"))it.querySelector(".itemrow").click();
-  setActive(FLOWS[current],id);
-  if(scroll)it.scrollIntoView({behavior:"smooth",block:"center"});
-}
-
-function togglePractice(f){
-  const btn=document.getElementById("pbtn");
-  if(practice){practice=null;btn.setAttribute("aria-pressed","false");btn.textContent="Modo práctica";render();return}
-  practice={i:0,err:0,order:f.items.map(it=>it.id)};
-  btn.setAttribute("aria-pressed","true");btn.textContent="Salir de práctica";
-  document.getElementById("tip").innerHTML="";
-  document.querySelectorAll(".dot").forEach(b=>{
-    b.classList.remove("hit","miss","checked");
-    b.querySelector("text").textContent="";
-  });
-  msg(`<b>1 de ${f.items.length}.</b> Toca los puntos <b>en orden de barrido</b>. Los números están ocultos.`);
-}
-function msg(h){document.getElementById("pstatus").innerHTML=h}
-
-function guess(f,id){
-  const want=practice.order[practice.i];
-  const b=document.querySelector(`.dot[data-id="${id}"]`);
-  if(id===want){
-    const it=f.items.find(x=>x.id===id);
-    b.classList.add("hit");
-    b.querySelector("text").textContent=it.k;
-    practice.i++;
-    if(practice.i>=practice.order.length){
-      const n=practice.order.length;
-      msg(`<span class="good">Secuencia completa.</span> <b>${n}/${n}</b> en orden · <b class="${practice.err?'bad':'good'}">${practice.err}</b> ${practice.err===1?'error':'errores'}.`);
-      practice=null;
-      const btn=document.getElementById("pbtn");
-      btn.setAttribute("aria-pressed","false");btn.textContent="Repetir práctica";
-      btn.onclick=()=>togglePractice(f);
-    }else{
-      msg(`<b>${practice.i+1} de ${practice.order.length}.</b> Siguiente punto del barrido. Errores: <b class="${practice.err?'bad':''}">${practice.err}</b>`);
-    }
-  }else{
-    practice.err++;b.classList.add("miss");
-    setTimeout(()=>b.classList.remove("miss"),420);
-    const it=f.items.find(x=>x.id===want);
-    msg(`<span class="bad">Ese no.</span> El siguiente es <b>${esc(it.s)}</b> — ${esc(it.n)}. Errores: <b class="bad">${practice.err}</b>`);
-  }
-}
-render();
-</script>
-
-</body>
-</html>
+  {sw:1,pm:1,zid:"EXTLT",ci:[0,2],s:"EXT LT",n:"LAND LIGHTS",v:"ON",t:0,
+   w:"Se despliegan y se encienden al cruzar el umbral hacia abajo. Por debajo de 10 000 pies vuelve a haber tráfico denso, y el avión tiene que ser visible mucho antes de estar en final.",r:"Manual A320 · cap. 19 — Luces"},
+  {sw:1,pm:1,zid:"SIGNS",ci:[0,0],s:"SIGNS",n:"SEAT BELTS",v:"ON",t:0,
+   w:"Encender la señal <b>inicia un proceso</b> en cabina que tarda minutos: recoger servicio, asegurar <i>galleys</i>, sentar pasajeros. Por eso se enciende en descenso y no en aproximación — si se deja para más tarde, la cabina no llega.",r:"Manual A320 · cap. 15 y 19"},
+  {sw:1,pm:1,zid:"EFIS2",ci:[0,0],s:"EFIS CM2",n:"EFIS",v:"SET",t:0,
+   w:"El PM repite la configuración en su panel. Lo importante no es que ambos tengan lo mismo puesto, sino que a partir de aquí <b>una discrepancia entre las dos pantallas sea informativa</b> en lugar de ser normal.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,pm:1,zid:"EFIS2",ci:[0,1],s:"EFIS CM2",n:"LS",v:"AS RQRD",t:0,
+   w:"Mismo pulsador, otro puesto. En una aproximación de precisión, tener LS en los dos PFD es lo que permite que el PM cante desviaciones <b>con la misma referencia</b> que está volando el PF.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,pm:1,x:66.5,y:67,s:"MCDU 2",n:"RADIO NAV",v:"SET",t:0,
+   w:"Sintonía de las radioayudas de la llegada. El FMS sintoniza solo, pero <b>sintoniza lo que él cree que hace falta</b>: si el procedimiento exige una ayuda concreta, se pone a mano. Y se identifica — un ILS sintonizado no es un ILS identificado.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:1,pm:1,zid:"ENGMODE",ci:[0,0],s:"ENG MODE",n:"ENG MODE SEL",v:"AS RQRD",t:0,
+   w:"<b>IGN</b> si se va a atravesar precipitación fuerte, granizo o condiciones severas. En descenso el motor va en ralentí o cerca, que es su condición <b>menos tolerante</b> a la ingestión de agua: justo donde la ignición continua vale lo que cuesta.",r:"Manual A320 · cap. 8 — Motores"}
+ ]
+},
+{
+ id:"aland",n:14,short:"After Landing",dg:"cabina",blk:"Bloque 4 · Llegada",
+ title:"After Landing",role:"PF + PM",
+ purpose:"Devuelve el avión de configuración de aterrizaje a configuración de rodaje. Es corto y engañosamente fácil: se ejecuta con el avión moviéndose, saliendo de pista y con el control dando instrucciones — que es exactamente el escenario de las incursiones de pista.",
+ scan:"Un barrido · PF el primer ítem, PM el resto",
+ sweeps:["Barrido único · PF (1) y PM (2 a 7)"],
+ notes:[
+  {t:"warn",h:"Primero liberar la pista",b:"Nada de este flujo se ejecuta <b>hasta haber liberado la pista</b> y, normalmente, hasta que el PF lo ordene. Mientras el avión esté sobre la pista, la tarea del PM es el exterior y la radio. Empezar a tocar el pedestal rodando sobre pista es cómo se pierde una instrucción de salida y cómo se acaba donde no se debe."},
+  {t:"",h:"El primer ítem es del PF",b:"<b>GROUND SPOILERS … DISARM</b> lo ejecuta el <b>PF</b> y encabeza el flujo. Los spoilers ya hicieron su trabajo en la toma —destruir sustentación para que los frenos mordieran— y dejarlos armados en rodaje no aporta nada. Es también el gesto que marca, para los dos pilotos, que el avión ha pasado de aterrizar a rodar."}
+ ],
+ items:[
+  {sw:0,zid:"SPDBRK",ci:[0,0],s:"SPD BRK",n:"GROUND SPOILERS",v:"DISARM",t:0,
+   w:"La palanca vuelve a su posición de reposo. Los spoilers se desplegaron solos en la toma y su efecto —<b>destruir sustentación para cargar el peso sobre las ruedas</b>— ya se consumió. El ítem es del PF porque es su mando y porque, en la secuencia mental del vuelo, es lo que cierra el aterrizaje.",r:"Manual A320 · cap. 11 — Mandos de vuelo"},
+  {sw:0,pm:1,zid:"RADAR",ci:[0,0],s:"RADAR · PWS",n:"RADAR / PREDICTIVE WINDSHEAR",v:"OFF",t:0,
+   w:"Se apagan los dos. El radar meteorológico <b>emite</b>, y esa emisión en plataforma es un riesgo para el personal de tierra y una restricción durante el repostaje. El PWS se apaga con él: en tierra no tiene nada que predecir y sus avisos serían ruido.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"ENGMODE",ci:[0,0],s:"ENG MODE",n:"ENG MODE SEL",v:"AS RQRD",t:0,
+   w:"Si se llevaba <b>IGN</b> por precipitación, vuelve a NORM una vez fuera de ella. Y al revés: con nieve o agua estancada en calle de rodaje puede convenir mantenerlo. Es el mismo criterio de toda la fase — la decisión está fuera, no en el panel.",r:"Manual A320 · cap. 8 — Motores"},
+  {sw:0,pm:1,zid:"FLAPSZ",ci:[0,0],s:"FLAPS",n:"FLAPS",v:"RETRACT",t:0,
+   w:"Flaps y slats a cero. No es solo cuestión de orden: en rodaje los dispositivos desplegados <b>recogen todo lo que levantan las ruedas y el chorro</b> —agua, nieve, gravilla, líquido de deshielo— y dejan el borde de ataque expuesto al FOD. Recogerlos es protección estructural.",r:"Manual A320 · cap. 11 — Mandos de vuelo"},
+  {sw:0,pm:1,zid:"ATCTCAS",ci:[0,1],s:"ATC · TCAS",n:"TCAS / ATC",v:"STBY",t:0,
+   w:"El transpondedor pasa a <b>STBY</b> —o a la modalidad de superficie que use el aeropuerto— y el TCAS deja de interrogar. En plataforma, decenas de aviones interrogándose a metros unos de otros saturan el sistema y generan avisos sin sentido. Es además uno de los ítems que más se olvidan.",r:"Manual A320 · cap. 14 — Navegación"},
+  {sw:0,pm:1,zid:"APU",ci:[0,0],s:"APU",n:"APU",v:"START",t:0,
+   w:"Se arranca el APU para disponer de aire y electricidad propios en cuanto se corten los motores. El arranque no es instantáneo —el ECB abre la compuerta de admisión y lleva la máquina hasta régimen—, y por eso se lanza rodando: cuando el avión llegue al puesto, el APU ya estará disponible.",r:"Manual A320 · cap. 4 — APU"},
+  {sw:0,pm:1,zid:"ANTIICE",ci:[0,1],s:"ANTI ICE",n:"ANTI-ICE",v:"AS RQRD",t:0,
+   w:"El antihielo de motor puede tener que <b>seguir encendido</b> en rodaje si las condiciones lo exigen: apagarlo por costumbre al pisar tierra es un error frecuente. El de ala, en cambio, no se usa en tierra salvo como prueba breve — sin flujo de aire que refrigere, el calor daña la estructura del borde de ataque.",r:"Manual A320 · cap. 7 — Hielo y lluvia"}
+ ]
+},
+{
+ id:"emerdes",n:15,short:"Emergency Descent",dg:"cabina",blk:"Bloque 5 · No normales",
+ title:"Emergency Descent",role:"PF + PM",
+ purpose:"El primer flujo no normal del módulo. Es corto, es de memoria y se ejecuta bajo la peor combinación posible: ruido, despresurización y una máscara puesta. Por eso los dos pilotos empiezan por lo mismo —oxígeno y comunicación— antes de tocar nada.",
+ scan:"Dos barridos simultáneos · PF y PM",
+ sweeps:["PF · iniciar el descenso","PM · protección y verificación"],
+ notes:[
+  {t:"warn",h:"Máscara, y después comunicación",b:"Los dos primeros gestos de ambos pilotos son el mismo: <b>máscara puesta</b> y <b>comunicación establecida</b>. Con la máscara puesta hay que pasar el selector del ACP a <b>MASK</b>: si se queda en BOOM, el piloto se oye a sí mismo y no oye nada más. Es el fallo más repetido del ejercicio en simulador, y el que deja a una tripulación incomunicada en el peor momento posible."},
+  {t:"",h:"Girar y tirar, en ese orden",b:"El descenso se inicia en el FCU con tres mandos: <b>ALT — girar y tirar</b> a la altitud de seguridad, <b>HDG — girar y tirar</b> si hay que separarse de la ruta, y <b>SPD — tirar</b>. <i>Tirar</i> significa siempre lo mismo en el A320: <b>el piloto toma el valor seleccionado</b>. Empujar devolvería la gestión al FMS, que es exactamente lo contrario de lo que se quiere aquí."},
+  {t:"",h:"Los aerofrenos van al final",b:"<b>SPD BRK … FULL</b> es el último ítem del PF y va después de comprobar el FMA. El orden no es casual: primero se manda la trayectoria y se confirma que el avión la ha aceptado; solo entonces se añade ritmo de descenso. Y si el A/THR no está activo, las palancas van a ralentí antes — porque aerofrenos con empuje puesto es una contradicción."}
+ ],
+ items:[
+  {sw:0,x:12.5,y:60,s:"CONSOLA CM1",n:"CREW OXY MASK",v:"USE",t:0,
+   w:"Máscara puesta y <b>comunicación establecida</b>: selector del ACP a MASK. El oxígeno de tripulación es un circuito distinto del de pasaje —botellas a presión frente a generadores químicos— y está dimensionado para durar lo que dure el descenso y la gestión posterior, no unos minutos.",r:"Manual A320 · cap. 17 — Oxígeno"},
+  {sw:0,zid:"FCU",ci:[0,2],s:"FCU",n:"EMER DESCENT",v:"INITIATE",t:0,
+   w:"Tres mandos, un solo objetivo: bajar. <b>ALT</b> girar y tirar a la altitud de seguridad; <b>HDG</b> girar y tirar si hay que salir de la aerovía; <b>SPD</b> tirar. Tirar entrega el control del parámetro al piloto. Y la altitud a la que se va no es 10 000 por costumbre: es <b>la mayor entre la de seguridad respecto al terreno y la respirable</b>.",r:"Manual A320 · cap. 12 — Auto Flight"},
+  {sw:0,x:14,y:38,s:"PFD CM1",n:"FMA",v:"ANNOUNCE",t:0,
+   w:"El PF canta el FMA. En una maniobra de memoria, ejecutada con máscara puesta y con la alarma sonando, el FMA es la única prueba de que <b>el avión entendió lo que se le pidió</b>. Cantarlo no es formalismo: es lo que permite al PM comprobar sin tener que preguntar.",r:"Manual A320 · cap. 12 — Auto Flight"},
