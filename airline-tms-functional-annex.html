@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Veyra Pilot Intelligence · Airline TMS Functional Annex</title>
+<meta name="description" content="Working functional annex for Veyra Pilot Intelligence airline training management architecture.">
+<style>
+:root{
+  --navy:#07111d;--navy2:#0b1827;--navy3:#102235;--ink:#111827;--muted:#687385;
+  --ivory:#f5f0e7;--paper:#fffaf2;--white:#fff;--line:#ddd3c3;--gold:#c7a159;--gold2:#e2bf79;
+  --green:#23856a;--amber:#b9852f;--red:#ad4a45;--blue:#4f789d;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:40;background:rgba(5,11,19,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(199,161,89,.38)}
+.topInner{max-width:1440px;margin:auto;padding:15px 26px;display:flex;align-items:center;gap:24px}
+.brand{min-width:220px}
+.brand strong{display:block;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:31px;font-weight:500;letter-spacing:-.04em}
+.brand small{display:block;color:var(--gold);font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-top:3px}
+.topMeta{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid rgba(199,161,89,.35);color:#d8c59b;padding:7px 10px;font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.pill.draft{background:rgba(199,161,89,.08)}
+.shell{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:0}
+.side{position:sticky;top:78px;align-self:start;height:calc(100vh - 78px);overflow:auto;padding:28px 20px 40px;border-right:1px solid var(--line);background:#f1ece3}
+.sideTitle{color:#93702f;text-transform:uppercase;letter-spacing:.14em;font-size:10px;font-weight:900;margin:0 0 13px}
+.side a{display:flex;gap:10px;align-items:flex-start;text-decoration:none;padding:10px 8px;border-left:2px solid transparent;color:#536071;font-size:12px;line-height:1.25}
+.side a span{color:#aa7d2d;font-weight:900;min-width:22px}
+.side a:hover,.side a:focus{border-left-color:var(--gold);color:#0b1725;outline:none;background:rgba(255,255,255,.5)}
+main{min-width:0}
+.hero{padding:70px 54px 52px;background:linear-gradient(120deg,#07111d 0%,#0a1929 68%,#14283b 100%);color:#fff;border-bottom:1px solid rgba(199,161,89,.35)}
+.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:.18em;font-size:10px;font-weight:900}
+.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(48px,5vw,76px);font-weight:400;line-height:.98;letter-spacing:-.045em;margin:18px 0 18px;max-width:920px}
+.hero p{max-width:850px;color:#c2cad4;font-size:16px;line-height:1.65;margin:0}
+.heroFlow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:30px;color:#e0c789;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.heroFlow b{color:#667b91}
+.heroNote{margin-top:25px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09);font-size:11px;color:#8695a5;max-width:900px}
+.section{padding:58px 54px;border-bottom:1px solid var(--line);background:var(--paper)}
+.section.alt{background:#f3eee5}
+.section.dark{background:var(--navy);color:#fff;border-bottom-color:rgba(199,161,89,.25)}
+.sectionHead{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);gap:42px;align-items:end;margin-bottom:32px}
+.sectionHead h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(36px,4vw,56px);font-weight:400;line-height:1.03;letter-spacing:-.04em;margin:9px 0 0;color:#0a1728}
+.dark .sectionHead h2{color:#fff}
+.sectionHead p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
+.dark .sectionHead p{color:#aeb8c4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.panel{background:#fff;border:1px solid var(--line);padding:24px}
+.alt .panel{background:#fffaf3}
+.dark .panel{background:#0c1927;border-color:rgba(255,255,255,.09)}
+.panelNum{color:#a47b31;font-weight:900;font-size:10px;letter-spacing:.1em}
+.panel h3{font-family:Georgia,"Times New Roman",serif;font-size:25px;font-weight:400;margin:13px 0 9px;color:#0a1728}
+.dark .panel h3{color:#fff}
+.panel p{color:#687385;font-size:13px;line-height:1.55;margin:0}
+.dark .panel p{color:#aeb8c4}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.tag{border:1px solid #d7ccbb;background:#fffaf2;color:#705e42;padding:6px 8px;font-size:9px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+.dark .tag{border-color:rgba(199,161,89,.28);background:rgba(255,255,255,.03);color:#d6c5a0}
+.roleMatrix{display:grid;grid-template-columns:160px repeat(4,1fr);border:1px solid var(--line);overflow:auto}
+.roleMatrix>div{padding:13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;min-width:120px}
+.roleMatrix .head{background:#0b1725;color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.roleMatrix .rowHead{background:#f0e9dc;color:#6f572d;font-weight:900}
+.roleMatrix .yes{font-weight:800;color:#1f6b59}.roleMatrix .limited{color:#93691f;font-weight:800}
+.orgMap{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
+.orgColumn{display:grid;gap:9px}
+.orgNode{padding:15px 17px;background:#fff;border:1px solid var(--line)}
+.orgNode strong{display:block;font-size:13px;color:#0c1826}.orgNode small{display:block;margin-top:4px;color:#7a8492;font-size:10px}
+.orgCenter{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;text-align:center;background:#091522;color:#fff;border:1px solid var(--gold);font-family:Georgia,serif;font-size:23px}
+.sessionLayout{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px}
+.sessionSteps{display:grid;gap:8px}
+.sessionStep{display:grid;grid-template-columns:46px 1fr;border:1px solid var(--line);background:#fff}
+.sessionStep b{display:grid;place-items:center;background:#0b1725;color:#d9b966;font-size:12px}
+.sessionStep div{padding:15px}.sessionStep strong{display:block;font-size:13px}.sessionStep small{display:block;color:#7a8492;margin-top:4px;font-size:10px}
+.assistant{background:linear-gradient(145deg,#08131f,#10263a);color:#fff;border:1px solid rgba(199,161,89,.35);padding:28px}
+.assistantHeader{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.assistant h3{font-family:Georgia,serif;font-size:34px;font-weight:400;margin:8px 0 10px}
+.assistant p{color:#bdc7d2;line-height:1.6;font-size:13px}
+.status{border:1px solid rgba(199,161,89,.4);color:#dfbf77;padding:7px 9px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:900;white-space:nowrap}
+.assistantList{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+.assistantList span{border-top:1px solid rgba(255,255,255,.09);padding:10px 0;color:#d7dde4;font-size:11px}
+.studentAssistant{background:#fff;border:1px solid var(--line);padding:28px}
+.studentAssistant h3{font-family:Georgia,serif;font-size:34px;font-weight:400;margin:8px 0 10px}
+.studentAssistant p{color:#657080;line-height:1.6;font-size:13px}
+.recordFlow{display:flex;gap:11px;align-items:center;overflow:auto;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.recordFlow span{white-space:nowrap;border:1px solid #d8cdbb;background:#fff;padding:12px 14px;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.recordFlow b{color:#b4873a}
+.recordDetail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.recordDetail div{border:1px solid var(--line);background:#fff;padding:16px}
+.recordDetail small{display:block;color:#8a7560;text-transform:uppercase;letter-spacing:.06em;font-size:9px;font-weight:900}
+.recordDetail b{display:block;margin-top:7px;font-size:14px;color:#172033}
+.ebtGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.chartCard{background:#0b1725;border:1px solid rgba(199,161,89,.28);padding:24px;color:#fff}
+.chartTitle{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:18px}
+.chartTitle strong{font-family:Georgia,serif;font-size:23px;font-weight:400}.chartTitle span{font-size:9px;color:#9aa8b7;text-transform:uppercase;letter-spacing:.08em}
+.radarWrap{display:grid;place-items:center}
+.radar{width:min(100%,480px);height:auto}
+.trendCard{background:#fff;border:1px solid var(--line);padding:24px}
+.trendCard h3,.heatCard h3,.distCard h3{font-family:Georgia,serif;font-size:24px;font-weight:400;margin:0 0 6px}
+.trendCard p,.heatCard p,.distCard p{color:#77818e;font-size:11px;margin:0 0 18px}
+.spark{width:100%;height:150px}
+.heatCard,.distCard{background:#fff;border:1px solid var(--line);padding:24px;margin-top:16px}
+.heat{display:grid;grid-template-columns:80px repeat(6,1fr);gap:5px;align-items:center}
+.heat span{font-size:9px;color:#67717f}
+.cell{height:26px;border-radius:2px}.c1{background:#ead8cf}.c2{background:#d9bd91}.c3{background:#b5bd9c}.c4{background:#7ea692}.c5{background:#447d71}
+.dist{display:flex;align-items:flex-end;gap:12px;height:150px;padding-top:14px;border-bottom:1px solid #d7cebf}
+.distCol{flex:1;text-align:center;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.distBar{background:linear-gradient(180deg,#d7b363,#96702e);min-height:12px}
+.distCol small{font-size:9px;color:#697483;margin-top:7px}
+.ebtNote{margin-top:16px;color:#7d8996;font-size:10px;line-height:1.5}
+.qualTable{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+.qualTable th,.qualTable td{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:11px}
+.qualTable th{background:#0b1725;color:#fff;text-transform:uppercase;letter-spacing:.05em;font-size:9px}
+.ok{color:#1f745f;font-weight:900}.warn{color:#a47324;font-weight:900}.bad{color:#a54343;font-weight:900}
+.kpiRow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:#fff;border:1px solid var(--line);padding:17px}.kpi small{display:block;color:#7c8794;text-transform:uppercase;letter-spacing:.05em;font-size:9px}.kpi b{display:block;margin-top:8px;font-size:25px}
+.kpiCharts{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:14px}
+.barList{background:#fff;border:1px solid var(--line);padding:22px}
+.barRow{display:grid;grid-template-columns:95px 1fr 42px;gap:9px;align-items:center;margin:12px 0}.barRow span{font-size:10px;color:#515e6e}.track{height:8px;background:#e9e3d8;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#9a732f,#d7b363)}.barRow b{font-size:10px;text-align:right}
+.addie{display:flex;align-items:stretch;gap:0;overflow:auto}
+.addieStep{min-width:150px;flex:1;border:1px solid var(--line);background:#fff;padding:20px}.addieStep span{font-size:9px;color:#9b742e;font-weight:900;letter-spacing:.08em}.addieStep h3{font-family:Georgia,serif;font-weight:400;font-size:23px;margin:12px 0 7px}.addieStep p{font-size:11px;color:#6d7886;line-height:1.45}.addieArrow{display:grid;place-items:center;color:#b4893c;padding:0 8px}
+.docList{display:grid;gap:8px}
+.docRow{display:grid;grid-template-columns:1.5fr .55fr .45fr .45fr;gap:10px;background:#fff;border:1px solid var(--line);padding:14px;align-items:center;font-size:11px}
+.docRow.head{background:#0b1725;color:#fff;text-transform:uppercase;letter-spacing:.05em;font-size:9px}
+.integrationMap{display:grid;grid-template-columns:1fr 190px 1fr;gap:16px;align-items:center}
+.integrationSide{display:grid;gap:8px}.integrationNode{background:#fff;border:1px solid var(--line);padding:14px;font-size:11px}.integrationNode b{display:block;color:#172033}.integrationNode span{display:block;color:#798390;margin-top:4px;font-size:9px}
+.integrationCore{height:190px;border-radius:50%;background:#091522;color:#fff;border:1px solid var(--gold);display:grid;place-items:center;text-align:center;font-family:Georgia,serif;font-size:24px;padding:20px}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(199,161,89,.25)}
+.control{background:#0b1725;padding:22px;min-height:170px}.control span{color:#d7b86c;font-size:9px;font-weight:900}.control h3{color:#fff;font-size:15px;margin:13px 0 7px}.control p{color:#9aa8b6;font-size:11px;line-height:1.5;margin:0}
+.ticketFlow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.ticket{background:#fff;border-top:2px solid var(--gold);padding:18px;min-height:130px}.ticket span{font-size:9px;color:#9b742e;font-weight:900}.ticket h3{font-size:14px;margin:12px 0 6px}.ticket p{font-size:10px;color:#6f7a87;line-height:1.45;margin:0}
+.footer{padding:32px 54px 46px;background:#050b13;color:#778695;font-size:10px;border-top:1px solid rgba(199,161,89,.3)}
+.footer strong{color:#d8bf84}
+.mobileNav{display:none}
+@media(max-width:1050px){
+  .shell{grid-template-columns:1fr}.side{display:none}.mobileNav{display:block;margin-left:auto}.topMeta{display:none}
+  .sectionHead{grid-template-columns:1fr}.grid4,.controls{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr}
+  .sessionLayout,.ebtGrid,.kpiCharts{grid-template-columns:1fr}.orgMap{grid-template-columns:1fr}.orgCenter{margin:auto}.recordDetail{grid-template-columns:1fr 1fr}
+  .integrationMap{grid-template-columns:1fr}.integrationCore{width:190px;margin:auto}.ticketFlow{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  .topInner{padding:12px 16px}.brand strong{font-size:27px}.brand{min-width:0}
+  .hero,.section,.footer{padding-left:20px;padding-right:20px}.hero{padding-top:50px}
+  .grid2,.grid3,.grid4,.controls{grid-template-columns:1fr}.section{padding-top:45px;padding-bottom:45px}
+  .roleMatrix{grid-template-columns:130px repeat(4,130px)}.recordDetail,.kpiRow{grid-template-columns:1fr}.assistantList{grid-template-columns:1fr}
+  .heat{grid-template-columns:62px repeat(6,38px);overflow:auto}.docRow{grid-template-columns:1.2fr .6fr}.docRow>*:nth-child(n+3){display:none}
+  .ticketFlow{grid-template-columns:1fr}.addie{padding-bottom:8px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topInner">
+    <div class="brand"><strong>Veyra</strong><small>Pilot Intelligence</small></div>
+    <div class="topMeta"><span class="pill draft">Working Draft</span><span class="pill">Airline TMS · Functional Annex v0.1</span></div>
+    <div class="mobileNav"><span class="pill">Functional Annex</span></div>
+  </div>
+</header>
+<div class="shell">
+  <aside class="side" aria-label="Functional annex navigation">
+    <div class="sideTitle">Core architecture</div>
+    <a href="#access"><span>01</span>Role &amp; Access Management</a>
+    <a href="#organization"><span>02</span>Training Organization</a>
+    <a href="#instructor"><span>03</span>Instructor Workspace</a>
+    <a href="#trainee"><span>04</span>Trainee Workspace</a>
+    <a href="#records"><span>05</span>Training Record</a>
+    <a href="#ebt"><span>06</span>EBT / Competency Intelligence</a>
+    <a href="#qms"><span>07</span>Qualification Management</a>
+    <a href="#manager"><span>08</span>Manager Dashboard / KPI</a>
+    <a href="#design"><span>09</span>Training Design · ADDIE + EBT</a>
+    <a href="#dms"><span>10</span>Document Management</a>
+    <a href="#integration"><span>11</span>Integration &amp; Data Layer</a>
+    <a href="#security"><span>12</span>Security / Governance / Audit</a>
+    <a href="#support"><span>13</span>Technical Request Management</a>
+  </aside>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Airline TMS · Functional Annex</div>
+      <h1>Core functional architecture.</h1>
+      <p>Documento de trabajo para montar y corregir la base funcional de Veyra en un entorno de aerolínea. Esta versión no utiliza identidad de ningún operador ni reproduce información confidencial del RFI.</p>
+      <div class="heroFlow"><span>MANAGE</span><b>→</b><span>TRAIN</span><b>→</b><span>ASSESS</span><b>→</b><span>QUALIFY</span><b>→</b><span>ANALYZE</span><b>→</b><span>IMPROVE</span></div>
+      <div class="heroNote">Los datos, KPI y gráficas de esta página son ilustrativos y sirven únicamente para revisar arquitectura, jerarquía y experiencia de usuario.</div>
+    </section>
+
+    <section class="section" id="access">
+      <div class="sectionHead">
+        <div><div class="eyebrow">01 · Role &amp; Access Management</div><h2>Acceso controlado según responsabilidad.</h2></div>
+        <p>El sistema parte de roles claros, permisos temporales cuando se requieran y trazabilidad de acceso. La autorización crítica no debe depender solamente de controles del navegador.</p>
+      </div>
+      <div class="roleMatrix" aria-label="Role access matrix">
+        <div class="head">Capability</div><div class="head">Manager</div><div class="head">Training Admin</div><div class="head">Instructor</div><div class="head">Trainee</div>
+        <div class="rowHead">KPI / Analytics</div><div class="yes">Full</div><div class="yes">Full</div><div class="limited">Assigned scope</div><div class="limited">Personal</div>
+        <div class="rowHead">Access administration</div><div class="limited">Review</div><div class="yes">Manage</div><div>—</div><div>—</div>
+        <div class="rowHead">Training record</div><div class="yes">Oversight</div><div class="yes">Manage</div><div class="yes">Assigned trainees</div><div class="limited">Personal</div>
+        <div class="rowHead">Qualifications</div><div class="yes">Oversight</div><div class="yes">Manage</div><div class="limited">Instructor scope</div><div class="limited">Personal</div>
+        <div class="rowHead">Audit trail</div><div class="yes">Review</div><div class="yes">Review</div><div>—</div><div>—</div>
+      </div>
+      <div class="grid3" style="margin-top:14px">
+        <div class="panel"><span class="panelNum">A</span><h3>Time-bound access</h3><p>Permisos con fecha de inicio y expiración para accesos temporales.</p></div>
+        <div class="panel"><span class="panelNum">B</span><h3>Access log</h3><p>Registro de accesos y acciones relevantes para trazabilidad administrativa.</p></div>
+        <div class="panel"><span class="panelNum">C</span><h3>Permission history</h3><p>Historial de cambios de rol, alcance y autorizaciones.</p></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="organization">
+      <div class="sectionHead">
+        <div><div class="eyebrow">02 · Training Organization Management</div><h2>Estructura del ecosistema de entrenamiento.</h2></div>
+        <p>La organización del sistema debe representar a quienes participan en Training y sus privilegios, no un catálogo de cursos.</p>
+      </div>
+      <div class="orgMap">
+        <div class="orgColumn">
+          <div class="orgNode"><strong>Ground Instructors</strong><small>Ground privileges</small></div>
+          <div class="orgNode"><strong>Ground + FFS Instructors</strong><small>Combined instructional scope</small></div>
+          <div class="orgNode"><strong>TRI-R / TRI / ED</strong><small>Instructor / examiner privileges</small></div>
+        </div>
+        <div class="orgCenter">Training<br>Organization</div>
+        <div class="orgColumn">
+          <div class="orgNode"><strong>Pilots / TCP / Dispatchers</strong><small>Training populations</small></div>
+          <div class="orgNode"><strong>Human Factors</strong><small>Cross-functional training domain</small></div>
+          <div class="orgNode"><strong>Training Administration</strong><small>Platforms · tracking · certifications</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="instructor">
+      <div class="sectionHead">
+        <div><div class="eyebrow">03 · Instructor Workspace</div><h2>La sesión, el record y el Instructor Assistant en un solo flujo.</h2></div>
+        <p>El instructor debe llegar a la sesión con el contexto necesario, registrar evidencia y cerrar con información utilizable después.</p>
+      </div>
+      <div class="sessionLayout">
+        <div class="sessionSteps">
+          <div class="sessionStep"><b>0</b><div><strong>Description</strong><small>Trainee · session context</small></div></div>
+          <div class="sessionStep"><b>1</b><div><strong>Session Preparation</strong><small>Session objective</small></div></div>
+          <div class="sessionStep"><b>2</b><div><strong>Training Topics</strong><small>Exercises · references · support</small></div></div>
+          <div class="sessionStep"><b>3</b><div><strong>Competency Criteria</strong><small>Learning objectives · competencies · OB</small></div></div>
+          <div class="sessionStep"><b>4</b><div><strong>Session Guide</strong><small>Events · sequence · instructor focus</small></div></div>
+        </div>
+        <div class="assistant">
+          <div class="assistantHeader"><div><div class="eyebrow">Veyra</div><h3>Instructor Assistant</h3></div><span class="status">Mandatory module</span></div>
+          <p>Convierte la observación del instructor en evidencia estructurada sin sustituir su criterio profesional.</p>
+          <div class="assistantList">
+            <span>Instructor Focus</span><span>Observations</span><span>Evidence</span><span>Competencies</span>
+            <span>Observable Behaviors</span><span>Strengths</span><span>Areas for Improvement</span><span>Debriefing / Follow-up</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="trainee">
+      <div class="sectionHead">
+        <div><div class="eyebrow">04 · Trainee Workspace</div><h2>Preparación y progreso desde la perspectiva del trainee.</h2></div>
+        <p>La vista del trainee debe contener solo la información que necesita para prepararse, comprender su progreso y consultar sus antecedentes.</p>
+      </div>
+      <div class="sessionLayout">
+        <div class="studentAssistant">
+          <div class="assistantHeader"><div><div class="eyebrow">Veyra</div><h3>Trainee Assistant</h3></div><span class="status" style="color:#876526;border-color:#d3c49f">Student Assistant</span></div>
+          <p>Asistente a construir para reunir preparación de sesión, resultados, brechas, materiales y próximos pasos en un mismo contexto personal.</p>
+          <div class="tags"><span class="tag">Training history</span><span class="tag">Previous results</span><span class="tag">Areas to reinforce</span><span class="tag">Next actions</span></div>
+        </div>
+        <div class="sessionSteps">
+          <div class="sessionStep"><b>1</b><div><strong>Assigned Session</strong><small>Description · objective</small></div></div>
+          <div class="sessionStep"><b>2</b><div><strong>Session Preparation</strong><small>What to review before training</small></div></div>
+          <div class="sessionStep"><b>3</b><div><strong>Training Topics</strong><small>Content · exercises · references</small></div></div>
+          <div class="sessionStep"><b>4</b><div><strong>Competency Criteria</strong><small>Learning objectives · expected performance</small></div></div>
+          <div class="sessionStep"><b>5</b><div><strong>Training Aids</strong><small>Videos · documents · references</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="records">
+      <div class="sectionHead">
+        <div><div class="eyebrow">05 · Training Record / Records Keeping</div><h2>La sesión termina. El contexto permanece.</h2></div>
+        <p>El Training Record debe conservar la evidencia necesaria para reconstruir qué ocurrió y qué decisión de entrenamiento siguió después.</p>
+      </div>
+      <div class="recordFlow"><span>Training Event</span><b>→</b><span>Evidence</span><b>→</b><span>Training Record</span><b>→</b><span>Qualification Impact</span><b>→</b><span>Report</span><b>→</b><span>Follow-up</span></div>
+      <div class="recordDetail">
+        <div><small>Trainee</small><b>Identity / population</b></div>
+        <div><small>Instructor</small><b>Role / privileges</b></div>
+        <div><small>Session</small><b>Phase / date / event</b></div>
+        <div><small>Result</small><b>Assessment outcome</b></div>
+        <div><small>Competencies</small><b>Ratings + OB</b></div>
+        <div><small>Evidence</small><b>Observations / events</b></div>
+        <div><small>Qualification</small><b>Impact / currency</b></div>
+        <div><small>Next action</small><b>Follow-up / reinforcement</b></div>
+      </div>
+    </section>
+
+    <section class="section dark" id="ebt">
+      <div class="sectionHead">
+        <div><div class="eyebrow">06 · EBT / CBTA &amp; Competency Intelligence</div><h2>El análisis del trainee debe ser visual, longitudinal y explicable.</h2></div>
+        <p>No basta con mostrar una tabla de competencias. La lectura debe permitir detectar tendencia, recurrencia, distribución y llegar hasta la evidencia que originó cada señal.</p>
+      </div>
+      <div class="ebtGrid">
+        <div class="chartCard">
+          <div class="chartTitle"><strong>Competency profile</strong><span>Illustrative trainee</span></div>
+          <div class="radarWrap">
+            <svg class="radar" viewBox="0 0 520 440" role="img" aria-label="Illustrative competency radar chart">
+              <g transform="translate(260 220)">
+                <polygon points="0,-170 109,-130 167,-30 148,85 58,160 -58,160 -148,85 -167,-30 -109,-130" fill="none" stroke="#31475b"/>
+                <polygon points="0,-136 87,-104 134,-24 118,68 46,128 -46,128 -118,68 -134,-24 -87,-104" fill="none" stroke="#2b4052"/>
+                <polygon points="0,-102 65,-78 100,-18 89,51 35,96 -35,96 -89,51 -100,-18 -65,-78" fill="none" stroke="#26394a"/>
+                <polygon points="0,-68 44,-52 67,-12 59,34 23,64 -23,64 -59,34 -67,-12 -44,-52" fill="none" stroke="#233342"/>
+                <g stroke="#31475b"><line x1="0" y1="0" x2="0" y2="-170"/><line x1="0" y1="0" x2="109" y2="-130"/><line x1="0" y1="0" x2="167" y2="-30"/><line x1="0" y1="0" x2="148" y2="85"/><line x1="0" y1="0" x2="58" y2="160"/><line x1="0" y1="0" x2="-58" y2="160"/><line x1="0" y1="0" x2="-148" y2="85"/><line x1="0" y1="0" x2="-167" y2="-30"/><line x1="0" y1="0" x2="-109" y2="-130"/></g>
+                <polygon points="0,-139 85,-101 120,-22 130,75 42,116 -39,108 -103,59 -114,-20 -90,-107" fill="rgba(215,179,99,.18)" stroke="#d7b363" stroke-width="3"/>
+                <g fill="#e6c77f">
+                  <circle cx="0" cy="-139" r="4"/><circle cx="85" cy="-101" r="4"/><circle cx="120" cy="-22" r="4"/><circle cx="130" cy="75" r="4"/><circle cx="42" cy="116" r="4"/><circle cx="-39" cy="108" r="4"/><circle cx="-103" cy="59" r="4"/><circle cx="-114" cy="-20" r="4"/><circle cx="-90" cy="-107" r="4"/>
+                </g>
+                <g fill="#d8e0e8" font-size="11" font-family="Arial" text-anchor="middle">
+                  <text x="0" y="-188">KNO</text><text x="128" y="-145">APK</text><text x="194" y="-31">COM</text><text x="174" y="104">FPA</text><text x="69" y="187">FPM</text><text x="-69" y="187">LTW</text><text x="-174" y="104">PSD</text><text x="-194" y="-31">SAW</text><text x="-128" y="-145">WLM</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="ebtNote">Ejemplo visual. En una implementación real, cada punto debe abrir la tendencia, OB recurrentes y evidencia asociada.</div>
+        </div>
+        <div>
+          <div class="trendCard">
+            <h3>Competency trend</h3><p>Ejemplo · PSD a través de seis sesiones</p>
+            <svg class="spark" viewBox="0 0 520 150" role="img" aria-label="Illustrative competency trend line">
+              <line x1="35" y1="120" x2="500" y2="120" stroke="#d7cebf"/><line x1="35" y1="25" x2="35" y2="120" stroke="#d7cebf"/>
+              <polyline points="45,102 130,88 215,96 300,72 385,66 480,48" fill="none" stroke="#b18438" stroke-width="4"/>
+              <g fill="#b18438"><circle cx="45" cy="102" r="4"/><circle cx="130" cy="88" r="4"/><circle cx="215" cy="96" r="4"/><circle cx="300" cy="72" r="4"/><circle cx="385" cy="66" r="4"/><circle cx="480" cy="48" r="4"/></g>
+              <g fill="#7c8792" font-size="9"><text x="42" y="140">S1</text><text x="127" y="140">S2</text><text x="212" y="140">S3</text><text x="297" y="140">S4</text><text x="382" y="140">S5</text><text x="477" y="140">S6</text></g>
+            </svg>
+          </div>
+          <div class="heatCard">
+            <h3>Competency × session heatmap</h3><p>Recurrencia y evolución visual</p>
+            <div class="heat">
+              <span></span><span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span>
+              <span>FPM</span><i class="cell c2"></i><i class="cell c3"></i><i class="cell c3"></i><i class="cell c4"></i><i class="cell c4"></i><i class="cell c5"></i>
+              <span>COM</span><i class="cell c3"></i><i class="cell c4"></i><i class="cell c4"></i><i class="cell c4"></i><i class="cell c5"></i><i class="cell c5"></i>
+              <span>PSD</span><i class="cell c1"></i><i class="cell c2"></i><i class="cell c1"></i><i class="cell c3"></i><i class="cell c3"></i><i class="cell c4"></i>
+              <span>SAW</span><i class="cell c3"></i><i class="cell c3"></i><i class="cell c4"></i><i class="cell c4"></i><i class="cell c4"></i><i class="cell c5"></i>
+            </div>
+          </div>
+          <div class="distCard">
+            <h3>Competency distribution</h3><p>Población ilustrativa · ratings 1–5</p>
+            <div class="dist">
+              <div class="distCol"><div class="distBar" style="height:18%"></div><small>1–2</small></div>
+              <div class="distCol"><div class="distBar" style="height:35%"></div><small>2–3</small></div>
+              <div class="distCol"><div class="distBar" style="height:72%"></div><small>3–4</small></div>
+              <div class="distCol"><div class="distBar" style="height:48%"></div><small>4–5</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="qms">
+      <div class="sectionHead">
+        <div><div class="eyebrow">07 · Qualification Management · QMS</div><h2>Qualifications, currency, privileges and alerts.</h2></div>
+        <p>El sistema debe relacionar cualificaciones y privilegios con vigencia, requisitos recurrentes, alertas e historial.</p>
+      </div>
+      <table class="qualTable">
+        <thead><tr><th>Qualification</th><th>Population</th><th>Status</th><th>Expiry</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>A320 Type Qualification</td><td>Pilot</td><td class="ok">Current</td><td>18 NOV 2026</td><td>Monitor</td></tr>
+          <tr><td>TRI Privilege</td><td>Instructor</td><td class="warn">90-day window</td><td>20 DEC 2026</td><td>Plan recurrent</td></tr>
+          <tr><td>Line Check</td><td>Pilot</td><td class="bad">Action required</td><td>05 OCT 2026</td><td>Schedule</td></tr>
+          <tr><td>Human Factors</td><td>TCP</td><td class="ok">Current</td><td>04 MAR 2027</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="heroNote" style="color:#7c8793;border-top-color:#d9cfbf">Datos ilustrativos. La lógica final debe configurarse según qualifications, privileges y reglas definidas por el operador.</div>
+    </section>
+
+    <section class="section alt" id="manager">
+      <div class="sectionHead">
+        <div><div class="eyebrow">08 · Manager Dashboard / Analytics &amp; KPI</div><h2>Supervisión ejecutiva con capacidad de drill-down.</h2></div>
+        <p>Manager Dashboard agrupa KPI, leading SPI relacionados con Training, AVR Pilot, AVR Competency, tendencias, alertas y populations.</p>
+      </div>
+      <div class="kpiRow">
+        <div class="kpi"><small>AVR Pilot</small><b>3.82</b></div><div class="kpi"><small>AVR Competency</small><b>3.67</b></div><div class="kpi"><small>Open alerts</small><b>14</b></div><div class="kpi"><small>Evidence coverage</small><b>89%</b></div>
+      </div>
+      <div class="kpiCharts">
+        <div class="barList">
+          <div class="chartTitle" style="color:#172033"><strong>Population overview</strong><span style="color:#7a8492">Illustrative</span></div>
+          <div class="barRow"><span>Pilots</span><div class="track"><div class="fill" style="width:86%"></div></div><b>86%</b></div>
+          <div class="barRow"><span>TCP</span><div class="track"><div class="fill" style="width:79%"></div></div><b>79%</b></div>
+          <div class="barRow"><span>Dispatchers</span><div class="track"><div class="fill" style="width:91%"></div></div><b>91%</b></div>
+          <div class="barRow"><span>Instructors</span><div class="track"><div class="fill" style="width:83%"></div></div><b>83%</b></div>
+        </div>
+        <div class="panel"><span class="panelNum">ALERT LOGIC</span><h3>From KPI to evidence</h3><p>Un indicador debe permitir bajar desde la población o competencia hasta el trainee, sesión, OB y evidencia que explica la señal.</p><div class="tags"><span class="tag">Population</span><span class="tag">Competency</span><span class="tag">Session</span><span class="tag">Evidence</span></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="design">
+      <div class="sectionHead">
+        <div><div class="eyebrow">09 · Training Design · ADDIE + EBT</div><h2>Diseñar, implementar y medir el entrenamiento.</h2></div>
+        <p>El diseño debe poder relacionar necesidad de entrenamiento, objetivos, competencias, OB, ejercicios, evaluación, evidencia y KPI.</p>
+      </div>
+      <div class="addie">
+        <div class="addieStep"><span>01</span><h3>Analyze</h3><p>Training need · operational data · safety signals</p></div><div class="addieArrow">→</div>
+        <div class="addieStep"><span>02</span><h3>Design</h3><p>Objectives · competencies · OB · scenarios</p></div><div class="addieArrow">→</div>
+        <div class="addieStep"><span>03</span><h3>Develop</h3><p>Exercises · content · assessment · training aids</p></div><div class="addieArrow">→</div>
+        <div class="addieStep"><span>04</span><h3>Implement</h3><p>Session delivery · instructor guidance · evidence</p></div><div class="addieArrow">→</div>
+        <div class="addieStep"><span>05</span><h3>Evaluate</h3><p>KPI · competency trend · effectiveness · feedback</p></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="dms">
+      <div class="sectionHead">
+        <div><div class="eyebrow">10 · Document Management · DMS</div><h2>Documentos de entrenamiento con versión, vigencia y contexto.</h2></div>
+        <p>La solución puede administrar documentación propia o integrarse con un DMS existente, según la arquitectura del operador.</p>
+      </div>
+      <div class="docList">
+        <div class="docRow head"><div>Document</div><div>Revision</div><div>Status</div><div>Validity</div></div>
+        <div class="docRow"><div>Training Manual · Example</div><div>REV 12</div><div class="ok">Published</div><div>Current</div></div>
+        <div class="docRow"><div>Session Guide · Example</div><div>REV 04</div><div class="warn">Review</div><div>30 days</div></div>
+        <div class="docRow"><div>Training Aid · Example</div><div>REV 02</div><div class="ok">Published</div><div>Current</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="integration">
+      <div class="sectionHead">
+        <div><div class="eyebrow">11 · Integration &amp; Data Layer</div><h2>Training conectado con el entorno operacional.</h2></div>
+        <p>Las integraciones se definen por proyecto. El objetivo es que Veyra pueda recibir, relacionar y devolver información sin imponer un único proveedor.</p>
+      </div>
+      <div class="integrationMap">
+        <div class="integrationSide">
+          <div class="integrationNode"><b>Flight Operations</b><span>Operational / crew data</span></div>
+          <div class="integrationNode"><b>Safety Management System</b><span>Safety signals / SPI</span></div>
+          <div class="integrationNode"><b>LMS / DMS / QMS</b><span>Learning · documents · qualifications</span></div>
+        </div>
+        <div class="integrationCore">Veyra<br>TMS</div>
+        <div class="integrationSide">
+          <div class="integrationNode"><b>Simulator Data</b><span>Parameters / events / interfaces</span></div>
+          <div class="integrationNode"><b>Human Performance</b><span>Video · eye tracking · voice · sensors</span></div>
+          <div class="integrationNode"><b>APIs / External Systems</b><span>Authorized interoperability</span></div>
+        </div>
+      </div>
+      <div class="heroNote" style="color:#7c8793;border-top-color:#d9cfbf">Human Performance y simulator-data integrations se presentan como arquitectura de integración futura; no se muestran como capacidades productivas ya desplegadas.</div>
+    </section>
+
+    <section class="section dark" id="security">
+      <div class="sectionHead">
+        <div><div class="eyebrow">12 · Security, Governance &amp; Audit</div><h2>Más control a medida que aumenta el alcance.</h2></div>
+        <p>La seguridad debe estar en la arquitectura y no depender de esconder botones o valores en el frontend.</p>
+      </div>
+      <div class="controls">
+        <div class="control"><span>01</span><h3>Role-based access</h3><p>Autorización por rol, organización, módulo y contexto.</p></div>
+        <div class="control"><span>02</span><h3>Audit trail</h3><p>Historial de acceso, cambios y acciones relevantes.</p></div>
+        <div class="control"><span>03</span><h3>Server-side controls</h3><p>Validación crítica fuera del navegador y datos sensibles fuera del cliente.</p></div>
+        <div class="control"><span>04</span><h3>Data separation</h3><p>Separación de información entre ámbitos autorizados.</p></div>
+        <div class="control"><span>05</span><h3>Temporary permissions</h3><p>Acceso limitado por tiempo cuando la operación lo requiera.</p></div>
+        <div class="control"><span>06</span><h3>Integration permissions</h3><p>Alcance explícito por interfaz y fuente de datos.</p></div>
+        <div class="control"><span>07</span><h3>Traceability</h3><p>Relación entre dato, evidencia, decisión y usuario.</p></div>
+        <div class="control"><span>08</span><h3>Human-in-the-loop</h3><p>Automatización como apoyo, no reemplazo del criterio profesional.</p></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="support">
+      <div class="sectionHead">
+        <div><div class="eyebrow">13 · Technical Support / Request Management</div><h2>Del hallazgo operativo a una solicitud técnica trazable.</h2></div>
+        <p>El Technical Request no debe perderse en mensajes aislados. Puede tener prioridad, responsable, estado, historial y resolución.</p>
+      </div>
+      <div class="ticketFlow">
+        <div class="ticket"><span>01</span><h3>Request</h3><p>Usuario registra necesidad o incidente.</p></div>
+        <div class="ticket"><span>02</span><h3>Triage</h3><p>Clasificación funcional, técnica o de datos.</p></div>
+        <div class="ticket"><span>03</span><h3>Priority</h3><p>Impacto y urgencia definidos.</p></div>
+        <div class="ticket"><span>04</span><h3>Resolution</h3><p>Responsable, solución y evidencia de cierre.</p></div>
+        <div class="ticket"><span>05</span><h3>History</h3><p>Trazabilidad para futuras revisiones.</p></div>
+      </div>
+    </section>
+    <footer class="footer"><strong>VEYRA PILOT INTELLIGENCE</strong> · Airline TMS Functional Annex · Working draft · v0.1</footer>
+  </main>
+</div>
+</body>
+</html>
