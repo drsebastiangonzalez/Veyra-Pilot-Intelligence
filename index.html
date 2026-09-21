@@ -1544,6 +1544,62 @@ main{max-width:1180px;}
   .heroActions{display:grid;grid-template-columns:1fr;width:min(100%,340px)}
   .heroPrimary,.heroSecondary{width:100%;justify-content:space-between;text-align:left}
 }
+
+/* === Veyra Enterprise product story v1 · 2026-09-21 === */
+.homeAudienceProgress{max-width:1050px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.homeAudienceProgress:before{content:"";position:absolute;left:8%;right:8%;top:8px;height:1px;background:#cdbf9f}
+.homeAudienceProgress span{width:16px;height:16px;border:1px solid #b78a39;border-radius:50%;background:#f2ede3;justify-self:center;position:relative;z-index:1}
+.homeAudienceCard{min-height:245px;padding:28px}
+.homeAudienceStage{display:flex;align-items:center;gap:12px;color:#9a712a;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:900}
+.homeAudienceStage span{display:grid;place-items:center;width:30px;height:30px;border:1px solid currentColor;border-radius:50%;font-size:10px}
+.homeAudienceCard.org .homeAudienceStage{color:#d7ad59}
+.homeAudienceCard h3{font-size:clamp(27px,2.5vw,37px);margin-top:17px}
+.homeAudienceCapabilities{margin-top:18px;padding-top:15px;border-top:1px solid #e2d8c7;color:#7c6950;font-size:11px;line-height:1.5;font-weight:800;letter-spacing:.035em;text-transform:uppercase}
+.homeAudienceCard.org .homeAudienceCapabilities{border-top-color:rgba(200,164,93,.22);color:#c9b98f}
+.homeEnterpriseAnalytics{margin:0 calc(50% - 50vw);padding:82px max(28px,calc((100vw - 1180px)/2));background:#07101b;color:#fff;display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center;border-top:1px solid rgba(200,164,93,.28);border-bottom:1px solid rgba(200,164,93,.28)}
+.homeEnterpriseAnalyticsCopy h2,.homeSuiteHead h2,.homeRecordsHead h2,.homeSecurityHead h2,.homeIntegrationHead h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(40px,4.3vw,60px);font-weight:400;letter-spacing:-.04em;line-height:1.03;margin:0 0 18px}
+.homeEnterpriseAnalyticsCopy p{color:#b9c1cd;font-size:16px;line-height:1.65;margin:0 0 24px}
+.homeProofList{display:grid;gap:9px;margin:0 0 24px}
+.homeProofList span{position:relative;padding-left:18px;color:#dde2e8;font-size:13px}
+.homeProofList span:before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:#c8a45d}
+.homeEnterpriseTextLink,.homeSuiteCard a,.homeSecurityLink{display:inline-flex;color:#e3bd6b;text-decoration:none;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid rgba(200,164,93,.48);padding-bottom:4px}
+.homeAnalyticsMock{background:#0c1725;border:1px solid rgba(200,164,93,.3);padding:24px;box-shadow:0 25px 60px rgba(0,0,0,.24)}
+.homeMockTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.09);padding-bottom:17px;margin-bottom:18px}
+.homeMockTop small{display:block;color:#c8a45d;letter-spacing:.13em;font-size:9px;font-weight:900}
+.homeMockTop strong{display:block;color:#fff;font-family:Georgia,serif;font-size:24px;font-weight:400;margin-top:5px}
+.homeMockTop>span{border:1px solid rgba(200,164,93,.32);padding:7px 9px;color:#b9c1cd;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.homeMockKpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.homeMockKpis div{background:#101e2d;border:1px solid rgba(255,255,255,.07);padding:15px}
+.homeMockKpis small{display:block;color:#94a0ae;font-size:9px;text-transform:uppercase;letter-spacing:.06em;line-height:1.35}
+.homeMockKpis b{display:block;color:#fff;font-size:23px;margin-top:8px}
+.homeMockChart{background:#09131f;border:1px solid rgba(255,255,255,.06);padding:18px}
+.homeMockChartHead{display:flex;justify-content:space-between;color:#fff;font-size:12px;margin-bottom:18px}.homeMockChartHead span{color:#8e9aa8}
+.homeMockBar{display:grid;grid-template-columns:42px 1fr 40px;gap:10px;align-items:center;margin:11px 0}.homeMockBar>span{color:#c4ccd5;font-size:11px;font-weight:900}.homeMockBar i{display:block;height:8px;background:#1b2a3a;overflow:hidden}.homeMockBar i b{display:block;height:100%;background:linear-gradient(90deg,#a77b2f,#e0bc72)}.homeMockBar em{font-style:normal;color:#d6dde5;font-size:10px;text-align:right}
+.homeMockDisclaimer{color:#788594;font-size:10px;line-height:1.45;margin:14px 0 0}
+.homeAssistantSuite{margin:0 calc(50% - 50vw);padding:78px max(28px,calc((100vw - 1180px)/2));background:#f7f2e8;color:#0a1728}
+.homeSuiteHead{max-width:860px;margin-bottom:34px}.homeSuiteHead h2,.homeRecordsHead h2,.homeIntegrationHead h2{color:#0a1728}.homeSuiteHead p,.homeRecordsHead p,.homeIntegrationHead p{color:#687181;line-height:1.65;font-size:16px}
+.homeSuiteGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.homeSuiteCard{position:relative;border:1px solid #dbd1c0;background:#fffdf8;padding:32px;min-height:440px}
+.homeSuiteCard.instructor{background:linear-gradient(145deg,#0a1523,#102337);border-color:rgba(200,164,93,.35);color:#fff}.homeSuiteCard.instructor h3{color:#fff}.homeSuiteCard.instructor p,.homeSuiteCard.instructor li{color:#bdc6d1}
+.homeSuiteStatus{position:absolute;top:22px;right:22px;color:#d7ad59;border:1px solid rgba(200,164,93,.38);padding:7px 9px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}.homeSuiteStatus.roadmap{color:#705f43;border-color:#d6cbb9}
+.homeSuiteNumber{display:grid;place-items:center;width:44px;height:44px;border:1px solid #c8a45d;border-radius:50%;font-size:11px;font-weight:900;color:#9a712a}.homeSuiteCard.instructor .homeSuiteNumber{color:#d7ad59}
+.homeSuiteCard h3{font-family:Georgia,serif;font-size:38px;font-weight:400;margin:24px 0 12px;color:#0a1728}.homeSuiteCard p{color:#687181;line-height:1.6}
+.homeSuiteCard ul{padding-left:19px;margin:22px 0 26px;color:#4e5967;line-height:1.8;font-size:13px}.homeSuiteRoadmapNote{display:inline-flex;color:#85652e;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
+.homeRecordsSection{margin:0 calc(50% - 50vw);padding:76px max(28px,calc((100vw - 1180px)/2));background:#fffaf2;color:#0a1728;border-top:1px solid #e1d8ca;border-bottom:1px solid #e1d8ca}
+.homeRecordsHead{max-width:900px}.homeRecordFlow{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:38px 0;padding:20px 0;border-top:1px solid #dcd2c1;border-bottom:1px solid #dcd2c1;color:#766342;font-size:10px;font-weight:900;letter-spacing:.11em}.homeRecordFlow b{color:#c8a45d;font-size:16px}
+.homeRecordsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.homeRecordsGrid article{border:1px solid #ded5c7;background:#fff;padding:24px}.homeRecordsGrid article>span{color:#a77b2f;font-size:11px;font-weight:900;letter-spacing:.1em}.homeRecordsGrid h3{font-family:Georgia,serif;font-size:27px;font-weight:400;margin:14px 0 9px}.homeRecordsGrid p{color:#687181;font-size:13px;line-height:1.55;margin:0}
+.homeEnterpriseTags{display:flex;gap:6px;flex-wrap:wrap;margin-top:15px}.homeEnterpriseTags span{border:1px solid #d9cfbd;background:#fffaf2;padding:6px 8px;color:#786546;font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:900}
+.homeSecurityEnterprise{margin:0 calc(50% - 50vw);padding:78px max(28px,calc((100vw - 1180px)/2));background:#050b13;color:#fff;border-top:1px solid rgba(200,164,93,.25)}
+.homeSecurityHead{max-width:920px}.homeSecurityHead h2{color:#fff}.homeSecurityHead p{color:#aeb7c4;line-height:1.65;font-size:16px}
+.homeSecurityGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(200,164,93,.18);margin:34px 0 28px}.homeSecurityGrid article{background:#09131f;padding:24px;min-height:185px}.homeSecurityGrid article>span{color:#d7ad59;font-size:10px;letter-spacing:.1em;font-weight:900}.homeSecurityGrid h3{font-size:17px;color:#fff;margin:15px 0 9px}.homeSecurityGrid p{color:#9da8b6;font-size:12px;line-height:1.55;margin:0}
+.homeIntegrationLayer{margin:0 calc(50% - 50vw);padding:72px max(28px,calc((100vw - 1180px)/2));background:#f4efe6;color:#0a1728}
+.homeIntegrationHead{max-width:880px}.homeIntegrationGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:32px}.homeIntegrationGrid article{border-top:2px solid #c8a45d;background:rgba(255,255,255,.55);padding:20px;min-height:190px}.homeIntegrationGrid article>span{color:#a77b2f;font-size:10px;font-weight:900}.homeIntegrationGrid h3{font-size:16px;margin:14px 0 8px;color:#0a1728}.homeIntegrationGrid p{color:#687181;font-size:12px;line-height:1.5;margin:0}.homeIntegrationNote{margin:18px 0 0;color:#8a8f97;font-size:10px}
+@media(max-width:980px){
+  .homeEnterpriseAnalytics{grid-template-columns:1fr;gap:34px}.homeMockKpis{grid-template-columns:1fr 1fr}.homeSuiteGrid{grid-template-columns:1fr}.homeRecordsGrid{grid-template-columns:1fr}.homeSecurityGrid{grid-template-columns:1fr 1fr}.homeIntegrationGrid{grid-template-columns:1fr 1fr}.homeRecordFlow{overflow-x:auto;justify-content:flex-start}.homeRecordFlow span{white-space:nowrap}
+}
+@media(max-width:640px){
+  .homeAudienceProgress{display:none}.homeAudienceCard{padding:24px;min-height:auto}.homeMockKpis{grid-template-columns:1fr}.homeSecurityGrid,.homeIntegrationGrid{grid-template-columns:1fr}.homeMockTop{flex-direction:column}.homeEnterpriseAnalytics,.homeAssistantSuite,.homeRecordsSection,.homeSecurityEnterprise,.homeIntegrationLayer{padding-left:20px;padding-right:20px}.homeSuiteCard{padding:25px;min-height:auto}.homeSuiteStatus{position:static;display:inline-flex;margin-bottom:18px}
+}
 </style>
 </head>
 <body>
@@ -1600,36 +1656,40 @@ main{max-width:1180px;}
     <div class="homeAudienceIntro">
       <span class="homeEyebrow">Una plataforma, cuatro contextos</span>
       <h2 id="homeAudienceTitle">Veyra crece con cada etapa del desarrollo del piloto.</h2>
-      <p>El mismo núcleo tecnológico puede adaptarse al piloto individual, una escuela de aviación, una aerolínea o un centro de entrenamiento sin convertir cada implementación en una plataforma distinta.</p>
+      <p>Un mismo núcleo tecnológico puede acompañar al piloto individual y escalar hacia escuelas, aerolíneas y centros de entrenamiento con configuración específica para cada operación.</p>
     </div>
+    <div class="homeAudienceProgress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     <div class="homeAudienceGrid">
-      <article class="homeAudienceCard">
+      <article class="homeAudienceCard audiencePilot">
         <div>
-          <span class="homeAudienceLabel">Pilot / Student</span>
+          <div class="homeAudienceStage"><span>01</span><b>Pilot / Student</b></div>
           <h3>Del primer entrenamiento al desarrollo continuo.</h3>
-          <p>Training Center, evaluaciones, historial, informes personales y una experiencia centrada en entender el progreso y el siguiente paso.</p>
+          <p>Preparación, evaluación y seguimiento personal para entender el progreso y llegar con mayor contexto a la siguiente fase.</p>
+          <div class="homeAudienceCapabilities">Training · Assessment · Personal reports · Training history</div>
         </div>
         <div class="homeAudienceLinks">
           <a href="training-center.html">Training Center</a>
           <a href="evaluacion-evidencia.html">Evaluación &amp; Evidencia</a>
         </div>
       </article>
-      <article class="homeAudienceCard">
+      <article class="homeAudienceCard audienceSchool">
         <div>
-          <span class="homeAudienceLabel">Flight School / Academy</span>
+          <div class="homeAudienceStage"><span>02</span><b>Flight School / Academy</b></div>
           <h3>Estandariza la formación sin perder el criterio del instructor.</h3>
-          <p>Instructores, estudiantes, misiones, competencias, resultados y analítica dentro de una experiencia configurable para cada programa.</p>
+          <p>Organiza estudiantes, instructores, misiones, competencias, resultados y evidencia dentro de una experiencia configurable.</p>
+          <div class="homeAudienceCapabilities">Students · Instructors · Missions · Competencies · Analytics</div>
         </div>
         <div class="homeAudienceLinks">
           <a href="instructor-assistant.html">Instructor Assistant</a>
           <a href="analytics.html">Analytics</a>
         </div>
       </article>
-      <article class="homeAudienceCard org">
+      <article class="homeAudienceCard org audienceAirline">
         <div>
-          <span class="homeAudienceLabel">Airline / Enterprise</span>
+          <div class="homeAudienceStage"><span>03</span><b>Airline / Enterprise</b></div>
           <h3>Training intelligence para operaciones de mayor escala.</h3>
-          <p>Competencias, comportamientos observables, KPI, tendencias, cohortes, reportes e historial de entrenamiento configurados para el operador.</p>
+          <p>Consolida competencias, comportamientos observables, KPI, tendencias, cohortes, reportes e historial de entrenamiento.</p>
+          <div class="homeAudienceCapabilities">CBTA / EBT · KPI · Cohorts · Trends · Enterprise reporting</div>
         </div>
         <div class="homeAudienceLinks">
           <a href="analytics.html">Analytics &amp; KPI</a>
@@ -1637,11 +1697,12 @@ main{max-width:1180px;}
           <a href="#demo" onclick="showScreen('contact');return false;">Solicitar demo</a>
         </div>
       </article>
-      <article class="homeAudienceCard org">
+      <article class="homeAudienceCard org audienceAto">
         <div>
-          <span class="homeAudienceLabel">Training Center / ATO</span>
-          <h3>Un núcleo, múltiples programas y clientes.</h3>
-          <p>Programas, flotas, instructores, dispositivos, permisos y reportes pueden organizarse por cliente, curso o proyecto manteniendo separación de información.</p>
+          <div class="homeAudienceStage"><span>04</span><b>Training Center / ATO</b></div>
+          <h3>Un núcleo, múltiples programas, clientes y configuraciones.</h3>
+          <p>Organiza programas, flotas, instructores, dispositivos, permisos y reportes manteniendo separación de información por proyecto.</p>
+          <div class="homeAudienceCapabilities">Multi-client · Programs · Fleets · Devices · Data separation</div>
         </div>
         <div class="homeAudienceLinks">
           <a href="training-center.html">Training Center</a>
@@ -1650,108 +1711,6 @@ main{max-width:1180px;}
       </article>
     </div>
   </section>
-
-  <div class="veyraHomeStory homeEnterpriseV1">
-    <section id="homeMethod" class="homeStoryIntro" aria-label="Qué es Veyra">
-      <div class="homeStoryImage" role="img" aria-label="Aeronaves Veyra en plataforma"></div>
-      <div class="homeStoryCopy">
-        <span class="homeEyebrow">Pilot Training Intelligence</span>
-        <h2>Una nueva forma de acompañar el progreso del piloto</h2>
-        <p>Veyra integra evaluación académica, preparación estructurada y análisis de desempeño para apoyar decisiones más claras durante el entrenamiento aeronáutico.</p>
-        <p>Cada resultado se transforma en información útil para orientar la retroalimentación, priorizar refuerzos y llegar mejor preparado a cada fase de formación.</p>
-      </div>
-    </section>
-
-    <section class="homePillars" aria-label="Cuatro pilares de Veyra">
-      <div class="homePillarsHead">
-        <div>
-          <span class="homeEyebrow">Nuestra solución</span>
-          <h2>Cuatro pilares,<br>un mejor futuro para la aviación</h2>
-        </div>
-        <p>Una plataforma integral que convierte la información en decisiones, acelera el aprendizaje y eleva los estándares de la formación aeronáutica.</p>
-      </div>
-      <div class="homePillarGrid">
-        <article class="homePillarCard">
-          <div class="homePillarIcon">01</div>
-          <h3>Evaluación</h3>
-          <p>Evalúa competencias, preparación y conocimientos mediante instrumentos estructurados y seguimiento continuo.</p>
-          <button type="button" onclick="showAssessment()">Saber más <span>→</span></button>
-        </article>
-        <article class="homePillarCard">
-          <div class="homePillarIcon">02</div>
-          <h3>Entrenamiento</h3>
-          <p>Gestión de programas, contenidos y rutas de preparación para acompañar el progreso antes del simulador y el vuelo.</p>
-          <button type="button" onclick="showTrainingCenter()">Saber más <span>→</span></button>
-        </article>
-        <article class="homePillarCard">
-          <div class="homePillarIcon">03</div>
-          <h3>Analítica</h3>
-          <p>Convierte resultados en información útil para identificar tendencias, brechas y prioridades de entrenamiento.</p>
-          <button type="button" onclick="showScreen('cbta')">Saber más <span>→</span></button>
-        </article>
-        <article class="homePillarCard">
-          <div class="homePillarIcon">04</div>
-          <h3>Personalización</h3>
-          <p>Adapta flujos, reportes, módulos y experiencia visual a los objetivos y estándares de cada organización.</p>
-          <button type="button" onclick="document.getElementById('homeEnterprise').scrollIntoView({behavior:'smooth'})">Saber más <span>→</span></button>
-        </article>
-      </div>
-    </section>
-
-    <section class="homeEcosystem" id="homeEcosystem" aria-label="Ecosistema conectado Veyra">
-      <div class="homeEcosystemCopy">
-        <span class="homeEyebrow">Ecosistema conectado</span>
-        <h2>Todo tu entrenamiento en perfecta sincronía</h2>
-        <p>Veyra integra herramientas, personas y datos para crear un flujo de información continuo, seguro y comprensible en un solo ecosistema.</p>
-        <button class="homeOutlineCta" type="button" onclick="showScreen('contact')">Ver integraciones <span>→</span></button>
-      </div>
-      <div class="homeNetworkMap homeNetworkMapV2" aria-label="Red de módulos e integraciones de Veyra">
-        <svg class="homeNetworkSvgV2" viewBox="0 0 1000 680" role="img" aria-labelledby="veyraNetworkTitle veyraNetworkDesc">
-          <title id="veyraNetworkTitle">Ecosistema conectado Veyra</title>
-          <desc id="veyraNetworkDesc">Veyra conecta Instructor Assistant, LMS, correo, VOA, Training Center, CBTA y EBT, reportes, analítica, integraciones y la app móvil.</desc>
-          <defs>
-            <radialGradient id="coreGlow" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#17263a"/><stop offset="1" stop-color="#07111f"/></radialGradient>
-            <linearGradient id="edgeGold" x1="0" x2="1"><stop offset="0" stop-color="#557899" stop-opacity=".42"/><stop offset=".5" stop-color="#d7ad59" stop-opacity=".95"/><stop offset="1" stop-color="#557899" stop-opacity=".42"/></linearGradient>
-            <filter id="networkGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-          <g fill="none" stroke="#5d7997" stroke-opacity=".23" stroke-width="1.5" vector-effect="non-scaling-stroke">
-            <path d="M250 122 Q365 75 500 72"/><path d="M500 72 Q650 72 800 122"/><path d="M800 122 Q900 170 910 260"/><path d="M910 260 Q925 380 870 470"/>
-            <path d="M870 470 Q790 550 675 570"/><path d="M675 570 Q590 620 500 600"/><path d="M500 600 Q415 620 330 570"/><path d="M330 570 Q215 550 140 475"/>
-            <path d="M140 475 Q70 390 90 280"/><path d="M90 280 Q130 170 250 122"/><path d="M250 122 Q390 210 500 320"/><path d="M800 122 Q650 210 500 320"/>
-            <path d="M90 280 Q300 245 500 320"/><path d="M910 260 Q700 245 500 320"/><path d="M140 475 Q325 425 500 320"/><path d="M870 470 Q680 425 500 320"/>
-          </g>
-          <g fill="none" stroke="url(#edgeGold)" stroke-width="2.2" vector-effect="non-scaling-stroke">
-            <path d="M500 320 L500 72"/><path d="M500 320 L250 122"/><path d="M500 320 L800 122"/><path d="M500 320 L910 260"/><path d="M500 320 L870 470"/>
-            <path d="M500 320 L675 570"/><path d="M500 320 L500 600"/><path d="M500 320 L330 570"/><path d="M500 320 L140 475"/><path d="M500 320 L90 280"/>
-          </g>
-          <g fill="#d7ad59" opacity=".92"><circle cx="375" cy="196" r="4"/><circle cx="650" cy="197" r="4"/><circle cx="710" cy="290" r="4"/><circle cx="700" cy="395" r="4"/><circle cx="590" cy="475" r="4"/><circle cx="410" cy="480" r="4"/><circle cx="310" cy="402" r="4"/><circle cx="285" cy="290" r="4"/></g>
-          <circle cx="500" cy="320" r="118" fill="#d7ad59" opacity=".08" filter="url(#networkGlow)"/>
-          <circle cx="500" cy="320" r="102" fill="url(#coreGlow)" stroke="#d7ad59" stroke-width="2.2"/>
-          <text x="500" y="314" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="48">Veyra</text>
-          <text x="500" y="344" text-anchor="middle" fill="#d7ad59" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="4">PILOT INTELLIGENCE</text>
-          <g font-family="Arial,sans-serif" text-anchor="middle">
-            <g transform="translate(500 72)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="18" font-weight="700">LMS</text><text y="65" fill="#cbd5e1" font-size="14">Learning</text></g>
-            <g transform="translate(250 122)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">INS</text><text y="65" fill="#cbd5e1" font-size="14">Instructor Assistant</text></g>
-            <g transform="translate(800 122)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="21" font-weight="700">@</text><text y="65" fill="#cbd5e1" font-size="14">E-mail</text></g>
-            <g transform="translate(910 260)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">VOA</text><text y="65" fill="#cbd5e1" font-size="14">Data &amp; Insights</text></g>
-            <g transform="translate(870 470)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="17" font-weight="700">TC</text><text y="65" fill="#cbd5e1" font-size="14">Training Center</text></g>
-            <g transform="translate(675 570)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">CBT</text><text y="65" fill="#cbd5e1" font-size="14">CBTA / EBT</text></g>
-            <g transform="translate(500 600)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">REP</text><text y="65" fill="#cbd5e1" font-size="14">Reportes</text></g>
-            <g transform="translate(330 570)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">ANA</text><text y="65" fill="#cbd5e1" font-size="14">Analytics</text></g>
-            <g transform="translate(140 475)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">API</text><text y="65" fill="#cbd5e1" font-size="14">Integraciones</text></g>
-            <g transform="translate(90 280)"><circle r="38" fill="#0a1625" stroke="#7893ac" stroke-width="1.5"/><text y="7" fill="#fff" font-size="16" font-weight="700">APP</text><text y="65" fill="#cbd5e1" font-size="14">App móvil</text></g>
-          </g>
-          <path d="M45 662 C265 590 735 590 955 662" fill="none" stroke="#49647d" stroke-opacity=".28" stroke-width="1.4"/>
-        </svg>
-      </div>
-    </section>
-
-    <section class="homePerformanceBanner homePerformanceBannerReal" aria-label="Formación orientada al desempeño">
-      <div class="homePerformanceCopy">
-        <h2>Prepararse antes de ejecutar.<br>Comprender antes de decidir.</h2>
-        <p>Formación orientada al desempeño</p>
-      </div>
-    </section>
 
     <section id="homeCapabilities" class="homeCapabilitiesCatalog" aria-label="Capacidades de Veyra">
       <div class="homeCapabilitiesHead">
@@ -1774,48 +1733,146 @@ main{max-width:1180px;}
       </div>
     </section>
 
-    <section class="homeTechStack homeTechStackLogos" aria-label="Ecosistema tecnológico Veyra">
-      <div class="homeTechHead">
-        <span class="homeEyebrow">Ecosistema tecnológico</span>
-        <h2>Conectado con las herramientas que forman parte de tu flujo.</h2>
-        <p>Integraciones activas y compatibilidades se habilitan según el proyecto, los permisos del cliente y las políticas de cada proveedor. La presencia de una marca no implica alianza comercial.</p>
-      </div>
-      <div class="homeTechViewport" aria-label="Tecnologías e integraciones">
-        <div class="homeTechTrack homeTechLogoTrack">
-          <span class="techLogo"><img src="assets/tech/github.svg" alt="GitHub"><small>GitHub</small></span>
-          <span class="techLogo"><img src="assets/tech/supabase.svg" alt="Supabase"><small>Supabase</small></span>
-          <span class="techLogo"><img src="assets/tech/whatsapp.svg" alt="WhatsApp Business"><small>WhatsApp Business</small></span>
-          <span class="techLogo"><img src="assets/tech/meta.svg" alt="Meta"><small>Meta</small></span>
-          <span class="techLogo"><img src="assets/tech/openai.svg" alt="OpenAI"><small>OpenAI</small></span>
-          <span class="techLogo"><img src="assets/tech/anthropic.svg" alt="Claude by Anthropic"><small>Claude</small></span>
-          <span class="techLogo"><img src="assets/tech/googledrive.svg" alt="Google Drive"><small>Google Drive</small></span>
-          <span class="techLogo"><img src="assets/tech/gmail.svg" alt="Gmail"><small>Gmail</small></span>
-          <span class="techLogo"><img src="assets/tech/outlook.svg" alt="Microsoft Outlook"><small>Outlook</small></span>
-          <span class="techLogo"><img src="assets/tech/googlecalendar.svg" alt="Google Calendar"><small>Google Calendar</small></span>
-          <span class="techLogo"><img src="assets/tech/apple.svg" alt="Apple iOS"><small>Apple iOS</small></span>
-          <span class="techLogo"><img src="assets/tech/resend.svg" alt="Resend"><small>Resend</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/github.svg" alt=""><small>GitHub</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/supabase.svg" alt=""><small>Supabase</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/whatsapp.svg" alt=""><small>WhatsApp Business</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/meta.svg" alt=""><small>Meta</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/openai.svg" alt=""><small>OpenAI</small></span>
-          <span class="techLogo" aria-hidden="true"><img src="assets/tech/anthropic.svg" alt=""><small>Claude</small></span>
+    <section class="homeEnterpriseAnalytics" aria-label="Analytics y KPI">
+      <div class="homeEnterpriseAnalyticsCopy">
+        <span class="homeEyebrow">Analytics &amp; KPI</span>
+        <h2>De una sesión aislada a una lectura del sistema de entrenamiento.</h2>
+        <p>Veyra organiza resultados, competencias, misiones y cohortes para que el dato conserve el contexto que lo originó y pueda convertirse en una decisión de entrenamiento.</p>
+        <div class="homeProofList">
+          <span>Seguimiento individual y grupal</span>
+          <span>Tendencias por competencia y misión</span>
+          <span>KPI configurables por organización</span>
+          <span>Lectura visual de fortalezas y brechas</span>
         </div>
+        <a href="analytics.html" class="homeEnterpriseTextLink">Explorar Analytics →</a>
+      </div>
+      <div class="homeAnalyticsMock" aria-label="Ejemplo ilustrativo de dashboard de entrenamiento">
+        <div class="homeMockTop"><div><small>TRAINING INTELLIGENCE</small><strong>Operational overview</strong></div><span>Ejemplo ilustrativo</span></div>
+        <div class="homeMockKpis">
+          <div><small>Training completion</small><b>92%</b></div>
+          <div><small>Evidence coverage</small><b>86%</b></div>
+          <div><small>Open follow-up</small><b>12</b></div>
+          <div><small>Cohort trend</small><b>+7 pp</b></div>
+        </div>
+        <div class="homeMockChart">
+          <div class="homeMockChartHead"><b>Competency trend</b><span>Current cohort</span></div>
+          <div class="homeMockBar"><span>FPM</span><i><b style="width:78%"></b></i><em>78%</em></div>
+          <div class="homeMockBar"><span>COM</span><i><b style="width:84%"></b></i><em>84%</em></div>
+          <div class="homeMockBar"><span>PSD</span><i><b style="width:73%"></b></i><em>73%</em></div>
+          <div class="homeMockBar"><span>SAW</span><i><b style="width:88%"></b></i><em>88%</em></div>
+        </div>
+        <p class="homeMockDisclaimer">Datos de ejemplo únicamente para visualizar la arquitectura analítica; no corresponden a un operador real.</p>
       </div>
     </section>
 
+    <section class="homeAssistantSuite" aria-label="Asistentes Veyra">
+      <div class="homeSuiteHead">
+        <span class="homeEyebrow">Human intelligence, digitally supported</span>
+        <h2>Dos asistentes. Un mismo historial de desarrollo.</h2>
+        <p>La tecnología apoya la preparación y la documentación; el criterio profesional continúa en el centro de cada decisión.</p>
+      </div>
+      <div class="homeSuiteGrid">
+        <article class="homeSuiteCard instructor">
+          <div class="homeSuiteStatus">Producto en evolución</div>
+          <span class="homeSuiteNumber">01</span>
+          <h3>Instructor Assistant</h3>
+          <p>Ayuda a convertir observaciones de entrenamiento en evidencia estructurada y recuperable para la retroalimentación y el seguimiento.</p>
+          <ul>
+            <li>Instructor Focus y contexto de misión</li>
+            <li>Competencias y comportamientos observables</li>
+            <li>Observaciones, evidencia e historial</li>
+            <li>Revisión de texto y apoyo a la clasificación</li>
+          </ul>
+          <a href="instructor-assistant.html">Conocer Instructor Assistant →</a>
+        </article>
+        <article class="homeSuiteCard student">
+          <div class="homeSuiteStatus roadmap">Roadmap</div>
+          <span class="homeSuiteNumber">02</span>
+          <h3>Student Assistant</h3>
+          <p>Una experiencia futura orientada al piloto para reunir preparación, progreso, informes y próximos pasos dentro de su propio contexto formativo.</p>
+          <ul>
+            <li>Training history personal</li>
+            <li>Resultados e informes</li>
+            <li>Áreas por reforzar y próximos pasos</li>
+            <li>Acceso a Training Center y preparación</li>
+          </ul>
+          <span class="homeSuiteRoadmapNote">Diseño funcional en desarrollo</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="homeRecordsSection" aria-label="Reportes e historial de entrenamiento">
+      <div class="homeRecordsHead">
+        <span class="homeEyebrow">Reports &amp; Training History</span>
+        <h2>El entrenamiento no debería desaparecer al terminar la sesión.</h2>
+        <p>Cada evento puede alimentar un historial recuperable que conecte evidencia, resultados y decisiones posteriores sin reducir el proceso a una nota aislada.</p>
+      </div>
+      <div class="homeRecordFlow" aria-label="Flujo de información de entrenamiento">
+        <span>TRAINING EVENT</span><b>→</b><span>EVIDENCE</span><b>→</b><span>TRAINING RECORD</span><b>→</b><span>REPORT</span><b>→</b><span>NEXT ACTION</span>
+      </div>
+      <div class="homeRecordsGrid">
+        <article><span>01</span><h3>Personal report</h3><p>Resumen individual de resultados, evidencia, competencias, fortalezas y áreas de seguimiento según el módulo.</p></article>
+        <article><span>02</span><h3>Group / cohort report</h3><p>Lectura consolidada para identificar patrones comunes y prioridades de entrenamiento a nivel de grupo.</p></article>
+        <article><span>03</span><h3>Training history</h3><p>Consulta longitudinal para recuperar antecedentes relevantes antes de la siguiente fase, sesión o evaluación.</p></article>
+      </div>
+    </section>
+
+  <div class="veyraHomeStory homeEnterpriseV1">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     <section id="homeEnterprise" class="homeEnterprise" aria-label="Niveles de implementación Veyra">
       <div class="homeEnterpriseHead">
-        <span class="homeEyebrow">Tres niveles de implementación</span>
+        <span class="homeEyebrow">Customization by design</span>
         <h2>Veyra se adapta al operador, no obliga al operador a adaptarse a Veyra.</h2>
-        <p>Customization puede abarcar identidad visual, colores, logotipo, nomenclatura, cursos, competencias, comportamientos observables, escalas, roles, permisos, KPI, reportes y flujos autorizados.</p>
+        <p>La configuración puede abarcar identidad visual, colores, logotipo, nomenclatura, cursos, competencias, comportamientos observables, escalas, roles, permisos, KPI, reportes y flujos autorizados.</p>
       </div>
       <div class="homeEnterpriseGrid">
-        <article><div class="enterpriseMark">V</div><div><h3>Veyra Native</h3><p>Experiencia Veyra completa para pilotos, instructores, Training Center propio y demostraciones generales.</p></div></article>
-        <article><div class="enterpriseMark">CO</div><div><h3>Co-branded</h3><p>La identidad del cliente convive con Veyra, combinando marca, colores y experiencia según el proyecto.</p></div></article>
-        <article><div class="enterpriseMark">E</div><div><h3>Enterprise / White-label</h3><p>La plataforma puede adoptar la identidad corporativa y estructura operativa del cliente mientras Veyra funciona como núcleo tecnológico.</p></div></article>
+        <article><div class="enterpriseMark">V</div><div><h3>Veyra Native</h3><p>Experiencia Veyra completa para pilotos, instructores, Training Center propio y demostraciones generales.</p><div class="homeEnterpriseTags"><span>Veyra brand</span><span>Core modules</span><span>Standard UX</span></div></div></article>
+        <article><div class="enterpriseMark">CO</div><div><h3>Co-branded</h3><p>La identidad del cliente convive con Veyra, combinando marca, colores, nomenclatura y módulos según el proyecto.</p><div class="homeEnterpriseTags"><span>Shared identity</span><span>Custom colors</span><span>Configurable flows</span></div></div></article>
+        <article><div class="enterpriseMark">E</div><div><h3>Enterprise / White-label</h3><p>La plataforma puede adoptar la identidad corporativa y estructura operativa del cliente mientras Veyra funciona como núcleo tecnológico.</p><div class="homeEnterpriseTags"><span>Client identity</span><span>Enterprise roles</span><span>Custom reporting</span></div></div></article>
       </div>
-      <p class="homeEnterpriseScope">La configuración se plantea por organización para evitar copias independientes del producto y conservar un núcleo seguro, mantenible y escalable.</p>
+      <p class="homeEnterpriseScope">La configuración se plantea por organización para conservar un núcleo común, seguro, mantenible y escalable en lugar de crear copias independientes del producto.</p>
+    </section>
+
+    <section class="homeSecurityEnterprise" aria-label="Seguridad y gobernanza">
+      <div class="homeSecurityHead">
+        <span class="homeEyebrow">Security &amp; Governance</span>
+        <h2>Enterprise no significa solamente más funciones. Significa más control.</h2>
+        <p>La arquitectura de cada implementación se define alrededor de acceso, separación de información, trazabilidad y criterio humano.</p>
+      </div>
+      <div class="homeSecurityGrid">
+        <article><span>01</span><h3>Access by role</h3><p>Permisos y alcance definidos según usuario, organización y módulo.</p></article>
+        <article><span>02</span><h3>Data separation</h3><p>Diseño orientado a separar información entre organizaciones, proyectos y contextos autorizados.</p></article>
+        <article><span>03</span><h3>Server-side controls</h3><p>Las funciones críticas deben validarse fuera del navegador y no depender de valores manipulables del cliente.</p></article>
+        <article><span>04</span><h3>Human-in-the-loop</h3><p>La automatización apoya el análisis sin sustituir la responsabilidad profesional de instructor u organización.</p></article>
+      </div>
+      <a class="homeSecurityLink" href="seguridad-gobernanza-ia.html">Ver principios de seguridad, gobernanza e IA responsable →</a>
+    </section>
+
+    <section class="homeIntegrationLayer" aria-label="Capa de integraciones Veyra">
+      <div class="homeIntegrationHead">
+        <span class="homeEyebrow">Integration layer</span>
+        <h2>Conectar lo que la operación ya utiliza.</h2>
+        <p>Las integraciones se definen por proyecto y permisos disponibles. Veyra no necesita imponer un único proveedor para cada parte del flujo.</p>
+      </div>
+      <div class="homeIntegrationGrid">
+        <article><span>01</span><h3>Identity &amp; Access</h3><p>Autenticación, roles y acceso institucional según la arquitectura acordada.</p></article>
+        <article><span>02</span><h3>Data &amp; Storage</h3><p>Bases de datos, archivos, históricos y fuentes autorizadas de entrenamiento.</p></article>
+        <article><span>03</span><h3>Communication</h3><p>Correo, mensajería, recordatorios y comunicaciones operativas cuando el proyecto lo requiera.</p></article>
+        <article><span>04</span><h3>Automation</h3><p>Flujos programados y tareas repetitivas con controles de acceso y trazabilidad.</p></article>
+        <article><span>05</span><h3>APIs &amp; Interoperability</h3><p>Conexión con sistemas externos cuando existan permisos, interfaces y alcance técnico definidos.</p></article>
+      </div>
+      <p class="homeIntegrationNote">La disponibilidad de una integración concreta depende de la implementación y no implica alianza comercial con proveedores externos.</p>
     </section>
 
     <section class="homeTrust" aria-label="Sectores atendidos por Veyra">
