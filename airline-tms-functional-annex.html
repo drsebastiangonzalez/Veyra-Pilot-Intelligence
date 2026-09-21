@@ -191,6 +191,10 @@ main{min-width:0}
 .dataArchitectureLab{margin-top:10px}.compactHead{margin-bottom:20px}.compactHead h2{font-size:clamp(30px,3vw,42px)}.entityMap{display:grid;grid-template-columns:1fr 36px 1.1fr 36px 1fr 36px 1fr;gap:8px;align-items:center}.entityColumn{display:grid;gap:8px}.entityNode{border:1px solid var(--line);padding:12px;background:#fffaf2}.entityNode b{display:block;font-size:10px}.entityNode span{display:block;color:#73808d;font-size:8px;margin-top:4px}.entityCore{background:#0b1725;color:#fff;border:1px solid #c7a159;padding:20px;text-align:center}.entityCore b{display:block;font-family:Georgia,serif;font-size:24px;font-weight:400}.entityCore span,.entityCore small{display:block;color:#a9b5c1;font-size:8px;margin-top:6px}.entityLinks{display:grid;place-items:center;color:#b48a3e;font-size:22px}
 @media(max-width:1100px){.gradingGrid,.trainingAnalysisGrid{grid-template-columns:1fr}.entityMap{grid-template-columns:1fr}.entityLinks{transform:rotate(90deg)}}
 @media(max-width:680px){.labStatus{grid-template-columns:1fr 1fr}.labToolbar{align-items:stretch;flex-direction:column}.labToolbar select{min-width:0;width:100%}.gaugeMeta,.studyPlan{grid-template-columns:1fr}.recentRecord{grid-template-columns:68px 1fr 40px}.recentRecord span{display:none}.traineeAssistantHead{flex-direction:column}}
+
+.instructorKpiLab{margin-top:10px;background:#fff;border:1px solid var(--line);padding:20px}.instructorKpiHead{display:flex;justify-content:space-between;gap:20px;align-items:end}.instructorKpiHead h3{font-family:Georgia,serif;font-size:28px;font-weight:400;margin:7px 0;color:#0a1728}.instructorKpiHead p{color:#687482;font-size:10px;line-height:1.55;max-width:760px}.instructorKpiHead label{display:grid;gap:6px}.instructorKpiHead label span{font-size:8px;color:#7b6541;font-weight:900;letter-spacing:.07em}.instructorKpiHead select{min-width:230px;padding:10px;border:1px solid #cfc4b3;background:#fff}.instructorKpiCards{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:17px 0}.instructorKpiCards>div{background:#0b1725;padding:13px;border:1px solid rgba(199,161,89,.23)}.instructorKpiCards small{display:block;color:#91a0ae;font-size:7px;text-transform:uppercase;letter-spacing:.05em}.instructorKpiCards b{display:block;color:#fff;font-size:18px;margin-top:6px}.instructorKpiCards span{display:block;color:#778898;font-size:7px;margin-top:4px}.instructorKpiGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.insPanel{border:1px solid var(--line);padding:18px;background:#fffaf3}.coverageRows{display:grid;gap:13px;margin-top:18px}.coverageRows>div{display:grid;grid-template-columns:125px 1fr 52px;gap:8px;align-items:center;font-size:9px}.coverageRows>div>span{color:#4d5968}.coverageRows i{height:8px;background:#e9e2d7;display:block}.coverageRows i b{height:100%;display:block;background:#7d987f;width:0}.coverageRows em{font-style:normal;text-align:right;color:#6c7784}.programMix{margin-top:14px}.programMixRow{display:grid;grid-template-columns:1fr 52px 52px;gap:8px;border-top:1px solid var(--line);padding:9px 0;font-size:9px}.programMixRow span{color:#4d5968}.programMixRow b,.programMixRow em{text-align:right}.programMixRow em{font-style:normal;color:#866426}.insSignals{display:grid;gap:8px;margin-top:14px}.insSignal{display:grid;grid-template-columns:85px 1fr 68px;gap:8px;align-items:center;border-top:1px solid var(--line);padding:9px 0;font-size:9px}.insSignal>b{color:#7c612e}.insSignal span{color:#4f5b69}.insSignal em{font-style:normal;text-align:right}.insOk{color:#27715c}.insWatch{color:#9a671f}.instructorKpiNote{margin-top:12px;padding:12px 14px;background:#f7f2e8;border-left:3px solid #c7a159;color:#687482;font-size:9px;line-height:1.5}
+@media(max-width:1100px){.instructorKpiCards{grid-template-columns:repeat(3,1fr)}.instructorKpiHead{align-items:stretch;flex-direction:column}.instructorKpiHead select{width:100%;min-width:0}}
+@media(max-width:680px){.instructorKpiCards,.instructorKpiGrid{grid-template-columns:1fr}.coverageRows>div{grid-template-columns:1fr 48px}.coverageRows i{grid-column:1/-1}.insSignal{grid-template-columns:70px 1fr}.insSignal em{display:none}}
 </style>
 </head>
 <body>
@@ -567,6 +571,54 @@ main{min-width:0}
         <div class="studentActions"><button type="button">Generate practice questions</button><button type="button">Open approved training aids</button><button type="button">Explain my latest feedback</button></div>
       </div>
 
+      <div class="instructorKpiLab">
+        <div class="instructorKpiHead">
+          <div>
+            <span class="panelNum">INSTRUCTOR KPI &amp; STANDARDIZATION</span>
+            <h3>Measure what helps Training manage quality, not a popularity score.</h3>
+            <p>Los KPI se presentan por dimensión: actividad, evidencia, cobertura, consistencia y follow-up. No se crea un ranking de instructores.</p>
+          </div>
+          <label><span>SELECT SYNTHETIC INSTRUCTOR</span><select id="labInstructorSelect"><option>Loading…</option></select></label>
+        </div>
+
+        <div class="instructorKpiCards">
+          <div><small>Sessions assessed</small><b id="insSessions">—</b><span>workload context</span></div>
+          <div><small>Trainees assessed</small><b id="insTrainees">—</b><span>unique synthetic trainees</span></div>
+          <div><small>Mean grade</small><b id="insMean">—</b><span>descriptive only</span></div>
+          <div><small>Calibration delta</small><b id="insDelta">—</b><span>vs comparable fleet pool</span></div>
+          <div><small>Evidence coverage</small><b id="insEvidence">—</b><span>grades with linked evidence</span></div>
+          <div><small>Follow-up consistency</small><b id="insFollowup">—</b><span>triggered when rule applies</span></div>
+        </div>
+
+        <div class="instructorKpiGrid">
+          <article class="insPanel">
+            <div class="labCardHead"><div><span class="panelNum">GRADE DISTRIBUTION</span><h3>How this instructor grades</h3></div><span class="analysisMode">contextual</span></div>
+            <div id="insGradeBars" class="gradeBars"></div>
+          </article>
+
+          <article class="insPanel">
+            <div class="labCardHead"><div><span class="panelNum">COVERAGE</span><h3>What gets observed and documented</h3></div><span id="insCoverageState" class="analysisMode">—</span></div>
+            <div class="coverageRows">
+              <div><span>Competency coverage</span><i><b id="insCompCoverageBar"></b></i><em id="insCompCoverage">—</em></div>
+              <div><span>OB coverage</span><i><b id="insObCoverageBar"></b></i><em id="insObCoverage">—</em></div>
+              <div><span>Low-grade evidence</span><i><b id="insLowEvidenceBar"></b></i><em id="insLowEvidence">—</em></div>
+            </div>
+          </article>
+
+          <article class="insPanel">
+            <div class="labCardHead"><div><span class="panelNum">PROGRAM CONTEXT</span><h3>Training vs checking activity</h3></div><span class="analysisMode">same instructor</span></div>
+            <div id="insProgramMix" class="programMix"></div>
+          </article>
+
+          <article class="insPanel">
+            <div class="labCardHead"><div><span class="panelNum">QUALITY SIGNALS</span><h3>Items for standardization review</h3></div><span class="analysisMode gold">review, not ranking</span></div>
+            <div id="insSignals" class="insSignals"></div>
+          </article>
+        </div>
+
+        <div class="instructorKpiNote"><b>Operational rule:</b> un KPI de instructor debe ayudar a detectar necesidades de standardization, documentación o apoyo. No debe usarse como “mejor/peor instructor” sin metodología validada, contexto comparable y revisión humana.</div>
+      </div>
+
       <div class="dataArchitectureLab">
         <div class="sectionHead compactHead">
           <div><div class="eyebrow">Synthetic Data Architecture</div><h2>Diseñar el dato antes de diseñar más pantallas.</h2></div>
@@ -894,6 +946,83 @@ main{min-width:0}
     ];
   }
 
+  function updateInstructor(id){
+    const instructor=demo.instructors.find(i=>i.id===id);
+    const records=demo.records.filter(r=>r.instructor_id===id);
+    const grades=allGrades(records);
+    const comparable=demo.records.filter(r=>instructor && (instructor.fleet==="MULTI" || r.fleet===instructor.fleet));
+    const comparableGrades=allGrades(comparable);
+    const ownMean=mean(grades.map(g=>g.grade));
+    const poolMean=mean(comparableGrades.map(g=>g.grade));
+    const delta=ownMean-poolMean;
+    const traineeCount=new Set(records.map(r=>r.trainee_id)).size;
+    const evidenceCount=records.reduce((acc,r)=>acc+r.grades.filter(g=>r.observations.some(o=>o.ob_id===g.ob_id && o.evidence)).length,0);
+    const evidencePct=grades.length?evidenceCount/grades.length*100:0;
+    const lowGrades=[];
+    records.forEach(r=>r.grades.forEach(g=>{if(g.grade<=2) lowGrades.push({r,g});}));
+    const lowEvidence=lowGrades.filter(x=>x.r.observations.some(o=>o.ob_id===x.g.ob_id && o.evidence)).length;
+    const lowEvidencePct=lowGrades.length?lowEvidence/lowGrades.length*100:100;
+    const followupCandidates=records.filter(r=>r.grades.filter(g=>g.grade<=2).length>=2);
+    const followupDone=followupCandidates.filter(r=>r.additional_training).length;
+    const followupPct=followupCandidates.length?followupDone/followupCandidates.length*100:100;
+    const comps=new Set(grades.map(g=>g.competency));
+    const obs=new Set(grades.map(g=>g.ob_id));
+    const compCoverage=comps.size/demo.competencies.length*100;
+    const obCoverage=obs.size/demo.observable_behaviours.length*100;
+
+    $("insSessions").textContent=records.length;
+    $("insTrainees").textContent=traineeCount;
+    $("insMean").textContent=fmt(ownMean);
+    $("insDelta").textContent=(delta>=0?"+":"")+fmt(delta);
+    $("insEvidence").textContent=Math.round(evidencePct)+"%";
+    $("insFollowup").textContent=Math.round(followupPct)+"%";
+
+    const counts={1:0,2:0,3:0,4:0,5:0}; grades.forEach(g=>counts[g.grade]++);
+    $("insGradeBars").innerHTML=[1,2,3,4,5].map(g=>{
+      const pct=grades.length?counts[g]/grades.length*100:0;
+      return '<div class="gradeBarRow"><span class="gradeNumber g'+g+'">'+g+'</span><i><b style="width:'+pct.toFixed(1)+'%"></b></i><em>'+counts[g]+' · '+pct.toFixed(0)+'%</em></div>';
+    }).join("");
+
+    $("insCompCoverage").textContent=comps.size+"/"+demo.competencies.length;
+    $("insObCoverage").textContent=obs.size+"/"+demo.observable_behaviours.length;
+    $("insLowEvidence").textContent=Math.round(lowEvidencePct)+"%";
+    $("insCompCoverageBar").style.width=compCoverage+"%";
+    $("insObCoverageBar").style.width=obCoverage+"%";
+    $("insLowEvidenceBar").style.width=lowEvidencePct+"%";
+    $("insCoverageState").textContent=(lowEvidencePct>=95 && compCoverage>=70)?"Complete":"Review";
+
+    const byType={};
+    records.forEach(r=>{const x=(byType[r.type] ||= {n:0,means:[]});x.n++;x.means.push(r.mean_grade);});
+    $("insProgramMix").innerHTML=Object.entries(byType).sort((a,b)=>b[1].n-a[1].n).map(([type,v])=>'<div class="programMixRow"><span>'+type+'</span><b>'+v.n+'</b><em>'+fmt(mean(v.means))+'</em></div>').join("");
+
+    const sameGradeRecords=records.filter(r=>new Set(r.grades.map(g=>g.grade)).size===1).length;
+    const sameGradePct=records.length?sameGradeRecords/records.length*100:0;
+    const stdDev=grades.length?Math.sqrt(mean(grades.map(g=>Math.pow(g.grade-ownMean,2)))):0;
+    const mismatch=records.filter(r=>{
+      const lows=r.grades.filter(g=>g.grade<=2).length;
+      return (lows>=3 && !/NOT PROFICIENT|FAIL/.test(r.outcome)) || (lows===0 && /NOT PROFICIENT|FAIL/.test(r.outcome));
+    }).length;
+    const signals=[
+      ["Calibration delta",""+(delta>=0?"+":"")+fmt(delta),Math.abs(delta)<=0.20?"insOk":"insWatch"],
+      ["Grade spread",fmt(stdDev),stdDev>=0.35 && stdDev<=1.10?"insOk":"insWatch"],
+      ["Same-grade records",sameGradePct.toFixed(0)+"%",sameGradePct<=15?"insOk":"insWatch"],
+      ["Low-grade evidence",Math.round(lowEvidencePct)+"%",lowEvidencePct>=95?"insOk":"insWatch"],
+      ["Record mismatch",String(mismatch),mismatch===0?"insOk":"insWatch"]
+    ];
+    $("insSignals").innerHTML=signals.map(s=>'<div class="insSignal"><b>'+s[0]+'</b><span>'+standardizationExplanation(s[0])+'</span><em class="'+s[2]+'">'+s[1]+'</em></div>').join("");
+  }
+
+  function standardizationExplanation(name){
+    const m={
+      "Calibration delta":"Descriptive difference vs comparable fleet pool.",
+      "Grade spread":"Checks whether grades have meaningful spread.",
+      "Same-grade records":"Flags repeated flat grading patterns.",
+      "Low-grade evidence":"Verifies documentation when grades are low.",
+      "Record mismatch":"Checks logical consistency between grades and outcome."
+    };
+    return m[name]||"";
+  }
+
   function reviewObservation(){
     let text=$("observationInput").value.trim();
     const replacements=[
@@ -941,8 +1070,11 @@ main{min-width:0}
       $("labGradeCount").textContent=demo.records.reduce((a,r)=>a+r.grades.length,0);
       $("labTraineeSelect").innerHTML=demo.trainees.map(t=>'<option value="'+t.id+'">'+t.label+' · '+t.fleet+' · '+t.rank+'</option>').join("");
       $("labTraineeSelect").addEventListener("change",e=>updateTrainee(e.target.value));
+      $("labInstructorSelect").innerHTML=demo.instructors.map(i=>'<option value="'+i.id+'">'+i.label+' · '+i.role+' · '+i.fleet+'</option>').join("");
+      $("labInstructorSelect").addEventListener("change",e=>updateInstructor(e.target.value));
       $("analyzeObservationBtn").addEventListener("click",reviewObservation);
       updateTrainee(demo.trainees[0].id);
+      updateInstructor(demo.instructors[0].id);
     }catch(err){
       $("labDatasetVersion").textContent="Dataset unavailable";
       $("analysisSummary").innerHTML="<p>Could not load the synthetic dataset.</p>";
