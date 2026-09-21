@@ -175,6 +175,22 @@ main{min-width:0}
 .kpi span{display:block;margin-top:5px;color:#8a949f;font-size:8px}
 @media(max-width:1100px){.recordWorkbench,.intelDeepDive,.managerGrid,.standardGrid{grid-template-columns:1fr}.builderFrame{grid-template-columns:1fr}.builderPalette{grid-template-columns:repeat(4,1fr)}.qualityGate{grid-template-columns:1fr 1fr}.qualityRules{grid-template-columns:1fr}.knowledgeGrid{grid-template-columns:1fr}.ruleBuilder{grid-template-columns:1fr}.ruleArrow{transform:rotate(90deg)}}
 @media(max-width:680px){.recordMetaV2,.signatureGrid,.intelStrip,.stdMetrics{grid-template-columns:1fr 1fr}.builderPalette{grid-template-columns:1fr 1fr}.qualityGate{grid-template-columns:1fr}.workflowRow,.qualityRule{grid-template-columns:36px 1fr}.workflowRow>*:nth-child(3),.workflowRow>*:nth-child(4),.qualityRule>em{display:none}.effectMock{flex-direction:column;align-items:stretch}.effectMock>span{transform:rotate(90deg);text-align:center}.recordRows>div{grid-template-columns:1fr}.recordRows em{text-align:left}}
+
+/* === Synthetic Intelligence Lab v1 === */
+.intelligenceLab{background:linear-gradient(180deg,#f5efe4 0%,#fffaf2 45%,#f5efe4 100%)}
+.labStatus{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}.labStatus>div{background:#0b1725;border:1px solid rgba(199,161,89,.28);padding:14px}.labStatus small{display:block;color:#92a0ae;font-size:8px;text-transform:uppercase;letter-spacing:.07em}.labStatus b{display:block;color:#fff;margin-top:6px;font-size:15px}
+.labToolbar{display:flex;justify-content:space-between;gap:14px;align-items:end;margin-bottom:14px;padding:14px;background:#fff;border:1px solid var(--line)}.labToolbar label{display:grid;gap:6px}.labToolbar label span{font-size:8px;color:#7b6541;font-weight:900;letter-spacing:.08em}.labToolbar select{min-width:260px;padding:10px 12px;border:1px solid #cfc4b3;background:#fff;color:#172033}.labNotice{color:#8a6b33;font-size:9px;border:1px solid #d8c8a6;padding:8px 10px;background:#fffaf2}
+.gradingGrid{display:grid;grid-template-columns:.8fr .95fr 1.25fr;gap:10px}.gradingGaugeCard,.gradeDistributionCard,.recentTrainingCard,.analysisCard,.instructorAiCard,.traineeAssistantLab,.dataArchitectureLab{background:#fff;border:1px solid var(--line);padding:20px}
+.labCardHead{display:flex;justify-content:space-between;gap:12px;align-items:start}.labCardHead h3,.traineeAssistantHead h3{font-family:Georgia,serif;font-size:24px;font-weight:400;margin:7px 0 0;color:#0a1728}.labBand,.analysisMode,.traineeFocusBadge{border:1px solid #d4c9b8;padding:6px 8px;color:#665a46;font-size:8px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;white-space:nowrap}.analysisMode{color:#47697f;border-color:#bfd0dc;background:#eef4f7}.analysisMode.gold{color:#8a6428;border-color:#d9c59a;background:#fff8e9}
+.gaugeWrap{display:grid;place-items:center;margin:7px 0}.gaugeWrap svg{width:min(100%,300px)}.gaugeTrack{fill:none;stroke:#e5ded2;stroke-width:18;stroke-linecap:round}.gaugeValue{fill:none;stroke:#c79b48;stroke-width:18;stroke-linecap:round;stroke-dasharray:299;stroke-dashoffset:299;transition:stroke-dashoffset .45s ease}.gaugeScore{font-size:30px;font-weight:700;fill:#0b1725}.gaugeCaption{font-size:8px;fill:#7a8591;text-transform:uppercase;letter-spacing:.04em}.gaugeTick{font-size:8px;fill:#9a8769}.gaugeMeta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.gaugeMeta span{background:#f6f1e8;padding:10px}.gaugeMeta small{display:block;font-size:7px;color:#7a8592}.gaugeMeta b{display:block;margin-top:5px;font-size:10px}
+.gradeBars{display:grid;gap:10px;margin-top:17px}.gradeBarRow{display:grid;grid-template-columns:26px 1fr 74px;gap:8px;align-items:center}.gradeNumber{width:24px;height:24px;display:grid;place-items:center;border-radius:4px;font-weight:900;font-size:9px;color:#fff}.g1{background:#9a433d}.g2{background:#d88b2e}.g3{background:#a2b77f}.g4{background:#5f8f71}.g5{background:#31516c}.gradeBarRow i{height:9px;background:#eee7db;display:block}.gradeBarRow i b{height:100%;display:block;background:#b58a3c}.gradeBarRow em{font-style:normal;color:#66717f;font-size:9px;text-align:right}.distributionNote{margin-top:14px;color:#78838f;font-size:9px;line-height:1.45}
+.recentRecords{margin-top:13px}.recentRecord{display:grid;grid-template-columns:74px 1.2fr 78px 42px;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:9px}.recentRecord time{color:#7e8995}.recentRecord b{font-size:9px}.recentRecord span{color:#65717f}.recentRecord em{font-style:normal;text-align:right;font-weight:900;color:#866324}
+.trainingAnalysisGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.analysisSummary{margin-top:14px}.analysisSummary h4{font-size:13px;margin:0 0 6px}.analysisSummary p{font-size:10px;color:#667381;line-height:1.5;margin:0 0 10px}.analysisBullet{display:grid;grid-template-columns:75px 1fr;gap:9px;border-top:1px solid var(--line);padding:10px 0}.analysisBullet b{font-size:9px;color:#8a672c;text-transform:uppercase;letter-spacing:.04em}.analysisBullet span{font-size:10px;color:#3f4c5b}.analysisTrace{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:12px}.analysisTrace span{padding:7px 8px;background:#0b1725;color:#dfe5eb;font-size:8px}.analysisTrace b{color:#b98d3f}
+.noteLabel{display:block;margin-top:14px;font-size:8px;color:#7c6745;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.instructorAiCard textarea{width:100%;min-height:90px;resize:vertical;margin-top:6px;padding:12px;border:1px solid #d3c9b9;background:#fffaf2;color:#25313f;font:inherit;font-size:11px;line-height:1.45}.labAction{margin-top:9px;border:0;background:#0b1725;color:#fff;padding:11px 14px;font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.assistantOutput{margin-top:12px;display:grid;gap:8px}.assistantOutput>div{border-left:3px solid #c7a159;background:#f7f2e8;padding:10px 12px}.assistantOutput small{display:block;color:#8c6a31;font-size:7px;text-transform:uppercase;letter-spacing:.06em;font-weight:900}.assistantOutput p{margin:5px 0 0;color:#44505f;font-size:10px;line-height:1.5}.assistantTags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.assistantTags span{border:1px solid #d5c9b7;padding:5px 7px;font-size:8px;background:#fff}.assistantGuardrail{margin-top:11px;color:#7c8793;font-size:8px;line-height:1.45}
+.traineeAssistantLab{margin-top:10px;background:linear-gradient(135deg,#07111d,#10283c);color:#fff;border-color:rgba(199,161,89,.35)}.traineeAssistantHead{display:flex;justify-content:space-between;gap:15px;align-items:start}.traineeAssistantHead h3{color:#fff}.traineeAssistantHead p{color:#b8c3ce;max-width:760px;font-size:10px;line-height:1.55}.traineeFocusBadge{color:#e3c47d;border-color:rgba(199,161,89,.45)}.studyPlan{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}.studyPlan>div{background:#0d1d2c;border:1px solid rgba(255,255,255,.08);padding:15px}.studyPlan span{color:#d9b966;font-size:8px;font-weight:900}.studyPlan b{display:block;margin:7px 0;color:#fff}.studyPlan p{color:#9fabb7;font-size:9px;line-height:1.5;margin:0}.studentActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.studentActions button{border:1px solid rgba(199,161,89,.35);background:transparent;color:#d9c69a;padding:8px 10px;font-size:8px;text-transform:uppercase;letter-spacing:.05em}
+.dataArchitectureLab{margin-top:10px}.compactHead{margin-bottom:20px}.compactHead h2{font-size:clamp(30px,3vw,42px)}.entityMap{display:grid;grid-template-columns:1fr 36px 1.1fr 36px 1fr 36px 1fr;gap:8px;align-items:center}.entityColumn{display:grid;gap:8px}.entityNode{border:1px solid var(--line);padding:12px;background:#fffaf2}.entityNode b{display:block;font-size:10px}.entityNode span{display:block;color:#73808d;font-size:8px;margin-top:4px}.entityCore{background:#0b1725;color:#fff;border:1px solid #c7a159;padding:20px;text-align:center}.entityCore b{display:block;font-family:Georgia,serif;font-size:24px;font-weight:400}.entityCore span,.entityCore small{display:block;color:#a9b5c1;font-size:8px;margin-top:6px}.entityLinks{display:grid;place-items:center;color:#b48a3e;font-size:22px}
+@media(max-width:1100px){.gradingGrid,.trainingAnalysisGrid{grid-template-columns:1fr}.entityMap{grid-template-columns:1fr}.entityLinks{transform:rotate(90deg)}}
+@media(max-width:680px){.labStatus{grid-template-columns:1fr 1fr}.labToolbar{align-items:stretch;flex-direction:column}.labToolbar select{min-width:0;width:100%}.gaugeMeta,.studyPlan{grid-template-columns:1fr}.recentRecord{grid-template-columns:68px 1fr 40px}.recentRecord span{display:none}.traineeAssistantHead{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -196,6 +212,7 @@ main{min-width:0}
     <a href="#ebt"><span>06</span>Competency Intelligence</a>
     <a href="#qms"><span>07</span>Qualification Management</a>
     <a href="#manager"><span>08</span>Manager Analytics</a>
+    <a href="#intelligence-lab"><span>08A</span>Synthetic Intelligence Lab</a>
     <a href="#design"><span>09</span>EBT Program &amp; Scenario Builder</a>
     <a href="#workflow"><span>10</span>Low Performance &amp; Workflows</a>
     <a href="#standardization"><span>11</span>Instructor Standardization</a>
@@ -474,6 +491,111 @@ main{min-width:0}
       </div>
     </section>
 
+    <section class="section intelligenceLab" id="intelligence-lab">
+      <div class="sectionHead">
+        <div><div class="eyebrow">08A · Synthetic Intelligence Lab</div><h2>Una base de datos sintética para probar análisis, gráficas y asistentes.</h2></div>
+        <p>Esta sección trabaja con registros inventados y separados de cualquier dato real. Sirve para desarrollar lógica de análisis, Instructor Assistant, Trainee Assistant y visualizaciones antes de conectar fuentes productivas.</p>
+      </div>
+
+      <div class="labStatus">
+        <div><small>Dataset</small><b id="labDatasetVersion">Loading…</b></div>
+        <div><small>Trainees</small><b id="labTraineeCount">—</b></div>
+        <div><small>Instructors</small><b id="labInstructorCount">—</b></div>
+        <div><small>Training records</small><b id="labRecordCount">—</b></div>
+        <div><small>Competency grades</small><b id="labGradeCount">—</b></div>
+      </div>
+
+      <div class="labToolbar">
+        <label><span>SELECT SYNTHETIC TRAINEE</span><select id="labTraineeSelect"><option>Loading…</option></select></label>
+        <div class="labNotice">Synthetic data only · no real person · no operator data</div>
+      </div>
+
+      <div class="gradingGrid">
+        <article class="gradingGaugeCard">
+          <div class="labCardHead"><div><span class="panelNum">AVERAGE GRADING</span><h3>Current training picture</h3></div><span id="avgBand" class="labBand">—</span></div>
+          <div class="gaugeWrap">
+            <svg viewBox="0 0 240 145" role="img" aria-label="Average grading gauge">
+              <path d="M25 120 A95 95 0 0 1 215 120" class="gaugeTrack"></path>
+              <path d="M25 120 A95 95 0 0 1 215 120" class="gaugeValue" id="avgGauge"></path>
+              <text x="120" y="103" text-anchor="middle" class="gaugeScore" id="avgScore">—</text>
+              <text x="120" y="122" text-anchor="middle" class="gaugeCaption">mean grade · 1–5</text>
+              <text x="25" y="138" class="gaugeTick">1</text><text x="116" y="34" class="gaugeTick">3</text><text x="210" y="138" class="gaugeTick">5</text>
+            </svg>
+          </div>
+          <div class="gaugeMeta"><span><small>Last 5 mean</small><b id="last5Mean">—</b></span><span><small>Trend</small><b id="avgTrend">—</b></span><span><small>Weakest signal</small><b id="weakestComp">—</b></span></div>
+        </article>
+
+        <article class="gradeDistributionCard">
+          <div class="labCardHead"><div><span class="panelNum">GRADE DISTRIBUTION</span><h3>Evidence behind the average</h3></div><span id="gradeTotal" class="labBand">— grades</span></div>
+          <div class="gradeBars" id="gradeBars"></div>
+          <div class="distributionNote">El promedio nunca se interpreta solo: se acompaña de distribución, tendencia, OB y evidencia.</div>
+        </article>
+
+        <article class="recentTrainingCard">
+          <div class="labCardHead"><div><span class="panelNum">LAST TRAININGS</span><h3>Recent records</h3></div><span class="labBand">last 5</span></div>
+          <div id="recentRecords" class="recentRecords"></div>
+        </article>
+      </div>
+
+      <div class="trainingAnalysisGrid">
+        <article class="analysisCard">
+          <div class="labCardHead"><div><span class="panelNum">DETERMINISTIC ANALYSIS</span><h3>What is happening in recent training?</h3></div><span class="analysisMode">no LLM required</span></div>
+          <div id="analysisSummary" class="analysisSummary"><p>Loading synthetic analysis…</p></div>
+          <div class="analysisTrace" id="analysisTrace"></div>
+        </article>
+
+        <article class="instructorAiCard">
+          <div class="labCardHead"><div><span class="panelNum">INSTRUCTOR ASSISTANT</span><h3>From free text to structured evidence</h3></div><span class="analysisMode gold">AI-ready</span></div>
+          <label class="noteLabel" for="observationInput">Instructor observation</label>
+          <textarea id="observationInput">durante la aproximacion el piloto tuvo mala comunicacion y se demoro en tomar la desicion cuando aumento la carga de trabajo</textarea>
+          <button id="analyzeObservationBtn" type="button" class="labAction">Review text & propose competencies</button>
+          <div id="assistantOutput" class="assistantOutput">
+            <div><small>Corrected text</small><p>Run the review to see the structured result.</p></div>
+          </div>
+          <div class="assistantGuardrail">Prototype logic is local and deterministic on this page. In production, AI calls would be server-side, auditable and always subject to instructor validation.</div>
+        </article>
+      </div>
+
+      <div class="traineeAssistantLab">
+        <div class="traineeAssistantHead">
+          <div><span class="panelNum">TRAINEE ASSISTANT</span><h3>Turn personal training history into a study plan.</h3><p>El asistente utiliza únicamente información autorizada del propio trainee y propone preparación, práctica y autoevaluación; no altera resultados oficiales.</p></div>
+          <span id="traineeFocusBadge" class="traineeFocusBadge">Focus · —</span>
+        </div>
+        <div id="studyPlan" class="studyPlan">
+          <div><span>01</span><b>Review</b><p>Loading…</p></div><div><span>02</span><b>Practice</b><p>Loading…</p></div><div><span>03</span><b>Self-check</b><p>Loading…</p></div>
+        </div>
+        <div class="studentActions"><button type="button">Generate practice questions</button><button type="button">Open approved training aids</button><button type="button">Explain my latest feedback</button></div>
+      </div>
+
+      <div class="dataArchitectureLab">
+        <div class="sectionHead compactHead">
+          <div><div class="eyebrow">Synthetic Data Architecture</div><h2>Diseñar el dato antes de diseñar más pantallas.</h2></div>
+          <p>El análisis solo es explicable si cada resultado mantiene relaciones claras entre sesión, programa, evidencia, competencia, OB y actor.</p>
+        </div>
+        <div class="entityMap">
+          <div class="entityColumn">
+            <div class="entityNode"><b>Trainee</b><span>identity · fleet · rank · base</span></div>
+            <div class="entityNode"><b>Instructor</b><span>role · fleet · calibration context</span></div>
+            <div class="entityNode"><b>Program Version</b><span>versioned design · criteria</span></div>
+          </div>
+          <div class="entityLinks">→</div>
+          <div class="entityCore"><b>Training Record</b><span>immutable context + signatures</span><small>Session · event · malfunction · topic</small></div>
+          <div class="entityLinks">→</div>
+          <div class="entityColumn">
+            <div class="entityNode"><b>Competency Grade</b><span>1–5 · band · trend</span></div>
+            <div class="entityNode"><b>Observable Behaviour</b><span>linked evidence</span></div>
+            <div class="entityNode"><b>Evidence</b><span>observation · event · provenance</span></div>
+          </div>
+          <div class="entityLinks">→</div>
+          <div class="entityColumn">
+            <div class="entityNode"><b>Workflow Case</b><span>rule · owner · status</span></div>
+            <div class="entityNode"><b>AI Analysis Run</b><span>inputs · figures · model · validation</span></div>
+            <div class="entityNode"><b>Qualification / Safety Signal</b><span>impact · effectiveness link</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="design">
       <div class="sectionHead">
         <div><div class="eyebrow">09 · EBT Program &amp; Scenario Builder</div><h2>Diseñar una sesión como estructura operacional, no como formulario.</h2></div>
@@ -653,5 +775,180 @@ main{min-width:0}
     <footer class="footer"><strong>VEYRA PILOT INTELLIGENCE</strong> · Airline TMS Functional Core · Working draft · v0.2</footer>
   </main>
 </div>
-</body>
+<script>
+(function(){
+  "use strict";
+  const DATA_URL="data/airline-tms-demo-seed-v1.json?v=1";
+  let demo=null;
+
+  const $=id=>document.getElementById(id);
+  const mean=arr=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
+  const fmt=n=>Number(n).toFixed(2);
+
+  function competencyName(code){
+    const c=demo.competencies.find(x=>x.code===code);
+    return c?c.name:code;
+  }
+  function recordsForTrainee(id){
+    return demo.records.filter(r=>r.trainee_id===id).sort((a,b)=>b.date.localeCompare(a.date));
+  }
+  function allGrades(records){
+    return records.flatMap(r=>r.grades.map(g=>({...g,record_id:r.id,date:r.date,event:r.event,topic:r.topic,malfunction:r.malfunction})));
+  }
+  function compStats(records){
+    const map={};
+    for(const g of allGrades(records)){
+      (map[g.competency] ||= []).push(g);
+    }
+    return Object.entries(map).map(([code,items])=>({
+      code,items,mean:mean(items.map(x=>x.grade)),
+      low:items.filter(x=>x.grade<=2).length,
+      last:items.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5)
+    })).sort((a,b)=>a.mean-b.mean);
+  }
+  function trendFor(records){
+    const sorted=records.slice().sort((a,b)=>a.date.localeCompare(b.date));
+    if(sorted.length<4) return "insufficient";
+    const half=Math.floor(sorted.length/2);
+    const a=mean(sorted.slice(0,half).map(r=>r.mean_grade));
+    const b=mean(sorted.slice(half).map(r=>r.mean_grade));
+    const d=b-a;
+    return d>0.12?"improving":d<-0.12?"falling":"stable";
+  }
+  function band(avg){
+    if(avg>=4.1) return "Above";
+    if(avg>=3.0) return "At standard";
+    if(avg>=2.5) return "Watch";
+    return "Below";
+  }
+  function obText(obId){
+    const ob=demo.observable_behaviours.find(o=>o.id===obId);
+    return ob?ob.text:obId;
+  }
+  function updateTrainee(id){
+    const records=recordsForTrainee(id);
+    const grades=allGrades(records);
+    const avg=mean(grades.map(g=>g.grade));
+    const pct=Math.max(0,Math.min(1,(avg-1)/4));
+    $("avgScore").textContent=fmt(avg);
+    $("avgBand").textContent=band(avg);
+    $("avgGauge").style.strokeDashoffset=(299*(1-pct)).toFixed(1);
+    const recent=records.slice(0,5);
+    $("last5Mean").textContent=fmt(mean(recent.map(r=>r.mean_grade)));
+    $("avgTrend").textContent=trendFor(records);
+    const stats=compStats(records);
+    const weakest=stats[0];
+    $("weakestComp").textContent=weakest?weakest.code:"—";
+    $("traineeFocusBadge").textContent="Focus · "+(weakest?weakest.code:"—");
+
+    const counts={1:0,2:0,3:0,4:0,5:0};
+    grades.forEach(g=>counts[g.grade]++);
+    $("gradeTotal").textContent=grades.length+" grades";
+    $("gradeBars").innerHTML=[1,2,3,4,5].map(g=>{
+      const p=grades.length?counts[g]/grades.length*100:0;
+      return '<div class="gradeBarRow"><span class="gradeNumber g'+g+'">'+g+'</span><i><b style="width:'+p.toFixed(1)+'%"></b></i><em>'+counts[g]+' · '+p.toFixed(0)+'%</em></div>';
+    }).join("");
+
+    $("recentRecords").innerHTML=recent.map(r=>'<div class="recentRecord"><time>'+r.date+'</time><b>'+r.type+'</b><span>'+r.outcome+'</span><em>'+fmt(r.mean_grade)+'</em></div>').join("");
+
+    if(weakest){
+      const latestWeak=weakest.last[0];
+      const lowObs=weakest.items.filter(x=>x.grade<=2).map(x=>x.ob_id);
+      const freq={}; lowObs.forEach(x=>freq[x]=(freq[x]||0)+1);
+      const recurrent=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0];
+      const recurrentText=recurrent?obText(recurrent[0]):obText(latestWeak.ob_id);
+      const lastFive=weakest.last.map(x=>x.grade);
+      const recentWeakMean=mean(lastFive);
+      const state=weakest.low>0?"recurrent low signal":"development opportunity within standard";
+      $("analysisSummary").innerHTML=
+        '<h4>'+weakest.code+' · '+competencyName(weakest.code)+'</h4>'+
+        '<p>La competencia con menor media acumulada es <b>'+weakest.code+' ('+fmt(weakest.mean)+')</b>. El sistema no concluye por sí solo que exista una deficiencia; genera una señal para revisión humana.</p>'+
+        '<div class="analysisBullet"><b>Recent pattern</b><span>Last '+lastFive.length+' grades: '+lastFive.join(" · ")+' · mean '+fmt(recentWeakMean)+' · '+state+'.</span></div>'+
+        '<div class="analysisBullet"><b>Recurring OB</b><span>'+recurrentText+'</span></div>'+
+        '<div class="analysisBullet"><b>Latest context</b><span>'+latestWeak.event+' · '+latestWeak.topic+' · '+latestWeak.malfunction+'.</span></div>'+
+        '<div class="analysisBullet"><b>Next review</b><span>Open the contributing records and evidence before defining tailored training or an Instructor Focus.</span></div>';
+      $("analysisTrace").innerHTML='<span>'+weakest.code+'</span><b>→</b><span>'+latestWeak.record_id+'</span><b>→</b><span>'+latestWeak.event+'</span><b>→</b><span>'+latestWeak.ob_id+'</span><b>→</b><span>Evidence</span>';
+
+      const plans=studyPlanFor(weakest.code,latestWeak);
+      $("studyPlan").innerHTML=plans.map((p,i)=>'<div><span>0'+(i+1)+'</span><b>'+p.title+'</b><p>'+p.text+'</p></div>').join("");
+    }
+  }
+
+  function studyPlanFor(code,ctx){
+    const map={
+      COM:["Review the approved communication standards and recent feedback linked to "+code+".","Practise a high-workload briefing and closed-loop communication scenario.","Answer 5 self-check questions on communication priorities and escalation."],
+      PSD:["Review the decision model and the evidence from the latest decision-making event.","Practise two time-limited scenarios with explicit option generation and consequence review.","Explain your decision process aloud using a structured self-check."],
+      WLM:["Review task prioritisation, interruption management and use of available resources.","Practise a workload peak scenario with deliberate task shedding and delegation.","Identify the top three priorities at three points in a sample scenario."],
+      LTW:["Review task sharing, leadership cues and how crew input was used in recent sessions.","Practise a scenario that requires explicit delegation and cross-checking.","Prepare three debrief questions about teamwork under high workload."],
+      SAW:["Review the recent event timeline and identify missed or late-changing cues.","Practise anticipation: state the next expected aircraft/operational state every 2 minutes.","Use a short self-test on threat detection and information prioritisation."],
+      FPA:["Review automation mode awareness and intervention criteria.","Practise mode-change callouts and recovery from an automation mismatch.","Self-check the triggers for reverting to a simpler automation strategy."],
+      FPM:["Review manual flight-path tolerances and energy-management cues.","Practise manual recovery from two representative deviations.","Use a quick self-check on energy state, trend and corrective priorities."],
+      PRO:["Review the applicable procedure and where to find its authoritative source.","Practise applying the procedure under time pressure without skipping verification steps.","Complete a procedure-order self-check and explain any conditional branches."],
+      KNO:["Review the approved systems material linked to the latest training topic.","Practise explaining system consequences instead of recalling isolated facts.","Complete a short application-focused self-check using scenario questions."]
+    };
+    const a=map[code]||map.KNO;
+    return [
+      {title:"Review",text:a[0]+" Context: "+ctx.topic+"."},
+      {title:"Practice",text:a[1]},
+      {title:"Self-check",text:a[2]}
+    ];
+  }
+
+  function reviewObservation(){
+    let text=$("observationInput").value.trim();
+    const replacements=[
+      [/aproximacion/gi,"aproximación"],[/comunicacion/gi,"comunicación"],[/desicion/gi,"decisión"],
+      [/demoro/gi,"demoró"],[/aumento/gi,"aumentó"],[/mala comunicación/gi,"comunicación poco clara"]
+    ];
+    let corrected=text;
+    replacements.forEach(([re,val])=>corrected=corrected.replace(re,val));
+    corrected=corrected.charAt(0).toUpperCase()+corrected.slice(1);
+    if(corrected && !/[.!?]$/.test(corrected)) corrected+=".";
+
+    const lower=corrected.toLowerCase();
+    const candidates=[];
+    const add=(code,reason)=>{if(!candidates.some(x=>x.code===code))candidates.push({code,reason});};
+    if(/comunic/.test(lower)) add("COM","The note describes clarity/timeliness of communication.");
+    if(/decisi|opci|resolve|tomar/.test(lower)) add("PSD","The note describes decision timing and problem solving.");
+    if(/carga|workload|priori|demor/.test(lower)) add("WLM","The note references workload and response timing.");
+    if(/equipo|crew|deleg|team/.test(lower)) add("LTW","The note references crew coordination or delegation.");
+    if(/automation|modo|autopilot/.test(lower)) add("FPA","The note references automation management.");
+    if(/proced|sop|regul/.test(lower)) add("PRO","The note references procedure/compliance.");
+    if(candidates.length===0) add("SAW","The observation needs review for situational context and evidence.");
+    const suggested=candidates.slice(0,3);
+    const obSuggestions=suggested.map(x=>{
+      const obs=demo.observable_behaviours.filter(o=>o.competency===x.code);
+      return obs[0] ? obs[0] : {id:x.code+"-?",text:"Review applicable observable behaviour"};
+    });
+    const vague=/mala|buena|bien|mal|demasiado|poco clara/i.test(text);
+    $("assistantOutput").innerHTML=
+      '<div><small>Corrected text</small><p>'+escapeHtml(corrected)+'</p></div>'+
+      '<div><small>Suggested competencies</small><div class="assistantTags">'+suggested.map(x=>'<span><b>'+x.code+'</b> · '+x.reason+'</span>').join("")+'</div></div>'+
+      '<div><small>Possible observable behaviours</small><div class="assistantTags">'+obSuggestions.map(x=>'<span>'+x.id+' · '+x.text+'</span>').join("")+'</div></div>'+
+      '<div><small>Evidence quality check</small><p>'+(vague?'The note contains evaluative wording. Ask the instructor to add observable actions, timing, context and consequence before using it as evidence.':'The note is relatively observable; still confirm context, action and operational consequence.')+'</p></div>';
+  }
+  function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+
+  async function init(){
+    try{
+      const res=await fetch(DATA_URL,{cache:"no-store"});
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      demo=await res.json();
+      $("labDatasetVersion").textContent="Synthetic v"+demo.metadata.version;
+      $("labTraineeCount").textContent=demo.trainees.length;
+      $("labInstructorCount").textContent=demo.instructors.length;
+      $("labRecordCount").textContent=demo.records.length;
+      $("labGradeCount").textContent=demo.records.reduce((a,r)=>a+r.grades.length,0);
+      $("labTraineeSelect").innerHTML=demo.trainees.map(t=>'<option value="'+t.id+'">'+t.label+' · '+t.fleet+' · '+t.rank+'</option>').join("");
+      $("labTraineeSelect").addEventListener("change",e=>updateTrainee(e.target.value));
+      $("analyzeObservationBtn").addEventListener("click",reviewObservation);
+      updateTrainee(demo.trainees[0].id);
+    }catch(err){
+      $("labDatasetVersion").textContent="Dataset unavailable";
+      $("analysisSummary").innerHTML="<p>Could not load the synthetic dataset.</p>";
+    }
+  }
+  init();
+})();
+</script></body>
 </html>
