@@ -205,6 +205,17 @@ main{min-width:0}
 .designGovernance{margin-top:10px;display:grid;grid-template-columns:1fr 1.25fr;gap:10px;background:#f4eee4;border:1px solid var(--line);padding:18px}.governanceIntro h3{font-family:Georgia,serif;font-weight:400;font-size:23px;margin:6px 0}.governanceIntro p{font-size:9px;line-height:1.5;color:#687482}.governanceChecks{display:grid;gap:7px}.govCheck{display:grid;grid-template-columns:58px 1fr;gap:8px;padding:10px;background:#fff;border-left:3px solid #7b9e8f}.govCheck.warn{border-left-color:#c5963f}.govCheck b{font-size:8px;color:#316e5b}.govCheck.warn b{color:#94651f}.govCheck span{font-size:9px;color:#4d5967}.designGovernance .versionFlow{grid-column:1/-1;border-top:1px solid #d8cebd;margin-top:4px}
 @media(max-width:1100px){.designIntent{grid-template-columns:1fr 1fr}.blueprintTimeline{display:flex;overflow:auto}.bpPhase{min-width:230px}.bpArrow{min-width:24px}.designWorkGrid{grid-template-columns:1fr}.assessmentRow{grid-template-columns:1fr 1fr}.assessmentRow>*:nth-child(n+3){display:none}.designGovernance{grid-template-columns:1fr}}
 @media(max-width:680px){.designIntent{grid-template-columns:1fr}.blueprintHead{align-items:flex-start;flex-direction:column}.blueprintMeta{justify-content:flex-start}.logicRows>div,.evidenceRows>div{grid-template-columns:42px 1fr}.logicRows small,.evidenceRows em{grid-column:2}.assessmentRow{grid-template-columns:1fr}.assessmentRow>*:nth-child(n){display:block}.assessmentRow.head{display:none}}
+
+/* === Training Design progressive workflow v1 === */
+.designStepper{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:8px}.designStep{border:1px solid var(--line);background:#fff;padding:13px 14px;text-align:left;display:grid;grid-template-columns:28px 1fr;gap:2px 9px;align-items:center;color:#536071;cursor:pointer}.designStep>span{grid-row:1/3;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;border:1px solid #c7a159;color:#8b6729;font-size:8px;font-weight:900}.designStep b{font-size:10px;color:#172033}.designStep small{font-size:8px;color:#85909d}.designStep.active{background:#0b1725;border-color:#0b1725}.designStep.active b{color:#fff}.designStep.active small{color:#9da9b5}.designStep.active>span{background:#c7a159;color:#07111d}.designProgress{height:3px;background:#e6ded1;margin-bottom:16px;overflow:hidden}.designProgress i{display:block;height:100%;width:20%;background:#c7a159;transition:width .2s ease}
+.designPanels{position:relative}.designPanel{background:#fff;border:1px solid var(--line);padding:22px}.designPanel[hidden]{display:none}.designPanelHead{display:flex;justify-content:space-between;gap:20px;align-items:start;padding-bottom:16px;border-bottom:1px solid var(--line)}.designPanelHead h3{font-family:Georgia,serif;font-size:29px;font-weight:400;margin:6px 0}.designPanelHead p{margin:0;color:#6b7683;font-size:10px}.stepState{border:1px solid #d5cabb;background:#fffaf2;color:#725e3c;padding:7px 9px;font-size:8px;text-transform:uppercase;letter-spacing:.05em;font-weight:900;white-space:nowrap}
+.intentForm{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.intentForm label,.assessmentFields label{display:grid;gap:6px}.intentForm label>span,.assessmentFields label>span{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:#7d6744;font-weight:900}.intentForm textarea,.assessmentFields textarea{min-height:84px;resize:vertical;border:1px solid #d5cabb;background:#fffaf3;padding:11px;color:#273341;font:inherit;font-size:10px;line-height:1.45}.intentForm select,.assessmentFields select{border:1px solid #d5cabb;background:#fff;padding:10px;font-size:10px;color:#273341}.selectChips{display:flex;flex-wrap:wrap;gap:6px}.selectChips button{border:1px solid #d7cebf;background:#fff;padding:8px 10px;color:#5f6976;font-size:8px}.selectChips button.selected{background:#0b1725;color:#fff;border-color:#0b1725}.designHint{margin-top:13px;border-left:3px solid #6f9a84;background:#f0f6f3;padding:11px 13px;color:#56636f;font-size:9px}.designNav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}.designNav button,.publishActions button{border:0;background:#0b1725;color:#fff;padding:11px 14px;font-size:8px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}.designNav button.secondary,.publishActions button.secondary{background:#fff;color:#596573;border:1px solid #d5cabb}
+.sessionTimelineSimple{max-width:920px;margin:18px auto 0;display:grid;gap:7px}.sessionPhase{width:100%;display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;text-align:left;border:1px solid #d8cebd;background:#fffaf3;padding:11px 12px;cursor:pointer}.sessionPhase>span{width:28px;height:28px;border-radius:50%;background:#0b1725;color:#dfbf77;display:grid;place-items:center;font-size:8px;font-weight:900}.sessionPhase b{display:block;font-size:10px;color:#172033}.sessionPhase small{display:block;color:#7b8692;font-size:8px;margin-top:3px}.sessionPhase em{font-style:normal;color:#8a672b;font-size:8px}.sessionPhase.open{border-left:4px solid #c7a159;background:#f8f2e8}.phaseEditor{margin:-1px 0 2px 42px;border:1px solid #e0d7c9;border-top:0;background:#fff;padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.phaseEditor div{padding:10px;background:#f8f4ed}.phaseEditor small{display:block;color:#897459;font-size:7px;text-transform:uppercase}.phaseEditor b{display:block;font-size:9px;margin-top:5px;color:#384553}
+.assessmentBuilderSimple{margin-top:18px;border:1px solid var(--line);background:#fffaf3;padding:15px}.assessmentFocus{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding-bottom:13px;border-bottom:1px solid var(--line)}.focusCode{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#0b1725;color:#e0c27c;font-size:9px;font-weight:900}.assessmentFocus b{display:block;font-size:11px}.assessmentFocus small{display:block;color:#7b8692;font-size:8px;margin-top:4px}.assessmentFocus button{border:1px solid #d5cabb;background:#fff;padding:7px 10px;font-size:8px}.assessmentFields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.assessmentCoverage{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.assessmentCoverage>div{border:1px solid var(--line);background:#fff;padding:11px;display:grid;grid-template-columns:auto 1fr auto;gap:7px;align-items:center}.assessmentCoverage span{color:#916a29;font-size:9px;font-weight:900}.assessmentCoverage b{font-size:9px}.assessmentCoverage em{font-style:normal;color:#34715d;font-size:8px}
+.reviewSummaryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}.reviewSummaryGrid article{border:1px solid var(--line);background:#fffaf3;padding:13px}.reviewSummaryGrid small{display:block;color:#89745a;font-size:7px;text-transform:uppercase}.reviewSummaryGrid b{display:block;margin:6px 0;font-size:10px}.statusOk{color:#2d735e;font-size:8px;font-weight:900}.reviewItem{margin-top:10px;border:1px solid #dfc99d;background:#fff8e8;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}.reviewItem b{display:block;color:#8b6321;font-size:9px}.reviewItem span{display:block;color:#6c7682;font-size:9px;margin-top:3px}.reviewItem button{border:1px solid #d3bd8b;background:#fff;padding:7px 9px;font-size:8px}.reviewDetails{margin-top:10px;border:1px solid var(--line);background:#fff}.reviewDetails summary{cursor:pointer;padding:11px 13px;font-size:9px;font-weight:900;color:#566270}.visibilityCompare{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}.visibilityCompare>div{background:#f7f2e9;padding:12px}.visibilityCompare small{display:block;color:#8c6b34;font-size:7px;font-weight:900}.visibilityCompare b{display:block;font-size:9px;margin:5px 0}.visibilityCompare p{font-size:8px;color:#727d89;line-height:1.45;margin:0}
+.publishCard{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-top:18px;border:1px solid var(--line);background:#fffaf3;padding:18px}.publishIdentity h3{font-family:Georgia,serif;font-weight:400;font-size:26px;margin:7px 0}.publishMeta{display:flex;flex-wrap:wrap;gap:6px}.publishMeta span{border:1px solid #d7cdbc;background:#fff;padding:6px 8px;font-size:8px;color:#697481}.publishMeta b{color:#283441}.publishChecklist{display:grid;gap:7px}.publishChecklist>div{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center;padding:9px;background:#fff;border:1px solid #ded5c6}.publishChecklist span{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#e8f2ee;color:#27705b;font-size:9px;font-weight:900}.publishChecklist b{font-size:9px}.publishChecklist .needsReview span{background:#fff0d7;color:#9a681e}.publishActions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.publishActions .publishPrimary{background:#b48a3d;color:#08121e}.compactVersion{padding-top:15px}
+@media(max-width:1050px){.designStepper{grid-template-columns:1fr 1fr 1fr}.intentForm,.assessmentFields,.publishCard{grid-template-columns:1fr}.phaseEditor,.reviewSummaryGrid,.assessmentCoverage{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.designStepper{grid-template-columns:1fr}.designStep{grid-template-columns:28px 1fr}.designPanel{padding:16px}.designPanelHead{flex-direction:column}.intentForm,.assessmentFields,.phaseEditor,.reviewSummaryGrid,.assessmentCoverage,.visibilityCompare{grid-template-columns:1fr}.phaseEditor{margin-left:0}.assessmentFocus{grid-template-columns:40px 1fr}.assessmentFocus button{grid-column:1/-1}.publishActions{flex-direction:column}.publishActions button{width:100%}}
 </style>
 </head>
 <body>
@@ -227,7 +238,7 @@ main{min-width:0}
     <a href="#qms"><span>07</span>Qualification Management</a>
     <a href="#manager"><span>08</span>Manager Analytics</a>
     <a href="#intelligence-lab"><span>08A</span>Synthetic Intelligence Lab</a>
-    <a href="#design"><span>09</span>EBT Program &amp; Scenario Builder</a>
+    <a href="#design"><span>09</span>Training Design</a>
     <a href="#workflow"><span>10</span>Low Performance &amp; Workflows</a>
     <a href="#standardization"><span>11</span>Instructor Standardization</a>
     <a href="#quality"><span>12</span>Record Quality Engine</a>
@@ -660,93 +671,135 @@ main{min-width:0}
 
     <section class="section" id="design">
       <div class="sectionHead">
-        <div><div class="eyebrow">09 · Training Design Studio · EBT Blueprint</div><h2>Diseñar desde la necesidad operacional hasta la evidencia que se espera observar.</h2></div>
-        <p>Veyra no replica un editor de bloques. El diseño parte de la intención de entrenamiento, define cómo se provocará la situación y especifica qué evidencia debe producir cada fase.</p>
+        <div><div class="eyebrow">09 · Training Design</div><h2>Diseñar una sesión en cinco pasos claros.</h2></div>
+        <p>La pantalla muestra solo lo necesario en cada momento. El usuario define primero la intención, luego construye la sesión, después configura assessment/evidence, revisa y finalmente publica.</p>
       </div>
 
-      <div class="designIntent">
-        <div><span>01</span><small>Operational need</small><b>Decision quality under changing operational conditions</b></div>
-        <div><span>02</span><small>Learning objective</small><b>Recognise, prioritise and act with shared crew understanding</b></div>
-        <div><span>03</span><small>Target intelligence</small><b>PSD · LTW · SAW · WLM</b></div>
-        <div><span>04</span><small>Success measure</small><b>Evidence quality + competency trend + event outcome</b></div>
+      <div class="designStepper" role="tablist" aria-label="Training design workflow">
+        <button class="designStep active" type="button" data-design-step="1" aria-selected="true"><span>01</span><b>Design intent</b><small>Qué y por qué</small></button>
+        <button class="designStep" type="button" data-design-step="2" aria-selected="false"><span>02</span><b>Build session</b><small>Cómo ocurrirá</small></button>
+        <button class="designStep" type="button" data-design-step="3" aria-selected="false"><span>03</span><b>Assessment</b><small>Qué observar</small></button>
+        <button class="designStep" type="button" data-design-step="4" aria-selected="false"><span>04</span><b>Review</b><small>Validar diseño</small></button>
+        <button class="designStep" type="button" data-design-step="5" aria-selected="false"><span>05</span><b>Publish</b><small>Versionar y liberar</small></button>
       </div>
 
-      <div class="blueprintFrame">
-        <div class="blueprintHead">
-          <div><span class="panelNum">SCENARIO BLUEPRINT</span><h3>EBT Recurrent · Module 2 · Design v4</h3></div>
-          <div class="blueprintMeta"><span>Fleet · A320</span><span>Device · FFS</span><span>Total · 04:00</span><span>Status · Draft</span></div>
-        </div>
+      <div class="designProgress"><i id="designProgressBar"></i></div>
 
-        <div class="blueprintTimeline" aria-label="Training design timeline">
-          <article class="bpPhase brief">
-            <header><span>00</span><b>Brief &amp; intent</b><em>00:25</em></header>
-            <div class="bpBody"><p>Set expectations, learning objectives and evidence standards.</p><div class="bpTags"><span>Objectives</span><span>Threat context</span><span>Assessment rules</span></div></div>
-          </article>
-          <div class="bpArrow">→</div>
-          <article class="bpPhase eval">
-            <header><span>01</span><b>Evaluation window</b><em>01:10</em></header>
-            <div class="bpBody"><p>Normal operation with planned opportunities to observe baseline performance.</p><div class="bpTags"><span>PSD</span><span>SAW</span><span>COM</span></div></div>
-          </article>
-          <div class="bpArrow">→</div>
-          <article class="bpPhase scenario">
-            <header><span>02</span><b>Scenario escalation</b><em>01:20</em></header>
-            <div class="bpBody"><p>Weather deterioration + workload escalation + automation degradation.</p><div class="bpTags"><span>Event</span><span>Malfunction</span><span>Threat</span></div></div>
-          </article>
-          <div class="bpArrow">→</div>
-          <article class="bpPhase reinforce">
-            <header><span>03</span><b>Targeted reinforcement</b><em>00:35</em></header>
-            <div class="bpBody"><p>Repeat or adapt the condition only if evidence indicates a development need.</p><div class="bpTags"><span>Training only</span><span>Tailored</span></div></div>
-          </article>
-          <div class="bpArrow">→</div>
-          <article class="bpPhase debrief">
-            <header><span>04</span><b>Facilitated debrief</b><em>00:30</em></header>
-            <div class="bpBody"><p>Crew self-analysis, evidence review, root-cause hypotheses and next actions.</p><div class="bpTags"><span>Evidence</span><span>Questions</span><span>Follow-up</span></div></div>
-          </article>
-        </div>
-      </div>
-
-      <div class="designWorkGrid">
-        <article class="scenarioLogic">
-          <div class="labCardHead"><div><span class="panelNum">SCENARIO LOGIC</span><h3>What happens, when and why</h3></div><span class="analysisMode">operator-defined</span></div>
-          <div class="logicRows">
-            <div><span>T+00</span><b>Normal departure</b><small>Establish baseline behaviour</small></div>
-            <div><span>T+24</span><b>Operational interruption</b><small>Observe prioritisation and communication</small></div>
-            <div><span>T+43</span><b>Weather deterioration</b><small>Increase decision uncertainty</small></div>
-            <div><span>T+61</span><b>Automation degradation</b><small>Create workload / flight-path management opportunity</small></div>
-            <div><span>T+79</span><b>Destination decision</b><small>Capture decision quality and crew integration</small></div>
+      <div class="designPanels">
+        <div class="designPanel active" data-design-panel="1">
+          <div class="designPanelHead">
+            <div><span class="panelNum">STEP 01</span><h3>Design intent</h3><p>Empieza por la necesidad operacional. No por el escenario.</p></div>
+            <span class="stepState">4 fields</span>
           </div>
-        </article>
-
-        <article class="evidencePlan">
-          <div class="labCardHead"><div><span class="panelNum">EVIDENCE PLAN</span><h3>What must be observable</h3></div><span class="analysisMode gold">explainable</span></div>
-          <div class="evidenceRows">
-            <div><b>PSD</b><span>Options considered · consequence review · decision timing</span><em>3 OB</em></div>
-            <div><b>LTW</b><span>Task sharing · crew input · leadership cues</span><em>3 OB</em></div>
-            <div><b>SAW</b><span>Threat detection · changing mental model · anticipation</span><em>3 OB</em></div>
-            <div><b>WLM</b><span>Prioritisation · interruption management · resource use</span><em>3 OB</em></div>
+          <div class="intentForm">
+            <label><span>Operational need</span><textarea>Improve decision quality during rapidly changing operational conditions.</textarea></label>
+            <label><span>Learning objective</span><textarea>Recognise, prioritise and act while maintaining a shared crew mental model.</textarea></label>
+            <label><span>Fleet / population</span><select><option>A320 · recurrent</option></select></label>
+            <label><span>Target competencies</span><div class="selectChips"><button type="button" class="selected">PSD</button><button type="button" class="selected">LTW</button><button type="button" class="selected">SAW</button><button type="button" class="selected">WLM</button><button type="button">COM</button></div></label>
           </div>
-        </article>
-      </div>
-
-      <div class="assessmentMatrix">
-        <div class="assessmentMatrixHead"><div><span class="panelNum">ASSESSMENT MAP</span><h3>Link design to grading and evidence.</h3></div><span>Illustrative</span></div>
-        <div class="assessmentTable">
-          <div class="assessmentRow head"><b>Design element</b><b>Purpose</b><b>Competency / OB</b><b>Evidence expected</b><b>Mode</b></div>
-          <div class="assessmentRow"><span>Operational interruption</span><span>Workload prioritisation</span><span>WLM · LTW</span><span>Observable task reallocation + crew coordination</span><em>Observe</em></div>
-          <div class="assessmentRow"><span>Weather deterioration</span><span>Decision uncertainty</span><span>PSD · SAW</span><span>Options, risk assessment, timing and review</span><em>Grade</em></div>
-          <div class="assessmentRow"><span>Automation degradation</span><span>Flight-path / workload response</span><span>FPA · WLM</span><span>Mode awareness, intervention and workload control</span><em>Grade</em></div>
-          <div class="assessmentRow"><span>Facilitated debrief</span><span>Root cause + learning transfer</span><span>All applicable</span><span>Crew self-analysis + evidence-linked conclusions</span><em>Debrief</em></div>
+          <div class="designHint"><b>Veyra check:</b> the objective is observable and can be linked to competency evidence.</div>
+          <div class="designNav"><span></span><button type="button" class="nextDesignStep" data-next-step="2">Continue to build session →</button></div>
         </div>
-      </div>
 
-      <div class="designGovernance">
-        <div class="governanceIntro"><span class="panelNum">DESIGN GOVERNANCE</span><h3>Publish only when the design is internally coherent.</h3><p>Checks are based on the selected framework and operator policy. They validate coverage and traceability; they do not copy another vendor's rules or UI.</p></div>
-        <div class="governanceChecks">
-          <div class="govCheck pass"><b>PASS</b><span>Every graded competency has an evidence opportunity.</span></div>
-          <div class="govCheck pass"><b>PASS</b><span>Trainee-visible objectives do not reveal hidden scenario triggers.</span></div>
-          <div class="govCheck warn"><b>REVIEW</b><span>Additional-training window is below the configured operator target.</span></div>
+        <div class="designPanel" data-design-panel="2" hidden>
+          <div class="designPanelHead">
+            <div><span class="panelNum">STEP 02</span><h3>Build session</h3><p>Organiza fases y abre únicamente la fase que necesitas editar.</p></div>
+            <span class="stepState">04:00 total</span>
+          </div>
+          <div class="sessionTimelineSimple">
+            <button class="sessionPhase open" type="button">
+              <span>01</span><div><b>Brief &amp; preparation</b><small>Objectives · expectations · 00:25</small></div><em>Open</em>
+            </button>
+            <div class="phaseEditor">
+              <div><small>Purpose</small><b>Set expectations and evidence standards</b></div>
+              <div><small>Trainee sees</small><b>Objectives + approved preparation</b></div>
+              <div><small>Instructor only</small><b>Hidden triggers: none</b></div>
+            </div>
+            <button class="sessionPhase" type="button"><span>02</span><div><b>Evaluation window</b><small>Baseline observation · 01:10</small></div><em>Edit</em></button>
+            <button class="sessionPhase" type="button"><span>03</span><div><b>Scenario escalation</b><small>Event + weather + automation · 01:20</small></div><em>Edit</em></button>
+            <button class="sessionPhase" type="button"><span>04</span><div><b>Targeted reinforcement</b><small>Training-only if required · 00:35</small></div><em>Edit</em></button>
+            <button class="sessionPhase" type="button"><span>05</span><div><b>Facilitated debrief</b><small>Evidence review · 00:30</small></div><em>Edit</em></button>
+          </div>
+          <div class="designNav"><button type="button" class="nextDesignStep secondary" data-next-step="1">← Back</button><button type="button" class="nextDesignStep" data-next-step="3">Continue to assessment →</button></div>
         </div>
-        <div class="versionFlow"><span>Draft</span><b>→</b><span>Peer review</span><b>→</b><span>Approved</span><b>→</b><span>Published</span><b>→</b><span>Superseded</span></div>
+
+        <div class="designPanel" data-design-panel="3" hidden>
+          <div class="designPanelHead">
+            <div><span class="panelNum">STEP 03</span><h3>Assessment &amp; evidence</h3><p>Define qué se observará y cómo sabrás que ocurrió.</p></div>
+            <span class="stepState">Explainable</span>
+          </div>
+          <div class="assessmentBuilderSimple">
+            <div class="assessmentFocus">
+              <span class="focusCode">PSD</span>
+              <div><b>Problem Solving &amp; Decision-Making</b><small>Scenario escalation · graded</small></div>
+              <button type="button">Edit</button>
+            </div>
+            <div class="assessmentFields">
+              <label><span>Observable behaviours</span><div class="selectChips"><button type="button" class="selected">Options considered</button><button type="button" class="selected">Consequences reviewed</button><button type="button" class="selected">Decision timing</button></div></label>
+              <label><span>Evidence expected</span><textarea>Instructor records the options considered, timing of the decision and how operational consequences were reviewed.</textarea></label>
+              <label><span>Assessment mode</span><select><option>Grade 1–5 + evidence</option></select></label>
+              <label><span>Instructor Focus</span><textarea>Observe whether increased workload changes decision quality or delays crew alignment.</textarea></label>
+            </div>
+          </div>
+          <div class="assessmentCoverage">
+            <div><span>PSD</span><b>3 OB</b><em>Covered</em></div>
+            <div><span>LTW</span><b>3 OB</b><em>Covered</em></div>
+            <div><span>SAW</span><b>3 OB</b><em>Covered</em></div>
+            <div><span>WLM</span><b>3 OB</b><em>Covered</em></div>
+          </div>
+          <div class="designNav"><button type="button" class="nextDesignStep secondary" data-next-step="2">← Back</button><button type="button" class="nextDesignStep" data-next-step="4">Review design →</button></div>
+        </div>
+
+        <div class="designPanel" data-design-panel="4" hidden>
+          <div class="designPanelHead">
+            <div><span class="panelNum">STEP 04</span><h3>Review</h3><p>Veyra resume lo importante y señala solo lo que necesita atención.</p></div>
+            <span class="stepState reviewState">1 review item</span>
+          </div>
+          <div class="reviewSummaryGrid">
+            <article><small>Objective</small><b>Clear and observable</b><span class="statusOk">Ready</span></article>
+            <article><small>Total time</small><b>04:00</b><span class="statusOk">Ready</span></article>
+            <article><small>Competency coverage</small><b>4 / 4 target competencies</b><span class="statusOk">Ready</span></article>
+            <article><small>Evidence coverage</small><b>12 OB mapped</b><span class="statusOk">Ready</span></article>
+          </div>
+          <div class="reviewItem warning">
+            <div><b>Review required</b><span>Targeted reinforcement window is below the current operator target.</span></div>
+            <button type="button">Open phase</button>
+          </div>
+          <details class="reviewDetails">
+            <summary>See trainee / instructor visibility</summary>
+            <div class="visibilityCompare">
+              <div><small>TRAINEE</small><b>Objectives · preparation · general criteria</b><p>Hidden events, triggers and detailed assessment strategy remain unavailable.</p></div>
+              <div><small>INSTRUCTOR</small><b>Full scenario · triggers · Instructor Focus</b><p>Includes the exact program version and evidence expectations.</p></div>
+            </div>
+          </details>
+          <div class="designNav"><button type="button" class="nextDesignStep secondary" data-next-step="3">← Back</button><button type="button" class="nextDesignStep" data-next-step="5">Continue to publish →</button></div>
+        </div>
+
+        <div class="designPanel" data-design-panel="5" hidden>
+          <div class="designPanelHead">
+            <div><span class="panelNum">STEP 05</span><h3>Publish</h3><p>Define la versión efectiva. Los records futuros conservarán esta versión exacta.</p></div>
+            <span class="stepState">Draft v4</span>
+          </div>
+          <div class="publishCard">
+            <div class="publishIdentity">
+              <span class="panelNum">PROGRAM VERSION</span><h3>EBT Recurrent · Module 2</h3>
+              <div class="publishMeta"><span>Version <b>v4</b></span><span>Fleet <b>A320</b></span><span>Effective <b>01 OCT 2026</b></span><span>Status <b>Draft</b></span></div>
+            </div>
+            <div class="publishChecklist">
+              <div><span>✓</span><b>Peer review complete</b></div>
+              <div><span>✓</span><b>Assessment coverage valid</b></div>
+              <div><span>✓</span><b>Trainee visibility validated</b></div>
+              <div class="needsReview"><span>!</span><b>1 operator-policy item requires acceptance</b></div>
+            </div>
+          </div>
+          <div class="publishActions">
+            <button type="button" class="secondary">Save draft</button>
+            <button type="button" class="secondary">Send for approval</button>
+            <button type="button" class="publishPrimary">Publish version</button>
+          </div>
+          <div class="versionFlow compactVersion"><span>Draft</span><b>→</b><span>Review</span><b>→</b><span>Approved</span><b>→</b><span>Published</span><b>→</b><span>Superseded</span></div>
+          <div class="designNav"><button type="button" class="nextDesignStep secondary" data-next-step="4">← Back</button><span></span></div>
+        </div>
       </div>
     </section>
 
@@ -1149,5 +1202,28 @@ main{min-width:0}
   }
   init();
 })();
-</script></body>
+</script>
+<script>
+(function(){
+  const stepButtons=[...document.querySelectorAll("[data-design-step]")];
+  const panels=[...document.querySelectorAll("[data-design-panel]")];
+  const progress=document.getElementById("designProgressBar");
+  function showStep(n){
+    stepButtons.forEach(btn=>{
+      const active=Number(btn.dataset.designStep)===n;
+      btn.classList.toggle("active",active);
+      btn.setAttribute("aria-selected",active?"true":"false");
+    });
+    panels.forEach(panel=>{
+      const active=Number(panel.dataset.designPanel)===n;
+      panel.classList.toggle("active",active);
+      panel.hidden=!active;
+    });
+    if(progress) progress.style.width=(n*20)+"%";
+  }
+  stepButtons.forEach(btn=>btn.addEventListener("click",()=>showStep(Number(btn.dataset.designStep))));
+  document.querySelectorAll(".nextDesignStep").forEach(btn=>btn.addEventListener("click",()=>showStep(Number(btn.dataset.nextStep))));
+})();
+</script>
+</body>
 </html>
