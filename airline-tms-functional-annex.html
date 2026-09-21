@@ -158,39 +158,60 @@ main{min-width:0}
   .heat{grid-template-columns:62px repeat(6,38px);overflow:auto}.docRow{grid-template-columns:1.2fr .6fr}.docRow>*:nth-child(n+3){display:none}
   .ticketFlow{grid-template-columns:1fr}.addie{padding-bottom:8px}
 }
+
+/* === Functional core v0.2 · distinct Veyra working UI === */
+.lifecycle{display:flex;align-items:stretch;gap:8px;overflow:auto;padding:8px 0 26px}.lifecycle>i{display:grid;place-items:center;color:#b98d3f;font-style:normal}.lifeStep{min-width:135px;border:1px solid var(--line);background:#fff;padding:14px}.lifeStep span{color:#a07831;font-size:9px;font-weight:900}.lifeStep b{display:block;margin-top:6px;font-size:12px}.lifeStep small{display:block;margin-top:5px;color:#7b8593;font-size:9px;line-height:1.35}.lifeStep.active{border-top:3px solid #c7a159}.lifeStep.locked{background:#0b1725;color:#fff;border-color:#0b1725}.lifeStep.locked small{color:#9eadba}
+.recordWorkbench{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}.recordSheet{background:#fff;border:1px solid var(--line);padding:24px}.recordSheetHead{display:flex;justify-content:space-between;gap:12px;align-items:start}.recordSheetHead h3{font-family:Georgia,serif;font-size:28px;font-weight:400;margin:8px 0 0}.recordState{border:1px solid #c7a159;color:#8d6827;padding:7px 9px;font-size:9px;font-weight:900}.recordMetaV2{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:22px 0}.recordMetaV2 span{background:#f7f2e9;border:1px solid #e2d9ca;padding:12px}.recordMetaV2 small{display:block;color:#88765a;font-size:8px;text-transform:uppercase;letter-spacing:.06em}.recordMetaV2 b{display:block;font-size:11px;margin-top:5px}.recordRows{border-top:1px solid var(--line)}.recordRows>div{display:grid;grid-template-columns:1.3fr .8fr .5fr;gap:8px;padding:13px 0;border-bottom:1px solid var(--line);font-size:10px}.recordRows span{color:#596575}.recordRows em{font-style:normal;color:#2b745f;text-align:right}.signatureGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.signatureGrid>div{border:1px solid var(--line);padding:12px}.signatureGrid small{display:block;color:#8c7856;font-size:8px}.signatureGrid b{display:block;margin-top:6px;font-size:10px}.recordActions{display:grid;gap:10px}.miniPanel{background:#fff;border:1px solid var(--line);padding:19px}.miniPanel h3{font-family:Georgia,serif;font-size:20px;font-weight:400;margin:8px 0}.miniPanel p{font-size:11px;line-height:1.5;color:#6b7583;margin:0}
+.intelStrip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}.intelState{padding:14px;border:1px solid rgba(255,255,255,.1);background:#0c1927}.intelState small{display:block;color:#93a0ad;font-size:9px}.intelState b{display:block;margin:6px 0;font-size:11px}.intelState span{color:#9ea9b6;font-size:9px}.intelState.watch{border-top:3px solid #d39c3a}.intelState.standard{border-top:3px solid #5b9d82}.intelState.above{border-top:3px solid #6aa3b9}
+.intelDeepDive{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.fleetCompare,.evidenceTrace{background:#0c1927;border:1px solid rgba(255,255,255,.1);padding:20px}.fleetCompare h3,.evidenceTrace h3{font-family:Georgia,serif;font-size:23px;font-weight:400;margin:8px 0 16px;color:#fff}.compareRow{display:grid;grid-template-columns:38px 1fr 72px;gap:9px;align-items:center;margin:11px 0}.compareRow>span,.compareRow em{font-size:9px;color:#bec7d0}.compareRow em{font-style:normal;text-align:right}.compareRow i{display:block;height:8px;background:#223142;position:relative}.compareRow i b{display:block;height:100%;background:#c7a159}.compareRow i u{position:absolute;top:-4px;width:2px;height:16px;background:#eef1f4;text-decoration:none}.compareLegend{display:flex;gap:16px;color:#8997a6;font-size:8px;margin-top:13px}.trace{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.trace span{background:#132538;border:1px solid rgba(255,255,255,.08);padding:7px 8px;color:#d6dee6;font-size:9px}.trace b{color:#c7a159}.evidenceTrace ul{padding-left:17px;color:#9fabb7;font-size:10px;line-height:1.7}.trace.vertical{display:grid;grid-template-columns:1fr;text-align:center}.trace.vertical b{padding:0}
+.managerGrid{display:grid;grid-template-columns:1.25fr .75fr .8fr;gap:12px;margin-top:14px}.managerPanel{background:#fff;border:1px solid var(--line);padding:20px}.managerPanel h3{font-family:Georgia,serif;font-size:23px;font-weight:400;margin:8px 0 15px}.signalRow{display:grid;grid-template-columns:42px 74px 1fr 58px;gap:8px;align-items:center;margin:11px 0;font-size:9px}.signalRow>i{height:7px;background:#e8e2d7}.signalRow>i u{display:block;height:100%;background:#b58a3d;text-decoration:none}.signalRow em{font-style:normal;color:#7a8491}.sigWatch,.sigGood,.sigStd{font-size:8px;padding:4px 6px;border-radius:20px;text-align:center}.sigWatch{background:#fff3df;color:#95651f}.sigGood{background:#e5f1ed;color:#256a58}.sigStd{background:#edf1f3;color:#556878}.queueItem{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:11px 0}.queueItem>span,.qualityRule>span,.workflowRow>span{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-size:8px;font-weight:900}.qAmber{background:#fff1d5;color:#9b671c}.qBlue{background:#e5edf4;color:#456b88}.qRed{background:#f6e1df;color:#9f443e}.queueItem b{display:block;font-size:10px}.queueItem small{display:block;color:#7b8592;font-size:8px;margin-top:3px}
+.builderFrame{display:grid;grid-template-columns:170px minmax(0,1fr) 230px;gap:10px;background:#eee8dd;border:1px solid var(--line);padding:10px}.builderPalette,.builderInspector,.builderCanvas{background:#fff;border:1px solid var(--line);padding:16px}.builderPalette{display:grid;gap:7px;align-content:start}.builderPalette button{border:1px solid #ddd4c5;background:#fffaf2;text-align:left;padding:10px;font-size:10px;color:#384555}.builderTop{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.builderTop b{display:block;margin-top:5px;font-size:12px}.versionPills{display:flex;gap:5px}.versionPills span,.versionPills i{font-style:normal;border:1px solid #d9cfbf;padding:5px 7px;font-size:8px}.versionPills span{background:#0b1725;color:#fff}.phaseCard{border:1px solid #ddd5c7;margin:9px 0;background:#fff}.phaseCard header{display:flex;justify-content:space-between;padding:10px 12px;background:#f6f1e8;font-size:10px}.elementLine{margin:6px 8px;padding:8px 10px;border-left:3px solid #8897a7;background:#faf8f4;font-size:9px}.elementLine small{float:right;color:#7a8592}.elementLine.setup{border-left-color:#7a9ab4}.elementLine.event{border-left-color:#63a193}.elementLine.malfunction{border-left-color:#c1786d}.elementLine.exercise{border-left-color:#c7a159}.elementLine.trainingOnly{border-left-color:#8e73ad}.elementLine.note{border-left-color:#6f7680}.builderInspector h3{font-family:Georgia,serif;font-size:20px;font-weight:400;margin:8px 0 14px}.builderInspector label{display:block;border-top:1px solid var(--line);padding:10px 0;color:#7a8491;font-size:8px}.builderInspector label b{display:block;color:#263242;font-size:10px;margin-top:4px}.qualityGate{display:grid;grid-template-columns:1.15fr repeat(3,.8fr);gap:8px;margin-top:14px}.qualityGate>div{border:1px solid var(--line);background:#fff;padding:15px}.qualityGate h3{font-family:Georgia,serif;font-weight:400;margin:6px 0}.qualityGate p{font-size:10px;color:#737e8b}.finding b{display:block;font-size:8px}.finding span{display:block;font-size:10px;margin:8px 0}.finding small{font-size:8px;color:#788491}.finding.blocker{border-top:3px solid #a94a43}.finding.warning{border-top:3px solid #bd8c36}.finding.clear{border-top:3px solid #2f7b64}.versionFlow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:19px 0 0;color:#6c5b3e;font-size:9px;font-weight:900;text-transform:uppercase}.versionFlow b{color:#c7a159}
+.ruleBuilder{display:grid;grid-template-columns:1fr 45px 1.3fr;gap:10px;align-items:stretch}.ruleIf,.ruleThen{background:#fff;border:1px solid var(--line);padding:22px}.ruleIf>span,.ruleThen>span{font-size:9px;color:#a17931;font-weight:900}.ruleIf>b{display:block;font-family:Georgia,serif;font-size:25px;font-weight:400;margin:12px 0}.ruleIf small{color:#7c8793}.ruleArrow{display:grid;place-items:center;color:#b58a3c;font-size:26px}.actionChips{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}.actionChips b{border:1px solid #d8cebd;background:#fffaf2;padding:8px;font-size:9px}.workflowQueue{background:#fff;border:1px solid var(--line);margin-top:12px}.queueHead{display:flex;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line);font-size:10px}.workflowRow{display:grid;grid-template-columns:40px 1.2fr .8fr .7fr;gap:8px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:9px}.workflowRow em{font-style:normal;color:#8a6528}.workflowRow small{color:#77818d}
+.standardGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.stdProfile,.stdFactors{background:#fff;border:1px solid var(--line);padding:21px}.stdTop{display:flex;justify-content:space-between}.stdTop h3{font-family:Georgia,serif;font-size:24px;font-weight:400;margin:7px 0}.stdState{border:1px solid #5f9b84;color:#2b6f5c;padding:6px 8px;font-size:8px;height:max-content}.stdMetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:16px 0}.stdMetrics span{background:#f6f1e8;padding:11px}.stdMetrics small{display:block;color:#7d8793;font-size:7px}.stdMetrics b{display:block;margin-top:5px}.stdBars>div{display:grid;grid-template-columns:38px 1fr 42px;gap:8px;align-items:center;margin:10px 0;font-size:8px}.stdBars i{height:7px;background:#e8e2d7;position:relative}.stdBars i b{display:block;height:100%;background:#667f94}.stdBars i u{position:absolute;width:2px;height:14px;top:-3px;background:#c7a159}.stdBars em{font-style:normal;text-align:right}.factor{border-top:1px solid var(--line);padding:11px 0;display:grid;grid-template-columns:1fr 1fr 55px;gap:7px;font-size:9px}.factor span{color:#7b8591}.factor em{font-style:normal;text-align:right;color:#2f745f}.stdFoot{margin-top:12px;color:#78838f;font-size:9px}
+.qualityRules{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qualityRule{background:#fff;border:1px solid var(--line);padding:16px;display:grid;grid-template-columns:38px 1fr 90px;gap:10px;align-items:center}.qualityRule b{display:block;font-size:11px}.qualityRule small{display:block;margin-top:4px;color:#747f8c;font-size:9px}.qualityRule em{font-style:normal;color:#8a6428;text-align:right;font-size:9px}
+.effectLoop{display:flex;align-items:stretch;gap:7px;overflow:auto}.effectLoop>div{min-width:145px;background:#0c1927;border:1px solid rgba(255,255,255,.09);padding:15px}.effectLoop span{color:#d7b86d;font-size:8px;font-weight:900}.effectLoop b{display:block;color:#fff;margin:8px 0;font-size:10px}.effectLoop small{color:#98a5b2;font-size:8px}.effectLoop>i{display:grid;place-items:center;color:#c7a159;font-style:normal}.effectMock{display:flex;gap:13px;align-items:center;margin-top:18px;padding:15px;border:1px solid rgba(255,255,255,.1);background:#0c1927}.effectMock>div{flex:1}.effectMock small{display:block;color:#93a0ad;font-size:8px}.effectMock b{display:block;margin-top:6px;color:#fff}.effectMock>span{color:#c7a159}.okText{color:#8fc5af!important}
+.knowledgeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.knowledgeSource{background:#fff;border:1px solid var(--line);padding:20px}.knowledgeSource h3{font-family:Georgia,serif;font-size:22px;font-weight:400;margin:8px 0}.knowledgeSource p{color:#6d7885;font-size:10px;line-height:1.5}.aiPipeline{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:16px;padding:16px;background:#0b1725;color:#e2e7ec;font-size:9px}.aiPipeline b{color:#c7a159}.aiNote{background:#fffaf2;border:1px solid var(--line);padding:13px;margin-top:8px;font-size:9px;color:#64707f}
+.offlinePanel{margin-top:18px;border:1px solid rgba(199,161,89,.28);background:#0c1927;padding:18px}.offlinePanel h3{font-family:Georgia,serif;font-size:22px;font-weight:400;margin:6px 0;color:#fff}.offlinePanel p{color:#aab5c1;font-size:10px;line-height:1.5}.offlineSteps{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:13px}.offlineSteps span{border:1px solid rgba(255,255,255,.1);padding:8px;color:#c8d0d8;font-size:8px}.offlineSteps b{color:#c7a159}
+.kpi span{display:block;margin-top:5px;color:#8a949f;font-size:8px}
+@media(max-width:1100px){.recordWorkbench,.intelDeepDive,.managerGrid,.standardGrid{grid-template-columns:1fr}.builderFrame{grid-template-columns:1fr}.builderPalette{grid-template-columns:repeat(4,1fr)}.qualityGate{grid-template-columns:1fr 1fr}.qualityRules{grid-template-columns:1fr}.knowledgeGrid{grid-template-columns:1fr}.ruleBuilder{grid-template-columns:1fr}.ruleArrow{transform:rotate(90deg)}}
+@media(max-width:680px){.recordMetaV2,.signatureGrid,.intelStrip,.stdMetrics{grid-template-columns:1fr 1fr}.builderPalette{grid-template-columns:1fr 1fr}.qualityGate{grid-template-columns:1fr}.workflowRow,.qualityRule{grid-template-columns:36px 1fr}.workflowRow>*:nth-child(3),.workflowRow>*:nth-child(4),.qualityRule>em{display:none}.effectMock{flex-direction:column;align-items:stretch}.effectMock>span{transform:rotate(90deg);text-align:center}.recordRows>div{grid-template-columns:1fr}.recordRows em{text-align:left}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="topInner">
     <div class="brand"><strong>Veyra</strong><small>Pilot Intelligence</small></div>
-    <div class="topMeta"><span class="pill draft">Working Draft</span><span class="pill">Airline TMS · Functional Annex v0.1</span></div>
+    <div class="topMeta"><span class="pill draft">Working Draft</span><span class="pill">Airline TMS · Functional Core v0.2</span></div>
     <div class="mobileNav"><span class="pill">Functional Annex</span></div>
   </div>
 </header>
 <div class="shell">
   <aside class="side" aria-label="Functional annex navigation">
-    <div class="sideTitle">Core architecture</div>
-    <a href="#access"><span>01</span>Role &amp; Access Management</a>
+    <div class="sideTitle">Functional core v0.2</div>
+    <a href="#access"><span>01</span>Role &amp; Access</a>
     <a href="#organization"><span>02</span>Training Organization</a>
-    <a href="#instructor"><span>03</span>Instructor Workspace</a>
-    <a href="#trainee"><span>04</span>Trainee Workspace</a>
-    <a href="#records"><span>05</span>Training Record</a>
-    <a href="#ebt"><span>06</span>EBT / Competency Intelligence</a>
+    <a href="#instructor"><span>03</span>Instructor Workspace + Assistant</a>
+    <a href="#trainee"><span>04</span>Trainee Workspace + Assistant</a>
+    <a href="#records"><span>05</span>Training Record Lifecycle</a>
+    <a href="#ebt"><span>06</span>Competency Intelligence</a>
     <a href="#qms"><span>07</span>Qualification Management</a>
-    <a href="#manager"><span>08</span>Manager Dashboard / KPI</a>
-    <a href="#design"><span>09</span>Training Design · ADDIE + EBT</a>
-    <a href="#dms"><span>10</span>Document Management</a>
-    <a href="#integration"><span>11</span>Integration &amp; Data Layer</a>
-    <a href="#security"><span>12</span>Security / Governance / Audit</a>
-    <a href="#support"><span>13</span>Technical Request Management</a>
+    <a href="#manager"><span>08</span>Manager Analytics</a>
+    <a href="#design"><span>09</span>EBT Program &amp; Scenario Builder</a>
+    <a href="#workflow"><span>10</span>Low Performance &amp; Workflows</a>
+    <a href="#standardization"><span>11</span>Instructor Standardization</a>
+    <a href="#quality"><span>12</span>Record Quality Engine</a>
+    <a href="#effectiveness"><span>13</span>Training Effectiveness Loop</a>
+    <a href="#knowledge"><span>14</span>LMS / Knowledge Integration</a>
+    <a href="#integration"><span>15</span>Integration &amp; Data Layer</a>
+    <a href="#security"><span>16</span>Security / Offline / Audit</a>
+    <a href="#support"><span>17</span>Technical Request Management</a>
   </aside>
   <main>
     <section class="hero">
       <div class="eyebrow">Airline TMS · Functional Annex</div>
       <h1>Core functional architecture.</h1>
       <p>Documento de trabajo para montar y corregir la base funcional de Veyra en un entorno de aerolínea. Esta versión no utiliza identidad de ningún operador ni reproduce información confidencial del RFI.</p>
-      <div class="heroFlow"><span>MANAGE</span><b>→</b><span>TRAIN</span><b>→</b><span>ASSESS</span><b>→</b><span>QUALIFY</span><b>→</b><span>ANALYZE</span><b>→</b><span>IMPROVE</span></div>
+      <div class="heroFlow"><span>DESIGN</span><b>→</b><span>PREPARE</span><b>→</b><span>TRAIN</span><b>→</b><span>OBSERVE</span><b>→</b><span>ASSESS</span><b>→</b><span>RECORD</span><b>→</b><span>ANALYZE</span><b>→</b><span>ACT</span><b>→</b><span>MEASURE</span></div>
       <div class="heroNote">Los datos, KPI y gráficas de esta página son ilustrativos y sirven únicamente para revisar arquitectura, jerarquía y experiencia de usuario.</div>
     </section>
 
@@ -290,19 +311,37 @@ main{min-width:0}
 
     <section class="section" id="records">
       <div class="sectionHead">
-        <div><div class="eyebrow">05 · Training Record / Records Keeping</div><h2>La sesión termina. El contexto permanece.</h2></div>
-        <p>El Training Record debe conservar la evidencia necesaria para reconstruir qué ocurrió y qué decisión de entrenamiento siguió después.</p>
+        <div><div class="eyebrow">05 · Training Record / Assessment Lifecycle</div><h2>El record debe ser trazable, firmable y resistente a cambios retrospectivos.</h2></div>
+        <p>La sesión conserva la versión exacta del programa utilizada, la evidencia, los firmantes y cualquier objection o amendment posterior.</p>
       </div>
-      <div class="recordFlow"><span>Training Event</span><b>→</b><span>Evidence</span><b>→</b><span>Training Record</span><b>→</b><span>Qualification Impact</span><b>→</b><span>Report</span><b>→</b><span>Follow-up</span></div>
-      <div class="recordDetail">
-        <div><small>Trainee</small><b>Identity / population</b></div>
-        <div><small>Instructor</small><b>Role / privileges</b></div>
-        <div><small>Session</small><b>Phase / date / event</b></div>
-        <div><small>Result</small><b>Assessment outcome</b></div>
-        <div><small>Competencies</small><b>Ratings + OB</b></div>
-        <div><small>Evidence</small><b>Observations / events</b></div>
-        <div><small>Qualification</small><b>Impact / currency</b></div>
-        <div><small>Next action</small><b>Follow-up / reinforcement</b></div>
+      <div class="lifecycle" aria-label="Training record lifecycle">
+        <div class="lifeStep active"><span>01</span><b>Assigned</b><small>Session + program version</small></div>
+        <i>→</i><div class="lifeStep active"><span>02</span><b>Open</b><small>Instructor working</small></div>
+        <i>→</i><div class="lifeStep active"><span>03</span><b>Instructor Complete</b><small>Evidence + grading</small></div>
+        <i>→</i><div class="lifeStep"><span>04</span><b>Trainee Review</b><small>Acknowledge / object</small></div>
+        <i>→</i><div class="lifeStep"><span>05</span><b>Signed</b><small>Timestamped</small></div>
+        <i>→</i><div class="lifeStep locked"><span>06</span><b>Finalised</b><small>Locked + export</small></div>
+      </div>
+      <div class="recordWorkbench">
+        <div class="recordSheet">
+          <div class="recordSheetHead"><div><span class="panelNum">ILLUSTRATIVE RECORD</span><h3>Recurrent simulator · Session 04</h3></div><span class="recordState">IN REVIEW</span></div>
+          <div class="recordMetaV2"><span><small>Trainee</small><b>AV-2048 · Example</b></span><span><small>Instructor</small><b>TRI · Example</b></span><span><small>Program version</small><b>EBT-R / M2 / v3</b></span><span><small>Device</small><b>FFS · A320</b></span></div>
+          <div class="recordRows">
+            <div><b>Event 03 · High workload arrival</b><span>PSD · LTW · SAW</span><em>Evidence linked</em></div>
+            <div><b>Malfunction 02 · Automation degradation</b><span>FPA · COM</span><em>Evidence linked</em></div>
+            <div><b>Debriefing</b><span>2 strengths · 2 development areas</span><em>Draft complete</em></div>
+          </div>
+          <div class="signatureGrid">
+            <div><small>INSTRUCTOR</small><b>Pending signature</b></div>
+            <div><small>TRAINEE</small><b>Awaiting review</b></div>
+            <div><small>EXPORT</small><b>PDF after finalisation</b></div>
+          </div>
+        </div>
+        <div class="recordActions">
+          <div class="miniPanel"><span class="panelNum">OBJECTION PATH</span><h3>Trainee disagreement</h3><p>El trainee puede objetar sin editar el resultado. El record cambia a <b>Review required</b> y notifica al responsable definido.</p></div>
+          <div class="miniPanel"><span class="panelNum">AMENDMENT</span><h3>Correction after finalisation</h3><p>No se reescribe el original. Se genera una enmienda con motivo, usuario, timestamp y vínculo al record previo.</p></div>
+          <div class="miniPanel"><span class="panelNum">IMMUTABILITY</span><h3>Program snapshot</h3><p>El record conserva la versión del programa y criterios vigentes en el momento de la sesión.</p></div>
+        </div>
       </div>
     </section>
 
@@ -365,7 +404,26 @@ main{min-width:0}
           </div>
         </div>
       </div>
-    </section>
+    <div class="intelStrip">
+        <div class="intelState watch"><small>LTW</small><b>WATCH</b><span>3 of last 5 below target</span></div>
+        <div class="intelState standard"><small>PSD</small><b>AT STANDARD</b><span>Stable · evidence complete</span></div>
+        <div class="intelState above"><small>SAW</small><b>ABOVE</b><span>Improving · fleet +0.24</span></div>
+        <div class="intelState standard"><small>COM</small><b>AT STANDARD</b><span>Flat · no recurrent OB</span></div>
+      </div>
+      <div class="intelDeepDive">
+        <div class="fleetCompare">
+          <div class="panelNum">POPULATION BENCHMARK</div><h3>Trainee vs comparable population</h3>
+          <div class="compareRow"><span>LTW</span><i><b style="width:47%"></b><u style="left:66%"></u></i><em>2.8 / 3.5</em></div>
+          <div class="compareRow"><span>PSD</span><i><b style="width:62%"></b><u style="left:65%"></u></i><em>3.3 / 3.4</em></div>
+          <div class="compareRow"><span>SAW</span><i><b style="width:76%"></b><u style="left:70%"></u></i><em>3.9 / 3.6</em></div>
+          <div class="compareLegend"><span>■ trainee</span><span>│ comparable population</span></div>
+        </div>
+        <div class="evidenceTrace">
+          <div class="panelNum">EXPLAINABLE DRILL-DOWN</div><h3>Why is LTW on watch?</h3>
+          <div class="trace"><span>LTW</span><b>→</b><span>Session 04</span><b>→</b><span>Event 03</span><b>→</b><span>OB 6.x</span><b>→</b><span>Instructor evidence</span></div>
+          <ul><li>18 observations in current window</li><li>3 of last 5 below configured target</li><li>Recurring behaviour detected in high-workload phases</li><li>Evidence available for each contributing signal</li></ul>
+        </div>
+      </div></section>
 
     <section class="section" id="qms">
       <div class="sectionHead">
@@ -386,55 +444,164 @@ main{min-width:0}
 
     <section class="section alt" id="manager">
       <div class="sectionHead">
-        <div><div class="eyebrow">08 · Manager Dashboard / Analytics &amp; KPI</div><h2>Supervisión ejecutiva con capacidad de drill-down.</h2></div>
-        <p>Manager Dashboard agrupa KPI, leading SPI relacionados con Training, AVR Pilot, AVR Competency, tendencias, alertas y populations.</p>
+        <div><div class="eyebrow">08 · Manager Dashboard / Analytics</div><h2>Del indicador agregado al record que explica la señal.</h2></div>
+        <p>La supervisión combina población, competencias, workflows abiertos, qualifications y training effectiveness sin reducir el desempeño a un único promedio.</p>
       </div>
       <div class="kpiRow">
-        <div class="kpi"><small>AVR Pilot</small><b>3.82</b></div><div class="kpi"><small>AVR Competency</small><b>3.67</b></div><div class="kpi"><small>Open alerts</small><b>14</b></div><div class="kpi"><small>Evidence coverage</small><b>89%</b></div>
+        <div class="kpi"><small>Population in scope</small><b>536</b><span>Illustrative</span></div>
+        <div class="kpi"><small>Open follow-up</small><b>14</b><span>Rules engine</span></div>
+        <div class="kpi"><small>Watch competencies</small><b>7</b><span>Across cohorts</span></div>
+        <div class="kpi"><small>Records pending close</small><b>23</b><span>Signature / review</span></div>
       </div>
-      <div class="kpiCharts">
-        <div class="barList">
-          <div class="chartTitle" style="color:#172033"><strong>Population overview</strong><span style="color:#7a8492">Illustrative</span></div>
-          <div class="barRow"><span>Pilots</span><div class="track"><div class="fill" style="width:86%"></div></div><b>86%</b></div>
-          <div class="barRow"><span>TCP</span><div class="track"><div class="fill" style="width:79%"></div></div><b>79%</b></div>
-          <div class="barRow"><span>Dispatchers</span><div class="track"><div class="fill" style="width:91%"></div></div><b>91%</b></div>
-          <div class="barRow"><span>Instructors</span><div class="track"><div class="fill" style="width:83%"></div></div><b>83%</b></div>
+      <div class="managerGrid">
+        <div class="managerPanel">
+          <div class="chartTitle" style="color:#172033"><strong>Competency signal board</strong><span style="color:#7a8492">Illustrative</span></div>
+          <div class="signalRow"><span>LTW</span><b class="sigWatch">Watch</b><i><u style="width:62%"></u></i><em>falling</em></div>
+          <div class="signalRow"><span>SAW</span><b class="sigGood">Above</b><i><u style="width:79%"></u></i><em>improving</em></div>
+          <div class="signalRow"><span>FPM</span><b class="sigStd">Standard</b><i><u style="width:68%"></u></i><em>stable</em></div>
+          <div class="signalRow"><span>COM</span><b class="sigStd">Standard</b><i><u style="width:65%"></u></i><em>stable</em></div>
         </div>
-        <div class="panel"><span class="panelNum">ALERT LOGIC</span><h3>From KPI to evidence</h3><p>Un indicador debe permitir bajar desde la población o competencia hasta el trainee, sesión, OB y evidencia que explica la señal.</p><div class="tags"><span class="tag">Population</span><span class="tag">Competency</span><span class="tag">Session</span><span class="tag">Evidence</span></div></div>
+        <div class="managerPanel">
+          <div class="panelNum">DRILL-DOWN PATH</div><h3>One click deeper</h3>
+          <div class="trace vertical"><span>Fleet / cohort</span><b>↓</b><span>Competency</span><b>↓</b><span>Trainee</span><b>↓</b><span>Session</span><b>↓</b><span>OB + evidence</span></div>
+        </div>
+        <div class="managerPanel">
+          <div class="panelNum">OPEN ACTIONS</div><h3>Workflow queue</h3>
+          <div class="queueItem"><span class="qAmber">06</span><div><b>Low performance review</b><small>Training + Tracking</small></div></div>
+          <div class="queueItem"><span class="qBlue">05</span><div><b>Qualification expiry</b><small>90-day window</small></div></div>
+          <div class="queueItem"><span class="qRed">03</span><div><b>Record mismatch</b><small>Outcome vs evidence</small></div></div>
+        </div>
       </div>
     </section>
 
     <section class="section" id="design">
       <div class="sectionHead">
-        <div><div class="eyebrow">09 · Training Design · ADDIE + EBT</div><h2>Diseñar, implementar y medir el entrenamiento.</h2></div>
-        <p>El diseño debe poder relacionar necesidad de entrenamiento, objetivos, competencias, OB, ejercicios, evaluación, evidencia y KPI.</p>
+        <div><div class="eyebrow">09 · EBT Program &amp; Scenario Builder</div><h2>Diseñar una sesión como estructura operacional, no como formulario.</h2></div>
+        <p>El builder relaciona objetivos, fases, eventos, amenazas, malfunctions, ejercicios, competencias, OB, grading y tiempos. La apariencia y nomenclatura son propias de Veyra.</p>
       </div>
-      <div class="addie">
-        <div class="addieStep"><span>01</span><h3>Analyze</h3><p>Training need · operational data · safety signals</p></div><div class="addieArrow">→</div>
-        <div class="addieStep"><span>02</span><h3>Design</h3><p>Objectives · competencies · OB · scenarios</p></div><div class="addieArrow">→</div>
-        <div class="addieStep"><span>03</span><h3>Develop</h3><p>Exercises · content · assessment · training aids</p></div><div class="addieArrow">→</div>
-        <div class="addieStep"><span>04</span><h3>Implement</h3><p>Session delivery · instructor guidance · evidence</p></div><div class="addieArrow">→</div>
-        <div class="addieStep"><span>05</span><h3>Evaluate</h3><p>KPI · competency trend · effectiveness · feedback</p></div>
+      <div class="builderFrame">
+        <div class="builderPalette">
+          <span class="panelNum">ELEMENTS</span>
+          <button>＋ Section</button><button>＋ Set-up</button><button>＋ Event</button><button>＋ Malfunction</button><button>＋ Exercise</button><button>＋ Note</button><button>＋ Comms</button><button>＋ Debrief</button>
+        </div>
+        <div class="builderCanvas">
+          <div class="builderTop"><div><span class="panelNum">PROGRAM</span><b>EBT Recurrent · Module 2 · Draft v4</b></div><div class="versionPills"><span>Draft</span><i>Review</i><i>Publish</i></div></div>
+          <div class="phaseCard"><header><b>Evaluation</b><span>01:35</span></header><div class="elementLine setup">Set-up · arrival environment</div><div class="elementLine event">Event · operational interruption</div><div class="elementLine malfunction">Malfunction · automation degradation</div><div class="elementLine exercise">Exercise · arrival sector <small>PSD · LTW · SAW · graded</small></div></div>
+          <div class="phaseCard"><header><b>Scenario-based training</b><span>01:10</span></header><div class="elementLine setup">Set-up · destination change</div><div class="elementLine event">Event · weather / workload escalation</div><div class="elementLine exercise">Exercise · decision cycle <small>COM · PSD · WLM · graded</small></div></div>
+          <div class="phaseCard"><header><b>Additional training</b><span>00:20</span></header><div class="elementLine exercise trainingOnly">Targeted reinforcement · training only</div></div>
+          <div class="phaseCard"><header><b>Facilitated debriefing</b><span>00:30</span></header><div class="elementLine note">Crew self-analysis · evidence review · next actions</div></div>
+        </div>
+        <div class="builderInspector">
+          <span class="panelNum">INSPECTOR</span><h3>Selected exercise</h3>
+          <label>Assessment mode<b>Competencies · 1–5</b></label>
+          <label>PF / PM<b>Recorded in session</b></label>
+          <label>Competencies<b>PSD · LTW · SAW</b></label>
+          <label>Learning objective<b>Decision making under workload</b></label>
+          <label>Visible to trainee<b>Objective only</b></label>
+        </div>
+      </div>
+      <div class="qualityGate">
+        <div><span class="panelNum">PUBLICATION GATE</span><h3>Rules before publish</h3><p>Reglas configurables por framework, política del operador y flota.</p></div>
+        <div class="finding blocker"><b>BLOCKER</b><span>Required phase missing</span><small>Source: configured EBT rule</small></div>
+        <div class="finding warning"><b>WARNING</b><span>Training-only time below target</span><small>Source: operator policy</small></div>
+        <div class="finding clear"><b>PASS</b><span>Grading coverage valid</span><small>Competency mapping complete</small></div>
+      </div>
+      <div class="versionFlow"><span>Draft</span><b>→</b><span>Review</span><b>→</b><span>Approved</span><b>→</b><span>Published</span><b>→</b><span>Superseded</span><b>→</b><span>Archived</span></div>
+    </section>
+
+    
+
+    <section class="section alt" id="workflow">
+      <div class="sectionHead">
+        <div><div class="eyebrow">10 · Low Performance &amp; Workflow Engine</div><h2>Una señal puede convertirse en una acción trazable.</h2></div>
+        <p>Las reglas, thresholds, destinatarios y acciones son configurables. El motor propone o ejecuta únicamente lo autorizado por la política del operador.</p>
+      </div>
+      <div class="ruleBuilder">
+        <div class="ruleIf"><span>IF</span><b>competency rating ≤ 2</b><small>and record = finalised</small></div>
+        <div class="ruleArrow">→</div>
+        <div class="ruleThen"><span>THEN</span><div class="actionChips"><b>Notify Training</b><b>Flag Tracking</b><b>Create follow-up</b><b>Recommend additional training</b><b>Open manager review</b></div></div>
+      </div>
+      <div class="workflowQueue">
+        <div class="queueHead"><b>Open workflow cases</b><span>Illustrative</span></div>
+        <div class="workflowRow"><span class="qRed">LP-024</span><b>LTW recurrent low signal</b><em>Training review</em><small>Owner · Training</small></div>
+        <div class="workflowRow"><span class="qAmber">LP-025</span><b>Assessment outcome needs follow-up</b><em>Awaiting decision</em><small>Owner · Tracking</small></div>
+        <div class="workflowRow"><span class="qBlue">LP-026</span><b>Additional training completed</b><em>Post-check monitoring</em><small>Owner · Training</small></div>
       </div>
     </section>
 
-    <section class="section alt" id="dms">
+    <section class="section" id="standardization">
       <div class="sectionHead">
-        <div><div class="eyebrow">10 · Document Management · DMS</div><h2>Documentos de entrenamiento con versión, vigencia y contexto.</h2></div>
-        <p>La solución puede administrar documentación propia o integrarse con un DMS existente, según la arquitectura del operador.</p>
+        <div><div class="eyebrow">11 · Instructor Standardization Intelligence</div><h2>Medir consistencia sin convertir al instructor en un ranking.</h2></div>
+        <p>La finalidad es identificar necesidades de estandarización y posibles sesgos de grading usando comparaciones válidas, no generar un “mejor/peor instructor”.</p>
       </div>
-      <div class="docList">
-        <div class="docRow head"><div>Document</div><div>Revision</div><div>Status</div><div>Validity</div></div>
-        <div class="docRow"><div>Training Manual · Example</div><div>REV 12</div><div class="ok">Published</div><div>Current</div></div>
-        <div class="docRow"><div>Session Guide · Example</div><div>REV 04</div><div class="warn">Review</div><div>30 days</div></div>
-        <div class="docRow"><div>Training Aid · Example</div><div>REV 02</div><div class="ok">Published</div><div>Current</div></div>
+      <div class="standardGrid">
+        <div class="stdProfile">
+          <div class="stdTop"><div><span class="panelNum">INSTRUCTOR PROFILE</span><h3>Standardization view</h3></div><b class="stdState">IN LINE</b></div>
+          <div class="stdMetrics"><span><small>Sessions</small><b>115</b></span><span><small>Pilots assessed</small><b>118</b></span><span><small>Mean grade</small><b>3.48</b></span><span><small>Calibration signal</small><b>+0.01</b></span></div>
+          <div class="stdBars"><div><span>KNO</span><i><b style="width:70%"></b><u style="left:68%"></u></i><em>+0.02</em></div><div><span>COM</span><i><b style="width:67%"></b><u style="left:67%"></u></i><em>0.00</em></div><div><span>LTW</span><i><b style="width:69%"></b><u style="left:68%"></u></i><em>+0.01</em></div><div><span>SAW</span><i><b style="width:66%"></b><u style="left:67%"></u></i><em>-0.01</em></div></div>
+        </div>
+        <div class="stdFactors">
+          <div class="panelNum">FACTORS TO REVIEW</div>
+          <div class="factor"><b>Grade spread</b><span>Within configured band</span><em>OK</em></div>
+          <div class="factor"><b>Low grades justified</b><span>Evidence / remarks coverage</span><em>OK</em></div>
+          <div class="factor"><b>Same-grade pattern</b><span>Potential flattening</span><em>Monitor</em></div>
+          <div class="factor"><b>Drift over time</b><span>Longitudinal residual</span><em>Stable</em></div>
+          <div class="factor"><b>Expected OB not observed</b><span>Program-context comparison</span><em>OK</em></div>
+        </div>
       </div>
+      <div class="stdFoot">Any calibration or standardization index must be statistically validated, explainable and configurable before operational use.</div>
+    </section>
+
+    <section class="section alt" id="quality">
+      <div class="sectionHead">
+        <div><div class="eyebrow">12 · Training Record Quality Engine</div><h2>Detectar contradicciones antes de que se conviertan en ruido de datos.</h2></div>
+        <p>El motor revisa consistencia lógica y completitud. No cambia el record: abre un caso para revisión y conserva la decisión humana.</p>
+      </div>
+      <div class="qualityRules">
+        <div class="qualityRule"><span class="qRed">01</span><div><b>Outcome vs grades mismatch</b><small>PASS / PROFICIENT con múltiples grades below configured standard.</small></div><em>Open review</em></div>
+        <div class="qualityRule"><span class="qAmber">02</span><div><b>Low grade without evidence</b><small>Resultado bajo sin remark/evidence mínimo definido.</small></div><em>Needs evidence</em></div>
+        <div class="qualityRule"><span class="qBlue">03</span><div><b>Expected observation missing</b><small>Competencia/OB requerido por la versión del programa no fue documentado.</small></div><em>Validate</em></div>
+        <div class="qualityRule"><span class="qAmber">04</span><div><b>Additional training logic</b><small>Señal que cumple regla de follow-up pero no tiene acción registrada.</small></div><em>Open workflow</em></div>
+      </div>
+    </section>
+
+    <section class="section dark" id="effectiveness">
+      <div class="sectionHead">
+        <div><div class="eyebrow">13 · Safety / FDM → Training Effectiveness</div><h2>Cerrar el circuito entre riesgo operacional y efecto del entrenamiento.</h2></div>
+        <p>La plataforma debe poder relacionar una señal operacional con una intervención de Training y medir posteriormente si la señal cambia.</p>
+      </div>
+      <div class="effectLoop">
+        <div><span>01</span><b>Safety / FDM signal</b><small>event · risk · SPI</small></div><i>→</i>
+        <div><span>02</span><b>Training Need</b><small>population · scenario · objective</small></div><i>→</i>
+        <div><span>03</span><b>Training Intervention</b><small>program version · delivery</small></div><i>→</i>
+        <div><span>04</span><b>Assessment</b><small>evidence · competency · event</small></div><i>→</i>
+        <div><span>05</span><b>Post-training monitoring</b><small>operational signal</small></div><i>→</i>
+        <div><span>06</span><b>Effectiveness</b><small>change vs baseline</small></div>
+      </div>
+      <div class="effectMock">
+        <div><small>Operational signal baseline</small><b>8.4 / 1k sectors</b></div><span>→</span><div><small>After intervention window</small><b>5.9 / 1k sectors</b></div><span>→</span><div><small>Status</small><b class="okText">Review evidence</b></div>
+      </div>
+      <p class="ebtNote">Cifras ilustrativas. Correlación no implica causalidad; la efectividad requiere reglas de análisis y ventanas definidas por Safety/Training.</p>
+    </section>
+
+    <section class="section" id="knowledge">
+      <div class="sectionHead">
+        <div><div class="eyebrow">14 · LMS / Knowledge / Document Integration</div><h2>Consumir contenido granular sin reconstruir un LMS completo.</h2></div>
+        <p>Veyra puede coexistir con LMS/DMS existentes y utilizar resultados, contenido y documentación autorizada como parte del contexto de Training.</p>
+      </div>
+      <div class="knowledgeGrid">
+        <div class="knowledgeSource"><span class="panelNum">LMS</span><h3>Learning data</h3><p>Courses · learning paths · assessments · question banks · completion · content units.</p></div>
+        <div class="knowledgeSource"><span class="panelNum">KNOWLEDGE</span><h3>Instructor reference</h3><p>Manuales y documentación aprobada para consultas asistidas con control de fuente y versión.</p></div>
+        <div class="knowledgeSource"><span class="panelNum">DMS</span><h3>Documents</h3><p>Version · validity · permissions · server-side access. Integración antes que duplicación.</p></div>
+      </div>
+      <div class="aiPipeline"><span>Signed records / approved sources</span><b>→</b><span>Deterministic figures</span><b>→</b><span>AI interpretation</span><b>→</b><span>Validation</span><b>→</b><span>Shown to user</span></div>
+      <div class="aiNote"><b>Principio:</b> la IA explica datos calculados y fuentes autorizadas; no inventa cifras ni reemplaza el criterio profesional. Si la IA no está disponible, figures and records remain usable.</div>
     </section>
 
     <section class="section" id="integration">
       <div class="sectionHead">
-        <div><div class="eyebrow">11 · Integration &amp; Data Layer</div><h2>Training conectado con el entorno operacional.</h2></div>
-        <p>Las integraciones se definen por proyecto. El objetivo es que Veyra pueda recibir, relacionar y devolver información sin imponer un único proveedor.</p>
+        <div><div class="eyebrow">15 · Integration &amp; Data Layer</div><h2>Una capa de interoperabilidad alrededor del Training Record.</h2></div>
+        <p>Las integraciones deben tener alcance, permisos, provenance y trazabilidad definidos. El núcleo no depende de un único LMS, DMS, proveedor de Safety o fuente operacional.</p>
       </div>
       <div class="integrationMap">
         <div class="integrationSide">
@@ -454,7 +621,7 @@ main{min-width:0}
 
     <section class="section dark" id="security">
       <div class="sectionHead">
-        <div><div class="eyebrow">12 · Security, Governance &amp; Audit</div><h2>Más control a medida que aumenta el alcance.</h2></div>
+        <div><div class="eyebrow">16 · Security, Offline Sync &amp; Audit</div><h2>Más control a medida que aumenta el alcance.</h2></div>
         <p>La seguridad debe estar en la arquitectura y no depender de esconder botones o valores en el frontend.</p>
       </div>
       <div class="controls">
@@ -467,11 +634,12 @@ main{min-width:0}
         <div class="control"><span>07</span><h3>Traceability</h3><p>Relación entre dato, evidencia, decisión y usuario.</p></div>
         <div class="control"><span>08</span><h3>Human-in-the-loop</h3><p>Automatización como apoyo, no reemplazo del criterio profesional.</p></div>
       </div>
+      <div class="offlinePanel"><div><span class="panelNum">OFFLINE INSTRUCTOR MODE</span><h3>Work locally, synchronise safely</h3><p>Sesión y contenido autorizado disponibles offline; evidencia local cifrada; sincronización posterior con control de versión y conflictos.</p></div><div class="offlineSteps"><span>Download authorised session</span><b>→</b><span>Work offline</span><b>→</b><span>Reconnect</span><b>→</b><span>Validate conflicts</span><b>→</b><span>Server sync</span></div></div>
     </section>
 
     <section class="section alt" id="support">
       <div class="sectionHead">
-        <div><div class="eyebrow">13 · Technical Support / Request Management</div><h2>Del hallazgo operativo a una solicitud técnica trazable.</h2></div>
+        <div><div class="eyebrow">17 · Technical Support / Request Management</div><h2>Del hallazgo operativo a una solicitud técnica trazable.</h2></div>
         <p>El Technical Request no debe perderse en mensajes aislados. Puede tener prioridad, responsable, estado, historial y resolución.</p>
       </div>
       <div class="ticketFlow">
@@ -482,7 +650,7 @@ main{min-width:0}
         <div class="ticket"><span>05</span><h3>History</h3><p>Trazabilidad para futuras revisiones.</p></div>
       </div>
     </section>
-    <footer class="footer"><strong>VEYRA PILOT INTELLIGENCE</strong> · Airline TMS Functional Annex · Working draft · v0.1</footer>
+    <footer class="footer"><strong>VEYRA PILOT INTELLIGENCE</strong> · Airline TMS Functional Core · Working draft · v0.2</footer>
   </main>
 </div>
 </body>
