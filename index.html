@@ -1482,6 +1482,59 @@ main{max-width:1180px;}
 @media(max-width:820px){.homeAudienceGrid{grid-template-columns:1fr}.homeAudienceCard{min-height:auto}.homeCapabilitiesFoot{align-items:flex-start;flex-direction:column}.homeCapabilityDemoLink{white-space:normal}}
 @media(max-width:560px){.homeAudiencePaths{padding:52px 20px}.homeAudienceCard{padding:25px}.homeAudienceLinks{display:grid}.homeAudienceLinks a{justify-content:center}}
 
+
+/* === Veyra responsive header + hero refinement · 2026-09-21 === */
+.mobileNavMenu{display:none}
+@media (min-width:901px) and (max-width:1180px){
+  .premiumTopbar{padding:15px 22px;align-items:center;flex-direction:row;gap:16px}
+  .premiumBrand{min-width:155px}
+  .premiumTopbar .brand{font-size:36px}
+  .premiumTopbar .subtitle{font-size:10px;letter-spacing:.18em;margin-top:6px}
+  .premiumNav{gap:5px;flex-wrap:nowrap;margin-left:auto}
+  .premiumNav .ghost{padding:10px 9px;font-size:10px;letter-spacing:.08em;white-space:nowrap}
+  .premiumNav .internalBtn{padding:11px 13px}
+  .premiumNav .navTabletOptional{display:none}
+  .premiumHero{min-height:610px}
+  .heroContent{min-height:610px;padding:76px 36px 58px}
+  .heroCopy{max-width:650px}
+  .heroCopy h1{font-size:60px;line-height:1.02}
+  .heroLead{font-size:19px;max-width:470px}
+  .heroActions{margin:20px 0 50px}
+}
+@media (max-width:900px){
+  .premiumTopbar{padding:12px 16px;align-items:center;flex-direction:row;gap:12px;min-height:74px}
+  .premiumBrand{min-width:0;flex:0 1 auto}
+  .premiumTopbar .brand{font-size:32px}
+  .premiumTopbar .subtitle{font-size:9px;letter-spacing:.16em;margin-top:5px}
+  .premiumNav{display:none!important}
+  .mobileNavMenu{display:block;position:relative;margin-left:auto}
+  .mobileNavMenu>summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;padding:0 16px;border:1px solid rgba(200,164,93,.7);color:var(--champagne);font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+  .mobileNavMenu>summary::-webkit-details-marker{display:none}
+  .mobileNavMenu[open]>summary{background:rgba(200,164,93,.08)}
+  .mobileNavPanel{position:absolute;right:0;top:calc(100% + 9px);width:min(320px,88vw);padding:10px;background:#070b11;border:1px solid rgba(200,164,93,.42);box-shadow:0 18px 38px rgba(0,0,0,.34);z-index:60}
+  .mobileNavPanel button{width:100%;min-height:44px;padding:11px 13px;border:0;border-bottom:1px solid rgba(255,255,255,.08);border-radius:0;background:transparent;color:#f3f1eb;text-align:left;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .mobileNavPanel button:last-child{border-bottom:0}
+  .mobileNavPanel .mobileInternalBtn{margin-top:8px;border:1px solid rgba(200,164,93,.56);color:var(--champagne)}
+  .premiumHero{min-height:590px;background-position:62% center}
+  .heroContent{min-height:590px;padding:58px 20px 46px;align-items:flex-start}
+  .heroCopy{max-width:560px}
+  .heroKicker{font-size:10px;letter-spacing:.2em;margin-bottom:14px}
+  .heroCopy h1{font-size:46px;line-height:1.02;margin-bottom:22px}
+  .heroGoldLine{margin-bottom:22px}
+  .heroLead{font-size:17px;line-height:1.5;max-width:430px}
+  .heroActions{gap:10px;margin:20px 0 34px}
+  .heroPrimary,.heroSecondary{padding:15px 20px}
+  .microTagline{font-size:10px;letter-spacing:.25em}
+  .heroAvailability{font-size:9px;letter-spacing:.06em}
+}
+@media (max-width:560px){
+  .premiumHero{min-height:620px;background-position:68% center}
+  .heroContent{min-height:620px;padding:48px 18px 42px}
+  .heroCopy h1{font-size:41px}
+  .heroLead{font-size:16px;max-width:350px}
+  .heroActions{display:grid;grid-template-columns:1fr;width:min(100%,340px)}
+  .heroPrimary,.heroSecondary{width:100%;justify-content:space-between;text-align:left}
+}
 </style>
 </head>
 <body>
@@ -1490,16 +1543,29 @@ main{max-width:1180px;}
     <div class="brand">Veyra</div>
     <div class="subtitle">Pilot Intelligence</div>
   </div>
-  <nav class="navbar premiumNav">
+  <nav class="navbar premiumNav" aria-label="Navegación principal">
     <button class="ghost" onclick="showScreen('start')">Inicio</button>
     <button class="ghost" onclick="showAssessment()">Evaluación</button>
     <button class="ghost" onclick="showTrainingCenter()">Training Center</button>
     <button class="ghost" onclick="showScreen('cbta')">CBTA / EBT</button>
-    <button class="ghost" onclick="showScreen('about')">Nosotros</button>
-    <button class="ghost" onclick="showScreen('help')">Ayuda</button>
+    <button class="ghost navTabletOptional" onclick="showScreen('about')">Nosotros</button>
+    <button class="ghost navTabletOptional" onclick="showScreen('help')">Ayuda</button>
     <button class="ghost" onclick="showScreen('contact')">Contacto</button>
     <button onclick="location.href='internal-access.html'" class="ghost internalBtn">Acceso interno</button>
   </nav>
+  <details class="mobileNavMenu">
+    <summary>Menú</summary>
+    <div class="mobileNavPanel" role="navigation" aria-label="Navegación móvil">
+      <button type="button" onclick="showScreen('start');this.closest('details').removeAttribute('open')">Inicio</button>
+      <button type="button" onclick="showAssessment();this.closest('details').removeAttribute('open')">Evaluación</button>
+      <button type="button" onclick="showTrainingCenter();this.closest('details').removeAttribute('open')">Training Center</button>
+      <button type="button" onclick="showScreen('cbta');this.closest('details').removeAttribute('open')">CBTA / EBT</button>
+      <button type="button" onclick="showScreen('about');this.closest('details').removeAttribute('open')">Nosotros</button>
+      <button type="button" onclick="showScreen('help');this.closest('details').removeAttribute('open')">Ayuda</button>
+      <button type="button" onclick="showScreen('contact');this.closest('details').removeAttribute('open')">Contacto</button>
+      <button type="button" class="mobileInternalBtn" onclick="location.href='internal-access.html'">Acceso interno</button>
+    </div>
+  </details>
 </header>
 <main>
 <section id="start" class="screen active">
