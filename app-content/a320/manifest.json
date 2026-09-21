@@ -31,7 +31,7 @@
             "id": "flow-patterns",
             "title": "Flow Patterns",
             "contentType": "web_module",
-            "version": "2026.09.19",
+            "version": "2026.09.20",
             "source": {
               "resolver": "signed_asset",
               "assetId": "a320-procedures-flow-patterns"
