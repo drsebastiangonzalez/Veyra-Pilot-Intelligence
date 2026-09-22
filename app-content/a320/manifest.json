@@ -51,6 +51,33 @@
                 "practice_completed"
               ]
             }
+          },
+          {
+            "id": "cockpit-3d",
+            "title": "Cabina A320",
+            "contentType": "web_module",
+            "version": "2026.09.21",
+            "source": {
+              "resolver": "signed_asset",
+              "assetId": "a320-procedures-cockpit-3d"
+            },
+            "offline": {
+              "policy": "download_after_entitlement"
+            },
+            "requirements": {
+              "webgl": true
+            },
+            "bridge": {
+              "schema": 1,
+              "handler": "veyraApp",
+              "events": [
+                "module_ready",
+                "view_changed",
+                "flow_opened",
+                "flow_step_changed",
+                "control_changed"
+              ]
+            }
           }
         ]
       }
