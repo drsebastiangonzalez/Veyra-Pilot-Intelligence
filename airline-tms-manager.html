@@ -16,7 +16,7 @@
 <body>
 <div class="app">
 <aside class="side">
-  <div class="brand"><b>Veyra</b><span>Pilot Intelligence</span></div>
+  <div class="brand"><b>Veyra</b><span>Pilot Intelligence</span><a href="airline-tms-demo.html" style="display:inline-block;margin-top:12px;color:#d7bd80;font-size:8px;text-transform:uppercase;letter-spacing:.06em">← Demo Home</a></div>
   <div class="role"><small>Current role</small><b>Training Manager</b><span>Manager sandbox · synthetic data</span></div>
   <nav class="nav">
     <button class="active" data-view="overview">01 · Overview</button>
@@ -91,7 +91,7 @@
 <script>
 (function(){
 "use strict";
-const DATA_URL="data/airline-tms-demo-seed-v1.json?v=1";let data=null;
+const DATA_URLS=["/data/airline-tms-demo-seed-v1.json?v=demo1","data/airline-tms-demo-seed-v1.json?v=demo1"];let data=null;
 const $=id=>document.getElementById(id),mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,fmt=n=>Number(n).toFixed(2);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
 const recordsFor=id=>data.records.filter(r=>r.trainee_id===id).sort((a,b)=>b.date.localeCompare(a.date));
@@ -115,7 +115,8 @@ function openTrainee(id){const t=data.trainees.find(x=>x.id===id),rs=recordsFor(
 function openInstructor(id){const x=insStats().find(y=>y.ins.id===id);$("drawerEyebrow").textContent="INSTRUCTOR KPI";$("drawerTitle").textContent=x.ins.label;$("drawerBody").innerHTML='<div class="drawerBlock"><small>Profile</small><b>'+x.ins.id+' · '+x.ins.role+' · '+x.ins.fleet+'</b></div><div class="drawerBlock"><small>Activity</small><b>'+x.records+' sessions · '+x.trainees+' trainees</b></div><div class="drawerBlock"><small>Grading</small><b>mean '+fmt(x.own)+' · delta '+(x.delta>=0?"+":"")+fmt(x.delta)+'</b></div><div class="drawerBlock"><small>Evidence</small><b>'+Math.round(x.cov*100)+'% low-grade evidence coverage</b></div><div class="drawerBlock"><small>Status</small><b>'+(x.review?"Standardization review":"In line")+'</b></div>';openDrawer()}
 function openDrawer(){$("drawer").classList.add("open");$("drawer").setAttribute("aria-hidden","false")}function closeDrawer(){$("drawer").classList.remove("open");$("drawer").setAttribute("aria-hidden","true")}function showView(n){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+n);document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===n));if($("mobileView"))$("mobileView").value=n}
 function bind(){document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));$("mobileView").addEventListener("change",e=>showView(e.target.value));["pilotSearch","pilotFleetFilter","pilotRankFilter"].forEach(id=>$(id).addEventListener("input",renderPilots));$("drawerClose").addEventListener("click",closeDrawer);document.addEventListener("click",e=>{const t=e.target.closest("[data-open-trainee]");if(t){openTrainee(t.dataset.openTrainee);return}const i=e.target.closest("[data-open-instructor]");if(i){openInstructor(i.dataset.openInstructor);return}const j=e.target.closest("[data-jump]");if(j){showView(j.dataset.jump)}})}
-async function init(){const r=await fetch(DATA_URL,{cache:"no-store"});data=await r.json();renderOverview();renderPilots();renderCompetencies();renderInstructors();renderQualifications();bind()}init().catch(()=>document.querySelector(".notice").textContent="Synthetic dataset unavailable.");
+async function loadSyntheticData(){let lastError=null;for(const url of DATA_URLS){try{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}catch(e){lastError=e}}throw lastError||new Error("Synthetic dataset unavailable")}
+async function init(){data=await loadSyntheticData();document.querySelector(".notice").textContent="Datos simulados para desarrollo y validación de la arquitectura funcional.";renderOverview();renderPilots();renderCompetencies();renderInstructors();renderQualifications();bind()}init().catch(()=>document.querySelector(".notice").textContent="No fue posible cargar los datos simulados.");
 })();
 </script>
 </body>

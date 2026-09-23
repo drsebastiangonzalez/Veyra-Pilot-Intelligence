@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Veyra Pilot Intelligence · Airline TMS Demo</title>
+<meta name="description" content="Veyra Pilot Intelligence Training Management System demo environment.">
+<style>
+:root{
+  --navy:#07111d;--navy2:#0c1b2a;--paper:#f4efe6;--paper2:#fffaf2;--ink:#101a27;
+  --muted:#6d7886;--line:#ddd3c3;--gold:#c7a159;--gold2:#e2c17c;--green:#2f7b64;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}
+.header{background:var(--navy);color:#fff;border-bottom:1px solid rgba(199,161,89,.3)}
+.headerInner{max-width:1440px;margin:auto;padding:18px 28px;display:flex;align-items:center;gap:20px}
+.brand strong{display:block;font:400 31px Georgia,"Times New Roman",serif;letter-spacing:-.04em}
+.brand span{display:block;color:var(--gold);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:3px}
+.headerMeta{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tag{border:1px solid rgba(199,161,89,.38);padding:6px 8px;color:#d9c28f;font-size:8px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.hero{max-width:1440px;margin:auto;padding:62px 28px 34px}
+.eyebrow{color:#9a742f;font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:900}
+.hero h1{font:400 clamp(44px,5vw,72px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.045em;margin:14px 0 18px;max-width:900px}
+.hero p{max-width:830px;color:var(--muted);font-size:14px;line-height:1.65;margin:0}
+.metaLine{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.metaLine span{border:1px solid var(--line);background:var(--paper2);padding:7px 9px;color:#6d604b;font-size:8px;text-transform:uppercase;letter-spacing:.05em;font-weight:900}
+.wrap{max-width:1440px;margin:auto;padding:0 28px 60px}
+.section{padding:36px 0;border-top:1px solid var(--line)}
+.sectionHead{display:flex;justify-content:space-between;gap:26px;align-items:end;margin-bottom:18px}
+.sectionHead h2{font:400 clamp(30px,3.5vw,48px)/1.02 Georgia,"Times New Roman",serif;letter-spacing:-.035em;margin:7px 0 0}
+.sectionHead p{max-width:520px;margin:0;color:var(--muted);font-size:11px;line-height:1.55}
+.roleGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.role{background:#fff;border:1px solid var(--line);padding:23px;display:flex;flex-direction:column;min-height:270px}
+.roleTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.roleNum{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--gold);color:#8e692a;font-size:9px;font-weight:900}
+.status{border:1px solid #d5c9b6;background:#fffaf2;padding:5px 7px;color:#7a6747;font-size:7px;text-transform:uppercase;letter-spacing:.05em;font-weight:900}
+.role h3{font:400 28px Georgia,"Times New Roman",serif;margin:18px 0 9px}
+.role p{color:#6d7885;font-size:10px;line-height:1.55;margin:0}
+.role ul{margin:16px 0 0;padding-left:17px;color:#44515f;font-size:9px;line-height:1.65}
+.roleAction{margin-top:auto;padding-top:18px;display:flex;justify-content:space-between;gap:12px;align-items:center;color:#8b6728;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.role.primary{background:linear-gradient(145deg,#07111d,#10283c);color:#fff;border-color:rgba(199,161,89,.35)}
+.role.primary p,.role.primary ul{color:#b8c3cd}.role.primary .roleAction{color:#e0c27f}.role.primary .status{background:transparent;border-color:rgba(199,161,89,.35);color:#dfc37d}
+.capGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cap{background:#fff;border:1px solid var(--line);padding:18px}
+.cap small{display:block;color:#9a742f;font-size:7px;text-transform:uppercase;letter-spacing:.06em;font-weight:900}
+.cap h3{font:400 22px Georgia,"Times New Roman",serif;margin:7px 0 7px}
+.cap p{margin:0;color:#6b7683;font-size:9px;line-height:1.5}
+.cap a{display:inline-block;margin-top:13px;color:#8b6729;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.path{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.pathStep{background:#0b1725;color:#fff;border-top:3px solid var(--gold);padding:14px}
+.pathStep span{display:block;color:#d8ba75;font-size:8px;font-weight:900}
+.pathStep b{display:block;margin:7px 0 4px;font-size:10px}
+.pathStep small{color:#94a1ae;font-size:8px;line-height:1.4}
+.disclaimer{margin-top:12px;border-left:3px solid var(--gold);background:#fff7e7;padding:11px 13px;color:#716452;font-size:9px;line-height:1.5}
+.footer{background:var(--navy);color:#7f90a0;border-top:1px solid rgba(199,161,89,.3)}
+.footerInner{max-width:1440px;margin:auto;padding:24px 28px;font-size:8px}
+.footerInner b{color:#d7be83}
+@media(max-width:1000px){.roleGrid,.capGrid{grid-template-columns:1fr 1fr}.path{grid-template-columns:1fr 1fr 1fr}.sectionHead{align-items:flex-start;flex-direction:column}}
+@media(max-width:650px){.headerInner,.hero,.wrap,.footerInner{padding-left:18px;padding-right:18px}.headerMeta{display:none}.hero{padding-top:42px}.roleGrid,.capGrid,.path{grid-template-columns:1fr}.role{min-height:0}.section{padding:28px 0}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="headerInner">
+    <div class="brand"><strong>Veyra</strong><span>Pilot Intelligence</span></div>
+    <div class="headerMeta"><span class="tag">Training Management System</span><span class="tag">Demo Environment</span></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Airline TMS Demo</div>
+  <h1>Training Management System (TMS)</h1>
+  <p>Entorno funcional para revisar arquitectura, roles, análisis, asistentes y flujos de entrenamiento. El objetivo es mostrar cómo pueden organizarse y conectarse las funciones del sistema sin depender de datos reales.</p>
+  <div class="metaLine"><span>Datos simulados</span><span>No real people</span><span>No operator data</span><span>Functional prototype</span></div>
+</section>
+
+<main class="wrap">
+  <section class="section">
+    <div class="sectionHead">
+      <div><div class="eyebrow">Role access</div><h2>Seleccione un perfil.</h2></div>
+      <p>Cada perfil muestra únicamente el contexto correspondiente a su función dentro del proceso de entrenamiento.</p>
+    </div>
+    <div class="roleGrid">
+      <a class="role primary" href="airline-tms-manager.html">
+        <div class="roleTop"><span class="roleNum">01</span><span class="status">Live sandbox</span></div>
+        <h3>Training Manager</h3>
+        <p>Supervisión de desempeño, competencias, instructor KPI, qualifications, casos en revisión y training effectiveness.</p>
+        <ul><li>Manager Overview</li><li>Pilot Performance</li><li>Competency Intelligence</li><li>Instructor KPI</li><li>Qualifications</li><li>Training Effectiveness</li></ul>
+        <div class="roleAction"><span>Open Manager Sandbox</span><b>→</b></div>
+      </a>
+
+      <a class="role" href="airline-tms-functional-annex.html#instructor">
+        <div class="roleTop"><span class="roleNum">02</span><span class="status">Functional prototype</span></div>
+        <h3>Instructor</h3>
+        <p>Sesión asignada, evidencia, grading, Instructor Focus, comportamientos observables y apoyo del Instructor Assistant.</p>
+        <ul><li>Assigned session</li><li>Instructor Assistant</li><li>Competency / OB support</li><li>Debriefing</li><li>Training Record</li></ul>
+        <div class="roleAction"><span>Open Instructor Preview</span><b>→</b></div>
+      </a>
+
+      <a class="role" href="airline-tms-functional-annex.html#trainee">
+        <div class="roleTop"><span class="roleNum">03</span><span class="status">Functional prototype</span></div>
+        <h3>Trainee</h3>
+        <p>Preparación de sesiones, historial autorizado, desempeño individual y apoyo del Trainee Assistant.</p>
+        <ul><li>Session preparation</li><li>Training aids</li><li>Personal history</li><li>Areas de mejora</li><li>Study plan</li></ul>
+        <div class="roleAction"><span>Open Trainee Preview</span><b>→</b></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><div class="eyebrow">Functional areas</div><h2>Capacidades disponibles para revisión.</h2></div>
+      <p>Las siguientes funciones se presentan como prototipos funcionales o arquitectura de integración.</p>
+    </div>
+    <div class="capGrid">
+      <article class="cap"><small>Training Design</small><h3>Training Design</h3><p>Diseño de sesiones, objetivos, assessment, evidence, review y versionado.</p><a href="airline-tms-functional-annex.html#design">Open →</a></article>
+      <article class="cap"><small>Analytics</small><h3>Competency Intelligence</h3><p>Tendencias, comparación poblacional, OB, evidencia y análisis de los últimos entrenamientos.</p><a href="airline-tms-functional-annex.html#ebt">Open →</a></article>
+      <article class="cap"><small>Instructor support</small><h3>Instructor Assistant</h3><p>Revisión de observaciones, propuesta de competencias y OB, evidencia y apoyo al debriefing.</p><a href="airline-tms-functional-annex.html#instructor">Open →</a></article>
+      <article class="cap"><small>Trainee support</small><h3>Trainee Assistant</h3><p>Preparación, review, practice y self-check a partir del historial autorizado.</p><a href="airline-tms-functional-annex.html#trainee">Open →</a></article>
+      <article class="cap"><small>Standardization</small><h3>Instructor KPI</h3><p>Actividad, evidencia, cobertura, consistencia y señales para revisión de standardization.</p><a href="airline-tms-manager.html">Open →</a></article>
+      <article class="cap"><small>Effectiveness</small><h3>Safety / FDM to Training</h3><p>Seguimiento de una señal operacional desde la necesidad de training hasta la medición posterior.</p><a href="airline-tms-manager.html">Open →</a></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><div class="eyebrow">Suggested review</div><h2>Recorrido recomendado.</h2></div>
+      <p>Un recorrido corto permite entender el flujo sin revisar toda la arquitectura técnica.</p>
+    </div>
+    <div class="path">
+      <div class="pathStep"><span>01</span><b>Manager Overview</b><small>KPIs y señales principales.</small></div>
+      <div class="pathStep"><span>02</span><b>Pilot Performance</b><small>Historial y competencias.</small></div>
+      <div class="pathStep"><span>03</span><b>Instructor KPI</b><small>Medición y standardization.</small></div>
+      <div class="pathStep"><span>04</span><b>Assistants</b><small>Instructor y trainee.</small></div>
+      <div class="pathStep"><span>05</span><b>Training Design</b><small>Diseño, assessment y publicación.</small></div>
+    </div>
+    <div class="disclaimer">Este entorno utiliza únicamente información simulada. Las funciones marcadas como prototipo representan capacidades en desarrollo o flujos propuestos para validación funcional.</div>
+  </section>
+</main>
+
+<footer class="footer"><div class="footerInner"><b>VEYRA PILOT INTELLIGENCE</b> · TMS Demo Environment</div></footer>
+</body>
+</html>
