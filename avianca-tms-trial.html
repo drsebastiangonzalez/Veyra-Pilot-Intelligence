@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Veyra Pilot Intelligence · Avianca TMS Trial</title>
+<style>
+:root{
+  --navy:#07111d;--navy2:#0d1b2a;--paper:#f4efe6;--card:#fffaf2;--ink:#101a27;
+  --muted:#6d7886;--line:#ddd3c3;--gold:#c7a159;--green:#2f7b64;--amber:#a97425;--red:#a34a43;--blue:#557c98;
+}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,select{font:inherit}button{cursor:pointer}
+.top{background:var(--navy);color:#fff;border-bottom:1px solid rgba(199,161,89,.3);position:sticky;top:0;z-index:20}
+.topin{max-width:1500px;margin:auto;padding:15px 24px;display:flex;gap:18px;align-items:center}.brand b{display:block;font:400 28px Georgia,serif}.brand span{display:block;color:var(--gold);font-size:8px;letter-spacing:.2em;text-transform:uppercase}.topmeta{margin-left:auto;display:flex;gap:7px}.tag{border:1px solid rgba(199,161,89,.32);padding:6px 8px;color:#dcc58f;font-size:8px;text-transform:uppercase;font-weight:900}
+.shell{max-width:1500px;margin:auto;padding:24px}.hero{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:18px}.eyebrow{color:#9a742f;font-size:8px;text-transform:uppercase;letter-spacing:.1em;font-weight:900}.hero h1{font:400 clamp(36px,4vw,58px)/1 Georgia,serif;margin:7px 0 8px}.hero p{margin:0;color:var(--muted);font-size:10px;line-height:1.5;max-width:680px}.notice{background:#fff7e8;border-left:3px solid var(--gold);padding:10px 12px;color:#6e6251;font-size:9px;margin-bottom:15px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{border:1px solid #d6cbb9;background:#fff;padding:9px 12px;color:#5a6674;font-size:9px}.tabs button.active{background:var(--navy);color:#fff;border-color:var(--navy)}.view[hidden]{display:none}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}.kpi{background:#fff;border:1px solid var(--line);padding:15px}.kpi small{display:block;color:#7d8894;font-size:7px;text-transform:uppercase}.kpi b{display:block;font-size:25px;margin-top:6px}.kpi span{display:block;color:#8b7759;font-size:8px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:10px}.panel{background:#fff;border:1px solid var(--line);padding:17px}.panelHead{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:13px}.panelHead small{display:block;color:#9a742f;font-size:7px;text-transform:uppercase;font-weight:900}.panelHead h3{margin:5px 0 0;font:400 22px Georgia,serif}.panelHead span{border:1px solid #d9cfbf;padding:5px 7px;color:#74808c;font-size:8px}
+.familyRow{display:grid;grid-template-columns:140px 1fr 70px;gap:8px;align-items:center;margin:11px 0}.familyRow b{font-size:9px}.track{height:8px;background:#ebe4d9}.track i{display:block;height:100%;background:#b68a3c}.familyRow em{font-style:normal;text-align:right;color:#6d7885;font-size:9px}
+.queueItem{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;border-top:1px solid var(--line);padding:9px 0}.queueItem:first-child{border-top:0}.q{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:8px;font-weight:900}.q.red{background:#f4dfdd;color:#9f443e}.q.amber{background:#fff0d7;color:#97671f}.q.blue{background:#e6eef4;color:#496f8b}.queueItem b{display:block;font-size:9px}.queueItem small{display:block;color:#7b8692;font-size:8px;margin-top:3px}.queueItem em{font-style:normal;color:#866327;font-size:8px}
+.tableWrap{overflow:auto;background:#fff;border:1px solid var(--line)}.table{min-width:850px}.tr{display:grid;gap:8px;padding:10px 12px;border-top:1px solid var(--line);align-items:center;font-size:9px}.tr.head{background:var(--navy);color:#fff;border-top:0;text-transform:uppercase;font-size:8px}.fleetTable .tr{grid-template-columns:1.25fr 1fr .65fr .75fr .85fr .65fr}.crewTable .tr{grid-template-columns:.8fr 1.15fr 1.15fr .8fr .7fr .7fr .65fr}.tr span{color:#687482}.tr b{font-size:9px}.status{display:inline-block;border-radius:20px;padding:4px 6px;font-size:8px;font-weight:900}.ok{background:#e4f0eb;color:#2d705c}.watch{background:#fff0d5;color:#93631d}.bad{background:#f5dfdd;color:#9d443e}.link{border:0;background:transparent;color:#8a6729;font-size:8px;font-weight:900;padding:0}
+.reportCards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.reportCard{background:#fff;border:1px solid var(--line);padding:18px}.reportCard small{display:block;color:#9a742f;font-size:7px;text-transform:uppercase}.reportCard h3{font:400 22px Georgia,serif;margin:7px 0}.reportCard p{color:#6c7785;font-size:9px;line-height:1.5;min-height:54px}.reportCard button{border:0;background:var(--navy);color:#fff;padding:9px 11px;font-size:8px;font-weight:900;text-transform:uppercase}
+.drawer{position:fixed;right:0;top:0;width:min(520px,94vw);height:100vh;background:#fff;box-shadow:-22px 0 50px rgba(0,0,0,.18);z-index:60;transform:translateX(102%);transition:.2s;overflow:auto}.drawer.open{transform:translateX(0)}.drawerHead{position:sticky;top:0;background:var(--navy);color:#fff;padding:18px;display:flex;justify-content:space-between;align-items:start}.drawerHead small{display:block;color:#d6b96f;font-size:8px}.drawerHead h3{font:400 25px Georgia,serif;margin:5px 0 0}.drawerHead button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;width:32px;height:32px}.drawerBody{padding:18px}.reportTitle{border-bottom:1px solid var(--line);padding-bottom:14px}.reportTitle b{display:block;font:400 25px Georgia,serif}.reportTitle span{display:block;color:#7a8591;font-size:8px;margin-top:4px}.reportKpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}.reportKpis div{background:#f7f2e9;padding:10px}.reportKpis small{display:block;color:#8b7658;font-size:7px}.reportKpis b{display:block;font-size:14px;margin-top:4px}.reportBlock{border-top:1px solid var(--line);padding:12px 0}.reportBlock small{display:block;color:#9a742f;font-size:7px;text-transform:uppercase}.reportBlock b{display:block;margin-top:5px;font-size:10px}.reportList{display:grid;gap:5px;margin-top:8px}.reportList div{background:#f7f2e9;padding:8px;font-size:8px;color:#4e5a67}.back{display:inline-block;color:#d7bc7d;font-size:8px;text-transform:uppercase;letter-spacing:.05em;margin-top:10px}
+@media(max-width:1000px){.hero{align-items:start;flex-direction:column}.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.reportCards{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.topin,.shell{padding-left:16px;padding-right:16px}.topmeta{display:none}.kpis{grid-template-columns:1fr 1fr}.reportCards{grid-template-columns:1fr}.tabs button{flex:1}.hero h1{font-size:39px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand"><b>Veyra</b><span>Pilot Intelligence</span><a class="back" href="airline-tms-demo.html">← Demo Home</a></div><div class="topmeta"><span class="tag">Avianca Trial Configuration</span><span class="tag">Synthetic Data</span></div></div></header>
+
+<main class="shell">
+  <div class="hero">
+    <div><div class="eyebrow">Operator Trial</div><h1>Avianca TMS Trial</h1><p>Prueba funcional con familias de flota Airbus A320 y Boeing 787 Dreamliner, tripulaciones, entrenamiento e informes simulados.</p></div>
+  </div>
+  <div class="notice">Todos los identificadores de aeronaves, tripulaciones, resultados y reportes son simulados. No se utilizan matrículas, nombres ni registros reales.</div>
+
+  <nav class="tabs"><button class="active" data-view="overview">Resumen</button><button data-view="fleet">Flota</button><button data-view="crews">Tripulaciones</button><button data-view="reports">Informes</button></nav>
+
+  <section class="view" id="view-overview">
+    <div class="kpis">
+      <div class="kpi"><small>Aeronaves en muestra</small><b id="kpiAircraft">—</b><span>sample synthetic fleet</span></div>
+      <div class="kpi"><small>Tripulaciones</small><b id="kpiCrews">—</b><span>crew pairs</span></div>
+      <div class="kpi"><small>Sesiones</small><b id="kpiSessions">—</b><span>training records</span></div>
+      <div class="kpi"><small>Casos en revisión</small><b id="kpiReview">—</b><span>crew / qualification</span></div>
+      <div class="kpi"><small>Promedio general</small><b id="kpiAverage">—</b><span>simulated grading</span></div>
+    </div>
+    <div class="grid2">
+      <article class="panel"><div class="panelHead"><div><small>FLOTA</small><h3>Distribución de la muestra</h3></div><span>12 aircraft sample</span></div><div id="fleetFamilySummary"></div></article>
+      <article class="panel"><div class="panelHead"><div><small>SEGUIMIENTO</small><h3>Casos prioritarios</h3></div><span id="priorityCount">—</span></div><div id="priorityQueue"></div></article>
+    </div>
+  </section>
+
+  <section class="view" id="view-fleet" hidden>
+    <div class="panelHead"><div><small>FLOTA SIMULADA</small><h3>Aeronaves en la muestra</h3></div><span>public fleet families</span></div>
+    <div class="tableWrap fleetTable"><div class="table" id="fleetTable"></div></div>
+  </section>
+
+  <section class="view" id="view-crews" hidden>
+    <div class="panelHead"><div><small>TRIPULACIONES SIMULADAS</small><h3>Crew training status</h3></div><span>captain + first officer</span></div>
+    <div class="tableWrap crewTable"><div class="table" id="crewTable"></div></div>
+  </section>
+
+  <section class="view" id="view-reports" hidden>
+    <div class="panelHead"><div><small>INFORMES SIMULADOS</small><h3>Reportes disponibles</h3></div><span>trial reports</span></div>
+    <div class="reportCards">
+      <article class="reportCard"><small>Fleet</small><h3>Fleet Training Status</h3><p>Estado de la muestra de flota, tripulaciones asignadas, casos de revisión y promedio de entrenamiento.</p><button data-report="fleet">Abrir informe</button></article>
+      <article class="reportCard"><small>Crew</small><h3>Crew Training Report</h3><p>Resumen por tripulación: miembros, aeronave asignada, sesiones recientes, competencia de seguimiento y próxima actividad.</p><button data-report="crew">Abrir informe</button></article>
+      <article class="reportCard"><small>Competency</small><h3>Competency Summary</h3><p>Promedios por competencia para la población simulada y principales señales de seguimiento.</p><button data-report="competency">Abrir informe</button></article>
+    </div>
+  </section>
+</main>
+
+<aside class="drawer" id="drawer" aria-hidden="true"><div class="drawerHead"><div><small id="drawerEyebrow">REPORT</small><h3 id="drawerTitle">Simulated report</h3></div><button id="drawerClose">×</button></div><div class="drawerBody" id="drawerBody"></div></aside>
+
+<script>
+(function(){
+"use strict";
+const DATA_URLS=["/data/avianca-trial-synthetic-v1.json?v=1","data/avianca-trial-synthetic-v1.json?v=1"];let data=null;
+const $=id=>document.getElementById(id),mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,fmt=n=>Number(n).toFixed(2);
+function showView(n){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+n);document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===n))}
+async function load(){let err;for(const u of DATA_URLS){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}catch(e){err=e}}throw err}
+function statusClass(s){return /Review|FOLLOW-UP/.test(s)?"watch":"ok"}
+function render(){
+  const reviewCrews=data.crews.filter(c=>c.qualification_status==="Review"),reviewAircraft=data.aircraft.filter(a=>a.status==="Training review");
+  $("kpiAircraft").textContent=data.aircraft.length;$("kpiCrews").textContent=data.crews.length;$("kpiSessions").textContent=data.sessions.length;$("kpiReview").textContent=reviewCrews.length+reviewAircraft.length;$("kpiAverage").textContent=fmt(mean(data.crews.map(c=>c.average)));
+  const fam={};data.aircraft.forEach(a=>fam[a.family]=(fam[a.family]||0)+1);const total=data.aircraft.length;$("fleetFamilySummary").innerHTML=Object.entries(fam).map(([k,v])=>'<div class="familyRow"><b>'+k+'</b><span class="track"><i style="width:'+(v/total*100)+'%"></i></span><em>'+v+' aircraft</em></div>').join("");
+  const q=[];reviewCrews.forEach(c=>q.push({code:c.id.slice(-2),title:c.id+" · "+c.fleet,sub:"Qualification review · next training "+c.next_training}));reviewAircraft.forEach(a=>q.push({code:a.id.slice(-2),title:a.id+" · "+a.family,sub:"Aircraft training review"}));$("priorityCount").textContent=q.length+" cases";$("priorityQueue").innerHTML=q.map((x,i)=>'<div class="queueItem"><span class="q '+(i?"amber":"red")+'">'+x.code+'</span><div><b>'+x.title+'</b><small>'+x.sub+'</small></div><em>Open</em></div>').join("")||'<div class="queueItem"><span class="q blue">OK</span><div><b>No review cases</b><small>synthetic sample</small></div></div>';
+  $("fleetTable").innerHTML='<div class="tr head"><b>Aircraft ID</b><b>Family</b><b>Base</b><b>Status</b><b>Assigned crew</b><b>Action</b></div>'+data.aircraft.map(a=>{const crew=data.crews.find(c=>c.aircraft_id===a.id);return'<div class="tr"><b>'+a.id+'</b><span>'+a.family+'</span><span>'+a.base+'</span><span class="status '+statusClass(a.status)+'">'+a.status+'</span><span>'+(crew?crew.id:"—")+'</span><button class="link" data-aircraft="'+a.id+'">Open</button></div>'}).join("");
+  $("crewTable").innerHTML='<div class="tr head"><b>Crew</b><b>Captain</b><b>First Officer</b><b>Fleet</b><b>Average</b><b>Status</b><b>Report</b></div>'+data.crews.map(c=>'<div class="tr"><b>'+c.id+'</b><span>'+c.captain.label+'</span><span>'+c.first_officer.label+'</span><span>'+c.fleet+'</span><span>'+fmt(c.average)+'</span><span class="status '+statusClass(c.qualification_status)+'">'+c.qualification_status+'</span><button class="link" data-crew="'+c.id+'">Open report</button></div>').join("");
+}
+function openDrawer(title,eyebrow,body){$("drawerTitle").textContent=title;$("drawerEyebrow").textContent=eyebrow;$("drawerBody").innerHTML=body;$("drawer").classList.add("open");$("drawer").setAttribute("aria-hidden","false")}
+function crewReport(c){const rs=data.sessions.filter(s=>s.crew_id===c.id).sort((a,b)=>b.date.localeCompare(a.date));return '<div class="reportTitle"><b>'+c.id+' · Crew Training Report</b><span>Simulated report · '+c.fleet+'</span></div><div class="reportKpis"><div><small>Average</small><b>'+fmt(c.average)+'</b></div><div><small>Watch competency</small><b>'+c.watch_competency+' '+fmt(c.watch_score)+'</b></div><div><small>Next training</small><b>'+c.next_training+'</b></div></div><div class="reportBlock"><small>Crew</small><b>'+c.captain.label+' · '+c.first_officer.label+'</b></div><div class="reportBlock"><small>Assigned aircraft</small><b>'+c.aircraft_id+'</b></div><div class="reportBlock"><small>Recent training</small><div class="reportList">'+rs.map(r=>'<div>'+r.date+' · '+r.type+' · '+r.outcome+' · '+fmt(r.average)+'</div>').join("")+'</div></div><div class="reportBlock"><small>Follow-up</small><b>'+(c.qualification_status==="Review"?"Review required":"Current")+'</b></div>'}
+function fleetReport(){const a320=data.aircraft.filter(a=>a.family==="Airbus A320").length,b787=data.aircraft.filter(a=>a.family==="Boeing 787 Dreamliner").length,review=data.crews.filter(c=>c.qualification_status==="Review").length;return '<div class="reportTitle"><b>Fleet Training Status</b><span>Simulated operator report</span></div><div class="reportKpis"><div><small>Aircraft sample</small><b>'+data.aircraft.length+'</b></div><div><small>Crew pairs</small><b>'+data.crews.length+'</b></div><div><small>Review cases</small><b>'+review+'</b></div></div><div class="reportBlock"><small>Fleet sample</small><div class="reportList"><div>Airbus A320 · '+a320+' simulated aircraft</div><div>Boeing 787 Dreamliner · '+b787+' simulated aircraft</div></div></div><div class="reportBlock"><small>Training</small><b>'+data.sessions.length+' simulated sessions · mean '+fmt(mean(data.crews.map(c=>c.average)))+'</b></div>'}
+function competencyReport(){const sums={};data.crews.forEach(c=>Object.entries(c.competency).forEach(([k,v])=>{(sums[k] ||= []).push(v)}));const rows=Object.entries(sums).map(([k,v])=>[k,mean(v)]).sort((a,b)=>a[1]-b[1]);return '<div class="reportTitle"><b>Competency Summary</b><span>Simulated population</span></div><div class="reportList">'+rows.map(([k,v])=>'<div>'+k+' · '+fmt(v)+(v<3.0?' · Review':'')+'</div>').join("")+'</div>'}
+function aircraftDetail(id){const a=data.aircraft.find(x=>x.id===id),c=data.crews.find(x=>x.aircraft_id===id);openDrawer(a.id,"AIRCRAFT",'<div class="reportTitle"><b>'+a.family+'</b><span>Simulated aircraft identifier</span></div><div class="reportBlock"><small>Base</small><b>'+a.base+'</b></div><div class="reportBlock"><small>Status</small><b>'+a.status+'</b></div><div class="reportBlock"><small>Assigned crew</small><b>'+(c?c.id+" · "+c.captain.label+" / "+c.first_officer.label:"No crew assigned")+'</b></div>')}
+function bind(){document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));$("drawerClose").addEventListener("click",()=>{$("drawer").classList.remove("open");$("drawer").setAttribute("aria-hidden","true")});document.addEventListener("click",e=>{const c=e.target.closest("[data-crew]");if(c){const x=data.crews.find(y=>y.id===c.dataset.crew);openDrawer(x.id,"CREW REPORT",crewReport(x));return}const a=e.target.closest("[data-aircraft]");if(a){aircraftDetail(a.dataset.aircraft);return}const r=e.target.closest("[data-report]");if(r){if(r.dataset.report==="fleet")openDrawer("Fleet Training Status","REPORT",fleetReport());if(r.dataset.report==="crew")openDrawer("Crew Training Report","REPORT",crewReport(data.crews[0]));if(r.dataset.report==="competency")openDrawer("Competency Summary","REPORT",competencyReport())}})}
+async function init(){data=await load();render();bind()}init().catch(()=>document.querySelector(".notice").textContent="No fue posible cargar los datos simulados.");
+})();
+</script>
+</body>
+</html>
