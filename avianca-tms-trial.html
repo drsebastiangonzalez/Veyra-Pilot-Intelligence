@@ -24,7 +24,9 @@
 .drawer{position:fixed;right:0;top:0;width:min(520px,94vw);height:100vh;background:#fff;box-shadow:-22px 0 50px rgba(0,0,0,.18);z-index:60;transform:translateX(102%);transition:.2s;overflow:auto}.drawer.open{transform:translateX(0)}.drawerHead{position:sticky;top:0;background:var(--navy);color:#fff;padding:18px;display:flex;justify-content:space-between;align-items:start}.drawerHead small{display:block;color:#d6b96f;font-size:8px}.drawerHead h3{font:400 25px Georgia,serif;margin:5px 0 0}.drawerHead button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;width:32px;height:32px}.drawerBody{padding:18px}.reportTitle{border-bottom:1px solid var(--line);padding-bottom:14px}.reportTitle b{display:block;font:400 25px Georgia,serif}.reportTitle span{display:block;color:#7a8591;font-size:8px;margin-top:4px}.reportKpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}.reportKpis div{background:#f7f2e9;padding:10px}.reportKpis small{display:block;color:#8b7658;font-size:7px}.reportKpis b{display:block;font-size:14px;margin-top:4px}.reportBlock{border-top:1px solid var(--line);padding:12px 0}.reportBlock small{display:block;color:#9a742f;font-size:7px;text-transform:uppercase}.reportBlock b{display:block;margin-top:5px;font-size:10px}.reportList{display:grid;gap:5px;margin-top:8px}.reportList div{background:#f7f2e9;padding:8px;font-size:8px;color:#4e5a67}.back{display:inline-block;color:#d7bc7d;font-size:8px;text-transform:uppercase;letter-spacing:.05em;margin-top:10px}
 @media(max-width:1000px){.hero{align-items:start;flex-direction:column}.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.reportCards{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.topin,.shell{padding-left:16px;padding-right:16px}.topmeta{display:none}.kpis{grid-template-columns:1fr 1fr}.reportCards{grid-template-columns:1fr}.tabs button{flex:1}.hero h1{font-size:39px}}
-</style>
+
+.crewDetailTop{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;margin-bottom:14px}.crewDetailTop small{display:block;color:#9a742f;font-size:7px;font-weight:900;letter-spacing:.07em}.crewDetailTop h2{font:400 34px Georgia,serif;margin:5px 0 4px}.crewDetailTop p{margin:0;color:#6d7885;font-size:9px}.backBtn{border:1px solid #d6cbb9;background:#fff;padding:9px 11px;color:#596573;font-size:8px;font-weight:900}.crewKpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.crewAnalytics,.crewLowerGrid,.crewActionGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.radarWrap,.trendWrap{min-height:330px;display:grid;place-items:center}.radarWrap svg,.trendWrap svg{width:100%;height:100%}.miniTable{display:grid}.miniRow{display:grid;grid-template-columns:78px 1fr 84px 52px;gap:8px;align-items:center;border-top:1px solid var(--line);padding:10px 0;font-size:8px}.miniRow:first-child{border-top:0}.miniRow time{color:#7c8793}.miniRow b{font-size:9px}.miniRow span{color:#687482}.miniRow em{font-style:normal;text-align:right;color:#866326;font-weight:900}.obList,.focusList,.followList{display:grid;gap:8px}.obItem,.focusItem,.followItem{border-top:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start}.obItem:first-child,.focusItem:first-child,.followItem:first-child{border-top:0}.obItem>span,.focusItem>span,.followItem>span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#0b1725;color:#dfc17a;font-size:8px;font-weight:900}.obItem b,.focusItem b,.followItem b{display:block;font-size:9px}.obItem small,.focusItem small,.followItem small{display:block;color:#737f8c;font-size:8px;line-height:1.45;margin-top:3px}.obItem em{font-style:normal;color:#8a6729;font-size:8px;white-space:nowrap}.focusPanel{border-top:3px solid #6d8ba0}.followPanel{border-top:3px solid #c7a159}.reportDisclaimer{border-left:3px solid var(--gold);background:#fff7e8;padding:10px 12px;color:#706350;font-size:8px}.radarGrid{fill:none;stroke:#ddd5c7;stroke-width:1}.radarAxis{stroke:#e2dacd;stroke-width:1}.radarArea{fill:rgba(199,161,89,.18);stroke:#987126;stroke-width:2.5}.radarPoint{fill:#0b1725;stroke:#c7a159;stroke-width:2}.radarLabel{font-size:10px;font-weight:700;fill:#52606f}.radarScore{font-size:8px;fill:#8a6729}.trendAxis{stroke:#d8cfbf;stroke-width:1}.trendLine{fill:none;stroke:#8e6b2d;stroke-width:3}.trendPoint{fill:#0b1725;stroke:#c7a159;stroke-width:2}.trendLabel{font-size:9px;fill:#6d7885}.trendScore{font-size:9px;font-weight:700;fill:#273442}@media(max-width:900px){.crewKpis{grid-template-columns:1fr 1fr}.crewAnalytics,.crewLowerGrid,.crewActionGrid{grid-template-columns:1fr}.crewDetailTop{grid-template-columns:1fr}.crewDetailTop .status{justify-self:start}}@media(max-width:560px){.crewKpis{grid-template-columns:1fr}.miniRow{grid-template-columns:70px 1fr 46px}.miniRow span{display:none}.radarWrap,.trendWrap{min-height:280px}}
+.crewDetailActions{display:flex;gap:8px;align-items:center}.crewDetailActions button{border:0;background:#0b1725;color:#fff;padding:8px 10px;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}@media print{body{background:#fff}.top,.hero,.notice,.tabs,.backBtn,#view-overview,#view-fleet,#view-crews,#view-reports,.drawer{display:none!important}.shell{max-width:none;padding:0}.view[hidden]{display:none!important}#view-crew-detail{display:block!important}.crewDetailActions button{display:none}.panel,.kpi{break-inside:avoid}.reportDisclaimer{margin-top:10px}}</style>
 </head>
 <body>
 <header class="top"><div class="topin"><div class="brand"><b>Veyra</b><span>Pilot Intelligence</span><a class="back" href="airline-tms-demo.html">← Demo Home</a></div><div class="topmeta"><span class="tag">Avianca Trial Configuration</span><span class="tag">Synthetic Data</span></div></div></header>
@@ -61,6 +63,55 @@
     <div class="tableWrap crewTable"><div class="table" id="crewTable"></div></div>
   </section>
 
+  <section class="view" id="view-crew-detail" hidden>
+    <div class="crewDetailTop">
+      <button class="backBtn" type="button" data-back-crews>← Tripulaciones</button>
+      <div><small>CREW TRAINING REPORT</small><h2 id="crewDetailTitle">Crew report</h2><p id="crewDetailMeta">—</p></div>
+      <div class="crewDetailActions"><span id="crewDetailStatus" class="status ok">Current</span><button id="printCrewReport" type="button">Imprimir / PDF</button></div>
+    </div>
+
+    <div class="crewKpis">
+      <div class="kpi"><small>Promedio</small><b id="crewAvg">—</b><span>simulated grading</span></div>
+      <div class="kpi"><small>Competencia en seguimiento</small><b id="crewWatch">—</b><span id="crewWatchScore">—</span></div>
+      <div class="kpi"><small>Próximo entrenamiento</small><b id="crewNext">—</b><span>scheduled activity</span></div>
+      <div class="kpi"><small>Últimas sesiones</small><b id="crewSessionCount">—</b><span>current report window</span></div>
+    </div>
+
+    <div class="crewAnalytics">
+      <article class="panel">
+        <div class="panelHead"><div><small>COMPETENCY PROFILE</small><h3>Perfil de competencias</h3></div><span>1–5</span></div>
+        <div class="radarWrap"><svg id="crewRadar" viewBox="0 0 420 360" role="img" aria-label="Synthetic competency radar"></svg></div>
+      </article>
+      <article class="panel">
+        <div class="panelHead"><div><small>TRAINING TREND</small><h3>Últimos entrenamientos</h3></div><span>3 sessions</span></div>
+        <div class="trendWrap"><svg id="crewTrend" viewBox="0 0 520 280" role="img" aria-label="Synthetic training trend"></svg></div>
+      </article>
+    </div>
+
+    <div class="crewLowerGrid">
+      <article class="panel">
+        <div class="panelHead"><div><small>RECENT TRAINING</small><h3>Sesiones recientes</h3></div><span>simulated</span></div>
+        <div id="crewRecentTraining" class="miniTable"></div>
+      </article>
+      <article class="panel">
+        <div class="panelHead"><div><small>OBSERVABLE BEHAVIOURS</small><h3>OB recurrentes</h3></div><span>top 3</span></div>
+        <div id="crewRecurringOb" class="obList"></div>
+      </article>
+    </div>
+
+    <div class="crewActionGrid">
+      <article class="panel focusPanel">
+        <div class="panelHead"><div><small>INSTRUCTOR FOCUS</small><h3>Próxima observación</h3></div><span>suggested</span></div>
+        <div id="crewInstructorFocus" class="focusList"></div>
+      </article>
+      <article class="panel followPanel">
+        <div class="panelHead"><div><small>FOLLOW-UP</small><h3>Plan de seguimiento</h3></div><span>3 steps</span></div>
+        <div id="crewFollowUp" class="followList"></div>
+      </article>
+    </div>
+    <div class="reportDisclaimer">Informe simulado. Las métricas, OB, tendencias y recomendaciones se generan únicamente con datos sintéticos de esta prueba.</div>
+  </section>
+
   <section class="view" id="view-reports" hidden>
     <div class="panelHead"><div><small>INFORMES SIMULADOS</small><h3>Reportes disponibles</h3></div><span>trial reports</span></div>
     <div class="reportCards">
@@ -76,7 +127,7 @@
 <script>
 (function(){
 "use strict";
-const DATA_URLS=["/data/avianca-trial-synthetic-v1.json?v=1","data/avianca-trial-synthetic-v1.json?v=1"];let data=null;
+const DATA_URLS=["/data/avianca-trial-synthetic-v1.json?v=1.1","data/avianca-trial-synthetic-v1.json?v=1.1"];let data=null;
 const $=id=>document.getElementById(id),mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,fmt=n=>Number(n).toFixed(2);
 function showView(n){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+n);document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===n))}
 async function load(){let err;for(const u of DATA_URLS){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}catch(e){err=e}}throw err}
@@ -90,11 +141,52 @@ function render(){
   $("crewTable").innerHTML='<div class="tr head"><b>Crew</b><b>Captain</b><b>First Officer</b><b>Fleet</b><b>Average</b><b>Status</b><b>Report</b></div>'+data.crews.map(c=>'<div class="tr"><b>'+c.id+'</b><span>'+c.captain.label+'</span><span>'+c.first_officer.label+'</span><span>'+c.fleet+'</span><span>'+fmt(c.average)+'</span><span class="status '+statusClass(c.qualification_status)+'">'+c.qualification_status+'</span><button class="link" data-crew="'+c.id+'">Open report</button></div>').join("");
 }
 function openDrawer(title,eyebrow,body){$("drawerTitle").textContent=title;$("drawerEyebrow").textContent=eyebrow;$("drawerBody").innerHTML=body;$("drawer").classList.add("open");$("drawer").setAttribute("aria-hidden","false")}
+function radarPoints(c){
+  const codes=data.competencies, cx=210,cy=175,r=120;
+  return codes.map((code,i)=>{const a=-Math.PI/2+(Math.PI*2*i/codes.length),v=(c.competency[code]-1)/4,rr=r*Math.max(0,Math.min(1,v));return{code,score:c.competency[code],x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr,lx:cx+Math.cos(a)*(r+28),ly:cy+Math.sin(a)*(r+28),ax:cx+Math.cos(a)*r,ay:cy+Math.sin(a)*r}});
+}
+function renderRadar(c){
+  const svg=$("crewRadar"),pts=radarPoints(c),cx=210,cy=175,r=120;
+  let html="";
+  [1,2,3,4].forEach(level=>{const rr=r*(level/4),poly=data.competencies.map((_,i)=>{const a=-Math.PI/2+(Math.PI*2*i/data.competencies.length);return(cx+Math.cos(a)*rr)+","+(cy+Math.sin(a)*rr)}).join(" ");html+='<polygon class="radarGrid" points="'+poly+'"/>'});
+  pts.forEach(p=>{html+='<line class="radarAxis" x1="'+cx+'" y1="'+cy+'" x2="'+p.ax+'" y2="'+p.ay+'"/>'});
+  html+='<polygon class="radarArea" points="'+pts.map(p=>p.x+","+p.y).join(" ")+'"/>';
+  pts.forEach(p=>{html+='<circle class="radarPoint" cx="'+p.x+'" cy="'+p.y+'" r="4"/><text class="radarLabel" x="'+p.lx+'" y="'+p.ly+'" text-anchor="middle">'+p.code+'</text><text class="radarScore" x="'+p.lx+'" y="'+(p.ly+12)+'" text-anchor="middle">'+fmt(p.score)+'</text>'});
+  svg.innerHTML=html;
+}
+function renderTrend(c){
+  const svg=$("crewTrend"),rs=data.sessions.filter(s=>s.crew_id===c.id).sort((a,b)=>a.date.localeCompare(b.date)),w=520,h=280,left=46,right=22,top=28,bottom=48,plotW=w-left-right,plotH=h-top-bottom;
+  let html='<line class="trendAxis" x1="'+left+'" y1="'+(h-bottom)+'" x2="'+(w-right)+'" y2="'+(h-bottom)+'"/><line class="trendAxis" x1="'+left+'" y1="'+top+'" x2="'+left+'" y2="'+(h-bottom)+'"/>';
+  [1,2,3,4,5].forEach(v=>{const y=top+(5-v)/4*plotH;html+='<text class="trendLabel" x="22" y="'+(y+3)+'">'+v+'</text><line class="trendAxis" x1="'+left+'" y1="'+y+'" x2="'+(w-right)+'" y2="'+y+'" opacity=".35"/>'});
+  const pts=rs.map((r,i)=>{const x=left+(rs.length===1?plotW/2:i*(plotW/(rs.length-1))),y=top+(5-r.average)/4*plotH;return{x,y,r}});
+  html+='<polyline class="trendLine" points="'+pts.map(p=>p.x+","+p.y).join(" ")+'"/>';
+  pts.forEach(p=>{html+='<circle class="trendPoint" cx="'+p.x+'" cy="'+p.y+'" r="5"/><text class="trendScore" x="'+p.x+'" y="'+(p.y-11)+'" text-anchor="middle">'+fmt(p.r.average)+'</text><text class="trendLabel" x="'+p.x+'" y="'+(h-22)+'" text-anchor="middle">'+p.r.date.slice(5)+'</text><text class="trendLabel" x="'+p.x+'" y="'+(h-9)+'" text-anchor="middle">'+p.r.type.replace(" recurrent","")+'</text>'});
+  svg.innerHTML=html;
+}
+function renderCrewDetail(id){
+  const c=data.crews.find(x=>x.id===id);if(!c)return;
+  const rs=data.sessions.filter(s=>s.crew_id===id).sort((a,b)=>b.date.localeCompare(a.date));
+  $("crewDetailTitle").textContent=c.id+" · "+c.fleet;
+  $("crewDetailMeta").textContent=c.captain.label+" · "+c.first_officer.label+" · "+c.base+" · "+c.aircraft_id;
+  $("crewDetailStatus").textContent=c.qualification_status;
+  $("crewDetailStatus").className="status "+statusClass(c.qualification_status);
+  $("crewAvg").textContent=fmt(c.average);
+  $("crewWatch").textContent=c.watch_competency;
+  $("crewWatchScore").textContent="score "+fmt(c.watch_score);
+  $("crewNext").textContent=c.next_training;
+  $("crewSessionCount").textContent=rs.length;
+  renderRadar(c);renderTrend(c);
+  $("crewRecentTraining").innerHTML=rs.map(r=>'<div class="miniRow"><time>'+r.date+'</time><b>'+r.type+'</b><span>'+r.simulated_event+'</span><em>'+fmt(r.average)+'</em></div>').join("");
+  $("crewRecurringOb").innerHTML=c.report.recurrent_ob.slice(0,3).map((o,i)=>'<div class="obItem"><span>0'+(i+1)+'</span><div><b>'+o.ob_id+' · '+o.text+'</b><small>Observed across simulated training records linked to '+c.watch_competency+'.</small></div><em>'+o.occurrences+'x</em></div>').join("");
+  $("crewInstructorFocus").innerHTML=c.report.instructor_focus.map((t,i)=>'<div class="focusItem"><span>0'+(i+1)+'</span><div><b>'+c.watch_competency+'</b><small>'+t+'</small></div></div>').join("");
+  $("crewFollowUp").innerHTML=c.report.follow_up.map((x,i)=>'<div class="followItem"><span>0'+(i+1)+'</span><div><b>'+x.title+'</b><small>'+x.detail+'</small></div></div>').join("");
+  showView("crew-detail");
+}
 function crewReport(c){const rs=data.sessions.filter(s=>s.crew_id===c.id).sort((a,b)=>b.date.localeCompare(a.date));return '<div class="reportTitle"><b>'+c.id+' · Crew Training Report</b><span>Simulated report · '+c.fleet+'</span></div><div class="reportKpis"><div><small>Average</small><b>'+fmt(c.average)+'</b></div><div><small>Watch competency</small><b>'+c.watch_competency+' '+fmt(c.watch_score)+'</b></div><div><small>Next training</small><b>'+c.next_training+'</b></div></div><div class="reportBlock"><small>Crew</small><b>'+c.captain.label+' · '+c.first_officer.label+'</b></div><div class="reportBlock"><small>Assigned aircraft</small><b>'+c.aircraft_id+'</b></div><div class="reportBlock"><small>Recent training</small><div class="reportList">'+rs.map(r=>'<div>'+r.date+' · '+r.type+' · '+r.outcome+' · '+fmt(r.average)+'</div>').join("")+'</div></div><div class="reportBlock"><small>Follow-up</small><b>'+(c.qualification_status==="Review"?"Review required":"Current")+'</b></div>'}
 function fleetReport(){const a320=data.aircraft.filter(a=>a.family==="Airbus A320").length,b787=data.aircraft.filter(a=>a.family==="Boeing 787 Dreamliner").length,review=data.crews.filter(c=>c.qualification_status==="Review").length;return '<div class="reportTitle"><b>Fleet Training Status</b><span>Simulated operator report</span></div><div class="reportKpis"><div><small>Aircraft sample</small><b>'+data.aircraft.length+'</b></div><div><small>Crew pairs</small><b>'+data.crews.length+'</b></div><div><small>Review cases</small><b>'+review+'</b></div></div><div class="reportBlock"><small>Fleet sample</small><div class="reportList"><div>Airbus A320 · '+a320+' simulated aircraft</div><div>Boeing 787 Dreamliner · '+b787+' simulated aircraft</div></div></div><div class="reportBlock"><small>Training</small><b>'+data.sessions.length+' simulated sessions · mean '+fmt(mean(data.crews.map(c=>c.average)))+'</b></div>'}
 function competencyReport(){const sums={};data.crews.forEach(c=>Object.entries(c.competency).forEach(([k,v])=>{(sums[k] ||= []).push(v)}));const rows=Object.entries(sums).map(([k,v])=>[k,mean(v)]).sort((a,b)=>a[1]-b[1]);return '<div class="reportTitle"><b>Competency Summary</b><span>Simulated population</span></div><div class="reportList">'+rows.map(([k,v])=>'<div>'+k+' · '+fmt(v)+(v<3.0?' · Review':'')+'</div>').join("")+'</div>'}
 function aircraftDetail(id){const a=data.aircraft.find(x=>x.id===id),c=data.crews.find(x=>x.aircraft_id===id);openDrawer(a.id,"AIRCRAFT",'<div class="reportTitle"><b>'+a.family+'</b><span>Simulated aircraft identifier</span></div><div class="reportBlock"><small>Base</small><b>'+a.base+'</b></div><div class="reportBlock"><small>Status</small><b>'+a.status+'</b></div><div class="reportBlock"><small>Assigned crew</small><b>'+(c?c.id+" · "+c.captain.label+" / "+c.first_officer.label:"No crew assigned")+'</b></div>')}
-function bind(){document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));$("drawerClose").addEventListener("click",()=>{$("drawer").classList.remove("open");$("drawer").setAttribute("aria-hidden","true")});document.addEventListener("click",e=>{const c=e.target.closest("[data-crew]");if(c){const x=data.crews.find(y=>y.id===c.dataset.crew);openDrawer(x.id,"CREW REPORT",crewReport(x));return}const a=e.target.closest("[data-aircraft]");if(a){aircraftDetail(a.dataset.aircraft);return}const r=e.target.closest("[data-report]");if(r){if(r.dataset.report==="fleet")openDrawer("Fleet Training Status","REPORT",fleetReport());if(r.dataset.report==="crew")openDrawer("Crew Training Report","REPORT",crewReport(data.crews[0]));if(r.dataset.report==="competency")openDrawer("Competency Summary","REPORT",competencyReport())}})}
+function bind(){document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));$("printCrewReport").addEventListener("click",()=>window.print());$("drawerClose").addEventListener("click",()=>{$("drawer").classList.remove("open");$("drawer").setAttribute("aria-hidden","true")});document.addEventListener("click",e=>{const back=e.target.closest("[data-back-crews]");if(back){showView("crews");return}const c=e.target.closest("[data-crew]");if(c){renderCrewDetail(c.dataset.crew);return}const a=e.target.closest("[data-aircraft]");if(a){aircraftDetail(a.dataset.aircraft);return}const r=e.target.closest("[data-report]");if(r){if(r.dataset.report==="fleet")openDrawer("Fleet Training Status","REPORT",fleetReport());if(r.dataset.report==="crew")renderCrewDetail(data.crews[0].id);if(r.dataset.report==="competency")openDrawer("Competency Summary","REPORT",competencyReport())}})}
 async function init(){data=await load();render();bind()}init().catch(()=>document.querySelector(".notice").textContent="No fue posible cargar los datos simulados.");
 })();
 </script>
