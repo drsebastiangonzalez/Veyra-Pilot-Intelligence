@@ -1,0 +1,895 @@
+{
+  "metadata": {
+    "synthetic": true,
+    "version": "1.0",
+    "operator_configuration": "Avianca trial configuration",
+    "generated_at": "2026-09-22",
+    "notice": "All aircraft identifiers, crew members, training records, scores and reports are simulated. No real crew or aircraft registration data is used.",
+    "public_reference": "Avianca publicly identifies Airbus A320 and Boeing 787 Dreamliner as its passenger fleet families."
+  },
+  "aircraft": [
+    {
+      "id": "AV-DMO-A32-01",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "MDE",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-02",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "SAL",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-03",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "BOG",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-04",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "MDE",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-05",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "SAL",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-06",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "BOG",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-07",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "MDE",
+      "status": "Training review",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-A32-08",
+      "family": "Airbus A320",
+      "category": "Narrow-body",
+      "base": "SAL",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-B78-01",
+      "family": "Boeing 787 Dreamliner",
+      "category": "Wide-body",
+      "base": "BOG",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-B78-02",
+      "family": "Boeing 787 Dreamliner",
+      "category": "Wide-body",
+      "base": "BOG",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-B78-03",
+      "family": "Boeing 787 Dreamliner",
+      "category": "Wide-body",
+      "base": "BOG",
+      "status": "Active",
+      "synthetic": true
+    },
+    {
+      "id": "AV-DMO-B78-04",
+      "family": "Boeing 787 Dreamliner",
+      "category": "Wide-body",
+      "base": "BOG",
+      "status": "Training review",
+      "synthetic": true
+    }
+  ],
+  "instructors": [
+    {
+      "id": "TRI-001",
+      "label": "Synthetic TRI 01",
+      "fleet": "Airbus A320"
+    },
+    {
+      "id": "TRI-002",
+      "label": "Synthetic TRI 02",
+      "fleet": "Airbus A320"
+    },
+    {
+      "id": "TRE-001",
+      "label": "Synthetic TRE 01",
+      "fleet": "Boeing 787 Dreamliner"
+    },
+    {
+      "id": "TRI-003",
+      "label": "Synthetic TRI 03",
+      "fleet": "Boeing 787 Dreamliner"
+    }
+  ],
+  "crews": [
+    {
+      "id": "CREW-01",
+      "fleet": "Airbus A320",
+      "base": "MDE",
+      "aircraft_id": "AV-DMO-A32-01",
+      "captain": {
+        "id": "P-A32-001",
+        "label": "Synthetic Captain 01",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-002",
+        "label": "Synthetic First Officer 01",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-06",
+      "competency": {
+        "KNO": 4.16,
+        "PRO": 4.15,
+        "COM": 4.07,
+        "FPA": 4.19,
+        "FPM": 4.31,
+        "LTW": 3.81,
+        "PSD": 4.35,
+        "SAW": 3.99,
+        "WLM": 3.24
+      },
+      "average": 4.03,
+      "watch_competency": "WLM",
+      "watch_score": 3.24,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-02",
+      "fleet": "Airbus A320",
+      "base": "SAL",
+      "aircraft_id": "AV-DMO-A32-02",
+      "captain": {
+        "id": "P-A32-003",
+        "label": "Synthetic Captain 02",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-004",
+        "label": "Synthetic First Officer 02",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-07",
+      "competency": {
+        "KNO": 3.27,
+        "PRO": 3.26,
+        "COM": 3.18,
+        "FPA": 3.3,
+        "FPM": 3.42,
+        "LTW": 2.92,
+        "PSD": 3.46,
+        "SAW": 3.1,
+        "WLM": 4.05
+      },
+      "average": 3.33,
+      "watch_competency": "LTW",
+      "watch_score": 2.92,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-03",
+      "fleet": "Airbus A320",
+      "base": "BOG",
+      "aircraft_id": "AV-DMO-A32-03",
+      "captain": {
+        "id": "P-A32-005",
+        "label": "Synthetic Captain 03",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-006",
+        "label": "Synthetic First Officer 03",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-08",
+      "competency": {
+        "KNO": 4.08,
+        "PRO": 4.07,
+        "COM": 3.99,
+        "FPA": 4.11,
+        "FPM": 4.23,
+        "LTW": 3.73,
+        "PSD": 4.27,
+        "SAW": 4.16,
+        "WLM": 3.16
+      },
+      "average": 3.98,
+      "watch_competency": "WLM",
+      "watch_score": 3.16,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-04",
+      "fleet": "Airbus A320",
+      "base": "MDE",
+      "aircraft_id": "AV-DMO-A32-04",
+      "captain": {
+        "id": "P-A32-007",
+        "label": "Synthetic Captain 04",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-008",
+        "label": "Synthetic First Officer 04",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-09",
+      "competency": {
+        "KNO": 3.19,
+        "PRO": 3.18,
+        "COM": 3.1,
+        "FPA": 3.22,
+        "FPM": 3.34,
+        "LTW": 2.29,
+        "PSD": 3.38,
+        "SAW": 3.02,
+        "WLM": 3.97
+      },
+      "average": 3.19,
+      "watch_competency": "LTW",
+      "watch_score": 2.29,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-05",
+      "fleet": "Airbus A320",
+      "base": "SAL",
+      "aircraft_id": "AV-DMO-A32-05",
+      "captain": {
+        "id": "P-A32-009",
+        "label": "Synthetic Captain 05",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-010",
+        "label": "Synthetic First Officer 05",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-10",
+      "competency": {
+        "KNO": 4,
+        "PRO": 3.99,
+        "COM": 3.91,
+        "FPA": 4.03,
+        "FPM": 4.15,
+        "LTW": 3.65,
+        "PSD": 3.74,
+        "SAW": 3.83,
+        "WLM": 3.08
+      },
+      "average": 3.82,
+      "watch_competency": "WLM",
+      "watch_score": 3.08,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-06",
+      "fleet": "Airbus A320",
+      "base": "BOG",
+      "aircraft_id": "AV-DMO-A32-06",
+      "captain": {
+        "id": "P-A32-011",
+        "label": "Synthetic Captain 06",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-012",
+        "label": "Synthetic First Officer 06",
+        "rank": "FO"
+      },
+      "qualification_status": "Review",
+      "next_training": "2026-10-04",
+      "competency": {
+        "KNO": 3.11,
+        "PRO": 3.1,
+        "COM": 3.02,
+        "FPA": 3.14,
+        "FPM": 3.26,
+        "LTW": 2.76,
+        "PSD": 3.3,
+        "SAW": 3.19,
+        "WLM": 3.89
+      },
+      "average": 3.2,
+      "watch_competency": "LTW",
+      "watch_score": 2.76,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-07",
+      "fleet": "Airbus A320",
+      "base": "MDE",
+      "aircraft_id": "AV-DMO-A32-07",
+      "captain": {
+        "id": "P-A32-013",
+        "label": "Synthetic Captain 07",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-A32-014",
+        "label": "Synthetic First Officer 07",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-12",
+      "competency": {
+        "KNO": 3.92,
+        "PRO": 3.91,
+        "COM": 3.83,
+        "FPA": 3.95,
+        "FPM": 4.07,
+        "LTW": 3.57,
+        "PSD": 4.11,
+        "SAW": 3.75,
+        "WLM": 3
+      },
+      "average": 3.79,
+      "watch_competency": "WLM",
+      "watch_score": 3,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-08",
+      "fleet": "Boeing 787 Dreamliner",
+      "base": "BOG",
+      "aircraft_id": "AV-DMO-B78-04",
+      "captain": {
+        "id": "P-B78-015",
+        "label": "Synthetic Captain 08",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-B78-016",
+        "label": "Synthetic First Officer 08",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-13",
+      "competency": {
+        "KNO": 3.03,
+        "PRO": 3.02,
+        "COM": 2.94,
+        "FPA": 3.06,
+        "FPM": 3.18,
+        "LTW": 3.83,
+        "PSD": 3.22,
+        "SAW": 2.86,
+        "WLM": 3.81
+      },
+      "average": 3.22,
+      "watch_competency": "SAW",
+      "watch_score": 2.86,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-09",
+      "fleet": "Boeing 787 Dreamliner",
+      "base": "BOG",
+      "aircraft_id": "AV-DMO-B78-01",
+      "captain": {
+        "id": "P-B78-017",
+        "label": "Synthetic Captain 09",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-B78-018",
+        "label": "Synthetic First Officer 09",
+        "rank": "FO"
+      },
+      "qualification_status": "Current",
+      "next_training": "2026-11-14",
+      "competency": {
+        "KNO": 3.84,
+        "PRO": 3.83,
+        "COM": 3.75,
+        "FPA": 3.87,
+        "FPM": 3.99,
+        "LTW": 3.49,
+        "PSD": 4.03,
+        "SAW": 3.92,
+        "WLM": 2.92
+      },
+      "average": 3.74,
+      "watch_competency": "WLM",
+      "watch_score": 2.92,
+      "synthetic": true
+    },
+    {
+      "id": "CREW-10",
+      "fleet": "Boeing 787 Dreamliner",
+      "base": "BOG",
+      "aircraft_id": "AV-DMO-B78-02",
+      "captain": {
+        "id": "P-B78-019",
+        "label": "Synthetic Captain 10",
+        "rank": "CP"
+      },
+      "first_officer": {
+        "id": "P-B78-020",
+        "label": "Synthetic First Officer 10",
+        "rank": "FO"
+      },
+      "qualification_status": "Review",
+      "next_training": "2026-10-11",
+      "competency": {
+        "KNO": 2.94,
+        "PRO": 2.93,
+        "COM": 2.85,
+        "FPA": 2.97,
+        "FPM": 3.09,
+        "LTW": 4.29,
+        "PSD": 2.68,
+        "SAW": 2.77,
+        "WLM": 3.72
+      },
+      "average": 3.14,
+      "watch_competency": "PSD",
+      "watch_score": 2.68,
+      "synthetic": true
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SES-CREW-01-1",
+      "crew_id": "CREW-01",
+      "aircraft_id": "AV-DMO-A32-01",
+      "fleet": "Airbus A320",
+      "date": "2026-07-12",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.95,
+      "watch_competency": "WLM",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-01-2",
+      "crew_id": "CREW-01",
+      "aircraft_id": "AV-DMO-A32-01",
+      "fleet": "Airbus A320",
+      "date": "2026-08-13",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 4.07,
+      "watch_competency": "WLM",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-01-3",
+      "crew_id": "CREW-01",
+      "aircraft_id": "AV-DMO-A32-01",
+      "fleet": "Airbus A320",
+      "date": "2026-09-14",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 4.12,
+      "watch_competency": "WLM",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-02-1",
+      "crew_id": "CREW-02",
+      "aircraft_id": "AV-DMO-A32-02",
+      "fleet": "Airbus A320",
+      "date": "2026-07-15",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.25,
+      "watch_competency": "LTW",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-02-2",
+      "crew_id": "CREW-02",
+      "aircraft_id": "AV-DMO-A32-02",
+      "fleet": "Airbus A320",
+      "date": "2026-08-16",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 3.37,
+      "watch_competency": "LTW",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-02-3",
+      "crew_id": "CREW-02",
+      "aircraft_id": "AV-DMO-A32-02",
+      "fleet": "Airbus A320",
+      "date": "2026-09-17",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.42,
+      "watch_competency": "LTW",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-03-1",
+      "crew_id": "CREW-03",
+      "aircraft_id": "AV-DMO-A32-03",
+      "fleet": "Airbus A320",
+      "date": "2026-07-18",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.9,
+      "watch_competency": "WLM",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-03-2",
+      "crew_id": "CREW-03",
+      "aircraft_id": "AV-DMO-A32-03",
+      "fleet": "Airbus A320",
+      "date": "2026-08-19",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 4.02,
+      "watch_competency": "WLM",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-03-3",
+      "crew_id": "CREW-03",
+      "aircraft_id": "AV-DMO-A32-03",
+      "fleet": "Airbus A320",
+      "date": "2026-09-20",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 4.07,
+      "watch_competency": "WLM",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-04-1",
+      "crew_id": "CREW-04",
+      "aircraft_id": "AV-DMO-A32-04",
+      "fleet": "Airbus A320",
+      "date": "2026-07-21",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.11,
+      "watch_competency": "LTW",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-04-2",
+      "crew_id": "CREW-04",
+      "aircraft_id": "AV-DMO-A32-04",
+      "fleet": "Airbus A320",
+      "date": "2026-08-22",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 3.23,
+      "watch_competency": "LTW",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-04-3",
+      "crew_id": "CREW-04",
+      "aircraft_id": "AV-DMO-A32-04",
+      "fleet": "Airbus A320",
+      "date": "2026-09-23",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.28,
+      "watch_competency": "LTW",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-05-1",
+      "crew_id": "CREW-05",
+      "aircraft_id": "AV-DMO-A32-05",
+      "fleet": "Airbus A320",
+      "date": "2026-07-24",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.74,
+      "watch_competency": "WLM",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-05-2",
+      "crew_id": "CREW-05",
+      "aircraft_id": "AV-DMO-A32-05",
+      "fleet": "Airbus A320",
+      "date": "2026-08-08",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 3.86,
+      "watch_competency": "WLM",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-05-3",
+      "crew_id": "CREW-05",
+      "aircraft_id": "AV-DMO-A32-05",
+      "fleet": "Airbus A320",
+      "date": "2026-09-09",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.91,
+      "watch_competency": "WLM",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-06-1",
+      "crew_id": "CREW-06",
+      "aircraft_id": "AV-DMO-A32-06",
+      "fleet": "Airbus A320",
+      "date": "2026-07-10",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.12,
+      "watch_competency": "LTW",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-06-2",
+      "crew_id": "CREW-06",
+      "aircraft_id": "AV-DMO-A32-06",
+      "fleet": "Airbus A320",
+      "date": "2026-08-11",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 3.24,
+      "watch_competency": "LTW",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-06-3",
+      "crew_id": "CREW-06",
+      "aircraft_id": "AV-DMO-A32-06",
+      "fleet": "Airbus A320",
+      "date": "2026-09-12",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.29,
+      "watch_competency": "LTW",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-07-1",
+      "crew_id": "CREW-07",
+      "aircraft_id": "AV-DMO-A32-07",
+      "fleet": "Airbus A320",
+      "date": "2026-07-13",
+      "type": "EBT recurrent",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.71,
+      "watch_competency": "WLM",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-07-2",
+      "crew_id": "CREW-07",
+      "aircraft_id": "AV-DMO-A32-07",
+      "fleet": "Airbus A320",
+      "date": "2026-08-14",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-002",
+      "outcome": "PROFICIENT",
+      "average": 3.83,
+      "watch_competency": "WLM",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-07-3",
+      "crew_id": "CREW-07",
+      "aircraft_id": "AV-DMO-A32-07",
+      "fleet": "Airbus A320",
+      "date": "2026-09-15",
+      "type": "Line check",
+      "instructor_id": "TRI-001",
+      "outcome": "PROFICIENT",
+      "average": 3.88,
+      "watch_competency": "WLM",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-08-1",
+      "crew_id": "CREW-08",
+      "aircraft_id": "AV-DMO-B78-04",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-07-16",
+      "type": "EBT recurrent",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.14,
+      "watch_competency": "SAW",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-08-2",
+      "crew_id": "CREW-08",
+      "aircraft_id": "AV-DMO-B78-04",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-08-17",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-003",
+      "outcome": "PROFICIENT",
+      "average": 3.26,
+      "watch_competency": "SAW",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-08-3",
+      "crew_id": "CREW-08",
+      "aircraft_id": "AV-DMO-B78-04",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-09-18",
+      "type": "Line check",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.31,
+      "watch_competency": "SAW",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-09-1",
+      "crew_id": "CREW-09",
+      "aircraft_id": "AV-DMO-B78-01",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-07-19",
+      "type": "EBT recurrent",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.66,
+      "watch_competency": "WLM",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-09-2",
+      "crew_id": "CREW-09",
+      "aircraft_id": "AV-DMO-B78-01",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-08-20",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-003",
+      "outcome": "PROFICIENT",
+      "average": 3.78,
+      "watch_competency": "WLM",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-09-3",
+      "crew_id": "CREW-09",
+      "aircraft_id": "AV-DMO-B78-01",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-09-21",
+      "type": "Line check",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.83,
+      "watch_competency": "WLM",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-10-1",
+      "crew_id": "CREW-10",
+      "aircraft_id": "AV-DMO-B78-02",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-07-22",
+      "type": "EBT recurrent",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.06,
+      "watch_competency": "PSD",
+      "simulated_event": "High workload arrival",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-10-2",
+      "crew_id": "CREW-10",
+      "aircraft_id": "AV-DMO-B78-02",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-08-23",
+      "type": "OPC/LPC",
+      "instructor_id": "TRI-003",
+      "outcome": "PROFICIENT",
+      "average": 3.18,
+      "watch_competency": "PSD",
+      "simulated_event": "Automation degradation",
+      "synthetic": true
+    },
+    {
+      "id": "SES-CREW-10-3",
+      "crew_id": "CREW-10",
+      "aircraft_id": "AV-DMO-B78-02",
+      "fleet": "Boeing 787 Dreamliner",
+      "date": "2026-09-24",
+      "type": "Line check",
+      "instructor_id": "TRE-001",
+      "outcome": "PROFICIENT",
+      "average": 3.23,
+      "watch_competency": "PSD",
+      "simulated_event": "Line operations assessment",
+      "synthetic": true
+    }
+  ],
+  "competencies": [
+    "KNO",
+    "PRO",
+    "COM",
+    "FPA",
+    "FPM",
+    "LTW",
+    "PSD",
+    "SAW",
+    "WLM"
+  ]
+}
