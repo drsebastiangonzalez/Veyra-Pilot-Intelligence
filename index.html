@@ -862,6 +862,16 @@ main{max-width:1180px;}
 }
 .trainingCardImg{height:210px;background:#0b1220;overflow:hidden}
 .trainingCardImg img{width:100%;height:100%;object-fit:cover;display:block}
+.classesTrainingVisual{height:100%;position:relative;overflow:hidden;background:
+radial-gradient(circle at 78% 24%,rgba(214,173,85,.18),transparent 26%),
+linear-gradient(145deg,#07111f,#0d2233)}
+.classesTrainingVisual:before{content:"";position:absolute;width:260px;height:260px;border:1px solid rgba(214,173,85,.3);border-radius:50%;right:-45px;top:-82px}
+.classesTrainingVisual:after{content:"";position:absolute;left:52px;right:58px;top:103px;height:72px;border-top:2px dashed rgba(240,207,134,.72);border-radius:50%}
+.classesTrainingEyebrow{position:absolute;left:24px;top:22px;color:#d6ad55;font-size:11px;font-weight:900;letter-spacing:.2em;text-transform:uppercase}
+.classesTrainingTitle{position:absolute;left:24px;bottom:26px;font-family:Georgia,serif;font-size:42px;color:#fff;line-height:.95}
+.classesTrainingTitle span{display:block;margin-top:7px;font-family:Inter,system-ui,sans-serif;font-size:11px;font-weight:900;letter-spacing:.18em;color:#b9c5d3}
+.classesTrainingPoint{position:absolute;width:9px;height:9px;border:2px solid #f0cf86;background:#07111f;border-radius:50%;z-index:2}
+.classesTrainingPoint.a{left:54px;top:97px}.classesTrainingPoint.b{right:61px;top:97px}
 .trainingCardBody{padding:26px}
 .trainingCardBody h3{font-family:Georgia,serif;font-size:38px;margin:0 0 4px;color:#0c1321}
 .trainingCardBody h3 span{display:block;font-family:Inter,system-ui,sans-serif;font-size:22px;font-weight:700}
@@ -2320,6 +2330,20 @@ main{max-width:1180px;}
           <p class="trainingMeta">23 clases gratuitas para construir la base Airbus: filosofía, sistemas, navegación, limitaciones y procedimientos fundamentales.</p>
           <span class="trainingBadge">FREE · 23 clases</span>
           <div style="margin-top:20px"><button class="trainingBtnGold" onclick="location.href='modules/a320-intro/index.html'">Entrar a A320 Foundations</button></div>
+        </div>
+      </article>
+
+      <article class="trainingCard classesTrainingCard">
+        <div class="trainingCardImg classesTrainingVisual" aria-hidden="true">
+          <div class="classesTrainingEyebrow">Veyra Training Center</div>
+          <span class="classesTrainingPoint a"></span><span class="classesTrainingPoint b"></span>
+          <div class="classesTrainingTitle">Classes<span>OPERATIONAL LEARNING LIBRARY</span></div>
+        </div>
+        <div class="trainingCardBody">
+          <h3>Classes <span>Biblioteca de formación</span></h3>
+          <p class="trainingMeta">Clases independientes sobre temas operacionales y profesionales. ETOPS es la primera clase disponible.</p>
+          <span class="trainingBadge">ETOPS disponible</span><span class="trainingBadge">Nuevas clases</span>
+          <div style="margin-top:20px"><button class="trainingBtnGold" onclick="location.href='classes/'">Entrar a Classes</button></div>
         </div>
       </article>
 
