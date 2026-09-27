@@ -12,6 +12,8 @@
         .premiumTopbar.veyraNavOpen .veyraMenuToggle span:nth-child(2){opacity:0}
         .premiumTopbar.veyraNavOpen .veyraMenuToggle span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
         .homeFaqContact{margin-top:36px!important}
+        #training .launchTrainingCard{position:relative}
+        #training .launchTrainingCard .trainingLaunchBadge{position:absolute;z-index:5;top:18px;right:18px;background:#d6ad55;color:#07111f;border-radius:999px;padding:7px 12px;font-size:10px;font-weight:900;letter-spacing:.13em;line-height:1.4;box-shadow:0 2px 9px #00000012;pointer-events:none}
         @media(max-width:1180px){
           .premiumTopbar{position:sticky!important;top:0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;padding:14px 18px!important;min-height:82px!important;overflow:visible!important}
           .premiumBrand{min-width:0!important}
@@ -35,6 +37,17 @@
       `;
       document.head.appendChild(style);
     }
+
+    // Presentation only: keep the original A320 course link and every other card intact.
+    document.querySelectorAll('#training .trainingCard').forEach(card => {
+      const title = card.querySelector('h3');
+      if (!title || !/^A320\s/.test(title.textContent.trim()) || card.querySelector('.trainingLaunchBadge')) return;
+      card.classList.add('launchTrainingCard');
+      const badge = document.createElement('span');
+      badge.className = 'trainingLaunchBadge';
+      badge.textContent = 'LANZAMIENTO';
+      card.appendChild(badge);
+    });
 
     const header = document.querySelector('.premiumTopbar');
     const nav = header && header.querySelector('.premiumNav');
