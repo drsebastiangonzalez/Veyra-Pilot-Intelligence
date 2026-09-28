@@ -47,7 +47,8 @@ test('CSV escapes delimiters and spreadsheet formulas', () => {
 });
 test('all JavaScript parses and every new local asset exists', () => {
   const html = fs.readFileSync('avianca-tms-trial.html', 'utf8');
-  for (const [, js] of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) new vm.Script(js);
+  // Syntax inspection only, not an HTML sanitizer. Include case-insensitive tags and attributes.
+  for (const [, js] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) new vm.Script(js);
   for (const f of ['assets/js/enterprise-intelligence-model.js', 'assets/js/enterprise-intelligence.js', 'assets/css/enterprise-intelligence.css']) { assert.ok(html.includes(f)); assert.ok(fs.existsSync(f)); }
   assert.ok(html.includes('window.VeyraIntelligence.init(data,'));
 });
