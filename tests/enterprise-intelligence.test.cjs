@@ -45,10 +45,10 @@ test('CSV escapes delimiters and spreadsheet formulas', () => {
   const csv = M.csv([['=SUM(A1)', 'a,"b', 'line\nbreak']]);
   assert.ok(csv.includes('"\'=SUM(A1)"')); assert.ok(csv.includes('"a,""b"')); assert.ok(csv.includes('"line\nbreak"'));
 });
-test('all JavaScript parses and every new local asset exists', () => {
+test('new JavaScript assets parse and every local asset is linked', () => {
   const html = fs.readFileSync('avianca-tms-trial.html', 'utf8');
-  // Syntax inspection only, not an HTML sanitizer. Include case-insensitive tags and attributes.
-  for (const [, js] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) new vm.Script(js);
+  // Inline scripts are parsed by the browser's native HTML parser in the browser suite.
+  for (const f of ['assets/js/enterprise-intelligence-model.js', 'assets/js/enterprise-intelligence.js']) new vm.Script(fs.readFileSync(f, 'utf8'), { filename: f });
   for (const f of ['assets/js/enterprise-intelligence-model.js', 'assets/js/enterprise-intelligence.js', 'assets/css/enterprise-intelligence.css']) { assert.ok(html.includes(f)); assert.ok(fs.existsSync(f)); }
   assert.ok(html.includes('window.VeyraIntelligence.init(data,'));
 });
