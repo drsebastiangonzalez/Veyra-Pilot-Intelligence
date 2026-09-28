@@ -1,0 +1,102 @@
+/* Local QA only. Network is intercepted; no real sign-ins or Supabase writes. */
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const http = require('node:http');
+const { chromium } = require('playwright');
+const runtimeChromium = process.env.VEYRA_CHROMIUM_MODULE ? require(process.env.VEYRA_CHROMIUM_MODULE) : null;
+const repository = path.resolve(__dirname, '..');
+const mock = `window.supabase={createClient:()=>({auth:{onAuthStateChange(){},getSession:async()=>({data:{session:{user:{id:'qa-user',email:'qa@example.test',user_metadata:{enterprise_password_set:true},app_metadata:{provider:'email'}}}}}),signOut:async()=>({error:null})},from:table=>{const q={select(){return q},eq(){return q},limit(){return q},order(){return q},range:async()=>({data:[],error:null}),maybeSingle:async()=>({data:{role:'admin',organization_id:'qa-org',status:'active',enterprise_organizations:{display_name:'Avianca Demo',slug:'qa'}},error:null})};return q}})};`;
+async function run() {
+  const server = http.createServer((req, res) => {
+    const f = path.join(repository, decodeURIComponent(new URL(req.url, 'http://localhost').pathname));
+    if (!f.startsWith(repository + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end(); }
+    const ext = path.extname(f); res.setHeader('content-type', ({ '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.json': 'application/json', '.svg': 'image/svg+xml' })[ext] || 'application/octet-stream');
+    res.end(fs.readFileSync(f));
+  });
+  await new Promise(r => server.listen(0, '127.0.0.1', r));
+  let browser;
+  try {
+    browser = await chromium.launch(runtimeChromium ? { executablePath: await runtimeChromium.executablePath(), args: runtimeChromium.args, headless: true } : { headless: true });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+    const errors = [], page = await context.newPage();
+    page.on('pageerror', e => errors.push(e.message));
+    await page.route('**/*', route => { const url = route.request().url(); if (url.includes('supabase-js')) return route.fulfill({ contentType: 'text/javascript', body: mock }); if (!url.startsWith('http://127.0.0.1:')) return route.abort(); return route.continue(); });
+    const url = 'http://127.0.0.1:' + server.address().port + '/avianca-tms-trial.html';
+    await page.goto(url);
+    await page.waitForSelector('#view-intelligence .ei-kpi');
+    await page.screenshot({ path: '/tmp/veyra-enterprise-desktop.png', fullPage: true });
+    if (process.env.VEYRA_VISUAL_ONLY) {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const shot = await page.screenshot({ path: '/tmp/veyra-enterprise-mobile.png', fullPage: true });
+      console.log('Mobile screenshot width:', shot.readUInt32BE(16));
+      console.log(await page.evaluate(() => [...document.querySelectorAll('.ei-main,.ei-sidebar,.ei-layout,.ei-filters,.ei-kpis')].map(e => ({c:e.className,width:e.getBoundingClientRect().width}))));
+      assert.equal(shot.readUInt32BE(16), 390); assert.deepEqual(errors, []); return;
+    }
+    assert.equal(await page.locator('#enterpriseApp').isVisible(), true);
+    assert.equal(await page.locator('#view-intelligence').isVisible(), true);
+    const n = await page.locator('.ei-scope').innerText(); assert.ok(n.includes('28.488'));
+    await page.selectOption('#ei-operator', 'Colombia');
+    assert.notEqual(await page.locator('.ei-scope').innerText(), n);
+    await page.click('[data-ei="reset"]');
+    await page.click('[data-ei="top10"]');
+    assert.equal(await page.locator('#ei-content .ei-bar').count(), 10);
+    await page.selectOption('#ei-airport', 'BOG'); await page.selectOption('#ei-weather', 'Baja visibilidad');
+    await page.locator('#ei-content .ei-bar').first().click();
+    assert.equal(await page.locator('#ei-dialog').isVisible(), true);
+    await page.click('[data-ei="plan-new"]');
+    for (const checkbox of await page.locator('#ei-plan-form input[type=checkbox]').all()) await checkbox.uncheck();
+    await page.locator('#ei-plan-form input[type=checkbox]').first().check();
+    await page.locator('#ei-plan-form button[type=submit]').click();
+    await page.locator('#ei-plan-form button[type=submit]').click();
+    await page.check('#ei-plan-confirm'); await page.locator('#ei-plan-form button[type=submit]').click();
+    assert.ok((await page.locator('#ei-content').innerText()).includes('Preparado'));
+    await page.locator('[data-ei="plan-open"]').first().click();
+    await page.fill('#ei-verify-evidence', 'Se observó coordinación explícita de tareas y supervisión de trayectoria sin intervención en el escenario comparable.');
+    await page.selectOption('#ei-verify-grade', '4'); await page.check('#ei-verify-check');
+    await page.locator('#ei-verify-form button[type=submit]').click();
+    assert.ok((await page.locator('#ei-dialog-body').innerText()).includes('Revisado'));
+    await page.click('#ei-dialog-close');
+    await page.click('[data-ei="page"][data-value="academy"]');
+    await page.locator('[data-ei="lesson"]').first().click(); await page.click('[data-ei="lesson-next"]');
+    await page.check('#ei-practice-form input[value="1"]'); await page.locator('#ei-practice-form button[type=submit]').click();
+    await page.click('#ei-to-quiz');
+    for (const [i, answer] of [1, 1, 2].entries()) await page.check('#ei-quiz-form input[name="q' + i + '"][value="' + answer + '"]');
+    await page.locator('#ei-quiz-form button[type=submit]').click();
+    assert.ok((await page.locator('#ei-dialog-body').innerText()).includes('3/3'));
+    await page.click('[data-ei="lesson-close"]');
+    assert.ok((await page.locator('#ei-content').innerText()).includes('Completado'));
+    await page.reload(); await page.waitForSelector('#view-intelligence .ei-kpi');
+    await page.click('[data-ei="page"][data-value="plans"]'); assert.ok((await page.locator('#ei-content').innerText()).includes('Revisado'));
+    await page.click('[data-ei="page"][data-value="calibration"]');
+    await page.locator('[data-ei="calibration"]').first().click(); await page.click('#ei-dialog-close');
+    await page.click('[data-ei="page"][data-value="people"]'); await page.fill('#ei-people-search', 'Alejandro');
+    await page.locator('[data-ei="pilot"]').first().click(); await page.click('#ei-dialog-close');
+    await page.click('[data-ei="page"][data-value="operations"]'); await page.locator('[data-ei="session"]').first().click(); await page.click('#ei-dialog-close');
+    await page.click('[data-ei="page"][data-value="reports"]');
+    const pending = page.waitForEvent('download'); await page.click('[data-ei="records-export"]'); const download = await pending; assert.ok(download.suggestedFilename().endsWith('.csv'));
+    await page.click('[data-role-preview="trainee"]');
+    assert.equal(await page.locator('.ei-subnav [data-value="calibration"]').count(), 0);
+    assert.equal(await page.locator('.ei-subnav [data-value="people"]').count(), 0);
+    assert.ok((await page.locator('#ei-content').innerText()).includes('Tu distribución'));
+    await page.click('[data-role-preview="instructor"]'); assert.equal(await page.locator('#ei-demo-instructor').count(), 1);
+    await page.click('[data-role-preview="admin"]');
+    await page.click('[data-ei="customize"]');
+    await page.selectOption('#ei-accent', 'navy');
+    await page.uncheck('#ei-settings-form [name="trend"]');
+    await page.locator('#ei-settings-form button[type=submit]').click();
+    assert.equal(await page.locator('#ei-content .ei-series').count(), 0);
+    await page.click('[data-ei="customize"]');
+    await page.check('#ei-settings-form [name="trend"]');
+    await page.locator('#ei-settings-form button[type=submit]').click();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('#view-intelligence').scrollIntoViewIfNeeded();
+    const mobile = await page.screenshot({ path: '/tmp/veyra-enterprise-mobile.png', fullPage: true });
+    assert.equal(mobile.readUInt32BE(16), 390, 'Full-page image must not reveal offscreen panels');
+    const size = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, width: innerWidth }));
+    assert.ok(size.scroll <= size.width + 2, JSON.stringify(size));
+    assert.deepEqual(errors, []);
+    console.log('PASS browser: auth fixture, dashboard, scopes, top10, evidence, plan creation, review, quiz, persistence, all views, export, roles and mobile overflow.');
+  } finally { if (browser) await browser.close(); server.close(); }
+}
+run().catch(e => { console.error(e); process.exitCode = 1; });
