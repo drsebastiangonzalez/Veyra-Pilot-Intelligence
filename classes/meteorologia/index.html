@@ -455,7 +455,7 @@ function results(){
   w.innerHTML=`<p class="kicker">Resultado</p><h1>${pct>=80?"Listo para el briefing":"Vale la pena repasar"}</h1>
     <div class="grade">${pct}%</div><p class="lead">${ok} de ${total} comprobaciones correctas. Aprobación de referencia: 80 %.</p>
     <div class="results">${Object.entries(perBlock).map(([b,v])=>`<div class="res"><small>${BLOCKS[b]}</small><strong>${v.ok}/${v.n}</strong><div class="bar"><i style="width:${v.ok/v.n*100}%"></i></div></div>`).join("")}</div>
-    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}. Pulsa el bloque en el índice de la izquierda para volver a él; las preguntas se pueden reintentar al reiniciar.</div>`:`<div class="note"><b>Sin bloques débiles.</b> El siguiente paso es el módulo ETOPS, donde el TAF y los mínimos de planificación se convierten en combustible crítico.</div>`}`;
+    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}. Pulsa el bloque en el índice de la izquierda para volver a él; las preguntas se pueden reintentar al reiniciar.</div>`:`<div class="note"><b>Sin bloques débiles.</b> El siguiente paso natural es <a href="../combustible-despacho/">Combustible y despacho</a>: allí este TAF se convierte en alternos, kilos y decisiones de combustible.</div>`}`;
   return w;
 }
 
