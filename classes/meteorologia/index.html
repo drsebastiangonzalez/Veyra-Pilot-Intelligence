@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veyra · Meteorología aeronáutica · Clase interactiva</title>
+<meta name="description" content="Clase interactiva de meteorología aeronáutica de Veyra: atmósfera, presión, humedad, tormentas, montaña, hielo, METAR, TAF y una misión de decisión.">
+<meta name="theme-color" content="#0B1014">
+<link rel="canonical" href="https://veyrapilot.com/classes/meteorologia/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1014; --panel:#13161D; --line:#232830; --line2:#2E343D;
+    --gold:#D8B25E; --gold-dim:#8F7640; --ink:#FFFFFF; --muted:#9AA3AD; --dim:#5F6873;
+    --ok:#7FBF8E; --bad:#D9776C;
+    --serif:"Lora",Georgia,serif; --sans:"Poppins",Arial,sans-serif;
+    --rail:240px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit}
+  a{color:var(--gold)}
+
+  .app{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100%}
+  /* rail */
+  .rail{border-right:1px solid var(--line);padding:28px 22px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit}
+  .rail-links{display:flex;gap:8px;flex-wrap:wrap}
+  .rail-links a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line2);padding:7px 9px;border-radius:4px;color:var(--muted)}
+  .rail-links a:hover,.rail-links a:focus-visible{color:var(--gold);border-color:var(--gold-dim)}
+  .source-note{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:4px;color:var(--muted);font-size:12px;line-height:1.6;max-width:640px}
+  .brand .w{font-family:var(--serif);font-size:22px;color:var(--ink)}
+  .brand .t{font-size:8px;letter-spacing:.22em;color:var(--muted)}
+  .rail h2{font-family:var(--serif);font-weight:400;font-size:15px;margin:0;color:var(--muted)}
+  .blocks{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+  .blocks li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;font-size:12.5px;color:var(--dim);cursor:default}
+  .blocks li .dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2);flex:none}
+  .blocks li.done{color:var(--muted);cursor:pointer}
+  .blocks li.done .dot{background:var(--gold-dim);border-color:var(--gold-dim)}
+  .blocks li.active{color:var(--ink);background:var(--panel)}
+  .blocks li.active .dot{background:var(--gold);border-color:var(--gold)}
+  .score{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.6}
+  .score b{color:var(--gold);font-weight:500}
+
+  /* stage */
+  .stage{display:flex;flex-direction:column;min-height:100vh}
+  .topbar{height:3px;background:var(--line)}
+  .topbar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s ease}
+  .step{flex:1;padding:56px 64px 40px;max-width:980px;width:100%;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+  .step.in{opacity:1;transform:none}
+  .kicker{font-size:12px;color:var(--gold);margin:0 0 10px}
+  h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.2;margin:0 0 14px;letter-spacing:-.01em}
+  h1.big{font-size:44px}
+  .lead{font-size:16px;color:var(--muted);line-height:1.65;max-width:640px;margin:0 0 28px}
+  p{line-height:1.7;max-width:660px;margin:0 0 14px;font-size:15px}
+  .note{border-left:2px solid var(--gold);padding:10px 16px;color:var(--muted);font-size:14px;line-height:1.6;max-width:640px;margin:18px 0}
+  .note b{color:var(--ink);font-weight:500}
+
+  /* reveals */
+  .reveals{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px;max-width:680px}
+  .reveals li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:4px;opacity:0;transform:translateX(-8px);transition:opacity .35s ease,transform .35s ease;line-height:1.55;font-size:14.5px}
+  .reveals li.show{opacity:1;transform:none}
+  .reveals li .n{font-family:var(--serif);color:var(--gold);font-size:20px;line-height:1}
+  .reveals li b{color:var(--ink);font-weight:500;display:block;margin-bottom:3px}
+  .reveals li span{color:var(--muted)}
+  .hint{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 64px 36px;max-width:980px;width:100%;margin:0 auto;gap:12px}
+  .btn{background:transparent;border:1px solid var(--line2);color:var(--ink);padding:11px 20px;border-radius:4px;font-size:13.5px;font-weight:400;cursor:pointer;transition:border-color .2s,background .2s}
+  .btn:hover{border-color:var(--gold)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .btn.primary{background:var(--gold);color:#1B1608;border-color:var(--gold);font-weight:500}
+  .btn.primary:hover{background:#E2C177}
+  .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .counter{font-size:12px;color:var(--dim)}
+
+  /* quiz */
+  .q{max-width:680px}
+  .q .prompt{font-family:var(--serif);font-size:22px;line-height:1.4;margin:0 0 22px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;color:var(--ink);font-size:14.5px;line-height:1.5;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:12px;transition:border-color .2s,background .2s;font-weight:300}
+  .opt .k{color:var(--muted);font-family:var(--serif)}
+  .opt:hover{border-color:var(--gold-dim)}
+  .opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .opt.right{border-color:var(--ok)} .opt.right .k{color:var(--ok)}
+  .opt.wrong{border-color:var(--bad)} .opt.wrong .k{color:var(--bad)}
+  .opt.locked{cursor:default}
+  .opt.locked:not(.right):not(.wrong){opacity:.45}
+  .fb{margin-top:18px;padding:16px 18px;border-radius:4px;background:var(--panel);border:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+  .fb.show{opacity:1;transform:none}
+  .fb b{font-weight:500}
+  .fb.ok b{color:var(--ok)} .fb.ko b{color:var(--bad)}
+
+  /* widgets */
+  .widget{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-top:8px}
+  .widget h3{font-family:var(--serif);font-weight:400;font-size:18px;margin:0 0 6px}
+  .widget .sub{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.5}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:12px;color:var(--muted)}
+  .field output{font-family:var(--serif);font-size:24px;color:var(--gold)}
+  input[type=range]{width:100%;accent-color:var(--gold);background:transparent}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+  .readout div{border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+  .readout small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .readout strong{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--ink)}
+  .readout strong.g{color:var(--gold)} .readout strong.b{color:var(--bad)} .readout strong.o{color:var(--ok)}
+  .verdict{margin-top:14px;font-size:14px;line-height:1.6;color:var(--muted);min-height:44px}
+  .verdict b{color:var(--ink);font-weight:500}
+
+  /* metar chips */
+  .metar{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px;font-family:"Courier New",monospace;font-size:17px}
+  .chip{border:1px solid var(--line2);border-radius:4px;padding:8px 10px;cursor:pointer;background:var(--bg);color:var(--ink);transition:border-color .2s,color .2s;font-family:inherit;font-size:inherit;font-weight:700}
+  .chip:hover{border-color:var(--gold-dim)}
+  .chip.on{border-color:var(--gold);color:var(--gold)}
+  .chip.seen{color:var(--muted)} .chip.seen.on{color:var(--gold)}
+  .decode{min-height:120px;border:1px solid var(--line);border-radius:4px;padding:16px 18px;font-size:14px;line-height:1.6;color:var(--muted)}
+  .decode b{color:var(--ink);font-weight:500;display:block;font-family:var(--serif);font-size:17px;margin-bottom:6px}
+  .decode em{color:var(--gold);font-style:normal}
+  .meter{font-size:12px;color:var(--dim);margin-top:10px}
+
+  /* taf timeline */
+  .taf{font-family:"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--muted);white-space:pre-wrap;border:1px solid var(--line);border-radius:4px;padding:14px 16px;background:var(--bg)}
+  .taf span{display:block;padding:0 6px;border-radius:3px;transition:background .25s,color .25s}
+  .taf span.live{background:#1C2A20;color:var(--ink)} .taf span.live.bad{background:#2B1C1B}
+  .tl{position:relative;height:28px;margin:18px 0 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+  .tl .seg{position:absolute;top:0;bottom:0;background:var(--gold-dim);opacity:.35}
+  .tl .seg.bad{background:var(--bad);opacity:.35}
+  .tl .cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--gold)}
+  .ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+
+  /* microburst */
+  .mb svg{width:100%;height:auto;display:block}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .phase{border:1px solid var(--line);border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--dim);transition:border-color .3s,color .3s}
+  .phase b{display:block;color:inherit;font-weight:500;margin-bottom:4px}
+  .phase.on{border-color:var(--gold);color:var(--ink)} .phase.on b{color:var(--gold)}
+
+  /* results */
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:22px 0}
+  .res{border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .res small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .res strong{font-family:var(--serif);font-weight:400;font-size:26px}
+  .res .bar{height:3px;background:var(--line);margin-top:10px}
+  .res .bar i{display:block;height:100%;background:var(--gold)}
+  .grade{font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin:6px 0 4px}
+
+  /* intro */
+  .cover{display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center}
+  .rings{aspect-ratio:1;position:relative}
+  .rings i{position:absolute;inset:0;border:1px solid var(--line2);border-radius:50%;animation:breathe 6s ease-in-out infinite}
+  .rings i:nth-child(2){inset:22%;animation-delay:-2s}
+  .rings i:nth-child(3){inset:44%;border-color:var(--gold);animation-delay:-4s}
+  .rings b{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:var(--gold);border-radius:50%}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.04);opacity:1}}
+  .mission{border:1px solid var(--gold-dim);border-radius:6px;padding:18px 20px;margin-top:22px;max-width:640px}
+  .mission h4{font-family:var(--serif);font-weight:400;margin:0 0 8px;font-size:17px;color:var(--gold)}
+  .mission p{margin:0;font-size:14px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr}
+    .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 20px;border-right:0;border-bottom:1px solid var(--line)}
+    .rail h2,.score{display:none}
+    .blocks{flex-direction:row;flex-wrap:wrap;gap:6px}
+    .blocks li{padding:5px 8px;font-size:0}
+    .blocks li .dot{width:10px;height:10px}
+    .step{padding:32px 22px 20px}
+    .nav{padding:12px 22px 28px}
+    h1{font-size:27px} h1.big{font-size:32px}
+    .cover{grid-template-columns:1fr}
+    .rings{max-width:180px}
+    .phases{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="../" aria-label="Volver a Classes"><span class="w">Veyra</span><span class="t">PILOT INTELLIGENCE</span></a>
+    <h2>Meteorología aeronáutica</h2>
+    <div class="rail-links"><a href="../">Classes</a><a href="/?view=training">Training Center</a></div>
+    <ol class="blocks" id="blocks"></ol>
+    <div class="score" id="railScore"></div>
+  </aside>
+  <main class="stage">
+    <div class="topbar"><i id="bar"></i></div>
+    <section class="step" id="step" aria-live="polite"></section>
+    <div class="nav">
+      <button class="btn" id="prev">Anterior</button>
+      <span class="counter" id="counter"></span>
+      <button class="btn primary" id="next">Continuar</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---------------- CONTENIDO ---------------- */
+const BLOCKS = [
+  "Bienvenida", "Atmósfera y presión", "Humedad y niebla", "Circulación y chorro",
+  "Tormentas", "Montaña, turbulencia y hielo", "METAR y SPECI", "TAF y decisión", "Resultado"
+];
+
+const STEPS = [
+  // 0 · Bienvenida
+  {b:0,t:"intro"},
+  {b:0,t:"lesson",k:"Cómo funciona esta clase",h:"Ver, aplicar, comprobar",
+   lead:"Cada tema se explica en pocos puntos, se practica con un instrumento interactivo y se cierra con una pregunta. Si fallas, la explicación te dice por qué. Al final verás tu resultado por bloque.",
+   items:[
+    ["Explicación","Pulsa Continuar (o la flecha derecha) para revelar cada punto. Nada aparece hasta que lo pides."],
+    ["Instrumento","Sliders, chips y animaciones: mueve, pulsa y observa qué cambia. Es la parte que no puede dar un libro."],
+    ["Comprobación","Una pregunta de selección múltiple con retroalimentación inmediata. No se puede avanzar sin responder."],
+    ["Misión","Toda la clase gira alrededor de un vuelo real: Cali → Bogotá, ETA 20:30Z, una tarde de tormentas. Al final tú tomas la decisión."]
+   ]},
+
+  // 1 · Atmósfera y presión
+  {b:1,t:"lesson",k:"Bloque 1 · Atmósfera y presión",h:"La atmósfera estándar es la regla con la que medimos todo",
+   lead:"El avión, el motor y el altímetro se calibran contra un modelo llamado ISA. Volar bien empieza por saber cuánto se aleja el día real de ese modelo.",
+   items:[
+    ["1013,25 hPa y 15 °C al nivel del mar","Los dos números que hay que saber de memoria. Todo lo demás se deriva."],
+    ["La temperatura baja 2 °C por cada 1.000 ft","Hasta la tropopausa (36.090 ft, −56,5 °C). A FL350 la temperatura ISA es 15 − 70 = −55 °C."],
+    ["Desviación ISA = OAT real − ISA","Si a FL350 el OAT es −45 °C, estás en ISA +10: aire menos denso, menos empuje, peor techo."],
+    ["En el trópico la troposfera es más alta","En el trópico los cumulonimbos pueden alcanzar niveles muy altos. La estrategia es evitarlos con margen, no asumir que podrán sobrevolarse."]
+   ]},
+  {b:1,t:"lesson",k:"Bloque 1 · Atmósfera y presión",h:"Tres ajustes de altímetro, una regla de oro",
+   items:[
+    ["QNH","El altímetro marca altitud sobre el nivel del mar. En pista marca la elevación del aeródromo. Bogotá: 8.360 ft."],
+    ["STD (1013,25)","Por encima de la altitud de transición todos vuelan con la misma referencia: niveles de vuelo."],
+    ["QFE","Altura sobre el aeródromo; en pista marca cero. Casi no se usa en aerolínea."],
+    ["\"De alta a baja, cuidado abajo\"","Si vuelas hacia menor presión sin ajustar, el altímetro marca más de lo que estás. 1 hPa ≈ 30 ft."]
+   ]},
+  {b:1,t:"widget",id:"alt",k:"Instrumento · Altímetro",h:"Mueve el QNH real y mira dónde está el avión de verdad"},
+  {b:1,t:"quiz",q:"Vuelas con 1020 hPa en el altímetro hacia un aeródromo cuyo QNH real es 1010. Sin corregir, tu avión está:",
+   o:["Unos 300 ft más alto de lo indicado","Unos 300 ft más bajo de lo indicado","A la altitud indicada","Unos 100 ft más alto"],a:1,
+   fb:"10 hPa × 30 ft = 300 ft. El altímetro cree que la presión de referencia es más alta de lo que es y marca de más: estás más bajo. En una MDA de 400 ft ese error es el terreno."},
+  {b:1,t:"quiz",q:"La temperatura ISA a FL390 es:",o:["−39 °C","−56,5 °C","−63 °C","−45 °C"],a:1,
+   fb:"FL390 está por encima de la tropopausa ISA (36.090 ft). Allí la temperatura deja de bajar y se queda en −56,5 °C. Si aplicaste 15 − 78 = −63 °C, olvidaste la tropopausa."},
+
+  // 2 · Humedad
+  {b:2,t:"lesson",k:"Bloque 2 · Humedad y niebla",h:"El vapor de agua es el ingrediente del tiempo",
+   lead:"Sin humedad no hay nubes, ni niebla, ni tormentas. La herramienta más simple para anticiparlas cabe en dos números del METAR.",
+   items:[
+    ["Punto de rocío (Td)","Temperatura a la que el aire se saturaría si se enfriara. Cuanto más cerca de la temperatura, más húmedo el aire."],
+    ["Spread = T − Td","Spread pequeño = aire casi saturado. Spread ≤ 2 °C al anochecer, con calma y cielo despejado, es receta de niebla."],
+    ["Base convectiva ≈ spread × 400 ft","Con 24/18 (spread 6) los cúmulos tendrán base cerca de 2.400 ft. Sirve para verificar que un METAR tiene sentido."],
+    ["FG, BR, HZ","Niebla: visibilidad menor de 1.000 m. Neblina: 1.000–5.000 m. Calima: aire seco, partículas. El código depende de la visibilidad y de la humedad."]
+   ]},
+  {b:2,t:"widget",id:"spread",k:"Instrumento · Temperatura y rocío",h:"Acerca el punto de rocío a la temperatura y observa qué pasa"},
+  {b:2,t:"quiz",q:"METAR de Rionegro a las 23Z: 13/12, calma, cielo despejado. ¿Qué esperas a las 10Z?",
+   o:["Tormenta","Niebla de radiación","Calima seca","Viento fuerte"],a:1,
+   fb:"Spread 1 °C, noche despejada (la tierra irradia calor) y calma: niebla de radiación casi segura. Por eso los vuelos de la primera ola a Rionegro salen tarde tantas mañanas."},
+
+  // 3 · Circulación
+  {b:3,t:"lesson",k:"Bloque 3 · Circulación y chorro",h:"El planeta tiene un mapa de presiones que explica el viento",
+   items:[
+    ["Baja en el ecuador (ZCIT)","El aire caliente sube: convección, cumulonimbos diarios. La ZCIT oscila sobre Colombia siguiendo al sol y trae las temporadas de lluvia."],
+    ["Alta en 30°","El aire de la célula de Hadley desciende seco: desiertos, anticiclones subtropicales."],
+    ["Baja en 60° y alta en los polos","Frente polar, borrascas de latitudes medias; aire frío denso sobre los polos."],
+    ["Coriolis desvía a la derecha en el hemisferio norte","Por eso los alisios son del noreste y no del norte. En el ecuador Coriolis es cero: allí no nacen huracanes."]
+   ]},
+  {b:3,t:"lesson",k:"Bloque 3 · Circulación y chorro",h:"La corriente en chorro: combustible o turbulencia",
+   items:[
+    ["Un río de aire de más de 60 kt bajo la tropopausa","De oeste a este. Cientos de kilómetros de ancho, pocos de espesor. Hasta 250 kt en invierno."],
+    ["Chorro polar (FL300–350) y subtropical (FL350–450)","El polar es más fuerte y variable; el subtropical más estable."],
+    ["Combustible","Bogotá–Madrid con chorro en cola ahorra 30–40 minutos. El regreso lo paga. El plan de vuelo se optimiza sobre la carta de viento."],
+    ["CAT cerca del chorro","La turbulencia en aire claro no se ve directamente en el radar meteorológico. Suele asociarse a fuertes gradientes de viento, especialmente cerca de zonas de máxima cizalladura del chorro; se anticipa con SIGWX, PIREP y reportes EDR."]
+   ]},
+  {b:3,t:"quiz",q:"¿Dónde se concentra la turbulencia en aire claro asociada al chorro?",
+   o:["En el centro del chorro","En el lado polar (frío) y en las curvas","Solo debajo del chorro","En el lado ecuatorial (cálido)"],a:1,
+   fb:"El mayor gradiente de viento y temperatura está en el lado frío y en las dorsales y vaguadas pronunciadas; ahí el flujo se rompe. El centro es rápido pero relativamente suave."},
+  {b:3,t:"quiz",q:"Los vientos alisios del hemisferio norte soplan del:",o:["Noroeste","Sureste","Noreste","Suroeste"],a:2,
+   fb:"Van del anticiclón de 30° hacia la baja ecuatorial (del norte) y Coriolis los desvía a la derecha: quedan del noreste. En Cartagena el METAR de la mañana casi siempre trae 04010KT."},
+
+  // 4 · Tormentas
+  {b:4,t:"lesson",k:"Bloque 4 · Tormentas",h:"Una tormenta vive media hora y pasa por tres etapas",
+   lead:"Sobre Colombia el sol calienta masas húmedas y produce cumulonimbos casi cada tarde. Saber en qué etapa está una célula es saber qué te puede hacer.",
+   items:[
+    ["Cúmulo (10–15 min)","Solo corrientes ascendentes. El TCU crece. Turbulencia moderada y hielo en la torre."],
+    ["Madurez (15–30 min)","Ascendentes y descendentes a la vez, empieza la precipitación, aparece el yunque. Aquí está todo: windshear, microburst, granizo, rayos, turbulencia severa."],
+    ["Disipación","Solo descendentes. La célula se deshace desde abajo, pero las descendentes siguen siendo fuertes."],
+    ["Regla de evitación","Como guía FAA, evita por al menos 20 NM cualquier tormenta identificada como severa o con eco intenso. Nunca vueles bajo el yunque ni uses un \"hueco\" de una línea convectiva como atajo sin separación claramente segura."]
+   ]},
+  {b:4,t:"widget",id:"mb",k:"Instrumento · Microburst",h:"Reproduce la aproximación y sigue las tres fases"},
+  {b:4,t:"quiz",q:"Un avión cruza un microburst en aproximación. La secuencia que experimenta es:",
+   o:["Viento de cola → descendente → viento de frente","Viento de frente → descendente → viento de cola","Descendente continua sin cambio de viento","Viento cruzado → ascendente → viento de cola"],a:1,
+   fb:"Primero entra en el flujo de salida (viento de frente: sube y acelera), luego la descendente, y por último viento de cola: pierde velocidad y sustentación. La primera fase puede resultar engañosa porque el incremento inicial de IAS/performance precede al downdraft y al viento de cola."},
+  {b:4,t:"quiz",q:"¿Cuál es la etapa más peligrosa de una tormenta?",o:["Cúmulo","Madurez","Disipación","Todas por igual"],a:1,
+   fb:"Solo en madurez coexisten ascendentes y descendentes, precipitación, granizo y rayos. En disipación quedan las descendentes, que siguen siendo un peligro en aproximación."},
+
+  // 5 · Montaña, turbulencia y hielo
+  {b:5,t:"lesson",k:"Bloque 5 · Montaña, turbulencia y hielo",h:"Lo que el terreno le hace al viento",
+   lead:"Casi toda la red colombiana es de montaña. Con viento fuerte y atmósfera estable, el aire a sotavento oscila como un río tras una piedra.",
+   items:[
+    ["Onda de montaña","Como regla práctica, vientos de unos 25 kt o más y casi perpendiculares a la cordillera favorecen onda de montaña. Puede producir fuertes ascendentes, descendentes y rotor a sotavento; la intensidad real depende de estabilidad, relieve y perfil de viento."],
+    ["Lenticular arriba, rotor abajo","La lenticular es estacionaria y parece inofensiva. El rotor, a sotavento y bajo la cresta, es la zona más peligrosa y a veces no se ve."],
+    ["Sin nubes la onda sigue ahí","Cielo despejado sobre los Andes con 40 kt en altura es una advertencia, no una tranquilidad."],
+    ["Turbulencia: cuatro niveles","Ligera, moderada (se suspende el servicio), severa (control momentáneamente perdido), extrema. Hoy se mide con EDR y se comparte entre aerolíneas."]
+   ]},
+  {b:5,t:"lesson",k:"Bloque 5 · Montaña, turbulencia y hielo",h:"Engelamiento: el avión tiene protección, no inmunidad",
+   items:[
+    ["Condición","El engelamiento estructural requiere agua líquida subenfriada. Es frecuente entre 0 y −20 °C, pero gotas subenfriadas pueden existir a temperaturas más bajas, especialmente en convección; no uses −40 °C como frontera operacional rígida."],
+    ["Hielo claro","Se favorece con temperaturas relativamente más cálidas, alto contenido de agua líquida y gotas grandes. Congela más lentamente y puede extenderse fuera de zonas protegidas."],
+    ["Rime","Se favorece con temperaturas más frías, menor contenido de agua líquida y gotas pequeñas. Congela rápidamente y suele ser blanco, rugoso y opaco."],
+    ["FZRA, FZDZ, SLD","Lluvia o llovizna engelante y gotas grandes subenfriadas: salir de la condición de inmediato. Es lo que los sistemas anti-ice no cubren."]
+   ]},
+  {b:5,t:"quiz",q:"¿Cuál es la zona más peligrosa de una onda de montaña?",
+   o:["La nube lenticular","El rotor, a sotavento y bajo la cresta","La cresta más lejana a la montaña","El barlovento"],a:1,
+   fb:"El rotor es un remolino horizontal a la altura de la cima con turbulencia severa o extrema. La lenticular es la nube visible; el rotor a veces ni se ve."},
+  {b:5,t:"quiz",q:"El hielo claro se forma preferentemente:",
+   o:["Entre 0 y −10 °C con gotas grandes","Entre −10 y −20 °C con gotas pequeñas","Por debajo de −40 °C","Solo en nubes estratiformes"],a:0,
+   fb:"Gotas grandes que se congelan despacio y escurren: hielo transparente, pesado y fuera de las zonas protegidas. El rime es el de −10 a −20 °C."},
+
+  // 6 · METAR
+  {b:6,t:"lesson",k:"Bloque 6 · METAR y SPECI",h:"Un METAR se lee siempre en el mismo orden",
+   lead:"Observación rutinaria cada 30 o 60 minutos. El SPECI es la misma observación, emitida fuera de hora porque algo cambió de forma significativa.",
+   items:[
+    ["Identificación, hora, viento","Aeródromo OACI, día y hora UTC, dirección verdadera y velocidad. G = rachas. V = variación de dirección."],
+    ["Visibilidad y RVR","Metros en formato OACI (9999 = 10 km o más); millas terrestres en Estados Unidos (10SM). RVR por pista: R13L/0800."],
+    ["Tiempo presente y nubes","Intensidad + descriptor + fenómeno: +TSRA, -FZDZ, VCSH. Nubes en octas: FEW, SCT, BKN, OVC. Solo BKN, OVC y VV son techo. Solo CB y TCU llevan tipo."],
+    ["Temperatura, presión, suplementaria, TREND","T/Td, Q en hPa (A en inHg en Estados Unidos), tiempo reciente RE, windshear WS, y el pronóstico de 2 horas: NOSIG, BECMG, TEMPO."]
+   ]},
+  {b:6,t:"widget",id:"metar",k:"Instrumento · Decodificador",h:"Pulsa cada grupo del METAR de Bogotá y decodifícalo"},
+  {b:6,t:"quiz",q:"En un METAR, ¿qué grupos constituyen techo?",o:["FEW y SCT","BKN, OVC y VV","Solo OVC","Cualquier grupo con CB"],a:1,
+   fb:"Techo es la base de la capa más baja que cubre más de la mitad del cielo (BKN 5–7 octas, OVC 8) o la visibilidad vertical si el cielo está oscurecido. FEW y SCT nunca son techo, aunque lleven CB."},
+  {b:6,t:"quiz",q:"SPECI SKRG 141830Z 00000KT 0400 FG VV001 12/12 Q1025 BECMG 3000 BR=  ¿Por qué es SPECI?",
+   o:["Porque la hora no es en punto","Porque la visibilidad y el techo cruzaron umbrales significativos hacia abajo","Porque incluye TREND","Porque el viento está en calma"],a:1,
+   fb:"Un SPECI se emite cuando hay un cambio significativo entre observaciones rutinarias: aquí la visibilidad cruzó 800 m y el techo cruzó 200 ft. En este ejercicio, 400 m está por debajo del mínimo asumido para la aproximación usada en el caso. El mínimo real depende de la carta, la pista, la aeronave, la aprobación y el procedimiento del operador."},
+  {b:6,t:"quiz",q:"METAR KMIA 301853Z 10012G18KT 6SM -SHRA BKN040CB 29/24 A3001. La presión y la visibilidad son:",
+   o:["QNH 3001 hPa y 6.000 m","29,24 inHg y 6 km","Altímetro 30,01 inHg y 6 millas terrestres","QNH 1001 hPa y 6 millas náuticas"],a:2,
+   fb:"Formato FAA: A3001 es 30,01 pulgadas de mercurio (≈ 1016 hPa) y 6SM son millas terrestres. Confundir metros con millas o hPa con inHg es el error clásico al volar a Estados Unidos."},
+
+  // 7 · TAF
+  {b:7,t:"lesson",k:"Bloque 7 · TAF y decisión",h:"El TAF se lee por ventanas de tiempo",
+   lead:"Pronóstico para un período de validez del aeródromo. En planificación importa identificar qué grupos afectan la ventana de uso definida por la normativa y el Manual de Operaciones; la misión usa una ventana didáctica alrededor de la ETA.",
+   items:[
+    ["Condiciones base","Rigen desde el inicio de la validez hasta que un grupo de cambio diga otra cosa."],
+    ["BECMG","Cambio gradual dentro del período indicado. La forma de aplicar ese cambio a la planificación depende del marco y del Manual de Operaciones; en esta clase se usa una convención conservadora indicada en cada ejercicio."],
+    ["TEMPO","Fluctuaciones temporales dentro del período indicado. Su tratamiento para planificación depende de la autoridad y del Manual de Operaciones; el ejercicio indica qué supuesto usar."],
+    ["PROB30 / PROB40 y FM","PROB30/PROB40 expresan probabilidad. Cómo se incorporan en planificación depende del marco y del Manual de Operaciones. FM indica un cambio rápido: desde esa hora comienza un nuevo conjunto de condiciones."]
+   ]},
+  {b:7,t:"widget",id:"taf",k:"Instrumento · Línea de tiempo",h:"Desliza la hora y observa qué grupos del TAF de Bogotá están vivos"},
+  {b:7,t:"quiz",q:"Con el TAF de Bogotá y ETA 20:30Z, ¿qué condiciones se aplican para planificar el destino?",
+   o:["Las de la mañana: 9999 SCT025, porque son las condiciones base","Las del TEMPO: 3000 m, TSRA, techo 1.500 ft con CB","Las del PROB30 de neblina","Ninguna: el TAF no aplica al destino"],a:1,
+   fb:"Ventana 19:30–21:30Z. En el supuesto de la misión, la BECMG ya se completó y el TEMPO convectivo afecta la ventana considerada. La decisión real requiere comparar el pronóstico con los mínimos y criterios de despacho vigentes del operador; aquí se usa el caso solo para practicar lectura temporal."},
+  {b:7,t:"quiz",q:"TAF SKRG: BECMG 3108/3110 1500 BR BKN003 · TEMPO 3109/3113 0500 FG VV002. Vuelo con ETA 10Z del 31 a Rionegro (CAT I):",
+   o:["Válido: el TEMPO se ignora siempre","En el supuesto del ejercicio, no cumple el mínimo de visibilidad asignado a la aproximación; verifica siempre carta y Manual de Operaciones","Válido si se lleva combustible extra","Válido porque la BECMG termina a las 10Z"],a:1,
+   fb:"En la ventana del ejercicio, el TEMPO incluye 500 m. Ese valor queda por debajo del mínimo asumido para este caso, por lo que la planificación debe cambiar. En operación real, usa los criterios de TAF y mínimos autorizados del operador."},
+  {b:7,t:"quiz",q:"Misión final. Eres el despachador del vuelo Cali → Bogotá, salida 19:15Z, ETA 20:30Z. METAR actual de Bogotá: TSRA BKN015CB, WS R13L. TAF: TEMPO 3000 TSRA BKN015CB hasta 23Z. ¿Qué haces?",
+   o:["Cancelo el vuelo: con tormenta no se opera","Despacho normal: el destino cumple mínimos y el TEMPO es transitorio","En el supuesto del ejercicio: considerar combustible adicional para posible espera, seleccionar un alterno adecuado fuera de la zona convectiva y verificar su propio pronóstico, además de briefing de windshear a la tripulación","Cambio el destino a Rionegro"],a:2,
+   fb:"Con los supuestos didácticos del caso, el destino permanece utilizable, pero existe riesgo de demora, aproximación frustrada y windshear. La respuesta buscada es gestionar el riesgo con combustible, un alterno verificado y briefing; una decisión real depende de los mínimos y procedimientos vigentes."},
+
+  // 8 · Resultado
+  {b:8,t:"results"}
+];
+
+/* ---------------- ESTADO ---------------- */
+let idx = 0, revealed = 0;
+const answers = {}; // stepIndex -> {a, ok}
+const quizIdx = STEPS.map((s,i)=>s.t==="quiz"?i:-1).filter(i=>i>=0);
+try{ const saved=JSON.parse(localStorage.getItem("veyra-met")||"null"); if(saved){ idx=saved.idx||0; Object.assign(answers,saved.answers||{}); } }catch(e){}
+function persist(){ try{ localStorage.setItem("veyra-met",JSON.stringify({idx,answers})); }catch(e){} }
+
+/* ---------------- RENDER ---------------- */
+const stepEl=document.getElementById("step"), bar=document.getElementById("bar"), counter=document.getElementById("counter");
+const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), blocksEl=document.getElementById("blocks"), railScore=document.getElementById("railScore");
+
+function renderRail(){
+  const cur=STEPS[idx].b;
+  const maxB=STEPS.slice(0,idx+1).reduce((m,s)=>Math.max(m,s.b),0);
+  blocksEl.innerHTML=BLOCKS.map((n,i)=>`<li class="${i===cur?"active":""} ${i<maxB?"done":""}" data-b="${i}"><span class="dot"></span><span>${n}</span></li>`).join("");
+  blocksEl.querySelectorAll("li.done").forEach(li=>li.onclick=()=>{ idx=STEPS.findIndex(s=>s.b===+li.dataset.b); go(); });
+  const done=Object.keys(answers).length, ok=Object.values(answers).filter(a=>a.ok).length;
+  railScore.innerHTML=`Preguntas respondidas: <b>${done}/${quizIdx.length}</b><br>Aciertos: <b>${ok}</b>`;
+}
+
+function go(){
+  const s=STEPS[idx]; revealed=0;
+  stepEl.classList.remove("in");
+  setTimeout(()=>{
+    stepEl.innerHTML=""; stepEl.appendChild(render(s));
+    requestAnimationFrame(()=>stepEl.classList.add("in"));
+    bar.style.width=(idx/(STEPS.length-1)*100)+"%";
+    counter.textContent=`${idx+1} / ${STEPS.length}`;
+    prevB.disabled=idx===0;
+    updateNext(); renderRail(); persist(); window.scrollTo({top:0,behavior:"smooth"});
+  }, 180);
+}
+
+function updateNext(){
+  const s=STEPS[idx];
+  if(s.t==="lesson"){ nextB.textContent = revealed<s.items.length ? "Continuar" : (idx===STEPS.length-1?"Terminar":"Siguiente"); nextB.disabled=false; }
+  else if(s.t==="quiz"){ nextB.textContent="Siguiente"; nextB.disabled=!answers[idx]; }
+  else if(s.t==="results"){ nextB.textContent="Volver a empezar"; nextB.disabled=false; }
+  else { nextB.textContent= s.t==="intro" ? "Empezar la clase" : "Siguiente"; nextB.disabled=false; }
+}
+
+function render(s){
+  const w=document.createElement("div");
+  if(s.t==="intro") w.innerHTML=`
+    <div class="cover">
+      <div>
+        <p class="kicker">Clase interactiva</p>
+        <h1 class="big">Meteorología aeronáutica, de la escuela a la aerolínea</h1>
+        <p class="lead">Ocho bloques, cinco instrumentos interactivos y quince comprobaciones. Unos 45 minutos. Puedes parar y volver: el progreso se guarda en este dispositivo.</p>
+        <div class="mission"><h4>La misión</h4><p>Vuelo didáctico Cali → Bogotá, salida 19:15Z, llegada estimada 20:30Z. Es una tarde convectiva en la sabana. Durante la clase irás reuniendo lo que necesitas para tomar la decisión final.</p></div>
+        <div class="source-note"><b>Importante.</b> Los METAR, TAF, mínimos y escenarios de esta clase son datos de entrenamiento; no representan condiciones actuales ni sustituyen cartas, pronósticos, procedimientos o documentación operacional vigente. Revisión Veyra 30/09/2026: se ajustaron algunas afirmaciones operacionales usando FAA Aviation Weather Handbook y AIM; los mínimos y procedimientos específicos siguen dependiendo de la autoridad, la aeronave y el Manual de Operaciones.</div>
+      </div>
+      <div class="rings"><i></i><i></i><i></i><b></b></div>
+    </div>`;
+  else if(s.t==="lesson"){
+    w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1>${s.lead?`<p class="lead">${s.lead}</p>`:""}
+      <ol class="reveals">${s.items.map((it,i)=>`<li><span class="n">${i+1}</span><div><b>${it[0]}</b><span>${it[1]}</span></div></li>`).join("")}</ol>
+      <p class="hint">Continuar revela el siguiente punto · flechas del teclado para navegar</p>`;
+    const me=s; setTimeout(()=>{ if(STEPS[idx]===me) reveal(w); },250);
+  }
+  else if(s.t==="quiz"){
+    const prev=answers[idx];
+    w.innerHTML=`<p class="kicker">Comprobación</p><div class="q"><p class="prompt">${s.q}</p>
+      <div class="opts">${s.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>
+      <div class="fb" id="fb"></div></div>`;
+    w.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(w,+b.dataset.i));
+    if(prev) setTimeout(()=>answer(w,prev.a,true),0);
+  }
+  else if(s.t==="widget"){
+    w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1><div class="widget" id="wg"></div>`;
+    WIDGETS[s.id](w.querySelector("#wg"));
+  }
+  else if(s.t==="results") w.appendChild(results());
+  return w;
+}
+
+function reveal(w){
+  const s=STEPS[idx]; if(!s.items||revealed>=s.items.length) return false;
+  const li=w.querySelectorAll(".reveals li")[revealed]; if(!li) return false;
+  li.classList.add("show"); revealed++; updateNext(); return true;
+}
+
+function answer(w,i,replay){
+  const s=STEPS[idx]; if(answers[idx]&&!replay) return;
+  const ok=i===s.a; answers[idx]={a:i,ok};
+  w.querySelectorAll(".opt").forEach((b,j)=>{ b.classList.add("locked"); if(j===s.a) b.classList.add("right"); else if(j===i) b.classList.add("wrong"); b.disabled=true; });
+  const fb=w.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko");
+  fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${s.fb}`;
+  updateNext(); renderRail(); persist();
+}
+
+function results(){
+  const w=document.createElement("div");
+  const perBlock={};
+  quizIdx.forEach(i=>{ const b=STEPS[i].b; perBlock[b]=perBlock[b]||{n:0,ok:0}; perBlock[b].n++; if(answers[i]&&answers[i].ok) perBlock[b].ok++; });
+  const total=quizIdx.length, ok=Object.values(answers).filter(a=>a.ok).length, pct=Math.round(ok/total*100);
+  const weak=Object.entries(perBlock).filter(([b,v])=>v.ok/v.n<0.67).map(([b])=>BLOCKS[b]);
+  w.innerHTML=`<p class="kicker">Resultado</p><h1>${pct>=80?"Listo para el briefing":"Vale la pena repasar"}</h1>
+    <div class="grade">${pct}%</div><p class="lead">${ok} de ${total} comprobaciones correctas. Aprobación de referencia: 80 %.</p>
+    <div class="results">${Object.entries(perBlock).map(([b,v])=>`<div class="res"><small>${BLOCKS[b]}</small><strong>${v.ok}/${v.n}</strong><div class="bar"><i style="width:${v.ok/v.n*100}%"></i></div></div>`).join("")}</div>
+    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}. Pulsa el bloque en el índice de la izquierda para volver a él; las preguntas se pueden reintentar al reiniciar.</div>`:`<div class="note"><b>Sin bloques débiles.</b> El siguiente paso es el módulo ETOPS, donde el TAF y los mínimos de planificación se convierten en combustible crítico.</div>`}`;
+  return w;
+}
+
+/* ---------------- WIDGETS ---------------- */
+const WIDGETS={
+  alt(el){
+    el.innerHTML=`<h3>Altímetro ajustado en 1020 hPa, indicando 3.000 ft</h3><p class="sub">El QNH real del aeródromo al que vuelas es distinto. Muévelo y observa la altitud verdadera del avión.</p>
+      <div class="row"><div class="field"><label>QNH real (hPa)</label><input type="range" id="qnh" min="990" max="1040" value="1020"><output id="qv">1020</output></div></div>
+      <div class="readout"><div><small>Altitud indicada</small><strong>3.000 ft</strong></div><div><small>Error (1 hPa ≈ 30 ft)</small><strong id="err" class="g">0 ft</strong></div><div><small>Altitud verdadera</small><strong id="tru">3.000 ft</strong></div></div>
+      <div class="verdict" id="v"></div>`;
+    const r=el.querySelector("#qnh"), f=()=>{ const q=+r.value, d=(1020-q)*30; el.querySelector("#qv").textContent=q; const e=el.querySelector("#err"); e.textContent=(d>0?"−":"+")+Math.abs(d)+" ft"; e.className=d>0?"b":(d<0?"o":"g"); el.querySelector("#tru").textContent=(3000-d)+" ft";
+      el.querySelector("#v").innerHTML= d>0 ? `<b>Vuelas hacia menor presión sin corregir:</b> el altímetro marca ${d} ft de más. Estás más bajo de lo que crees. "De alta a baja, cuidado abajo."` : d<0 ? `<b>Vuelas hacia mayor presión:</b> el altímetro marca de menos; estás ${-d} ft más alto. Menos peligroso para el terreno, pero rompe la separación con el tráfico de arriba.` : `<b>QNH correcto.</b> La altitud indicada coincide con la verdadera.`; };
+    r.oninput=f; f();
+  },
+  spread(el){
+    el.innerHTML=`<h3>Temperatura y punto de rocío</h3><p class="sub">Es de noche, viento en calma, cielo despejado. Mueve los dos valores.</p>
+      <div class="row"><div class="field"><label>Temperatura (°C)</label><input type="range" id="t" min="5" max="35" value="18"><output id="tv">18</output></div>
+      <div class="field"><label>Punto de rocío (°C)</label><input type="range" id="d" min="0" max="30" value="9"><output id="dv">9</output></div></div>
+      <div class="readout"><div><small>Spread</small><strong id="sp" class="g">9 °C</strong></div><div><small>Base convectiva estimada (de día)</small><strong id="base">3.600 ft</strong></div><div><small>Humedad relativa aprox.</small><strong id="rh">56 %</strong></div></div>
+      <div class="verdict" id="v"></div>`;
+    const t=el.querySelector("#t"), d=el.querySelector("#d"); const f=()=>{ let T=+t.value, D=+d.value; if(D>T){D=T; d.value=T;} const s=T-D; el.querySelector("#tv").textContent=T; el.querySelector("#dv").textContent=D;
+      const sp=el.querySelector("#sp"); sp.textContent=s+" °C"; sp.className=s<=2?"b":(s<=5?"g":"o"); el.querySelector("#base").textContent=(s*400).toLocaleString("es-CO")+" ft";
+      const rh=Math.round(100*Math.exp(17.625*D/(243.04+D))/Math.exp(17.625*T/(243.04+T))); el.querySelector("#rh").textContent=rh+" %";
+      el.querySelector("#v").innerHTML= s===0 ? `<b>Aire saturado.</b> Si ya es de noche, hay niebla o llovizna. El METAR traerá FG o BR y probablemente VV.` : s<=2 ? `<b>Niebla probable en la madrugada.</b> Spread ≤ 2 °C con calma y cielo despejado: el suelo irradia calor, el aire de contacto se enfría hasta el rocío. Programa alterno de despegue y espera al sol.` : s<=5 ? `<b>Aire húmedo.</b> Neblina o techos bajos posibles al amanecer; de día, cúmulos con base cerca de ${(s*400).toLocaleString("es-CO")} ft.` : `<b>Aire seco.</b> Sin niebla. Si hay convección de día, las bases estarán altas y las nubes tendrán menos agua.`; };
+    t.oninput=f; d.oninput=f; f();
+  },
+  metar(el){
+    const G=[
+      ["METAR","Tipo de reporte","Observación <em>rutinaria</em>. SPECI sería una observación especial fuera de hora; METAR COR, una corrección; AUTO, estación automática."],
+      ["SKBO","Aeródromo","Indicador OACI de cuatro letras: <em>Bogotá – El Dorado</em>. SK = Colombia."],
+      ["302100Z","Día y hora","Día <em>30</em>, <em>21:00 UTC</em>. Siempre Z. Colombia es UTC−5: son las 16:00 local, hora punta de tormentas en la sabana."],
+      ["25012G22KT","Viento","Del <em>250°</em> verdadero, <em>12 kt</em>, rachas (G) de <em>22 kt</em>. La pista en uso probablemente cambió a la 31. 00000KT sería calma; VRB, variable."],
+      ["200V290","Variación","La dirección varía entre <em>200° y 290°</em>. Se reporta cuando la variación es de 60° o más con viento de 3 kt o más. Aviso de componente cruzada cambiante."],
+      ["3000","Visibilidad","<em>3.000 metros</em>. Formato OACI en metros; 9999 sería 10 km o más. En Estados Unidos se escribiría 2SM."],
+      ["TSRA","Tiempo presente","<em>Tormenta con lluvia</em> de intensidad moderada (sin signo). +TSRA sería fuerte; VCTS, tormenta en la vecindad."],
+      ["BKN015CB","Nubes","<em>Fragmentado</em> (5–7 octas) a <em>1.500 ft</em> con <em>cumulonimbos</em>. Es techo. Solo CB y TCU llevan tipo."],
+      ["OVC060","Nubes","<em>Cubierto</em> (8 octas) a <em>6.000 ft</em>. Alturas sobre el aeródromo, no sobre el mar."],
+      ["14/12","Temperatura y rocío","<em>14 °C</em>, punto de rocío <em>12 °C</em>. Spread 2: aire saturándose bajo la tormenta. M03 sería −3."],
+      ["Q1024","Presión","<em>QNH 1024 hPa</em>. Por la mañana era 1029: bajó 5 hPa con el paso del sistema. En Estados Unidos se escribiría A3024 en pulgadas."],
+      ["RETS","Tiempo reciente","<em>Tormenta reciente</em>: ocurrió en la última hora aunque no esté en el momento de la observación."],
+      ["WS R13L","Windshear","<em>Cizalladura reportada</em> en la aproximación o el despegue de la pista <em>13L</em>. Requiere revisar el procedimiento de windshear aplicable a la aeronave y al operador. WS ALL RWY afectaría a todas."],
+      ["TEMPO 1500 +TSRA","TREND","Pronóstico de <em>2 horas</em>: temporalmente visibilidad <em>1.500 m</em> con <em>tormenta fuerte</em>. Muchos operadores dan prevalencia al TREND sobre el TAF en ese plazo."]
+    ];
+    const seen=new Set();
+    el.innerHTML=`<h3>METAR SKBO, tarde de tormenta</h3><p class="sub">Catorce grupos. Cada uno se marca como leído cuando lo pulsas.</p>
+      <div class="metar">${G.map((g,i)=>`<button class="chip" data-i="${i}">${g[0]}</button>`).join("")}</div>
+      <div class="decode" id="dec"><b>Pulsa un grupo</b>Empieza por METAR y sigue en orden: así se lee siempre, de izquierda a derecha, sin saltarse nada.</div>
+      <div class="meter" id="m">0 de ${G.length} grupos leídos</div>`;
+    el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ const i=+c.dataset.i; el.querySelectorAll(".chip").forEach(x=>x.classList.remove("on")); c.classList.add("on","seen"); seen.add(i);
+      el.querySelector("#dec").innerHTML=`<b>${G[i][1]} · <span style="font-family:'Courier New',monospace">${G[i][0]}</span></b>${G[i][2]}`;
+      el.querySelector("#m").textContent= seen.size===G.length ? "Los catorce grupos leídos. Lectura operativa: tormenta sobre el campo, techo 1.500 ft, windshear en la 13L → espera o alterno." : `${seen.size} de ${G.length} grupos leídos`; });
+  },
+  taf(el){
+    const LINES=[
+      {txt:"TAF SKBO 301100Z 3012/3112 08006KT 9999 SCT025 BKN080",from:12,to:36,base:true,desc:"Condiciones base: viento del este 6 kt, 10 km, dispersas 2.500, fragmentadas 8.000."},
+      {txt:"  BECMG 3017/3019 25010KT 6000 SHRA BKN020",from:17,to:36,desc:"Cambio gradual entre 17Z y 19Z a viento del oeste 10 kt, 6.000 m, chubascos y techo 2.000 ft. Desde 19Z es lo normal.",becmg:true},
+      {txt:"  TEMPO 3018/3023 3000 TSRA BKN015CB",from:18,to:23,bad:true,desc:"Entre 18Z y 23Z, episodios temporales de 3.000 m, tormenta con lluvia y techo 1.500 ft con CB."},
+      {txt:"  PROB30 TEMPO 3106/3110 1500 BR BKN005",from:30,to:34,bad:true,desc:"Del 31 a las 06Z a 10Z, 30 % de probabilidad de neblina con 1.500 m y techo 500 ft."}
+    ];
+    el.innerHTML=`<h3>TAF SKBO, validez del 30 a las 12Z al 31 a las 12Z</h3><p class="sub">La hora del slider recorre las 24 horas. Los grupos vivos se iluminan; en rojo los que empeoran.</p>
+      <div class="taf">${LINES.map((l,i)=>`<span id="l${i}">${l.txt}</span>`).join("")}</div>
+      <div class="tl">${LINES.slice(1).map(l=>`<div class="seg ${l.bad?"bad":""}" style="left:${(l.from-12)/24*100}%;width:${(Math.min(l.to,36)-l.from)/24*100}%"></div>`).join("")}<div class="cursor" id="cur"></div></div>
+      <div class="ticks"><span>12Z</span><span>18Z</span><span>00Z</span><span>06Z</span><span>12Z</span></div>
+      <div class="row" style="margin-top:14px"><div class="field"><label>Hora</label><input type="range" id="h" min="12" max="36" step="0.5" value="20.5"><output id="hv">20:30Z</output></div></div>
+      <div class="verdict" id="v"></div>`;
+    const h=el.querySelector("#h"); const f=()=>{ const t=+h.value; const hh=String(Math.floor(t)%24).padStart(2,"0"), mm=t%1?"30":"00"; el.querySelector("#hv").textContent=`${hh}:${mm}Z${t>=24?" (día 31)":""}`; el.querySelector("#cur").style.left=((t-12)/24*100)+"%";
+      let live=[]; LINES.forEach((l,i)=>{ const on=t>=l.from&&t<l.to; const s=el.querySelector("#l"+i); s.classList.toggle("live",on); s.classList.toggle("bad",!!l.bad&&on); if(on) live.push(l); });
+      const local=String((Math.floor(t)+19)%24).padStart(2,"0");
+      let vis="9999", cig="sin techo", txt="";
+      if(t>=19){ vis="6000"; cig="BKN020"; }
+      if(t>=18&&t<23){ vis="3000"; cig="BKN015CB"; txt="Tormenta activa: para planificar se toma el peor caso aplicable. Destino legal para el ILS 13L, pero cargar espera."; }
+      else if(t>=30&&t<34){ txt="PROB30 de neblina: para el destino la mayoría de operadores lo ignora; para alterno de despegue o ETOPS, muchos lo aplican. Verifica el Manual de Operaciones."; }
+      else if(t>=17&&t<19){ txt="Dentro de la BECMG: como es deterioro, se aplica desde el inicio (17Z). Ya cuenta el techo de 2.000 ft."; }
+      else if(t>=19){ txt="Rigen las condiciones de la última BECMG: chubascos, 6.000 m, techo 2.000 ft. Sin problema para mínimos."; }
+      else txt="Mañana limpia: condiciones base.";
+      el.querySelector("#v").innerHTML=`<b>${hh}:${mm}Z (${local}:${mm} local) · visibilidad ${vis} · ${cig}.</b> ${txt}`; };
+    h.oninput=f; f();
+  },
+  mb(el){
+    el.innerHTML=`<h3>Aproximación a través de un microburst</h3><p class="sub">Pulsa Reproducir. La senda dorada es la prevista; el avión sigue lo que el viento le hace.</p>
+      <div class="mb"><svg viewBox="0 0 900 340" aria-label="Animación de microburst">
+        <line x1="20" y1="300" x2="880" y2="300" stroke="#3A414B"/><rect x="720" y="296" width="150" height="8" fill="#13161D" stroke="#3A414B"/>
+        <path d="M380 150 Q350 135 360 110 Q345 80 385 75 Q400 45 450 55 Q485 30 525 50 Q565 40 580 75 Q620 80 605 110 Q630 140 590 150 Z" fill="#13161D" stroke="#3A414B"/>
+        <g stroke="#3A414B"><line x1="430" y1="150" x2="425" y2="255"/><line x1="470" y1="150" x2="470" y2="255"/><line x1="510" y1="150" x2="515" y2="255"/></g>
+        <line x1="470" y1="155" x2="470" y2="250" stroke="#9AA3AD" stroke-width="2.5"/><path d="M462 240 L470 256 L478 240" fill="none" stroke="#9AA3AD" stroke-width="2.5"/>
+        <path d="M455 262 Q380 275 250 280" fill="none" stroke="#9AA3AD" stroke-width="2"/><path d="M262 272 L246 280 L262 288" fill="none" stroke="#9AA3AD" stroke-width="2"/>
+        <path d="M485 262 Q560 275 690 280" fill="none" stroke="#9AA3AD" stroke-width="2"/><path d="M678 272 L694 280 L678 288" fill="none" stroke="#9AA3AD" stroke-width="2"/>
+        <line x1="60" y1="120" x2="740" y2="298" stroke="#D8B25E" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path id="fp" d="M60 120 L230 160 Q330 178 400 215 Q470 258 560 296 L740 300" fill="none" stroke="transparent"/>
+        <g id="pl"><path d="M-18 0 L14 0 L20 -2 L14 -4 L-4 -4 L-10 -12 L-14 -12 L-10 -4 L-16 -4 L-20 -8 L-23 -8 L-19 0 L-23 8 L-20 8 L-16 4 L-10 4 L-14 12 L-10 12 L-4 4 L14 4 L20 2 Z" fill="#D8B25E"/></g>
+        <text id="ias" x="60" y="60" fill="#FFFFFF" font-family="Poppins,Arial" font-size="14">IAS 138 kt</text>
+        <text id="vs" x="60" y="82" fill="#9AA3AD" font-family="Poppins,Arial" font-size="12">V/S −700 ft/min · en senda</text>
+      </svg></div>
+      <div class="phases"><div class="phase" id="p0"><b>1 · Viento de frente</b>La IAS sube y el avión flota sobre la senda. La trampa: reducir potencia.</div><div class="phase" id="p1"><b>2 · Descendente</b>Cae bajo la senda: cambio de IAS ≥ 15 kt, V/S ≥ 500 ft/min no comandado. Aviso WINDSHEAR.</div><div class="phase" id="p2"><b>3 · Viento de cola</b>Pierde IAS y sustentación cerca del suelo. Aplica el procedimiento de windshear/escape publicado para la aeronave; no improvises una maniobra genérica.</div></div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="play">Reproducir</button></div>`;
+    const path=el.querySelector("#fp"), pl=el.querySelector("#pl"), L=path.getTotalLength(); let raf=null;
+    const setP=(u)=>{ const p=path.getPointAtLength(u*L), p2=path.getPointAtLength(Math.min(1,u+0.01)*L); const ang=Math.atan2(p2.y-p.y,p2.x-p.x)*180/Math.PI; pl.setAttribute("transform",`translate(${p.x} ${p.y}) rotate(${ang})`);
+      const ph= u<0.3?0:(u<0.62?1:2); [0,1,2].forEach(i=>el.querySelector("#p"+i).classList.toggle("on",u>0.05&&i===ph));
+      const ias= ph===0?138+Math.round(u/0.3*14):(ph===1?152-Math.round((u-0.3)/0.32*22):130-Math.round((u-0.62)/0.38*18));
+      el.querySelector("#ias").textContent="IAS "+ias+" kt"; el.querySelector("#vs").textContent= ph===0?"V/S −300 ft/min · por encima de la senda":(ph===1?"V/S −1.800 ft/min · WINDSHEAR":"V/S −1.200 ft/min · bajo la senda, sin margen"); };
+    setP(0);
+    el.querySelector("#play").onclick=()=>{ if(raf) cancelAnimationFrame(raf); const t0=performance.now(); const dur=7000; const tick=(t)=>{ const u=Math.min(1,(t-t0)/dur); setP(u); if(u<1) raf=requestAnimationFrame(tick); }; raf=requestAnimationFrame(tick); };
+  }
+};
+
+/* ---------------- NAV ---------------- */
+nextB.onclick=()=>{ const s=STEPS[idx];
+  if(s.t==="lesson" && reveal(stepEl)) return;
+  if(s.t==="results"){ idx=0; for(const k in answers) delete answers[k]; go(); return; }
+  if(idx<STEPS.length-1){ idx++; go(); } };
+prevB.onclick=()=>{ if(idx>0){ idx--; go(); } };
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT") return; if(e.key==="ArrowRight"&&!nextB.disabled) nextB.click(); if(e.key==="ArrowLeft") prevB.click(); });
+go();
+</script>
+</body>
+</html>
