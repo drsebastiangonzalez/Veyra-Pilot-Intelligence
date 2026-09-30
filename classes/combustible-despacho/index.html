@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veyra · Planificación de combustible y despacho · Clase interactiva</title>
+<meta name="description" content="Clase interactiva Veyra sobre planificación de combustible, alternos, OFP, gestión en vuelo, MINIMUM FUEL y MAYDAY FUEL.">
+<meta name="theme-color" content="#0B1014">
+<link rel="canonical" href="https://veyrapilot.com/classes/combustible-despacho/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1014; --panel:#13161D; --line:#232830; --line2:#2E343D;
+    --gold:#D8B25E; --gold-dim:#8F7640; --ink:#FFFFFF; --muted:#9AA3AD; --dim:#5F6873;
+    --ok:#7FBF8E; --bad:#D9776C;
+    --serif:"Lora",Georgia,serif; --sans:"Poppins",Arial,sans-serif;
+    --rail:240px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit}
+  a{color:var(--gold)}
+
+  .app{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100%}
+  /* rail */
+  .rail{border-right:1px solid var(--line);padding:28px 22px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit}
+  .rail-links{display:flex;gap:8px;flex-wrap:wrap}
+  .rail-links a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line2);padding:7px 9px;border-radius:4px;color:var(--muted)}
+  .rail-links a:hover,.rail-links a:focus-visible{color:var(--gold);border-color:var(--gold-dim)}
+  .source-note{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:4px;color:var(--muted);font-size:12px;line-height:1.6;max-width:680px}
+  .source-note b{color:var(--ink);font-weight:500}
+  .assessment-link{display:inline-flex;margin-top:14px;text-decoration:none;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:10px 14px;border-radius:4px;font-size:12.5px}
+  .assessment-link:hover,.assessment-link:focus-visible{border-color:var(--gold)}
+  .brand .w{font-family:var(--serif);font-size:22px;color:var(--ink)}
+  .brand .t{font-size:8px;letter-spacing:.22em;color:var(--muted)}
+  .rail h2{font-family:var(--serif);font-weight:400;font-size:15px;margin:0;color:var(--muted)}
+  .blocks{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+  .blocks li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;font-size:12.5px;color:var(--dim);cursor:default}
+  .blocks li .dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2);flex:none}
+  .blocks li.done{color:var(--muted);cursor:pointer}
+  .blocks li.done .dot{background:var(--gold-dim);border-color:var(--gold-dim)}
+  .blocks li.active{color:var(--ink);background:var(--panel)}
+  .blocks li.active .dot{background:var(--gold);border-color:var(--gold)}
+  .score{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.6}
+  .score b{color:var(--gold);font-weight:500}
+
+  /* stage */
+  .stage{display:flex;flex-direction:column;min-height:100vh}
+  .topbar{height:3px;background:var(--line)}
+  .topbar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s ease}
+  .step{flex:1;padding:56px 64px 40px;max-width:980px;width:100%;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+  .step.in{opacity:1;transform:none}
+  .kicker{font-size:12px;color:var(--gold);margin:0 0 10px}
+  h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.2;margin:0 0 14px;letter-spacing:-.01em}
+  h1.big{font-size:44px}
+  .lead{font-size:16px;color:var(--muted);line-height:1.65;max-width:640px;margin:0 0 28px}
+  p{line-height:1.7;max-width:660px;margin:0 0 14px;font-size:15px}
+  .note{border-left:2px solid var(--gold);padding:10px 16px;color:var(--muted);font-size:14px;line-height:1.6;max-width:640px;margin:18px 0}
+  .note b{color:var(--ink);font-weight:500}
+
+  /* reveals */
+  .reveals{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px;max-width:680px}
+  .reveals li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:4px;opacity:0;transform:translateX(-8px);transition:opacity .35s ease,transform .35s ease;line-height:1.55;font-size:14.5px}
+  .reveals li.show{opacity:1;transform:none}
+  .reveals li .n{font-family:var(--serif);color:var(--gold);font-size:20px;line-height:1}
+  .reveals li b{color:var(--ink);font-weight:500;display:block;margin-bottom:3px}
+  .reveals li span{color:var(--muted)}
+  .hint{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 64px 36px;max-width:980px;width:100%;margin:0 auto;gap:12px}
+  .btn{background:transparent;border:1px solid var(--line2);color:var(--ink);padding:11px 20px;border-radius:4px;font-size:13.5px;font-weight:400;cursor:pointer;transition:border-color .2s,background .2s}
+  .btn:hover{border-color:var(--gold)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .btn.primary{background:var(--gold);color:#1B1608;border-color:var(--gold);font-weight:500}
+  .btn.primary:hover{background:#E2C177}
+  .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .counter{font-size:12px;color:var(--dim)}
+
+  /* quiz */
+  .q{max-width:680px}
+  .q .prompt{font-family:var(--serif);font-size:22px;line-height:1.4;margin:0 0 22px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;color:var(--ink);font-size:14.5px;line-height:1.5;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:12px;transition:border-color .2s,background .2s;font-weight:300}
+  .opt .k{color:var(--muted);font-family:var(--serif)}
+  .opt:hover{border-color:var(--gold-dim)}
+  .opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .opt.right{border-color:var(--ok)} .opt.right .k{color:var(--ok)}
+  .opt.wrong{border-color:var(--bad)} .opt.wrong .k{color:var(--bad)}
+  .opt.locked{cursor:default}
+  .opt.locked:not(.right):not(.wrong){opacity:.45}
+  .fb{margin-top:18px;padding:16px 18px;border-radius:4px;background:var(--panel);border:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+  .fb.show{opacity:1;transform:none}
+  .fb b{font-weight:500}
+  .fb.ok b{color:var(--ok)} .fb.ko b{color:var(--bad)}
+
+  /* widgets */
+  .widget{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-top:8px}
+  .widget h3{font-family:var(--serif);font-weight:400;font-size:18px;margin:0 0 6px}
+  .widget .sub{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.5}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:12px;color:var(--muted)}
+  .field output{font-family:var(--serif);font-size:24px;color:var(--gold)}
+  input[type=range]{width:100%;accent-color:var(--gold);background:transparent}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+  .readout div{border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+  .readout small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .readout strong{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--ink)}
+  .readout strong.g{color:var(--gold)} .readout strong.b{color:var(--bad)} .readout strong.o{color:var(--ok)}
+  .verdict{margin-top:14px;font-size:14px;line-height:1.6;color:var(--muted);min-height:44px}
+  .verdict b{color:var(--ink);font-weight:500}
+
+  /* metar chips */
+  .metar{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px;font-family:"Courier New",monospace;font-size:17px}
+  .chip{border:1px solid var(--line2);border-radius:4px;padding:8px 10px;cursor:pointer;background:var(--bg);color:var(--ink);transition:border-color .2s,color .2s;font-family:inherit;font-size:inherit;font-weight:700}
+  .chip:hover{border-color:var(--gold-dim)}
+  .chip.on{border-color:var(--gold);color:var(--gold)}
+  .chip.seen{color:var(--muted)} .chip.seen.on{color:var(--gold)}
+  .decode{min-height:120px;border:1px solid var(--line);border-radius:4px;padding:16px 18px;font-size:14px;line-height:1.6;color:var(--muted)}
+  .decode b{color:var(--ink);font-weight:500;display:block;font-family:var(--serif);font-size:17px;margin-bottom:6px}
+  .decode em{color:var(--gold);font-style:normal}
+  .meter{font-size:12px;color:var(--dim);margin-top:10px}
+
+  /* taf timeline */
+  .taf{font-family:"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--muted);white-space:pre-wrap;border:1px solid var(--line);border-radius:4px;padding:14px 16px;background:var(--bg)}
+  .taf span{display:block;padding:0 6px;border-radius:3px;transition:background .25s,color .25s}
+  .taf span.live{background:#1C2A20;color:var(--ink)} .taf span.live.bad{background:#2B1C1B}
+  .tl{position:relative;height:28px;margin:18px 0 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+  .tl .seg{position:absolute;top:0;bottom:0;background:var(--gold-dim);opacity:.35}
+  .tl .seg.bad{background:var(--bad);opacity:.35}
+  .tl .cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--gold)}
+  .ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+
+  /* microburst */
+  .mb svg{width:100%;height:auto;display:block}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .phase{border:1px solid var(--line);border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--dim);transition:border-color .3s,color .3s}
+  .phase b{display:block;color:inherit;font-weight:500;margin-bottom:4px}
+  .phase.on{border-color:var(--gold);color:var(--ink)} .phase.on b{color:var(--gold)}
+
+  /* results */
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:22px 0}
+  .res{border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .res small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .res strong{font-family:var(--serif);font-weight:400;font-size:26px}
+  .res .bar{height:3px;background:var(--line);margin-top:10px}
+  .res .bar i{display:block;height:100%;background:var(--gold)}
+  .grade{font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin:6px 0 4px}
+
+  /* intro */
+  .cover{display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center}
+  .rings{aspect-ratio:1;position:relative}
+  .rings i{position:absolute;inset:0;border:1px solid var(--line2);border-radius:50%;animation:breathe 6s ease-in-out infinite}
+  .rings i:nth-child(2){inset:22%;animation-delay:-2s}
+  .rings i:nth-child(3){inset:44%;border-color:var(--gold);animation-delay:-4s}
+  .rings b{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:var(--gold);border-radius:50%}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.04);opacity:1}}
+  .mission{border:1px solid var(--gold-dim);border-radius:6px;padding:18px 20px;margin-top:22px;max-width:640px}
+  .mission h4{font-family:var(--serif);font-weight:400;margin:0 0 8px;font-size:17px;color:var(--gold)}
+  .mission p{margin:0;font-size:14px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr}
+    .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 20px;border-right:0;border-bottom:1px solid var(--line)}
+    .rail h2,.score{display:none}
+    .blocks{flex-direction:row;flex-wrap:wrap;gap:6px}
+    .blocks li{padding:5px 8px;font-size:0}
+    .blocks li .dot{width:10px;height:10px}
+    .step{padding:32px 22px 20px}
+    .nav{padding:12px 22px 28px}
+    h1{font-size:27px} h1.big{font-size:32px}
+    .cover{grid-template-columns:1fr}
+    .rings{max-width:180px}
+    .phases{grid-template-columns:1fr}
+  }
+
+  .stack{display:flex;flex-direction:column-reverse;gap:3px;height:300px;justify-content:flex-start;border:1px solid var(--line);border-radius:4px;padding:8px;background:var(--bg)}
+  .layer{display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-radius:3px;font-size:12px;color:#1B1608;min-height:14px;transition:flex .4s ease,opacity .4s}
+  .layer span:last-child{font-family:var(--serif);font-size:13px}
+  .l-taxi{background:#5F6873;color:#fff}.l-trip{background:#8F7640;color:#fff}.l-cont{background:#B59748}.l-alt{background:#C9A853}.l-frf{background:#D8B25E}.l-extra{background:#E6CC8A}.l-disc{background:#F1E1B4}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:12px}
+  .legend b{color:var(--ink);font-weight:500}
+  .two{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start}
+  .toggle{display:flex;gap:6px;flex-wrap:wrap}
+  .tg{border:1px solid var(--line2);background:transparent;color:var(--muted);padding:7px 12px;border-radius:4px;font-size:12.5px;cursor:pointer}
+  .tg.on{border-color:var(--gold);color:var(--gold)}
+  .gauge{position:relative;height:34px;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden;margin-top:10px}
+  .gauge i{position:absolute;top:0;bottom:0;transition:width .2s linear}
+  .gauge .mk{position:absolute;top:0;bottom:0;width:2px;background:var(--bad)}
+  .status{font-family:var(--serif);font-size:22px;margin-top:12px;min-height:30px}
+  .status.warn{color:var(--gold)} .status.bad{color:var(--bad)} .status.ok{color:var(--ok)}
+  @media (max-width:900px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="../" aria-label="Volver a Classes"><span class="w">Veyra</span><span class="t">PILOT INTELLIGENCE</span></a>
+    <h2>Combustible y despacho</h2>
+    <div class="rail-links"><a href="../">Classes</a><a href="/?view=training">Training Center</a><a href="evaluacion.html">Evaluación 20</a></div>
+    <ol class="blocks" id="blocks"></ol>
+    <div class="score" id="railScore"></div>
+  </aside>
+  <main class="stage">
+    <div class="topbar"><i id="bar"></i></div>
+    <section class="step" id="step" aria-live="polite"></section>
+    <div class="nav">
+      <button class="btn" id="prev">Anterior</button>
+      <span class="counter" id="counter"></span>
+      <button class="btn primary" id="next">Continuar</button>
+    </div>
+  </main>
+</div>
+<p class="source-note" style="margin:12px auto 28px;max-width:920px">Clase formativa. Los valores A320 son redondeados para aula y no son datos de performance ni combustible para operación. Consulta OFP, Manual de Operaciones, MEL, AFM/FCOM y normativa vigente.</p>
+
+<script>
+/* ---------------- CONTENIDO ---------------- */
+const BLOCKS = [
+  "Bienvenida", "Un principio y ocho capas", "Esquemas EASA y reglas FAA", "Alternos",
+  "El OFP en cabina", "Gestión en vuelo", "Eficiencia", "Resultado"
+];
+
+const STEPS = [
+  {b:0,t:"intro"},
+  {b:0,t:"lesson",k:"Cómo funciona esta clase",h:"Ver, aplicar, comprobar",
+   lead:"Igual que en meteorología: puntos que se revelan, un instrumento por bloque y comprobaciones con retroalimentación. La misión continúa donde la dejamos.",
+   items:[
+    ["La misión, segunda parte","Cali → Bogotá, salida 19:15Z, ETA 20:30Z, tormenta en el destino. Ya decidiste despachar con espera y alterno. Ahora hay que decir cuántos kilos, y hasta qué minuto de espera se aguanta."],
+    ["Datos del A320 para toda la clase","Crucero 2.500 kg/h · espera a 1.500 ft 2.300 kg/h · reserva final 30 min de espera = 1.150 kg · regla mental: 40 kg por minuto."],
+    ["Lo que hay que sacar de aquí","Construir el mínimo, justificar cada capa con su norma, elegir alternos y saber cuándo decir MINIMUM FUEL y cuándo MAYDAY FUEL."]
+   ]},
+
+  // 1 · principio y capas
+  {b:1,t:"lesson",k:"Bloque 1 · Un principio y ocho capas",h:"Todo el combustible sale de una sola frase",
+   lead:"El avión debe poder llegar al destino, hacer una aproximación frustrada, ir al alterno y aterrizar con la reserva final intacta, aun con desviaciones razonables. Cada capa de la pila cubre una parte de esa frase.",
+   items:[
+    ["Taxi y trip","Rodaje, y luego despegue, ascenso, crucero, descenso, aproximación y aterrizaje en destino. El trip sale del plan de vuelo con viento, peso y nivel reales."],
+    ["Contingencia","Para que el trip salga como estaba previsto aunque el viento o ATC no cooperen. Básico EASA: el mayor entre 5 % del trip y 5 minutos de espera. No es para esperar."],
+    ["Alterno y reserva final","Frustrada, vuelo al alterno y aterrizaje; y reserva final calculada a 1.500 ft. La reserva final debe protegerse: si el combustible previsto al aterrizar en el aeródromo seguro más cercano cae por debajo de ella, corresponde MAYDAY FUEL."],
+    ["Adicional, extra, discrecional","Adicional solo para escenarios (ETOPS, aislado). Extra para retrasos previsibles, lo pone el despachador. Discrecional, lo pone el comandante."]
+   ]},
+  {b:1,t:"widget",id:"stack",k:"Instrumento · La pila",h:"Construye el combustible del vuelo Cali → Bogotá capa por capa"},
+  {b:1,t:"quiz",q:"Trip de 1.875 kg. Contingencia en esquema básico EASA (espera a 2.300 kg/h):",
+   o:["94 kg (5 %)","192 kg (5 minutos de espera)","1.150 kg (30 minutos)","0 kg: en vuelos cortos no hay contingencia"],a:1,
+   fb:"Es el mayor entre 5 % del trip (94 kg) y 5 minutos de espera a 1.500 ft (2.300/60 × 5 = 192 kg). En vuelos cortos gana casi siempre el mínimo de 5 minutos."},
+  {b:1,t:"quiz",q:"¿Qué capa cubre el retraso previsible por tormentas de la tarde en Bogotá?",
+   o:["Contingencia","Reserva final","Extra","Adicional"],a:2,
+   fb:"El extra cubre retrasos previsibles y lo decide el despachador. La contingencia es para desviaciones del trip; la reserva final no se planifica gastar; el adicional es para escenarios como ETOPS."},
+
+  // 2 · esquemas y reglas
+  {b:2,t:"lesson",k:"Bloque 2 · Esquemas EASA y reglas FAA",h:"EASA: tres esquemas, cuatro políticas",
+   lead:"Desde el Reglamento (UE) 2021/1296 el combustible no es una lista de porcentajes sino un esquema aprobado, que describe cómo se planifica, cómo se replanifica en vuelo, cómo se eligen aeródromos y cómo se gestiona en el aire.",
+   items:[
+    ["Básico","5 % o 5 minutos, al menos un alterno, 30 minutos de reserva final. No exige nada especial del operador. Es el punto de partida."],
+    ["Básico con variaciones","3 % con un alterno en ruta disponible, 20 minutos de trip, contingencia estadística o replanificación en vuelo. Nunca menos de 5 minutos. Exige programa de monitoreo de consumo y entrenamiento."],
+    ["Individual","El operador define su política sobre su evaluación de riesgo y sus datos. Aprobación individual, métricas vigiladas: vuelos que agotan la contingencia, aterrizajes bajo reserva, declaraciones MINIMUM FUEL."],
+    ["Por qué existe","Un 2 % menos de contingencia en una flota grande son miles de toneladas al año. La regla cambia la seguridad de la cifra a los datos."]
+   ]},
+  {b:2,t:"lesson",k:"Bloque 2 · Esquemas EASA y reglas FAA",h:"FAA: reglas por tipo de operación",
+   items:[
+    ["Doméstica (121.639)","Trip + alterno + 45 minutos a consumo de crucero normal. No hay contingencia como tal: los 45 minutos la absorben."],
+    ["Bandera (121.645)","Trip + 10 % del tiempo de trip + alterno + 30 minutos de espera a 1.500 ft. Sin alterno autorizado: trip + 2 horas."],
+    ["ETOPS (121.646) y factores (121.647)","Se suma el escenario crítico; y viento, meteo y retrasos ATC previsibles, que es el extra con otro nombre."],
+    ["Regla 1-2-3","En operación doméstica FAA puede prescindirse del alterno si, de 1 h antes a 1 h después de la ETA, el pronóstico cumple 2.000 ft y 3 SM. En Colombia, consulta el RAC 121 vigente y el Manual de Operaciones aprobado; esta clase no presume equivalencia literal."]
+   ]},
+  {b:2,t:"quiz",q:"Bogotá → Madrid, trip 24.200 kg. Con la variación del 3 % (alterno en ruta disponible), la contingencia es:",
+   o:["1.210 kg","726 kg","192 kg","2.420 kg"],a:1,
+   fb:"3 % × 24.200 = 726 kg frente a 1.210 kg con el 5 %. Son 484 kg menos cargados, que además cuestan unos 160 kg de consumo solo por transportarlos durante 9,7 horas. Por eso la variación exige monitoreo de consumo."},
+  {b:2,t:"quiz",q:"Regla FAA para operación doméstica:",
+   o:["Trip + 10 % + alterno + 30 min de espera","Trip + alterno + 45 min a crucero normal","Trip + 5 % + alterno + 30 min","Trip + 2 horas"],a:1,
+   fb:"121.639: destino, luego alterno más lejano, y después 45 minutos a consumo de crucero normal. La regla de bandera (121.645) es la del 10 % y los 30 minutos de espera."},
+
+  // 3 · alternos
+  {b:3,t:"lesson",k:"Bloque 3 · Alternos",h:"Cuándo se exige cada alterno",
+   items:[
+    ["De despegue","Cuando no se puede regresar al aeródromo de salida (bajo mínimos de aterrizaje, pista contaminada). A 1 hora con un motor inoperativo; 2 horas con aprobación ETOPS."],
+    ["De destino","En el esquema básico EASA se selecciona al menos un alterno IFR. Bajo un esquema básico con variaciones puede omitirse cuando el destino es aislado o, entre otras condiciones, el vuelo no excede 6 h y hay dos pistas separadas utilizables con el pronóstico exigido. Si no se requiere alterno, el componente equivalente incluye al menos 15 minutos de espera a 1.500 ft en el destino, además de la reserva final."],
+    ["Dos alternos","Cuando el destino está por debajo de los mínimos de planificación en su ventana, o no hay información meteorológica. Combustible al más lejano."],
+    ["En ruta (ERA)","Para usar el 3 % o la replanificación en vuelo. Dentro de un círculo de radio 20 % de la distancia total, centrado en la ruta a 25 % del destino."]
+   ]},
+  {b:3,t:"lesson",k:"Bloque 3 · Alternos",h:"Mínimos de planificación: usa la tabla vigente del esquema",
+   lead:"La revisión EASA 2026 clasifica por tipo de operación de aproximación, no por la antigua escalera CAT II/III → CAT I → NPA. En un esquema básico, aplica los márgenes de AMC6 CAT.OP.MPA.182.",
+   items:[
+    ["Type B instrument approach","Planificación básica: DA/H + 200 ft y RVR/VIS + 800 m."],
+    ["Type A instrument approach","Planificación básica: DA/H o MDA/H + 400 ft y RVR/VIS + 1.500 m."],
+    ["Circling","MDA/H + 400 ft y VIS + 1.500 m."],
+    ["Variaciones aprobadas","Los esquemas con variaciones pueden usar márgenes distintos bajo AMC8/AMC9 y con mitigaciones específicas. El Manual de Operaciones aprobado es la referencia final."]
+   ]},
+  {b:3,t:"widget",id:"alt",k:"Instrumento · Selector de alternos",h:"Ajusta destino y pronóstico y decide cuántos alternos hacen falta"},
+  {b:3,t:"quiz",q:"Bajo el esquema básico EASA con variaciones, Bogotá → Barranquilla dura menos de 6 h y el pronóstico cumple 2.000 ft / 5 km, pero el destino tiene una sola pista utilizable. ¿Puede omitirse el alterno por esa excepción?",
+   o:["Sí: basta con cumplir la meteorología","No: esa excepción exige dos pistas separadas utilizables además de las demás condiciones","Sí: si el comandante lleva discrecional","Sí: en todo vuelo de menos de 6 horas"],a:1,
+   fb:"La excepción de AMC2 CAT.OP.MPA.182(c) para operar sin alterno exige, además del límite de tiempo, dos pistas separadas utilizables y la meteorología especificada en la ventana. Con una sola pista falta una condición."},
+  {b:3,t:"quiz",q:"Esquema básico EASA. Un alterno tiene un ILS con DH 200 ft y RVR 550 m, considerado Type B. Según AMC6 CAT.OP.MPA.182, ¿qué mínimos de planificación resultan para esa aproximación?",
+   o:["200 ft y 550 m","300 ft y 850 m","400 ft y 1.350 m","600 ft y 2.050 m"],a:2,
+   fb:"Para una operación Type B, AMC6 CAT.OP.MPA.182 suma 200 ft a la DA/H y 800 m a RVR/VIS: 200 + 200 = 400 ft; 550 + 800 = 1.350 m. Variaciones aprobadas pueden usar otra tabla."},
+
+  // 4 · OFP
+  {b:4,t:"lesson",k:"Bloque 4 · El OFP en cabina",h:"El plan de vuelo operacional se lee comparando",
+   items:[
+    ["Resumen de combustible","Cada capa con kilos y minutos, el mínimo requerido, el block y el take-off fuel. La casilla del comandante para extra/discrecional y la firma."],
+    ["Navlog","Punto a punto: distancia, nivel, viento, tiempo acumulado y el combustible estimado en cada punto: el EFOB."],
+    ["FOB frente a EFOB","En cada waypoint se compara lo que hay con lo que debería haber. La diferencia acumulada es contingencia que se está yendo. Si crece, se replanifica antes del destino, no en la espera."],
+    ["Alternos y puntos de decisión","Ruta, tiempo y combustible a cada alterno; ETP y punto de decisión si el vuelo va con replanificación en vuelo."]
+   ]},
+  {b:4,t:"widget",id:"ofp",k:"Instrumento · FOB frente a EFOB",h:"Recorre el navlog y detecta cuándo hay que reaccionar"},
+  {b:4,t:"quiz",q:"A mitad de ruta el FOB está 250 kg por debajo del EFOB y la diferencia crece 60 kg por waypoint. ¿Qué capa se está consumiendo y qué haces?",
+   o:["La reserva final; declarar MAYDAY FUEL","La contingencia; verificar causa (viento, nivel), ahorrar y replanificar antes del destino","El extra; no hacer nada hasta la espera","El alterno; desviarse de inmediato"],a:1,
+   fb:"Una diferencia negativa que crece es contingencia yéndose. La respuesta es entender por qué (viento, nivel bajo, velocidad), corregir lo que se pueda y recalcular si el destino, el alterno y la reserva siguen cubiertos. Todo antes de llegar a la espera."},
+
+  // 5 · gestión en vuelo
+  {b:5,t:"lesson",k:"Bloque 5 · Gestión en vuelo",h:"Una pregunta permanente y una escalera",
+   lead:"El comandante verifica el combustible a intervalos regulares y se hace siempre la misma pregunta: con lo que tengo, ¿llego al destino, voy al alterno y aterrizo con la reserva final?",
+   items:[
+    ["Primero ahorrar, luego cambiar de alterno, luego desviar","Nivel óptimo, ruta directa, velocidad de máximo alcance; un alterno más cercano que cumpla; y si no, irse mientras el alterno aún está cubierto con reserva."],
+    ["Comprometerse a aterrizar en un aeródromo","Es una decisión prevista por procedimientos aprobados de gestión de combustible. El comandante reduce las opciones planificadas a un aeródromo concreto y debe proteger la reserva final. No existe una regla universal de 'dos pistas = compromiso permitido': manda el esquema y el Manual de Operaciones."],
+    ["MINIMUM FUEL","Comprometido a un aeródromo, cualquier cambio a la autorización llevaría a aterrizar bajo la reserva final. Es un aviso: no acepto más demora. No es emergencia y no da prioridad."],
+    ["MAYDAY MAYDAY MAYDAY FUEL","Si el combustible utilizable estimado al aterrizar en el aeródromo seguro más cercano será menor que la reserva final planificada, se declara emergencia de combustible con la fraseología MAYDAY MAYDAY MAYDAY FUEL."]
+   ]},
+  {b:5,t:"widget",id:"hold",k:"Instrumento · Espera sobre Bogotá",h:"Reproduce la espera y decide el minuto de desvío"},
+  {b:5,t:"quiz",q:"Sobre Bogotá con FOB 3.975 kg. Ir a Rionegro cuesta 1.200 kg, la reserva final son 1.150 kg. Consumo de espera 2.300 kg/h. ¿Cuántos minutos puedes esperar antes de irte?",
+   o:["Unos 20 minutos","Unos 42 minutos","Unos 60 minutos","Unos 100 minutos"],a:1,
+   fb:"Para irte y aterrizar con reserva necesitas 1.200 + 1.150 = 2.350 kg. Disponible para esperar: 3.975 − 2.350 = 1.625 kg. A 38 kg/min son unos 42 minutos. Un comandante fija el bingo unos minutos antes para salir de la espera y aproximar con margen."},
+  {b:5,t:"quiz",q:"Te comprometiste a Bogotá. ATC pide una vuelta más de espera y tu cálculo dice que con esa vuelta aterrizarías con 1.050 kg. ¿Qué declaras?",
+   o:["Nada: sigue siendo legal","MINIMUM FUEL","MAYDAY MAYDAY MAYDAY FUEL","PAN PAN FUEL"],a:2,
+   fb:"1.050 kg es menos que la reserva final de 1.150. Cuando el combustible estimado al aterrizar en el aeródromo más cercano seguro será menor que la reserva final, es MAYDAY FUEL. MINIMUM FUEL se declara antes: cuando cualquier cambio te llevaría a esa situación pero todavía no ha ocurrido."},
+  {b:5,t:"quiz",q:"¿Qué obtiene una aeronave al declarar MINIMUM FUEL?",
+   o:["Prioridad sobre el resto del tráfico","Aterrizaje inmediato","Solo información de ATC sobre las demoras previstas; ATC sabe que no acepta más demora","Activación de los servicios de emergencia"],a:2,
+   fb:"MINIMUM FUEL no es una emergencia y no da prioridad. Es un aviso de que cualquier cambio a la autorización actual comprometería la reserva final. La prioridad llega con MAYDAY FUEL."},
+
+  // 6 · eficiencia
+  {b:6,t:"lesson",k:"Bloque 6 · Eficiencia",h:"El combustible también es economía",
+   items:[
+    ["Cada kilo de más tiene precio","La clase usa como regla de aula un costo de transporte aproximado del 3–4 % del peso extra por hora. El valor real depende de aeronave, etapa, peso, nivel y condiciones; usa datos del operador para decisiones reales."],
+    ["Cost index","Relación entre el costo del tiempo y el del combustible. Un CI más bajo prioriza eficiencia; uno más alto prioriza tiempo. El valor lo define el operador y no existe un rango universal válido para todos los A320 o rutas."],
+    ["Tankering","Llevar combustible desde donde es barato para no repostar donde es caro. Solo si el ahorro supera el costo de transporte y el peso lo permite."],
+    ["Monitoreo de consumo","La estadística por avión y ruta que alimenta la contingencia estadística y detecta aviones que consumen de más. Es el precio de los esquemas con variaciones."]
+   ]},
+  {b:6,t:"quiz",q:"Un despachador carga 500 kg de extra en un vuelo de 9 horas 'por si acaso'. Aunque no se use, el costo aproximado es:",
+   o:["Cero: si no se consume, no cuesta","Unos 150 kg de combustible quemados solo por transportarlo","500 kg","Depende del cost index"],a:1,
+   fb:"Con la regla de aula de esta clase, 500 × 3,5 % × 9 h ≈ 158 kg. Es una aproximación pedagógica, no performance certificada. El costo real de transportar combustible debe obtenerse de las herramientas y datos del operador."},
+
+  {b:7,t:"results"}
+];
+
+/* ---------------- ESTADO ---------------- */
+let idx = 0, revealed = 0;
+const answers = {};
+const quizIdx = STEPS.map((s,i)=>s.t==="quiz"?i:-1).filter(i=>i>=0);
+try{ const saved=JSON.parse(localStorage.getItem("veyra-fuel")||"null"); if(saved){ idx=saved.idx||0; Object.assign(answers,saved.answers||{}); } }catch(e){}
+function persist(){ try{ localStorage.setItem("veyra-fuel",JSON.stringify({idx,answers})); }catch(e){} }
+
+/* ---------------- RENDER ---------------- */
+const stepEl=document.getElementById("step"), bar=document.getElementById("bar"), counter=document.getElementById("counter");
+const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), blocksEl=document.getElementById("blocks"), railScore=document.getElementById("railScore");
+
+function renderRail(){
+  const cur=STEPS[idx].b;
+  const maxB=STEPS.slice(0,idx+1).reduce((m,s)=>Math.max(m,s.b),0);
+  blocksEl.innerHTML=BLOCKS.map((n,i)=>`<li class="${i===cur?"active":""} ${i<maxB?"done":""}" data-b="${i}"><span class="dot"></span><span>${n}</span></li>`).join("");
+  blocksEl.querySelectorAll("li.done").forEach(li=>li.onclick=()=>{ idx=STEPS.findIndex(s=>s.b===+li.dataset.b); go(); });
+  const done=Object.keys(answers).length, ok=Object.values(answers).filter(a=>a.ok).length;
+  railScore.innerHTML=`Preguntas respondidas: <b>${done}/${quizIdx.length}</b><br>Aciertos: <b>${ok}</b>`;
+}
+function go(){
+  const s=STEPS[idx]; revealed=0;
+  stepEl.classList.remove("in");
+  setTimeout(()=>{ stepEl.innerHTML=""; stepEl.appendChild(render(s));
+    requestAnimationFrame(()=>stepEl.classList.add("in"));
+    bar.style.width=(idx/(STEPS.length-1)*100)+"%"; counter.textContent=`${idx+1} / ${STEPS.length}`;
+    prevB.disabled=idx===0; updateNext(); renderRail(); persist(); window.scrollTo({top:0,behavior:"smooth"}); },180);
+}
+function updateNext(){
+  const s=STEPS[idx];
+  if(s.t==="lesson"){ nextB.textContent = revealed<s.items.length ? "Continuar" : "Siguiente"; nextB.disabled=false; }
+  else if(s.t==="quiz"){ nextB.textContent="Siguiente"; nextB.disabled=!answers[idx]; }
+  else if(s.t==="results"){ nextB.textContent="Volver a empezar"; nextB.disabled=false; }
+  else { nextB.textContent= s.t==="intro" ? "Empezar la clase" : "Siguiente"; nextB.disabled=false; }
+}
+function render(s){
+  const w=document.createElement("div");
+  if(s.t==="intro") w.innerHTML=`
+    <div class="cover"><div>
+        <p class="kicker">Clase interactiva</p>
+        <h1 class="big">Planificación de combustible y despacho</h1>
+        <p class="lead">Siete bloques, cuatro instrumentos y once comprobaciones. Unos 40 minutos. El progreso se guarda en este dispositivo.</p>
+        <div class="mission"><h4>La misión continúa</h4><p>Cali → Bogotá, salida 19:15Z, ETA 20:30Z, tormenta en Bogotá. En meteorología decidiste despachar con espera y alterno en Rionegro. Hoy calculas los kilos y el punto de decisión del ejercicio.</p></div>
+        <div class="source-note"><b>Datos de entrenamiento.</b> Pesos, consumos, tiempos, mínimos y aeródromos de los ejercicios son didácticos. Para una operación real mandan el esquema aprobado, el OFP, el Manual de Operaciones, la MEL y la normativa aplicable. Revisión Veyra 30/09/2026 contrastada con EASA Easy Access Rules Rev. 24 (marzo 2026), ICAO Anexo 6 y 14 CFR Part 121.</div>
+        <a class="assessment-link" href="evaluacion.html">Evaluación final · 20 preguntas →</a>
+      </div><div class="rings"><i></i><i></i><i></i><b></b></div></div>`;
+  else if(s.t==="lesson"){
+    w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1>${s.lead?`<p class="lead">${s.lead}</p>`:""}
+      <ol class="reveals">${s.items.map((it,i)=>`<li><span class="n">${i+1}</span><div><b>${it[0]}</b><span>${it[1]}</span></div></li>`).join("")}</ol>
+      <p class="hint">Continuar revela el siguiente punto · flechas del teclado para navegar</p>`;
+    const me=s; setTimeout(()=>{ if(STEPS[idx]===me) reveal(w); },250);
+  }
+  else if(s.t==="quiz"){
+    const prev=answers[idx];
+    w.innerHTML=`<p class="kicker">Comprobación</p><div class="q"><p class="prompt">${s.q}</p>
+      <div class="opts">${s.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>
+      <div class="fb" id="fb"></div></div>`;
+    w.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(w,+b.dataset.i));
+    if(prev) setTimeout(()=>answer(w,prev.a,true),0);
+  }
+  else if(s.t==="widget"){ w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1><div class="widget" id="wg"></div>`; WIDGETS[s.id](w.querySelector("#wg")); }
+  else if(s.t==="results") w.appendChild(results());
+  return w;
+}
+function reveal(w){
+  const s=STEPS[idx]; if(!s.items||revealed>=s.items.length) return false;
+  const li=w.querySelectorAll(".reveals li")[revealed]; if(!li) return false;
+  li.classList.add("show"); revealed++; updateNext(); return true;
+}
+function answer(w,i,replay){
+  const s=STEPS[idx]; if(answers[idx]&&!replay) return;
+  const ok=i===s.a; answers[idx]={a:i,ok};
+  w.querySelectorAll(".opt").forEach((b,j)=>{ b.classList.add("locked"); if(j===s.a) b.classList.add("right"); else if(j===i) b.classList.add("wrong"); b.disabled=true; });
+  const fb=w.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${s.fb}`;
+  updateNext(); renderRail(); persist();
+}
+function results(){
+  const w=document.createElement("div"); const perBlock={};
+  quizIdx.forEach(i=>{ const b=STEPS[i].b; perBlock[b]=perBlock[b]||{n:0,ok:0}; perBlock[b].n++; if(answers[i]&&answers[i].ok) perBlock[b].ok++; });
+  const total=quizIdx.length, ok=Object.values(answers).filter(a=>a.ok).length, pct=Math.round(ok/total*100);
+  const weak=Object.entries(perBlock).filter(([b,v])=>v.ok/v.n<0.67).map(([b])=>BLOCKS[b]);
+  w.innerHTML=`<p class="kicker">Resultado</p><h1>${pct>=80?"Listo para firmar el OFP":"Vale la pena repasar"}</h1>
+    <div class="grade">${pct}%</div><p class="lead">${ok} de ${total} comprobaciones correctas. Aprobación de referencia: 80 %.</p>
+    <div class="results">${Object.entries(perBlock).map(([b,v])=>`<div class="res"><small>${BLOCKS[b]}</small><strong>${v.ok}/${v.n}</strong><div class="bar"><i style="width:${v.ok/v.n*100}%"></i></div></div>`).join("")}</div>
+    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}. Pulsa el bloque en el índice para volver a él.</div>`:`<div class="note"><b>Sin bloques débiles.</b> El vuelo Cali → Bogotá del ejercicio queda alrededor de 6.000 kg de block con los datos de aula. Ya sabes de dónde sale cada kilo.</div>`}
+      <a class="assessment-link" href="evaluacion.html">Evaluación final · 20 preguntas →</a>`;
+  return w;
+}
+
+/* ---------------- WIDGETS ---------------- */
+const CR=2500/60, HD=2300/60, FRF=1150;
+const WIDGETS={
+  stack(el){
+    el.innerHTML=`<h3>Cali → Bogotá · A320</h3><p class="sub">Trip 45 min, alterno Rionegro 28 min, taxi 150 kg. Cambia el esquema y los tiempos; la pila se recalcula.</p>
+      <div class="two"><div>
+        <div class="toggle" id="sch"><button class="tg on" data-s="b">EASA básico</button><button class="tg" data-s="v">EASA variación 3 %</button><button class="tg" data-s="f">FAA doméstico</button></div>
+        <div class="field" style="margin-top:14px"><label>Trip (min)</label><input type="range" id="trip" min="30" max="600" value="45"><output id="tripv">45 min</output></div>
+        <div class="field"><label>Alterno (min)</label><input type="range" id="alt" min="10" max="90" value="28"><output id="altv">28 min</output></div>
+        <div class="field"><label>Extra por retraso previsible (min de espera)</label><input type="range" id="ext" min="0" max="60" step="5" value="30"><output id="extv">30 min</output></div>
+        <div class="field"><label>Discrecional del comandante (kg)</label><input type="range" id="disc" min="0" max="1000" step="50" value="300"><output id="discv">300 kg</output></div>
+      </div><div>
+        <div class="stack" id="st"></div>
+        <div class="readout"><div><small>Mínimo requerido</small><strong id="min" class="g">—</strong></div><div><small>Block fuel</small><strong id="blk">—</strong></div><div><small>Take-off fuel</small><strong id="tof">—</strong></div></div>
+        <div class="legend" id="lg"></div>
+      </div></div>`;
+    let sch="b";
+    el.querySelectorAll(".tg").forEach(b=>b.onclick=()=>{ el.querySelectorAll(".tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); sch=b.dataset.s; f(); });
+    const f=()=>{ const tm=+el.querySelector("#trip").value, am=+el.querySelector("#alt").value, em=+el.querySelector("#ext").value, disc=+el.querySelector("#disc").value;
+      el.querySelector("#tripv").textContent=tm+" min"; el.querySelector("#altv").textContent=am+" min"; el.querySelector("#extv").textContent=em+" min"; el.querySelector("#discv").textContent=disc+" kg";
+      const taxi=150, trip=Math.round(tm*CR), alt=Math.round(am*HD)+130, extra=Math.round(em*HD);
+      let cont, frf, contLbl, frfLbl;
+      if(sch==="b"){ cont=Math.max(Math.round(trip*0.05),Math.round(5*HD)); frf=FRF; contLbl=`Contingencia · mayor entre 5 % (${Math.round(trip*0.05)}) y 5 min (${Math.round(5*HD)})`; frfLbl="Reserva final · 30 min de espera a 1.500 ft"; }
+      else if(sch==="v"){ cont=Math.max(Math.round(trip*0.03),Math.round(5*HD)); frf=FRF; contLbl=`Contingencia · 3 % con ERA (${Math.round(trip*0.03)}), nunca menos de 5 min (${Math.round(5*HD)})`; frfLbl="Reserva final · 30 min de espera a 1.500 ft"; }
+      else { cont=0; frf=Math.round(45*CR); contLbl="Contingencia · no existe en 121.639"; frfLbl="Reserva · 45 min a crucero normal"; }
+      const min=taxi+trip+cont+alt+frf+extra, blk=min+disc;
+      const L=[["l-taxi","Taxi",taxi],["l-trip","Trip",trip],["l-cont","Contingencia",cont],["l-alt","Alterno",alt],["l-frf","Reserva final",frf],["l-extra","Extra",extra],["l-disc","Discrecional",disc]];
+      el.querySelector("#st").innerHTML=L.map(l=>`<div class="layer ${l[0]}" style="flex:${l[2]} 1 0;opacity:${l[2]?1:.2}"><span>${l[1]}</span><span>${l[2].toLocaleString("es-CO")}</span></div>`).join("");
+      el.querySelector("#min").textContent=min.toLocaleString("es-CO")+" kg"; el.querySelector("#blk").textContent=blk.toLocaleString("es-CO")+" kg"; el.querySelector("#tof").textContent=(blk-taxi).toLocaleString("es-CO")+" kg";
+      el.querySelector("#lg").innerHTML=`<div><b>Trip</b> ${tm} min × 2.500 kg/h</div><div><b>${contLbl}</b></div><div><b>Alterno</b> frustrada (130 kg) + ${am} min al alterno</div><div><b>${frfLbl}</b></div><div><b>Extra</b> ${em} min de espera prevista (despachador)</div><div><b>Discrecional</b> criterio del comandante</div>`; };
+    el.querySelectorAll("input").forEach(i=>i.oninput=f); f();
+  },
+  alt(el){
+    el.innerHTML=`<h3>¿Cuántas opciones de aterrizaje exige el caso?</h3><p class="sub">Ejercicio basado en EASA CAT.OP.MPA.182. La opción de operar sin alterno que se modela aquí pertenece al esquema básico con variaciones; el Manual de Operaciones puede ser más restrictivo.</p>
+      <div class="row">
+        <div class="field"><label>Duración del vuelo</label><div class="toggle" id="dur"><button class="tg on" data-v="short">6 h o menos</button><button class="tg" data-v="long">Más de 6 h</button></div></div>
+        <div class="field"><label>Pistas separadas utilizables en destino</label><div class="toggle" id="rwy"><button class="tg on" data-v="1">Una</button><button class="tg" data-v="2">Dos o más</button></div></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="field"><label>Techo pronosticado en ETA ± 1 h (ft)</label><input type="range" id="cig" min="0" max="5000" step="100" value="2500"><output id="cigv">2.500 ft</output></div>
+        <div class="field"><label>Visibilidad pronosticada (m)</label><input type="range" id="vis" min="0" max="10000" step="100" value="8000"><output id="visv">8.000 m</output></div>
+        <div class="field"><label>Mínimos de planificación del destino</label><input type="range" id="mn" min="100" max="1000" step="50" value="200"><output id="mnv">200 ft</output></div>
+      </div>
+      <div class="status" id="st"></div><div class="verdict" id="v"></div>`;
+    let dur="short", rwy="1";
+    el.querySelectorAll("#dur .tg").forEach(b=>b.onclick=()=>{ el.querySelectorAll("#dur .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); dur=b.dataset.v; f(); });
+    el.querySelectorAll("#rwy .tg").forEach(b=>b.onclick=()=>{ el.querySelectorAll("#rwy .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); rwy=b.dataset.v; f(); });
+    const f=()=>{ const cig=+el.querySelector("#cig").value, vis=+el.querySelector("#vis").value, mn=+el.querySelector("#mn").value;
+      el.querySelector("#cigv").textContent=cig.toLocaleString("es-CO")+" ft"; el.querySelector("#visv").textContent=vis.toLocaleString("es-CO")+" m"; el.querySelector("#mnv").textContent=mn+" ft";
+      const st=el.querySelector("#st"), v=el.querySelector("#v");
+      if(cig<mn || vis<550){ st.className="status bad"; st.textContent="Dos alternos de destino"; v.innerHTML=`<b>El destino está por debajo de sus mínimos de planificación en la ventana.</b> Se despacha con dos alternos y combustible al más lejano, o se retrasa el vuelo hasta que el TAF mejore. Con niebla persistente, la mayoría de aerolíneas retrasa.`; }
+      else if(dur==="short" && rwy==="2" && cig>=2000 && vis>=5000){ st.className="status ok"; st.textContent="El ejercicio permite planificar sin alterno"; v.innerHTML=`<b>Se cumplen las condiciones simplificadas mostradas para la variación:</b> vuelo de 6 h o menos, dos pistas separadas utilizables y pronóstico de al menos 2.000 ft y 5 km en la ventana. El componente sin alterno incluye como mínimo 15 minutos de espera a 1.500 ft, además de FRF. El OM puede exigir más.`; }
+      else { st.className="status warn"; st.textContent="Un alterno de destino"; const why=[]; if(dur!=="short") why.push("el vuelo dura más de 6 h"); if(rwy!=="2") why.push("no hay dos pistas separadas"); if(cig<2000) why.push("el techo es menor de 2.000 ft"); if(vis<5000) why.push("la visibilidad es menor de 5 km");
+        v.innerHTML=`<b>Alterno obligatorio</b> porque ${why.join(", ")}. El alterno se evalúa con sus propios mínimos de planificación (una categoría más exigente) en su ventana ETA ± 1 h.`; } };
+    el.querySelectorAll("input").forEach(i=>i.oninput=f); f();
+  },
+  ofp(el){
+    const WP=[["SKCL",5850,5850],["ULQ",5480,5470],["TIBUS",5120,5060],["GIRAR",4780,4660],["MATEO",4460,4290],["SKBO (ETA)",3975,3780]];
+    el.innerHTML=`<h3>Navlog Cali → Bogotá</h3><p class="sub">Desliza por los waypoints. EFOB es lo que el plan esperaba; FOB es lo que marca el avión.</p>
+      <div class="field"><label>Waypoint</label><input type="range" id="wp" min="0" max="${WP.length-1}" value="0"><output id="wpv">SKCL</output></div>
+      <div class="readout"><div><small>EFOB (plan)</small><strong id="e">—</strong></div><div><small>FOB (real)</small><strong id="f">—</strong></div><div><small>Diferencia</small><strong id="d">—</strong></div><div><small>Contingencia restante</small><strong id="c">—</strong></div></div>
+      <div class="verdict" id="v"></div>`;
+    const r=el.querySelector("#wp"); const f=()=>{ const i=+r.value, [n,e,fb]=WP[i], d=fb-e, contLeft=192+d;
+      el.querySelector("#wpv").textContent=n; el.querySelector("#e").textContent=e.toLocaleString("es-CO")+" kg"; el.querySelector("#f").textContent=fb.toLocaleString("es-CO")+" kg";
+      const dd=el.querySelector("#d"); dd.textContent=(d>0?"+":"")+d+" kg"; dd.className=d<-150?"b":(d<0?"g":"o");
+      const cc=el.querySelector("#c"); cc.textContent=Math.max(0,contLeft)+" kg"; cc.className=contLeft<=0?"b":"g";
+      el.querySelector("#v").innerHTML= i===0?`<b>Al soltar frenos:</b> take-off fuel 5.850 kg, igual al plan. La contingencia son 192 kg.`:
+        d>=-60?`<b>Diferencia pequeña.</b> Normal: viento y nivel nunca son exactos. Se anota y se sigue vigilando.`:
+        contLeft>0?`<b>La diferencia crece:</b> ya se ha ido ${-d} kg de contingencia y quedan ${contLeft}. Pregunta al PM: ¿viento en contra mayor que el previsto? ¿nivel más bajo? Corrige velocidad o nivel si se puede.`:
+        `<b>Contingencia agotada antes del destino.</b> Se llega con ${fb.toLocaleString("es-CO")} kg en vez de ${e.toLocaleString("es-CO")}: el extra de espera ya no son 30 minutos sino ${Math.round((fb-2350)/HD)}. Replanifica ahora: ¿espera más corta, alterno más cercano o desvío temprano?`; };
+    r.oninput=f; f();
+  },
+  hold(el){
+    const alt=1200;
+    el.innerHTML=`<h3>Espera sobre Bogotá, 20:30Z</h3><p class="sub">Llegas con 3.975 kg. Rionegro cuesta 1.200 kg; la reserva final son 1.150. Reproduce y observa las capas consumirse a 2.300 kg/h.</p>
+      <div class="row"><div class="field"><label>FOB al llegar (kg)</label><input type="range" id="fob" min="2500" max="4500" step="25" value="3975"><output id="fobv">3.975 kg</output></div><div class="field"><label>Comprometido a Bogotá</label><div class="toggle" id="cm"><button class="tg on" data-v="0">No · alterno disponible</button><button class="tg" data-v="1">Sí · uso el alterno para esperar</button></div></div></div>
+      <div class="gauge" id="g"><i id="gfrf" style="left:0;background:#D8B25E"></i><i id="galt" style="background:#C9A853"></i><i id="gfree" style="background:#E6CC8A"></i><div class="mk" id="mk"></div></div>
+      <div class="ticks"><span>0</span><span>Reserva final 1.150</span><span>+ alterno 2.350</span><span id="tmax"></span></div>
+      <div class="readout"><div><small>Hora</small><strong id="t">20:30Z</strong></div><div><small>FOB</small><strong id="f">—</strong></div><div><small>Minutos hasta el bingo de desvío</small><strong id="b" class="g">—</strong></div></div>
+      <div class="status" id="st"></div><div class="verdict" id="v"></div>
+      <div class="row" style="margin-top:12px"><button class="btn" id="play">Reproducir espera</button><button class="btn" id="reset">Reiniciar</button></div>`;
+    let fob0=3975, commit=0, elapsed=0, raf=null; const MAX=4500;
+    el.querySelectorAll("#cm .tg").forEach(b=>b.onclick=()=>{ el.querySelectorAll("#cm .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); commit=+b.dataset.v; draw(); });
+    const draw=()=>{ const fob=Math.max(0,fob0-elapsed*HD); const pct=x=>Math.min(100,x/MAX*100);
+      el.querySelector("#gfrf").style.width=pct(Math.min(fob,FRF))+"%"; el.querySelector("#galt").style.left=pct(FRF)+"%"; el.querySelector("#galt").style.width=pct(Math.max(0,Math.min(fob,FRF+alt)-FRF))+"%";
+      el.querySelector("#gfree").style.left=pct(FRF+alt)+"%"; el.querySelector("#gfree").style.width=pct(Math.max(0,fob-FRF-alt))+"%"; el.querySelector("#mk").style.left=pct(FRF)+"%"; el.querySelector("#tmax").textContent=MAX.toLocaleString("es-CO");
+      const m=Math.floor(elapsed), hh=20+Math.floor((30+m)/60), mm=(30+m)%60; el.querySelector("#t").textContent=`${hh}:${String(mm).padStart(2,"0")}Z`; el.querySelector("#f").textContent=Math.round(fob).toLocaleString("es-CO")+" kg";
+      const bingo=(fob-FRF-alt)/HD, toLandNow=fob-150; const b=el.querySelector("#b"); b.textContent= commit? "comprometido" : (bingo>0? Math.floor(bingo)+" min" : "0 min"); b.className=bingo>10?"o":(bingo>0?"g":"b");
+      const st=el.querySelector("#st"), v=el.querySelector("#v");
+      if(!commit){
+        if(fob>FRF+alt){ st.className="status ok"; st.textContent="Esperando con margen"; v.innerHTML=`<b>Estás consumiendo extra y contingencia.</b> Mientras FOB sea mayor que ${(FRF+alt).toLocaleString("es-CO")} kg puedes irte a Rionegro y aterrizar con reserva. Fija el bingo unos minutos antes.`; }
+        else if(fob>FRF){ st.className="status bad"; st.textContent="Pasaste el punto de decisión del ejercicio"; v.innerHTML=`<b>Ya no conservas el alterno con la reserva final del caso.</b> La operación real debe seguir el procedimiento aprobado: desviar antes del punto previsto o, si el esquema y el Manual de Operaciones permiten un compromiso al destino y se cumplen sus condiciones, aplicar ese procedimiento. No uses este simulador para decidir un vuelo real.`; }
+        else { st.className="status bad"; st.textContent="MAYDAY MAYDAY MAYDAY FUEL"; v.innerHTML=`<b>El combustible estimado al aterrizar en el aeródromo seguro más cercano está por debajo de la reserva final del ejercicio.</b> Corresponde una emergencia de combustible y la fraseología publicada aplicable.`; }
+      } else {
+        if(toLandNow>FRF+HD*8){ st.className="status warn"; st.textContent="Comprometido a Bogotá"; v.innerHTML=`<b>Ya no hay alterno.</b> Puedes seguir esperando mientras el aterrizaje estimado quede sobre 1.150 kg. Aterrizando ahora quedarían ${Math.round(toLandNow).toLocaleString("es-CO")} kg.`; }
+        else if(toLandNow>FRF){ st.className="status warn"; st.textContent="MINIMUM FUEL"; v.innerHTML=`<b>Cualquier cambio a la autorización</b> (otra vuelta, otra pista) te llevaría bajo la reserva. Declara MINIMUM FUEL: no aceptas más demora. No da prioridad; ATC informa la demora prevista.`; }
+        else { st.className="status bad"; st.textContent="MAYDAY MAYDAY MAYDAY FUEL"; v.innerHTML=`<b>El aterrizaje estimado queda bajo la reserva final.</b> Es una emergencia de combustible. Aplica la fraseología y los procedimientos publicados; después se gestiona el reporte de seguridad según el operador.`; }
+      } };
+    el.querySelector("#fob").oninput=e=>{ fob0=+e.target.value; el.querySelector("#fobv").textContent=fob0.toLocaleString("es-CO")+" kg"; elapsed=0; draw(); };
+    el.querySelector("#play").onclick=()=>{ if(raf) cancelAnimationFrame(raf); const t0=performance.now(), e0=elapsed; const tick=t=>{ elapsed=e0+(t-t0)/1000*6; draw(); if(fob0-elapsed*HD>FRF-200) raf=requestAnimationFrame(tick); }; raf=requestAnimationFrame(tick); };
+    el.querySelector("#reset").onclick=()=>{ if(raf) cancelAnimationFrame(raf); elapsed=0; draw(); };
+    draw();
+  }
+};
+
+/* ---------------- NAV ---------------- */
+nextB.onclick=()=>{ const s=STEPS[idx];
+  if(s.t==="lesson" && reveal(stepEl)) return;
+  if(s.t==="results"){ idx=0; for(const k in answers) delete answers[k]; go(); return; }
+  if(idx<STEPS.length-1){ idx++; go(); } };
+prevB.onclick=()=>{ if(idx>0){ idx--; go(); } };
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT") return; if(e.key==="ArrowRight"&&!nextB.disabled) nextB.click(); if(e.key==="ArrowLeft") prevB.click(); });
+go();
+</script>
+</body>
+</html>
