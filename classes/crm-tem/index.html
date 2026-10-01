@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veyra · CRM y TEM · Clase interactiva</title>
+<meta name="description" content="Clase interactiva de CRM y TEM de Veyra: amenazas, errores, competencias, comunicación, toma de decisiones, sorpresa y cultura justa.">
+<meta name="theme-color" content="#0B1014">
+<link rel="canonical" href="https://veyrapilot.com/classes/crm-tem/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1014; --panel:#13161D; --line:#232830; --line2:#2E343D;
+    --gold:#D8B25E; --gold-dim:#8F7640; --ink:#FFFFFF; --muted:#9AA3AD; --dim:#5F6873;
+    --ok:#7FBF8E; --bad:#D9776C;
+    --serif:"Lora",Georgia,serif; --sans:"Poppins",Arial,sans-serif;
+    --rail:240px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit}
+  a{color:var(--gold)}
+
+  .app{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100%}
+  /* rail */
+  .rail{border-right:1px solid var(--line);padding:28px 22px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit}
+  .rail-links{display:flex;gap:8px;flex-wrap:wrap}
+  .rail-links a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line2);padding:7px 9px;border-radius:4px;color:var(--muted)}
+  .rail-links a:hover,.rail-links a:focus-visible{color:var(--gold);border-color:var(--gold-dim)}
+  .source-note{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:4px;color:var(--muted);font-size:12px;line-height:1.6;max-width:650px}
+  .brand .w{font-family:var(--serif);font-size:22px;color:var(--ink)}
+  .brand .t{font-size:8px;letter-spacing:.22em;color:var(--muted)}
+  .rail h2{font-family:var(--serif);font-weight:400;font-size:15px;margin:0;color:var(--muted)}
+  .blocks{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+  .blocks li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;font-size:12.5px;color:var(--dim);cursor:default}
+  .blocks li .dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2);flex:none}
+  .blocks li.done{color:var(--muted);cursor:pointer}
+  .blocks li.done .dot{background:var(--gold-dim);border-color:var(--gold-dim)}
+  .blocks li.active{color:var(--ink);background:var(--panel)}
+  .blocks li.active .dot{background:var(--gold);border-color:var(--gold)}
+  .score{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.6}
+  .score b{color:var(--gold);font-weight:500}
+
+  /* stage */
+  .stage{display:flex;flex-direction:column;min-height:100vh}
+  .topbar{height:3px;background:var(--line)}
+  .topbar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s ease}
+  .step{flex:1;padding:56px 64px 40px;max-width:980px;width:100%;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+  .step.in{opacity:1;transform:none}
+  .kicker{font-size:12px;color:var(--gold);margin:0 0 10px}
+  h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.2;margin:0 0 14px;letter-spacing:-.01em}
+  h1.big{font-size:44px}
+  .lead{font-size:16px;color:var(--muted);line-height:1.65;max-width:640px;margin:0 0 28px}
+  p{line-height:1.7;max-width:660px;margin:0 0 14px;font-size:15px}
+  .note{border-left:2px solid var(--gold);padding:10px 16px;color:var(--muted);font-size:14px;line-height:1.6;max-width:640px;margin:18px 0}
+  .note b{color:var(--ink);font-weight:500}
+
+  /* reveals */
+  .reveals{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px;max-width:680px}
+  .reveals li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:4px;opacity:0;transform:translateX(-8px);transition:opacity .35s ease,transform .35s ease;line-height:1.55;font-size:14.5px}
+  .reveals li.show{opacity:1;transform:none}
+  .reveals li .n{font-family:var(--serif);color:var(--gold);font-size:20px;line-height:1}
+  .reveals li b{color:var(--ink);font-weight:500;display:block;margin-bottom:3px}
+  .reveals li span{color:var(--muted)}
+  .hint{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 64px 36px;max-width:980px;width:100%;margin:0 auto;gap:12px}
+  .btn{background:transparent;border:1px solid var(--line2);color:var(--ink);padding:11px 20px;border-radius:4px;font-size:13.5px;font-weight:400;cursor:pointer;transition:border-color .2s,background .2s}
+  .btn:hover{border-color:var(--gold)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .btn.primary{background:var(--gold);color:#1B1608;border-color:var(--gold);font-weight:500}
+  .btn.primary:hover{background:#E2C177}
+  .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .counter{font-size:12px;color:var(--dim)}
+
+  /* quiz */
+  .q{max-width:680px}
+  .q .prompt{font-family:var(--serif);font-size:22px;line-height:1.4;margin:0 0 22px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;color:var(--ink);font-size:14.5px;line-height:1.5;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:12px;transition:border-color .2s,background .2s;font-weight:300}
+  .opt .k{color:var(--muted);font-family:var(--serif)}
+  .opt:hover{border-color:var(--gold-dim)}
+  .opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .opt.right{border-color:var(--ok)} .opt.right .k{color:var(--ok)}
+  .opt.wrong{border-color:var(--bad)} .opt.wrong .k{color:var(--bad)}
+  .opt.locked{cursor:default}
+  .opt.locked:not(.right):not(.wrong){opacity:.45}
+  .fb{margin-top:18px;padding:16px 18px;border-radius:4px;background:var(--panel);border:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+  .fb.show{opacity:1;transform:none}
+  .fb b{font-weight:500}
+  .fb.ok b{color:var(--ok)} .fb.ko b{color:var(--bad)}
+
+  /* widgets */
+  .widget{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-top:8px}
+  .widget h3{font-family:var(--serif);font-weight:400;font-size:18px;margin:0 0 6px}
+  .widget .sub{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.5}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:12px;color:var(--muted)}
+  .field output{font-family:var(--serif);font-size:24px;color:var(--gold)}
+  input[type=range]{width:100%;accent-color:var(--gold);background:transparent}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+  .readout div{border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+  .readout small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .readout strong{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--ink)}
+  .readout strong.g{color:var(--gold)} .readout strong.b{color:var(--bad)} .readout strong.o{color:var(--ok)}
+  .verdict{margin-top:14px;font-size:14px;line-height:1.6;color:var(--muted);min-height:44px}
+  .verdict b{color:var(--ink);font-weight:500}
+
+  /* metar chips */
+  .metar{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px;font-family:"Courier New",monospace;font-size:17px}
+  .chip{border:1px solid var(--line2);border-radius:4px;padding:8px 10px;cursor:pointer;background:var(--bg);color:var(--ink);transition:border-color .2s,color .2s;font-family:inherit;font-size:inherit;font-weight:700}
+  .chip:hover{border-color:var(--gold-dim)}
+  .chip.on{border-color:var(--gold);color:var(--gold)}
+  .chip.seen{color:var(--muted)} .chip.seen.on{color:var(--gold)}
+  .decode{min-height:120px;border:1px solid var(--line);border-radius:4px;padding:16px 18px;font-size:14px;line-height:1.6;color:var(--muted)}
+  .decode b{color:var(--ink);font-weight:500;display:block;font-family:var(--serif);font-size:17px;margin-bottom:6px}
+  .decode em{color:var(--gold);font-style:normal}
+  .meter{font-size:12px;color:var(--dim);margin-top:10px}
+
+  /* taf timeline */
+  .taf{font-family:"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--muted);white-space:pre-wrap;border:1px solid var(--line);border-radius:4px;padding:14px 16px;background:var(--bg)}
+  .taf span{display:block;padding:0 6px;border-radius:3px;transition:background .25s,color .25s}
+  .taf span.live{background:#1C2A20;color:var(--ink)} .taf span.live.bad{background:#2B1C1B}
+  .tl{position:relative;height:28px;margin:18px 0 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+  .tl .seg{position:absolute;top:0;bottom:0;background:var(--gold-dim);opacity:.35}
+  .tl .seg.bad{background:var(--bad);opacity:.35}
+  .tl .cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--gold)}
+  .ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+
+  /* microburst */
+  .mb svg{width:100%;height:auto;display:block}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .phase{border:1px solid var(--line);border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--dim);transition:border-color .3s,color .3s}
+  .phase b{display:block;color:inherit;font-weight:500;margin-bottom:4px}
+  .phase.on{border-color:var(--gold);color:var(--ink)} .phase.on b{color:var(--gold)}
+
+  /* results */
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:22px 0}
+  .res{border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .res small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .res strong{font-family:var(--serif);font-weight:400;font-size:26px}
+  .res .bar{height:3px;background:var(--line);margin-top:10px}
+  .res .bar i{display:block;height:100%;background:var(--gold)}
+  .grade{font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin:6px 0 4px}
+
+  /* intro */
+  .cover{display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center}
+  .rings{aspect-ratio:1;position:relative}
+  .rings i{position:absolute;inset:0;border:1px solid var(--line2);border-radius:50%;animation:breathe 6s ease-in-out infinite}
+  .rings i:nth-child(2){inset:22%;animation-delay:-2s}
+  .rings i:nth-child(3){inset:44%;border-color:var(--gold);animation-delay:-4s}
+  .rings b{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:var(--gold);border-radius:50%}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.04);opacity:1}}
+  .mission{border:1px solid var(--gold-dim);border-radius:6px;padding:18px 20px;margin-top:22px;max-width:640px}
+  .mission h4{font-family:var(--serif);font-weight:400;margin:0 0 8px;font-size:17px;color:var(--gold)}
+  .mission p{margin:0;font-size:14px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr}
+    .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 20px;border-right:0;border-bottom:1px solid var(--line)}
+    .rail h2,.score{display:none}
+    .blocks{flex-direction:row;flex-wrap:wrap;gap:6px}
+    .blocks li{padding:5px 8px;font-size:0}
+    .blocks li .dot{width:10px;height:10px}
+    .step{padding:32px 22px 20px}
+    .nav{padding:12px 22px 28px}
+    h1{font-size:27px} h1.big{font-size:32px}
+    .cover{grid-template-columns:1fr}
+    .rings{max-width:180px}
+    .phases{grid-template-columns:1fr}
+  }
+
+  .stack{display:flex;flex-direction:column-reverse;gap:3px;height:300px;justify-content:flex-start;border:1px solid var(--line);border-radius:4px;padding:8px;background:var(--bg)}
+  .layer{display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-radius:3px;font-size:12px;color:#1B1608;min-height:14px;transition:flex .4s ease,opacity .4s}
+  .layer span:last-child{font-family:var(--serif);font-size:13px}
+  .l-taxi{background:#5F6873;color:#fff}.l-trip{background:#8F7640;color:#fff}.l-cont{background:#B59748}.l-alt{background:#C9A853}.l-frf{background:#D8B25E}.l-extra{background:#E6CC8A}.l-disc{background:#F1E1B4}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:12px}
+  .legend b{color:var(--ink);font-weight:500}
+  .two{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start}
+  .toggle{display:flex;gap:6px;flex-wrap:wrap}
+  .tg{border:1px solid var(--line2);background:transparent;color:var(--muted);padding:7px 12px;border-radius:4px;font-size:12.5px;cursor:pointer}
+  .tg.on{border-color:var(--gold);color:var(--gold)}
+  .gauge{position:relative;height:34px;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden;margin-top:10px}
+  .gauge i{position:absolute;top:0;bottom:0;transition:width .2s linear}
+  .gauge .mk{position:absolute;top:0;bottom:0;width:2px;background:var(--bad)}
+  .status{font-family:var(--serif);font-size:22px;margin-top:12px;min-height:30px}
+  .status.warn{color:var(--gold)} .status.bad{color:var(--bad)} .status.ok{color:var(--ok)}
+  @media (max-width:900px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="../" aria-label="Volver a Classes"><span class="w">Veyra</span><span class="t">PILOT INTELLIGENCE</span></a>
+    <h2>CRM y TEM</h2>
+    <div class="rail-links"><a href="../">Classes</a><a href="/?view=training">Training Center</a></div>
+    <ol class="blocks" id="blocks"></ol>
+    <div class="score" id="railScore"></div>
+  </aside>
+  <main class="stage">
+    <div class="topbar"><i id="bar"></i></div>
+    <section class="step" id="step" aria-live="polite"></section>
+    <div class="nav">
+      <button class="btn" id="prev">Anterior</button>
+      <span class="counter" id="counter"></span>
+      <button class="btn primary" id="next">Continuar</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---------------- CONTENIDO ---------------- */
+const BLOCKS = ["Bienvenida","Por qué existe el CRM","El modelo TEM","Las nueve competencias","Comunicación y asertividad","Decisiones y sorpresa","Cultura justa","Resultado"];
+
+const STEPS = [
+  {b:0,t:"intro"},
+  {b:0,t:"lesson",k:"Cómo funciona esta clase",h:"Ver, aplicar, comprobar",
+   lead:"Mismo formato. Marco vigente: OACI Doc 9868 (nueve competencias), Doc 9995 EBT, EASA AMC1 ORO.FC.115, FAA AC 120-51E, RAC 121. La misión se revisa ahora desde la cabina.",
+   items:[
+    ["La misión, quinta parte","Todo lo que pasó en los módulos anteriores lo vivió una tripulación de dos personas. Aquí volvemos a esos momentos y preguntamos cómo se hablaron, quién decidió qué y qué amenazas vieron venir."],
+    ["La idea central","CRM no es actitud: son comportamientos observables que se entrenan y se evalúan como cualquier maniobra. Un piloto que vuela bien pero no comunica, no monitorea o no gestiona la carga no aprueba."],
+    ["Lo que hay que sacar de aquí","El modelo TEM, las nueve competencias, la escalera PACE, el FORDEC, el protocolo de sorpresa y qué hace la cultura justa con un reporte."]
+   ]},
+
+  // 1
+  {b:1,t:"lesson",k:"Bloque 1 · Por qué existe el CRM",h:"Tres accidentes que cambiaron la aviación",
+   items:[
+    ["Tenerife, 1977","Dos 747 colisionaron en pista con niebla: 583 muertos. El KLM inició el despegue sin autorización de despegue; el ingeniero expresó duda sobre si el Pan Am ya estaba fuera de la pista, pero la intervención no detuvo la maniobra. El caso ilustra gradiente de autoridad, comunicación y monitoreo."],
+    ["United 173, 1978","Durante una demora por una anomalía del tren, la tripulación expresó preocupaciones sobre el combustible, pero el comandante no monitorizó ni respondió adecuadamente al estado de combustible; los otros tripulantes tampoco lograron comunicar con suficiente eficacia su criticidad. Es un caso clásico de fijación y comunicación ineficaz."],
+    ["Avianca 052, 1990","Un 707 acumuló tres esperas llegando a Nueva York y reportó una situación crítica de combustible. Tras la aproximación frustrada, el comandante pidió al primer oficial que comunicara emergencia, pero la transmisión a ATC siguió expresándose como que se estaban quedando sin combustible. El caso muestra por qué la fraseología, la gestión del combustible y la comunicación inequívoca importan."],
+    ["Lo que exige hoy","El marco actual integra CRM y TEM en la formación operacional. EASA ORO.FC.115 incluye CRM en tipo/clase, recurrente y curso de mando, con contenidos como TEM, automatización, monitoreo e intervención, resiliencia, sorpresa/sobresalto y diferencias culturales. FAA AC 120-51E sigue vigente como guía de CRM; en Colombia aplica el RAC y, sobre todo, el programa aprobado del operador."]
+   ]},
+  {b:1,t:"lesson",k:"Bloque 1 · Por qué existe el CRM",h:"El error humano es normal",
+   items:[
+    ["Atención y memoria","Recursos limitados. La visión de túnel bajo estrés; la memoria de trabajo de 5 a 9 elementos que una interrupción borra. Regla de la lista: si te interrumpen, vuelve un ítem atrás."],
+    ["Expectativa y sesgos","Vemos lo que esperamos ver: 'cleared to land' cuando dijeron 'line up'. Sesgo de confirmación, anclaje y, sobre todo, continuación del plan: seguir porque ya empezamos. El go-around es su cura."],
+    ["Estrés, carga y fatiga","La fatiga reduce vigilancia, atención y toma de decisiones; no existe una equivalencia operacional única con una alcoholemia determinada. Se gestiona mediante FRMS, autoevaluación y los procedimientos de reporte del operador, dentro de las protecciones y límites de su cultura justa."],
+    ["Automatización","Complacencia, pérdida de habilidad manual y confusión de modo. Regla del A320: conocer, anunciar y verificar el modo del FMA; si no entiendes lo que hace, baja un nivel."]
+   ]},
+  {b:1,t:"quiz",q:"¿Qué falló en Tenerife, más allá de la niebla y la radio?",
+   o:["La pista era demasiado corta","El Pan Am no tenía transponder","No había ATIS","El ingeniero dudó pero no escaló su intervención ante el comandante"],a:3,
+   fb:"El ingeniero preguntó si el Pan Am seguía en pista, el comandante dijo 'sí, sí' y nadie insistió. Gradiente de autoridad y comunicación ambigua: la pregunta que fundó el CRM es por qué nadie dijo no."},
+  {b:1,t:"quiz",q:"El sesgo de continuación del plan se combate sobre todo con:",
+   o:["Más experiencia","Volar más rápido","Límites de decisión definidos de antemano y respetados sin renegociar","Desconectar el autopilot"],a:2,
+   fb:"Bingo de combustible, altitud de estabilización, mínimos: se fijan antes y no se discuten en el momento. El go-around no estabilizado es la aplicación más frecuente."},
+
+  // 2
+  {b:2,t:"lesson",k:"Bloque 2 · El modelo TEM",h:"Amenaza, error, estado no deseado",
+   lead:"Gestión de amenazas y errores: el marco de la Universidad de Texas y LOSA que OACI y EASA adoptaron para analizar y entrenar todo vuelo.",
+   items:[
+    ["Amenaza","Evento fuera de la influencia de la tripulación que aumenta la complejidad: tormenta, pista mojada, MEL diferida, cambio de pista, fatiga. Anticipada si se ve en el briefing; inesperada si aparece en vuelo."],
+    ["Error","Acción u omisión de la tripulación que reduce el margen: de manejo (control, automatización), de procedimiento (checklist, callout) o de comunicación (ATC, entre pilotos). Van a ocurrir: lo que se entrena es atraparlos."],
+    ["Estado no deseado","Consecuencia de un error no gestionado: aproximación no estabilizada, aterrizaje largo, velocidad bajo VAPP, espera sin bingo. Desde aquí solo queda recuperar: go-around, escape."],
+    ["Contramedidas","De planificación (briefing basado en amenazas, plan B), de ejecución (monitoreo, callouts, automatización adecuada) y de revisión (reevaluar cuando cambia la situación, debriefing). Las contramedidas son las competencias en acción."]
+   ]},
+  {b:2,t:"widget",id:"tem",k:"Instrumento · Briefing basado en amenazas",h:"Para cada amenaza de la misión, elige la contramedida que la neutraliza"},
+  {b:2,t:"quiz",q:"El windshear reportado por SPECI mientras el vuelo está en espera es:",
+   o:["Una amenaza inesperada","Un error de la tripulación","Un estado no deseado","Una contramedida"],a:0,
+   fb:"Está fuera de la influencia de la tripulación y aumenta la complejidad: amenaza. Inesperada porque no estaba en el briefing. La contramedida: briefing de escape y Vapp incrementada."},
+  {b:2,t:"quiz",q:"Una aproximación no estabilizada a 1.000 ft que se continúa es:",
+   o:["Una amenaza","Un estado no deseado de la aeronave","Un error de comunicación","Una amenaza latente"],a:1,
+   fb:"Es la consecuencia de errores no gestionados (configuración tardía, velocidad). Desde ahí la única contramedida es recuperar: go-around. Continuar es el sesgo de continuación del plan."},
+
+  // 3
+  {b:3,t:"lesson",k:"Bloque 3 · Las nueve competencias",h:"El marco con que se evalúa a un piloto de aerolínea",
+   lead:"En esta clase usamos el marco de nueve competencias de piloto presentado en materiales ICAO CBTA/EBT. Cada dominio se observa mediante comportamientos concretos; la forma de calificación y la escala dependen del programa aprobado del operador o centro de entrenamiento.",
+   items:[
+    ["KNO y PRO","Aplicación del conocimiento (sistemas, limitaciones, entorno) y aplicación de procedimientos y cumplimiento de la normativa (SOP, listas, regulación)."],
+    ["COM, LTW","Comunicación (qué, cuándo, cómo, con quién; fraseología; escucha; confirmación) y liderazgo y trabajo en equipo (participación, responsabilidad, retroalimentación, intervención asertiva)."],
+    ["FPA, FPM","Gestión de la trayectoria con automatización (nivel adecuado, FMA, intervenir cuando no hace lo esperado) y manual (precisión, envolvente, instrumentos)."],
+    ["PSD, SAW, WLM","Resolución de problemas y decisión (identificar, opciones, decidir, revisar); conciencia situacional (percibir, comprender, proyectar; verificar la información); gestión de la carga (priorizar, delegar, gestionar interrupciones, pedir ayuda)."]
+   ]},
+  {b:3,t:"widget",id:"comp",k:"Instrumento · ¿Qué competencia es?",h:"Asigna cada comportamiento observado a su competencia"},
+  {b:3,t:"quiz",q:"En el marco de nueve competencias usado en esta clase, ¿qué representa KNO?",
+   o:["Aplicación del conocimiento","Conocimiento de la compañía","Control de la carga de trabajo","Comunicación técnica"],a:0,
+   fb:"KNO es Application of Knowledge. Doc 9868 describe la aplicación del conocimiento como elemento que sustenta las competencias del piloto, y materiales ICAO de CBTA/EBT la presentan como uno de los nueve dominios de competencia."},
+  {b:3,t:"quiz",q:"El PM detecta un cambio de FMA que reduce la capacidad de aproximación y propone volver a comprobar los mínimos antes de continuar. Competencias principales:",
+   o:["FPM y PRO","WLM y LTW","SAW, COM y KNO","Solo FPA"],a:2,
+   fb:"Percibió el cambio y proyectó su consecuencia (SAW), lo comunicó (COM) y aplicó conocimiento relevante sobre la capacidad de aproximación (KNO). La idea es evaluar comportamientos observables, no memorizar un valor de mínimos aislado."},
+
+  // 4
+  {b:4,t:"lesson",k:"Bloque 4 · Comunicación y asertividad",h:"Que el mensaje llegue, aun contra el gradiente",
+   items:[
+    ["Circuito cerrado","Mensaje, recepción, readback, hearback. Todo cambio de altitud, rumbo, pista, autorización y de plan pasa por el circuito. Entre pilotos también: 'set standard' → 'standard set, passing FL190'."],
+    ["PACE","PACE es un modelo estructurado de intervención asertiva: Probe, Alert, Challenge, Emergency. Es una herramienta de entrenamiento; cada operador puede usar otro modelo o fraseología, y siempre manda el OM/SOP aplicable."],
+    ["Intervención y toma de control","EASA exige entrenar monitoreo e intervención, pero no prescribe una regla universal de dos desafíos. Algunos operadores sí emplean una two-challenge rule; cuándo asumir el control y con qué fraseología debe seguir el OM/SOP del operador."],
+    ["Cultura y cabina","Las diferencias culturales y el gradiente de autoridad pueden influir en la disposición a hablar. Las contramedidas son explícitas: SOP y callouts claros, liderazgo que invite a discrepar y entrenamiento de intervención. Con la tripulación de cabina pueden usarse modelos estructurados como NITS si forman parte del procedimiento del operador."]
+   ]},
+  {b:4,t:"widget",id:"pace",k:"Instrumento · La escalera PACE",h:"El PF continúa rápido y alto. Elige la frase de cada escalón"},
+  {b:4,t:"quiz",q:"En la escalera PACE, 'No estamos estabilizados. Recomiendo go-around' es el nivel:",
+   o:["Challenge","Probe","Alert","Emergency"],a:0,
+   fb:"Cuestiona la decisión y propone una acción concreta: Challenge. Alert sería enunciar el hecho ('30 kt rápidos a 1.200 ft'); Emergency es tomar el control."},
+  {b:4,t:"quiz",q:"Si el operador usa el modelo NITS, ¿para qué sirve?",
+   o:["Pedir combustible al despachador","Estructurar información a la tripulación de cabina: naturaleza, intenciones, tiempo e instrucciones especiales","Declarar MINIMUM FUEL","Hacer el briefing de despegue"],a:1,
+   fb:"NITS es un ejemplo de estructura para comunicar con cabina. No es una fraseología universal; úsalo solo si está incorporado al procedimiento del operador. El canal inverso es igual de importante: cabina puede observar humo, ruidos o fuego que la cabina de mando no ve."},
+
+  // 5
+  {b:5,t:"lesson",k:"Bloque 5 · Decisiones y sorpresa",h:"Un método cuando hay tiempo, un reflejo cuando no",
+   items:[
+    ["Sin tiempo","Aviate, navigate, communicate. Memory items, escapes (windshear, TCAS, EGPWS), go-around. No se decide: se ejecuta lo entrenado. Después se piensa."],
+    ["Con tiempo: FORDEC","Facts, Options, Risks, Decide, Execute, Check. Da igual FORDEC, DODAR o T-DODAR: lo que importa es hacerlo en voz alta con el otro piloto y anunciar la decisión."],
+    ["Sorpresa y sobresalto","El sobresalto puede generar una respuesta fisiológica inmediata y la sorpresa rompe el modelo mental. La prioridad es estabilizar la trayectoria, evitar acciones impulsivas, verbalizar lo que se observa y aplicar el procedimiento correspondiente. Los casos de estudio sirven para entrenar adaptación, no para imponer una receta única a todas las aeronaves."],
+    ["Resiliencia","EASA GM5 ORO.FC.115 la describe mediante aprender, monitorear, anticipar y responder. Se entrena con escenarios variables, adaptación al cambio y debriefing que identifica tanto fortalezas como oportunidades de mejora."]
+   ]},
+  {b:5,t:"widget",id:"fordec",k:"Instrumento · FORDEC sobre Bogotá",h:"21:00Z, 2.900 kg, ATC ofrece diez minutos más y luego ILS con windshear reportado. Decide paso a paso"},
+  {b:5,t:"quiz",q:"Suena una alerta mayor en crucero y el piloto automático se desconecta. ¿Qué prioridad CRM es correcta antes de diagnosticar en detalle?",
+   o:["Leer inmediatamente todas las páginas del sistema","Estabilizar la trayectoria y evitar acciones impulsivas; después identificar y aplicar el procedimiento","Llamar a ATC antes de controlar el avión","Hacer una entrada grande de mando para confirmar la respuesta"],a:1,
+   fb:"Primero controla y estabiliza la aeronave. Después identifica la situación, distribuye tareas y aplica el procedimiento de la aeronave. CRM entrena la gestión del sobresalto; no sustituye los memory items o procedimientos específicos."},
+  {b:5,t:"quiz",q:"En un FORDEC, la 'C' final significa:",
+   o:["Communicate","Climb","Cancel","Check: revisar si la decisión funciona y si cambió algo"],a:3,
+   fb:"Facts, Options, Risks and benefits, Decide, Execute, Check. Sin el Check, una decisión correcta a las 21:00 puede ser incorrecta a las 21:10."},
+
+  // 6
+  {b:6,t:"lesson",k:"Bloque 6 · Cultura justa",h:"El sistema que convierte errores en seguridad",
+   items:[
+    ["Cultura justa","Las acciones, omisiones o decisiones acordes con la experiencia y entrenamiento no deben tratarse igual que la negligencia grave, las violaciones deliberadas o los actos destructivos. Herramientas como el test de sustitución pueden ayudar al análisis, pero no reemplazan la política ni el marco legal aplicable."],
+    ["Reportes","El sistema puede incluir reportes obligatorios y voluntarios, confidenciales o protegidos, según la autoridad y el operador. Fatiga, turbulencia, windshear, frenado y otros eventos se reportan por los canales aplicables; las protecciones de cultura justa tienen límites para conductas inaceptables."],
+    ["FDM y LOSA","FDM analiza datos de vuelo donde exista un programa aplicable; LOSA observa una muestra de operaciones normales y registra amenazas, errores y contramedidas. Ambas fuentes pueden alimentar el SMS y el diseño de entrenamiento, con las protecciones de datos correspondientes."],
+    ["El círculo","El piloto reporta, el SMS analiza tendencias y el programa de entrenamiento puede ajustar escenarios y prioridades. Un debriefing breve es una buena contramedida de revisión cuando la tripulación y el operador lo incorporan; no existe una duración universal de tres minutos."]
+   ]},
+  {b:6,t:"quiz",q:"En una cultura justa se sanciona:",
+   o:["Todo error que produzca un incidente","Un readback incompleto","La negligencia grave y las violaciones deliberadas","Declarar MAYDAY FUEL"],a:2,
+   fb:"El error honesto se reporta y se analiza sin castigo; lo que se sanciona es la negligencia grave, la violación deliberada y el acto destructivo. Declarar MAYDAY FUEL bien es la respuesta correcta, no una falta."},
+  {b:6,t:"quiz",q:"Misión final. Tras el tramo Cali → Bogotá, el comandante propone tres minutos de debriefing. ¿Qué preguntas hacen?",
+   o:["Qué amenazas hubo, qué errores, cómo los atraparon y qué harían distinto","Quién tuvo la culpa del retraso","Cuánto combustible sobró","Si el pasajero de la 12C se quejó"],a:0,
+   fb:"El debriefing es la contramedida de revisión del TEM: amenazas, errores, contramedidas que funcionaron y las que no. Sin culpa, con aprendizaje. Lo que salió bien también se nombra."},
+
+  {b:7,t:"results"}
+];
+
+/* ---------------- ESTADO ---------------- */
+let idx = 0, revealed = 0; const answers = {};
+const quizIdx = STEPS.map((s,i)=>s.t==="quiz"?i:-1).filter(i=>i>=0);
+try{ const saved=JSON.parse(localStorage.getItem("veyra-crm")||"null"); if(saved){ idx=saved.idx||0; Object.assign(answers,saved.answers||{}); } }catch(e){}
+function persist(){ try{ localStorage.setItem("veyra-crm",JSON.stringify({idx,answers})); }catch(e){} }
+
+/* ---------------- RENDER ---------------- */
+const stepEl=document.getElementById("step"), bar=document.getElementById("bar"), counter=document.getElementById("counter");
+const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), blocksEl=document.getElementById("blocks"), railScore=document.getElementById("railScore");
+function renderRail(){ const cur=STEPS[idx].b; const maxB=STEPS.slice(0,idx+1).reduce((m,s)=>Math.max(m,s.b),0);
+  blocksEl.innerHTML=BLOCKS.map((n,i)=>`<li class="${i===cur?"active":""} ${i<maxB?"done":""}" data-b="${i}"><span class="dot"></span><span>${n}</span></li>`).join("");
+  blocksEl.querySelectorAll("li.done").forEach(li=>li.onclick=()=>{ idx=STEPS.findIndex(s=>s.b===+li.dataset.b); go(); });
+  const done=Object.keys(answers).length, ok=Object.values(answers).filter(a=>a.ok).length;
+  railScore.innerHTML=`Preguntas respondidas: <b>${done}/${quizIdx.length}</b><br>Aciertos: <b>${ok}</b>`; }
+function go(){ const s=STEPS[idx]; revealed=0; stepEl.classList.remove("in");
+  setTimeout(()=>{ stepEl.innerHTML=""; stepEl.appendChild(render(s)); requestAnimationFrame(()=>stepEl.classList.add("in"));
+    bar.style.width=(idx/(STEPS.length-1)*100)+"%"; counter.textContent=`${idx+1} / ${STEPS.length}`; prevB.disabled=idx===0; updateNext(); renderRail(); persist(); window.scrollTo({top:0,behavior:"smooth"}); },180); }
+function updateNext(){ const s=STEPS[idx];
+  if(s.t==="lesson"){ nextB.textContent = revealed<s.items.length ? "Continuar" : "Siguiente"; nextB.disabled=false; }
+  else if(s.t==="quiz"){ nextB.textContent="Siguiente"; nextB.disabled=!answers[idx]; }
+  else if(s.t==="results"){ nextB.textContent="Volver a empezar"; nextB.disabled=false; }
+  else { nextB.textContent= s.t==="intro" ? "Empezar la clase" : "Siguiente"; nextB.disabled=false; } }
+function render(s){ const w=document.createElement("div");
+  if(s.t==="intro") w.innerHTML=`<div class="cover"><div><p class="kicker">Clase interactiva</p><h1 class="big">CRM y gestión de amenazas y errores</h1>
+    <p class="lead">Siete bloques, cuatro instrumentos y doce comprobaciones. Unos 45 minutos. El progreso se guarda en este dispositivo.</p>
+    <div class="mission"><h4>La misión, desde la cabina</h4><p>La tormenta en Bogotá, el bingo, el windshear, la niebla de Rionegro: todo lo vivió una tripulación de dos personas. ¿Cómo se hablaron? ¿Quién decidió qué? ¿Qué amenazas vieron venir y cuáles no?</p></div>
+    <div class="source-note"><b>Alcance.</b> Esta clase enseña conceptos y conductas observables de CRM/TEM. PACE, NITS, FORDEC, la two-challenge rule y las técnicas de aeronave son herramientas o ejemplos cuya adopción depende del operador. Para una operación real mandan el OM/SOP, la aeronave y el programa aprobado. Revisión Veyra 30/09/2026 contrastada con ICAO PANS-TRG Doc 9868, EASA ORO.FC.115, FAA AC 120-51E y normativa de reporte/cultura justa aplicable.</div></div><div class="rings"><i></i><i></i><i></i><b></b></div></div>`;
+  else if(s.t==="lesson"){ w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1>${s.lead?`<p class="lead">${s.lead}</p>`:""}<ol class="reveals">${s.items.map((it,i)=>`<li><span class="n">${i+1}</span><div><b>${it[0]}</b><span>${it[1]}</span></div></li>`).join("")}</ol><p class="hint">Continuar revela el siguiente punto · flechas del teclado para navegar</p>`;
+    const me=s; setTimeout(()=>{ if(STEPS[idx]===me) reveal(w); },250); }
+  else if(s.t==="quiz"){ const prev=answers[idx]; w.innerHTML=`<p class="kicker">Comprobación</p><div class="q"><p class="prompt">${s.q}</p><div class="opts">${s.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div></div>`;
+    w.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(w,+b.dataset.i)); if(prev) setTimeout(()=>answer(w,prev.a,true),0); }
+  else if(s.t==="widget"){ w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1><div class="widget" id="wg"></div>`; WIDGETS[s.id](w.querySelector("#wg")); }
+  else if(s.t==="results") w.appendChild(results());
+  return w; }
+function reveal(w){ const s=STEPS[idx]; if(!s.items||revealed>=s.items.length) return false; const li=w.querySelectorAll(".reveals li")[revealed]; if(!li) return false; li.classList.add("show"); revealed++; updateNext(); return true; }
+function answer(w,i,replay){ const s=STEPS[idx]; if(answers[idx]&&!replay) return; const ok=i===s.a; answers[idx]={a:i,ok};
+  w.querySelectorAll(".opt").forEach((b,j)=>{ b.classList.add("locked"); if(j===s.a) b.classList.add("right"); else if(j===i) b.classList.add("wrong"); b.disabled=true; });
+  const fb=w.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${s.fb}`; updateNext(); renderRail(); persist(); }
+function results(){ const w=document.createElement("div"); const perBlock={};
+  quizIdx.forEach(i=>{ const b=STEPS[i].b; perBlock[b]=perBlock[b]||{n:0,ok:0}; perBlock[b].n++; if(answers[i]&&answers[i].ok) perBlock[b].ok++; });
+  const total=quizIdx.length, ok=Object.values(answers).filter(a=>a.ok).length, pct=Math.round(ok/total*100);
+  const weak=Object.entries(perBlock).filter(([b,v])=>v.ok/v.n<0.67).map(([b])=>BLOCKS[b]);
+  w.innerHTML=`<p class="kicker">Resultado</p><h1>${pct>=80?"Listo para el debriefing":"Vale la pena repasar"}</h1><div class="grade">${pct}%</div><p class="lead">${ok} de ${total} comprobaciones correctas. Aprobación de referencia: 80 %.</p>
+    <div class="results">${Object.entries(perBlock).map(([b,v])=>`<div class="res"><small>${BLOCKS[b]}</small><strong>${v.ok}/${v.n}</strong><div class="bar"><i style="width:${v.ok/v.n*100}%"></i></div></div>`).join("")}</div>
+    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}.</div>`:`<div class="note"><b>Sin bloques débiles.</b> La misión completa: meteorología, combustible, performance, baja visibilidad y ahora la tripulación que lo hizo posible. Lo que queda es volarlo en el simulador.</div>`}`; return w; }
+
+/* ---------------- WIDGETS ---------------- */
+function pick(el,id,cb){ el.querySelectorAll(`#${id} .opt`).forEach(b=>b.onclick=()=>cb(b,+b.dataset.i)); }
+const WIDGETS={
+  tem(el){
+    const T=[
+      {th:"TS pronosticada en Bogotá 18–23Z (TAF)",kind:"Anticipada",opts:["Esperar a ver qué pasa al llegar","Calcular y anunciar el bingo de desvío en el briefing","Pedir a ATC que no nos ponga en espera","Volar más rápido para llegar antes"],a:1,why:"Contramedida de planificación: un límite de decisión fijado de antemano (21:05Z) evita el sesgo de continuación y la espera sin fin de United 173 y Avianca 052."},
+      {th:"SPECI en vuelo: WS R13L",kind:"Inesperada",opts:["Continuar la aproximación como estaba briefeada","Ignorarlo: el anterior aterrizó","Pedir otra pista sin más análisis","Rehacer un briefing corto: procedimiento de windshear de la aeronave, criterio de go-around y tareas PF/PM"],a:3,why:"Contramedida de revisión: la situación cambió y el plan debe actualizarse en voz alta. Los ajustes de velocidad, escape y criterios de continuación dependen del procedimiento aprobado de la aeronave y del operador."},
+      {th:"Cambio de pista a 31R en la espera",kind:"Inesperada",opts:["El PM prepara la 31 y el nuevo briefing mientras el PF vuela; luego se verifica cruzado","El PF programa el FMS mientras vuela la espera","Se acepta la 31 y se reprograma en final","Se rechaza la 31"],a:0,why:"Gestión de la carga: delegar. El PF vuela, el PM prepara, y después se verifica cruzado. Programar en final produce la aproximación no estabilizada."},
+      {th:"Último tramo del día, 11 horas de actividad",kind:"Anticipada",opts:["No mencionarlo para no parecer débil","Tomar café y seguir igual","Nombrarlo en el briefing y aumentar la verbalización y el cross-check","Cambiar los roles PF/PM"],a:2,why:"La fatiga se gestiona nombrándola: más verbalización, cross-check explícito, IMSAFE. Es una amenaza como cualquier otra y el OM permite reportarla sin sanción."},
+      {th:"RWYCC 5/5/4 en el ATIS",kind:"Anticipada",opts:["Performance de aterrizaje verificada y técnica/frenado según SOP, con intención clara de evitar una flotada","Aterrizar suave para cuidar el avión","Usar reversa al ralentí para no levantar agua","Pedir la pista seca"],a:0,why:"Contramedida de ejecución: performance verificada y una intención compartida de aterrizaje conforme al SOP. La selección de autobrake y técnica exacta depende de la aeronave, pista y procedimiento del operador."}
+    ];
+    let i=0, score=0;
+    const draw=()=>{ if(i>=T.length){ el.innerHTML=`<h3>Briefing terminado</h3><p class="sub">${score} de ${T.length} contramedidas correctas.</p><div class="verdict"><b>Lo que hiciste fue un briefing basado en amenazas:</b> ¿cuáles son las amenazas del día?, ¿qué errores nos van a inducir?, ¿qué haremos para atraparlos?, ¿cuál es el plan B y quién lo dispara? Ese es el estándar de aerolínea, no recitar la aproximación.</div>`; return; }
+      const t=T[i]; el.innerHTML=`<h3>Amenaza ${i+1} de ${T.length} · <span style="color:var(--gold)">${t.kind}</span></h3><p class="sub">${t.th}</p><div class="opts" id="o">${t.opts.map((o,j)=>`<button class="opt" data-i="${j}"><span class="k">${"ABCD"[j]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div><div class="row" style="margin-top:14px"><button class="btn" id="nx" disabled>Siguiente amenaza</button></div>`;
+      pick(el,"o",(b,j)=>{ el.querySelectorAll("#o .opt").forEach((x,k)=>{ x.disabled=true; x.classList.add("locked"); if(k===t.a) x.classList.add("right"); else if(k===j) x.classList.add("wrong"); }); const ok=j===t.a; if(ok) score++; const fb=el.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${t.why}`; el.querySelector("#nx").disabled=false; });
+      el.querySelector("#nx").onclick=()=>{ i++; draw(); }; };
+    draw();
+  },
+  comp(el){
+    const C=[["KNO","Conocimiento"],["PRO","Procedimientos"],["COM","Comunicación"],["FPA","Trayectoria: automatización"],["FPM","Trayectoria: manual"],["LTW","Liderazgo y equipo"],["PSD","Decisión"],["SAW","Conciencia situacional"],["WLM","Carga de trabajo"]];
+    const B=[["El comandante dice en el briefing: 'si ven algo raro, díganlo aunque no estén seguros; yo también me equivoco'.","LTW","Fomenta la participación y aplana el gradiente de autoridad a propósito."],["El PF pide vectores a ATC para tener tiempo de terminar la lista de aproximación.","WLM","Gestiona la carga diferiendo y simplificando; pide ayuda."],["La tripulación hace el FORDEC en voz alta sobre Bogotá y anuncia la decisión.","PSD","Identifica, genera opciones, decide con método y comunica."],["El PF baja de modo gestionado a selectado cuando el avión no captura la senda.","FPA","Usa el nivel de automatización adecuado e interviene cuando no hace lo esperado."],["El PM hace readback completo del QNH y lo compara con el ATIS antes de ajustar.","COM","Circuito cerrado y verificación de la información."],["Aterrizaje firme en la zona de toma con RWYCC 4, sin flotar.","FPM","Control manual preciso de la trayectoria según la intención briefeada."],["El PM detecta un cambio de FMA que reduce la capacidad de aproximación y proyecta que los mínimos deben volver a verificarse.","SAW","Percibe, comprende y proyecta la consecuencia del cambio de capacidad."],["El PF aplica la lista de chequeo y, tras una interrupción, vuelve un ítem atrás.","PRO","Aplicación correcta de procedimientos."],["El copiloto recuerda qué limitaciones y mínimos corresponden a la capacidad de aproximación disponible y pide verificarlos antes de continuar.","KNO","Conocimiento práctico y aplicable de limitaciones y normativa."]];
+    let i=0, score=0;
+    const draw=()=>{ if(i>=B.length){ el.innerHTML=`<h3>Nueve comportamientos</h3><p class="sub">${score} de ${B.length} asignados correctamente.</p><div class="verdict"><b>Así funciona una evaluación por competencias:</b> el instructor observa comportamientos y los asocia a dominios de competencia. La escala, el estándar y las consecuencias de una calificación dependen del programa aprobado; el objetivo es identificar fortalezas y necesidades de entrenamiento.</div>`; return; }
+      const b=B[i]; el.innerHTML=`<h3>Comportamiento ${i+1} de ${B.length}</h3><p class="sub" style="color:var(--ink);font-size:15px">${b[0]}</p><div class="toggle" id="o">${C.map(c=>`<button class="tg" data-i="${c[0]}" style="text-align:left">${c[0]} · ${c[1]}</button>`).join("")}</div><div class="fb" id="fb"></div><div class="row" style="margin-top:14px"><button class="btn" id="nx" disabled>Siguiente</button></div>`;
+      el.querySelectorAll("#o .tg").forEach(x=>x.onclick=()=>{ const ok=x.dataset.i===b[1]; el.querySelectorAll("#o .tg").forEach(y=>{ y.disabled=true; if(y.dataset.i===b[1]) y.classList.add("on"); }); if(ok) score++; const fb=el.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto: "+b[1]+".":"Es "+b[1]+"."}</b> ${b[2]}`; el.querySelector("#nx").disabled=false; });
+      el.querySelector("#nx").onclick=()=>{ i++; draw(); }; };
+    draw();
+  },
+  pace(el){
+    const L=[{n:"P · Probe",d:"Preguntar, buscar información",opts:["¡Go-around!","Estás volando fatal.","I have control.","¿Vamos a configurar ya?"],a:3},{n:"A · Alert",d:"Alertar con un hecho",opts:["¿Todo bien?","Estamos 30 kt rápidos y un punto alto a 1.200 ft.","Recomiendo go-around.","Deja que yo lo haga."],a:1},{n:"C · Challenge",d:"Cuestionar y proponer",opts:["¿Seguro?","Vamos rápido.","No vamos a estar estabilizados a 1.000. Recomiendo go-around.","Esto es inaceptable."],a:2},{n:"E · Emergency",d:"Tomar el control",opts:["Go-around, I have control.","Por favor, haz go-around.","¡Te lo dije!","Voy a reportar esto."],a:0}];
+    let i=0, score=0;
+    const draw=()=>{ if(i>=L.length){ el.innerHTML=`<h3>Escalera completa</h3><p class="sub">${score} de 4 escalones correctos.</p><div class="verdict"><b>Intervención progresiva:</b> el objetivo es recuperar el margen con lenguaje dirigido, hechos y propuestas. Algunos operadores incorporan una two-challenge rule; la toma de control debe seguir siempre el OM/SOP aplicable.</div>`; return; }
+      const l=L[i]; el.innerHTML=`<h3>${l.n}</h3><p class="sub">${l.d}. Situación: el PF continúa a 1.200 ft con 175 kt en CONF 2, un punto alto en la senda.</p><div class="opts" id="o">${l.opts.map((o,j)=>`<button class="opt" data-i="${j}"><span class="k">${"ABCD"[j]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div><div class="row" style="margin-top:14px"><button class="btn" id="nx" disabled>Siguiente escalón</button></div>`;
+      pick(el,"o",(b,j)=>{ el.querySelectorAll("#o .opt").forEach((x,k)=>{ x.disabled=true; x.classList.add("locked"); if(k===l.a) x.classList.add("right"); else if(k===j) x.classList.add("wrong"); }); const ok=j===l.a; if(ok) score++; const fb=el.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=ok?`<b>Correcto.</b> Nivel adecuado: ${l.d.toLowerCase()}, con lenguaje claro y sin juicio.`:`<b>No es esa.</b> Este escalón es ${l.d.toLowerCase()}: la frase correcta es "${l.opts[l.a]}". Las otras saltan escalones, juzgan a la persona o no proponen nada.`; el.querySelector("#nx").disabled=false; });
+      el.querySelector("#nx").onclick=()=>{ i++; draw(); }; };
+    draw();
+  },
+  fordec(el){
+    const S=[
+      {k:"F · Facts",q:"¿Cuáles son los hechos?",opts:["Estamos cansados y queremos aterrizar","ATC nos está haciendo perder el tiempo","El anterior aterrizó, así que se puede","FOB 2.900 kg; 10 min más = 380 kg; alterno 1.200; reserva 1.150; WS reportado en la 31R; Rionegro abierto"],a:3,why:"Hechos, no impresiones. Los números del módulo de combustible son el punto de partida: tras esperar y aproximar quedarían unos 2.370 kg, justo el alterno más la reserva."},
+      {k:"O · Options",q:"¿Qué opciones hay?",opts:["Solo aceptar lo que ofrece ATC","Aceptar la espera y quedar comprometidos; ir a Rionegro ahora; pedir aproximación inmediata","Declarar emergencia para que nos den prioridad","Esperar hasta que se acabe el combustible de alterno"],a:1,why:"Todas las opciones, incluso las incómodas. Declarar emergencia sin estar en esa condición no es una opción legítima; agotar el alterno tampoco."},
+      {k:"R · Risks",q:"¿Qué arriesga cada una?",opts:["Ninguna tiene riesgo","Rionegro es peligroso por la niebla","Aceptar = mayor exposición si el windshear sigue reportado; debe evaluarse contra criterios y SOP del operador. Rionegro = opción alternativa del caso. Aproximación inmediata = solo si las condiciones y procedimientos permiten continuar","Todas son iguales"],a:2,why:"La presencia de windshear cambia el riesgo de la aproximación y puede afectar la decisión de continuar. La evaluación real depende de los reportes, criterios de aproximación, combustible, alterno y procedimientos del operador."},
+      {k:"D · Decide",q:"¿Qué decides y cómo lo dices?",opts:["'Vamos a ver qué pasa'","'Rionegro, salvo aproximación inmediata sin windshear. ¿De acuerdo?'","'Yo decido, no hace falta que opines'","'Que decida el despachador'"],a:1,why:"Decisión clara, anunciada, con el límite explícito y con invitación al otro piloto. El comandante decide; el copiloto aporta."},
+      {k:"E · Execute",q:"¿Cómo se reparte?",opts:["El PF hace todo","El PM vuela y el PF habla","Nadie hace el PA","PM avisa a ATC y despacho y prepara la ruta; PF vuela; PA a pasajeros después"],a:3,why:"Roles claros: el avión primero (PF), comunicaciones y preparación (PM), el PA se difiere: gestión de la carga."},
+      {k:"C · Check",q:"ATC responde: 'aproximación inmediata ILS 31R, el windshear cesó según el último tráfico'. ¿Y ahora?",opts:["Nuevo FORDEC corto: cambiaron los hechos; si se acepta, revalidar capacidad/mínimos, procedimiento de windshear, criterios de go-around y combustible","Ya decidimos Rionegro: no se cambia","Aceptar sin más","Rechazar por principio"],a:0,why:"El Check existe para esto: cambió un hecho y se reevalúa con método. Aceptar o desviar debe sostenerse en los criterios y procedimientos aplicables, no en que el tráfico anterior haya aterrizado."}
+    ];
+    let i=0, score=0;
+    const draw=()=>{ if(i>=S.length){ el.innerHTML=`<h3>FORDEC completo</h3><p class="sub">${score} de 6 pasos correctos.</p><div class="verdict"><b>Lo importante no es la sigla:</b> es hacerlo en voz alta con el otro piloto, anunciar la decisión y volver a revisarla cuando cambian los hechos. Sin tiempo, no se decide: se ejecuta lo entrenado y se piensa después.</div>`; return; }
+      const s=S[i]; el.innerHTML=`<h3>${s.k}</h3><p class="sub">${s.q}</p><div class="opts" id="o">${s.opts.map((o,j)=>`<button class="opt" data-i="${j}"><span class="k">${"ABCD"[j]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div><div class="row" style="margin-top:14px"><button class="btn" id="nx" disabled>Siguiente paso</button></div>`;
+      pick(el,"o",(b,j)=>{ el.querySelectorAll("#o .opt").forEach((x,k)=>{ x.disabled=true; x.classList.add("locked"); if(k===s.a) x.classList.add("right"); else if(k===j) x.classList.add("wrong"); }); const ok=j===s.a; if(ok) score++; const fb=el.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${s.why}`; el.querySelector("#nx").disabled=false; });
+      el.querySelector("#nx").onclick=()=>{ i++; draw(); }; };
+    draw();
+  }
+};
+
+/* ---------------- NAV ---------------- */
+nextB.onclick=()=>{ const s=STEPS[idx]; if(s.t==="lesson" && reveal(stepEl)) return; if(s.t==="results"){ idx=0; for(const k in answers) delete answers[k]; go(); return; } if(idx<STEPS.length-1){ idx++; go(); } };
+prevB.onclick=()=>{ if(idx>0){ idx--; go(); } };
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT") return; if(e.key==="ArrowRight"&&!nextB.disabled) nextB.click(); if(e.key==="ArrowLeft") prevB.click(); });
+go();
+</script>
+</body>
+</html>
