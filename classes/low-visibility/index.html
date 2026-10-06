@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veyra · Low Visibility Operations (LVO) · Clase interactiva</title>
+<meta name="description" content="Clase interactiva de operaciones de baja visibilidad: ILS, luces, RVR, CAT II/III, LVP, LVTO y degradaciones en final.">
+<meta name="theme-color" content="#0B1014">
+<link rel="canonical" href="https://veyrapilot.com/classes/low-visibility/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1014; --panel:#13161D; --line:#232830; --line2:#2E343D;
+    --gold:#D8B25E; --gold-dim:#8F7640; --ink:#FFFFFF; --muted:#9AA3AD; --dim:#5F6873;
+    --ok:#7FBF8E; --bad:#D9776C;
+    --serif:"Lora",Georgia,serif; --sans:"Poppins",Arial,sans-serif;
+    --rail:240px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit}
+  a{color:var(--gold)}
+
+  .app{display:grid;grid-template-columns:var(--rail) 1fr;min-height:100%}
+  /* rail */
+  .rail{border-right:1px solid var(--line);padding:28px 22px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit}
+  .rail-links{display:flex;gap:8px;flex-wrap:wrap}
+  .rail-links a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line2);padding:7px 9px;border-radius:4px;color:var(--muted)}
+  .rail-links a:hover,.rail-links a:focus-visible{color:var(--gold);border-color:var(--gold-dim)}
+  .source-note{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:4px;color:var(--muted);font-size:12px;line-height:1.6;max-width:680px}
+  .brand .w{font-family:var(--serif);font-size:22px;color:var(--ink)}
+  .brand .t{font-size:8px;letter-spacing:.22em;color:var(--muted)}
+  .rail h2{font-family:var(--serif);font-weight:400;font-size:15px;margin:0;color:var(--muted)}
+  .blocks{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+  .blocks li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;font-size:12.5px;color:var(--dim);cursor:default}
+  .blocks li .dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2);flex:none}
+  .blocks li.done{color:var(--muted);cursor:pointer}
+  .blocks li.done .dot{background:var(--gold-dim);border-color:var(--gold-dim)}
+  .blocks li.active{color:var(--ink);background:var(--panel)}
+  .blocks li.active .dot{background:var(--gold);border-color:var(--gold)}
+  .score{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.6}
+  .score b{color:var(--gold);font-weight:500}
+
+  /* stage */
+  .stage{display:flex;flex-direction:column;min-height:100vh}
+  .topbar{height:3px;background:var(--line)}
+  .topbar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s ease}
+  .step{flex:1;padding:56px 64px 40px;max-width:980px;width:100%;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+  .step.in{opacity:1;transform:none}
+  .kicker{font-size:12px;color:var(--gold);margin:0 0 10px}
+  h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.2;margin:0 0 14px;letter-spacing:-.01em}
+  h1.big{font-size:44px}
+  .lead{font-size:16px;color:var(--muted);line-height:1.65;max-width:640px;margin:0 0 28px}
+  p{line-height:1.7;max-width:660px;margin:0 0 14px;font-size:15px}
+  .note{border-left:2px solid var(--gold);padding:10px 16px;color:var(--muted);font-size:14px;line-height:1.6;max-width:640px;margin:18px 0}
+  .note b{color:var(--ink);font-weight:500}
+
+  /* reveals */
+  .reveals{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px;max-width:680px}
+  .reveals li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:4px;opacity:0;transform:translateX(-8px);transition:opacity .35s ease,transform .35s ease;line-height:1.55;font-size:14.5px}
+  .reveals li.show{opacity:1;transform:none}
+  .reveals li .n{font-family:var(--serif);color:var(--gold);font-size:20px;line-height:1}
+  .reveals li b{color:var(--ink);font-weight:500;display:block;margin-bottom:3px}
+  .reveals li span{color:var(--muted)}
+  .hint{font-size:12.5px;color:var(--dim);margin-top:14px}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 64px 36px;max-width:980px;width:100%;margin:0 auto;gap:12px}
+  .btn{background:transparent;border:1px solid var(--line2);color:var(--ink);padding:11px 20px;border-radius:4px;font-size:13.5px;font-weight:400;cursor:pointer;transition:border-color .2s,background .2s}
+  .btn:hover{border-color:var(--gold)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .btn.primary{background:var(--gold);color:#1B1608;border-color:var(--gold);font-weight:500}
+  .btn.primary:hover{background:#E2C177}
+  .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .counter{font-size:12px;color:var(--dim)}
+
+  /* quiz */
+  .q{max-width:680px}
+  .q .prompt{font-family:var(--serif);font-size:22px;line-height:1.4;margin:0 0 22px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;color:var(--ink);font-size:14.5px;line-height:1.5;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:12px;transition:border-color .2s,background .2s;font-weight:300}
+  .opt .k{color:var(--muted);font-family:var(--serif)}
+  .opt:hover{border-color:var(--gold-dim)}
+  .opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .opt.right{border-color:var(--ok)} .opt.right .k{color:var(--ok)}
+  .opt.wrong{border-color:var(--bad)} .opt.wrong .k{color:var(--bad)}
+  .opt.locked{cursor:default}
+  .opt.locked:not(.right):not(.wrong){opacity:.45}
+  .fb{margin-top:18px;padding:16px 18px;border-radius:4px;background:var(--panel);border:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+  .fb.show{opacity:1;transform:none}
+  .fb b{font-weight:500}
+  .fb.ok b{color:var(--ok)} .fb.ko b{color:var(--bad)}
+
+  /* widgets */
+  .widget{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-top:8px}
+  .widget h3{font-family:var(--serif);font-weight:400;font-size:18px;margin:0 0 6px}
+  .widget .sub{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.5}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:12px;color:var(--muted)}
+  .field output{font-family:var(--serif);font-size:24px;color:var(--gold)}
+  input[type=range]{width:100%;accent-color:var(--gold);background:transparent}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+  .readout div{border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+  .readout small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .readout strong{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--ink)}
+  .readout strong.g{color:var(--gold)} .readout strong.b{color:var(--bad)} .readout strong.o{color:var(--ok)}
+  .verdict{margin-top:14px;font-size:14px;line-height:1.6;color:var(--muted);min-height:44px}
+  .verdict b{color:var(--ink);font-weight:500}
+
+  /* metar chips */
+  .metar{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px;font-family:"Courier New",monospace;font-size:17px}
+  .chip{border:1px solid var(--line2);border-radius:4px;padding:8px 10px;cursor:pointer;background:var(--bg);color:var(--ink);transition:border-color .2s,color .2s;font-family:inherit;font-size:inherit;font-weight:700}
+  .chip:hover{border-color:var(--gold-dim)}
+  .chip.on{border-color:var(--gold);color:var(--gold)}
+  .chip.seen{color:var(--muted)} .chip.seen.on{color:var(--gold)}
+  .decode{min-height:120px;border:1px solid var(--line);border-radius:4px;padding:16px 18px;font-size:14px;line-height:1.6;color:var(--muted)}
+  .decode b{color:var(--ink);font-weight:500;display:block;font-family:var(--serif);font-size:17px;margin-bottom:6px}
+  .decode em{color:var(--gold);font-style:normal}
+  .meter{font-size:12px;color:var(--dim);margin-top:10px}
+
+  /* taf timeline */
+  .taf{font-family:"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--muted);white-space:pre-wrap;border:1px solid var(--line);border-radius:4px;padding:14px 16px;background:var(--bg)}
+  .taf span{display:block;padding:0 6px;border-radius:3px;transition:background .25s,color .25s}
+  .taf span.live{background:#1C2A20;color:var(--ink)} .taf span.live.bad{background:#2B1C1B}
+  .tl{position:relative;height:28px;margin:18px 0 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+  .tl .seg{position:absolute;top:0;bottom:0;background:var(--gold-dim);opacity:.35}
+  .tl .seg.bad{background:var(--bad);opacity:.35}
+  .tl .cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--gold)}
+  .ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+
+  /* microburst */
+  .mb svg{width:100%;height:auto;display:block}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .phase{border:1px solid var(--line);border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--dim);transition:border-color .3s,color .3s}
+  .phase b{display:block;color:inherit;font-weight:500;margin-bottom:4px}
+  .phase.on{border-color:var(--gold);color:var(--ink)} .phase.on b{color:var(--gold)}
+
+  /* results */
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:22px 0}
+  .res{border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .res small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .res strong{font-family:var(--serif);font-weight:400;font-size:26px}
+  .res .bar{height:3px;background:var(--line);margin-top:10px}
+  .res .bar i{display:block;height:100%;background:var(--gold)}
+  .grade{font-family:var(--serif);font-size:64px;color:var(--gold);line-height:1;margin:6px 0 4px}
+
+  /* intro */
+  .cover{display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center}
+  .rings{aspect-ratio:1;position:relative}
+  .rings i{position:absolute;inset:0;border:1px solid var(--line2);border-radius:50%;animation:breathe 6s ease-in-out infinite}
+  .rings i:nth-child(2){inset:22%;animation-delay:-2s}
+  .rings i:nth-child(3){inset:44%;border-color:var(--gold);animation-delay:-4s}
+  .rings b{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:var(--gold);border-radius:50%}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.04);opacity:1}}
+  .mission{border:1px solid var(--gold-dim);border-radius:6px;padding:18px 20px;margin-top:22px;max-width:640px}
+  .mission h4{font-family:var(--serif);font-weight:400;margin:0 0 8px;font-size:17px;color:var(--gold)}
+  .mission p{margin:0;font-size:14px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr}
+    .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 20px;border-right:0;border-bottom:1px solid var(--line)}
+    .rail h2,.score{display:none}
+    .blocks{flex-direction:row;flex-wrap:wrap;gap:6px}
+    .blocks li{padding:5px 8px;font-size:0}
+    .blocks li .dot{width:10px;height:10px}
+    .step{padding:32px 22px 20px}
+    .nav{padding:12px 22px 28px}
+    h1{font-size:27px} h1.big{font-size:32px}
+    .cover{grid-template-columns:1fr}
+    .rings{max-width:180px}
+    .phases{grid-template-columns:1fr}
+  }
+
+  .stack{display:flex;flex-direction:column-reverse;gap:3px;height:300px;justify-content:flex-start;border:1px solid var(--line);border-radius:4px;padding:8px;background:var(--bg)}
+  .layer{display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-radius:3px;font-size:12px;color:#1B1608;min-height:14px;transition:flex .4s ease,opacity .4s}
+  .layer span:last-child{font-family:var(--serif);font-size:13px}
+  .l-taxi{background:#5F6873;color:#fff}.l-trip{background:#8F7640;color:#fff}.l-cont{background:#B59748}.l-alt{background:#C9A853}.l-frf{background:#D8B25E}.l-extra{background:#E6CC8A}.l-disc{background:#F1E1B4}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:12px}
+  .legend b{color:var(--ink);font-weight:500}
+  .two{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start}
+  .toggle{display:flex;gap:6px;flex-wrap:wrap}
+  .tg{border:1px solid var(--line2);background:transparent;color:var(--muted);padding:7px 12px;border-radius:4px;font-size:12.5px;cursor:pointer}
+  .tg.on{border-color:var(--gold);color:var(--gold)}
+  .gauge{position:relative;height:34px;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden;margin-top:10px}
+  .gauge i{position:absolute;top:0;bottom:0;transition:width .2s linear}
+  .gauge .mk{position:absolute;top:0;bottom:0;width:2px;background:var(--bad)}
+  .status{font-family:var(--serif);font-size:22px;margin-top:12px;min-height:30px}
+  .status.warn{color:var(--gold)} .status.bad{color:var(--bad)} .status.ok{color:var(--ok)}
+  @media (max-width:900px){.two{grid-template-columns:1fr}}
+
+  /* --- escenas --- */
+  .scene{background:#070A0D;border:1px solid var(--line);border-radius:6px;padding:12px;margin-top:8px}
+  .scene svg{width:100%;height:auto;display:block}
+  .lgd{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .lgd .tg{display:inline-flex;align-items:center;gap:8px}
+  .sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .exp{margin-top:12px;border:1px solid var(--line);border-radius:4px;padding:12px 14px;font-size:13.5px;line-height:1.6;color:var(--muted);min-height:70px}
+  .exp b{color:var(--ink);font-weight:500;display:block;font-family:var(--serif);font-size:16px;margin-bottom:4px}
+  .exp i{color:var(--gold);font-style:normal}
+  .def{border:1px solid var(--gold-dim);border-radius:4px;padding:10px 14px;margin:8px 0 0;font-size:13px;line-height:1.55;color:var(--muted)}
+  .def b{color:var(--gold);font-weight:500}
+  .ra{font-family:var(--serif);font-size:30px;color:var(--ink)}
+  .fma{display:inline-block;font-family:"Courier New",monospace;font-weight:700;font-size:14px;padding:5px 12px;border:1px solid #3A414B;border-radius:3px;color:#7FBF8E;background:#0B1014}
+  .fma.deg{color:var(--gold)} .fma.bad{color:var(--bad)}
+  @keyframes strobe{0%,8%{opacity:1}12%,100%{opacity:.08}}
+  .strobe{animation:strobe 1.6s linear infinite}
+  @keyframes beacon{0%,100%{opacity:.25}50%{opacity:1}}
+  .beacon{animation:beacon 2s ease-in-out infinite}
+  @keyframes drift{0%{transform:translateX(0)}100%{transform:translateX(-120px)}}
+  .fogdrift{animation:drift 14s linear infinite}
+  .glos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:14px}
+  .glos div{border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+  .glos b{color:var(--gold);font-weight:500}
+  .cover .rings{display:none}
+  .runway-cover{width:100%;max-width:320px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="../" aria-label="Volver a Classes"><span class="w">Veyra</span><span class="t">PILOT INTELLIGENCE</span></a>
+    <h2>Low Visibility · LVO</h2>
+    <div class="rail-links"><a href="../">Classes</a><a href="/?view=training">Training Center</a></div>
+    <ol class="blocks" id="blocks"></ol>
+    <div class="score" id="railScore"></div>
+  </aside>
+  <main class="stage">
+    <div class="topbar"><i id="bar"></i></div>
+    <section class="step" id="step" aria-live="polite"></section>
+    <div class="nav">
+      <button class="btn" id="prev">Anterior</button>
+      <span class="counter" id="counter"></span>
+      <button class="btn primary" id="next">Continuar</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ===================== CONTENIDO ===================== */
+const BLOCKS=["Bienvenida","El ILS desde cero","Las luces","Ver en la niebla: RVR","Categorías y la decisión","LVP y despegue","En final: degradaciones","Resultado y glosario"];
+
+const STEPS=[
+ {b:0,t:"intro"},
+ {b:0,t:"lesson",k:"Cómo funciona esta clase",h:"Ver, tocar, comprobar",
+  lead:"Un recorrido visual de baja visibilidad: seis escenas interactivas y trece comprobaciones. Nada se lee sin verse: cada concepto tiene su dibujo y cada dibujo responde a lo que muevas.",
+  items:[
+   {t:"La misión",d:"Escenario didáctico: 05:30 en Bogotá con RVR 400 m y techo de 100 ft; destino Rionegro con niebla temporal. ¿Puede despegar? ¿Puede aterrizar? ¿Qué limitación manda?"},
+   {t:"Sin peajes",d:"Los puntos aparecen solos. Tras responder, la clase avanza sola (puedes adelantarte con el botón). Un clic por pantalla."},
+   {t:"Desde cero",d:"Cada sigla se define la primera vez que aparece, y al final hay un glosario con todas."},
+   {t:"Regla de la clase",d:"Las cifras de aeródromo, aeronave y operador se usan para aprender. En operación real mandan AIP/NOTAM, AFM/FCOM, MEL, aprobación LVO y Manual de Operaciones vigentes."}
+  ]},
+
+ /* ---------- 1 · ILS ---------- */
+ {b:1,t:"lesson",k:"Bloque 1 · El ILS desde cero",h:"Qué es un ILS",
+  lead:"ILS significa Instrument Landing System. El localizador aporta guía lateral y la senda de planeo guía vertical; juntos forman el pasillo electrónico hacia la pista. La distancia puede venir de DME u otra fuente publicada: no es un tercer componente obligatorio del ILS.",
+  items:[
+   {t:"Localizador (LOC)",d:"Antena al final de la pista. Emite un haz que dice si estás a la izquierda o a la derecha del eje de pista. En el PFD (la pantalla principal del piloto) se ve como un rombo que se mueve de lado."},
+   {t:"Senda de planeo (GS, glide slope)",d:"Antena junto a la zona de toma. Emite un haz inclinado 3° que dice si estás alto o bajo. En el PFD es un rombo que sube o baja."},
+   {t:"Distancia",d:"Cuando la aproximación lo publica, un DME u otra fuente aprobada ayuda a saber cuánto falta. Las marker beacons son una ayuda heredada que todavía puede aparecer en algunos procedimientos, pero no definen por sí solas un ILS moderno."}
+  ]},
+ {b:1,t:"widget",id:"ils",k:"Escena · El pasillo del ILS",h:"Mueve el avión y mira cómo responden los rombos del PFD"},
+ {b:1,t:"lesson",k:"Bloque 1 · El ILS desde cero",h:"Tres alturas que no son lo mismo",
+  items:[
+   {t:"DA/H · decisión",d:"La carta publica una altitud/altura de decisión para la aproximación. En CAT I la DA/H suele referenciarse barométricamente; si en la DA/H no existe la referencia visual requerida, se ejecuta la aproximación frustrada.",ex:"CAT I se define con DH no inferior a 200 ft; el mínimo real puede ser mayor."},
+   {t:"DH en CAT II/III",d:"En CAT II y en CAT III con DH, EASA exige que la DH se determine mediante radioaltímetro o un medio equivalente cuando así lo determine la certificación. La cifra depende de la aproximación, aeronave, tripulación y aprobación.",ex:"CAT II: DH no menor de 100 ft; el RVR mínimo puede aumentar si la DH es mayor."},
+   {t:"AH · altura de alerta",d:"En operaciones fail-operational puede existir una Alert Height: por encima de ella ciertas fallas requieren abandonar la aproximación; por debajo, el sistema certificado puede conservar la capacidad prevista. El valor es específico de aeronave/configuración y del procedimiento del operador.",ex:"Cualquier AH mostrada en esta clase es un supuesto de entrenamiento, no un valor universal del A320."}
+  ]},
+ {b:1,t:"quiz",q:"¿Qué le dice el localizador al piloto?",o:["Si está alto o bajo respecto a la senda","Cuánto falta para la pista","Si está a la izquierda o a la derecha del eje de pista","La velocidad del viento"],a:2,
+  fb:"El localizador es la referencia lateral; la senda de planeo (GS) es la vertical; el DME o las balizas dan la distancia."},
+ {b:1,t:"quiz",q:"En CAT II la decisión se toma con:",o:["Altitud barométrica (DA)","Altura de radioaltímetro (DH)","El DME","El reloj"],a:1,
+  fb:"En CAT II la DH se determina con radioaltímetro o un medio equivalente según la certificación y el procedimiento aplicable; no es simplemente una cuestión de que el barométrico sea impreciso."},
+
+ /* ---------- 2 · LUCES ---------- */
+ {b:2,t:"lesson",k:"Bloque 2 · Las luces",h:"Por qué hay tantas luces",
+  lead:"Cuando el ILS te deja a 100 ft sobre la pista, lo único que confirma que estás donde crees son las luces. Cada sistema tiene un color y una forma, y cada uno responde a una pregunta distinta.",
+  items:[
+   {t:"¿Dónde está la pista?",d:"Luces de aproximación: una línea de luces blancas que empieza 900 m antes del umbral y lleva hasta él. Las estroboscópicas corren hacia la pista."},
+   {t:"¿Dónde empieza y dónde termina?",d:"Umbral en verde; fin de pista en rojo. Los bordes en blanco, que se vuelven amarillos en los últimos 600 m."},
+   {t:"¿Dónde toco y dónde voy?",d:"Zona de toma (TDZ) con barras blancas a los lados del eje los primeros 900 m; el eje de pista con luces blancas que alternan con rojo al final."}
+  ]},
+ {b:2,t:"widget",id:"lights",k:"Escena · La pista encendida",h:"Toca cada sistema de luces para verlo solo y saber qué significa"},
+ {b:2,t:"lesson",k:"Bloque 2 · Las luces",h:"Las siglas, como las trae la carta",
+  lead:"En la carta de aproximación y en el AIP las luces aparecen como siglas. Estas son las que hay que reconocer de un vistazo.",
+  items:[
+   {t:"ALS · ALSF-1 · ALSF-2 · MALSR · Calvert",d:"ALS es un sistema de luces de aproximación. Existen configuraciones como Calvert, ALSF-1, ALSF-2 y MALSR; cada pista publica en el AIP/carta qué sistema está instalado y qué capacidad soporta.",ex:"No deduzcas CAT II/III solo por reconocer una sigla: confirma la categoría de pista y el estado de las ayudas."},
+   {t:"HIRL · CL · TDZL · RCLM",d:"HIRL: luces de borde de alta intensidad. CL/RCLL: luces de eje. TDZL: luces de zona de toma. RCLM: marcas pintadas del eje. En baja visibilidad importan las ayudas visuales requeridas por la categoría certificada de la pista; para LVTO a 125 m EASA exige, entre otros elementos, eje de pista con luces espaciadas 15 m o menos.",ex:"'HIRL, CL, TDZL' describe ayudas visuales; la autorización CAT II/III se confirma en AIP/NOTAM y en la aprobación del operador."},
+   {t:"RVR · PAPI · REIL",d:"RVR: alcance visual en pista, medido por transmisómetros; la carta expresa el mínimo en RVR cuando la pista lo reporta. PAPI: cuatro luces de senda visual (dos blancas, dos rojas = en senda). REIL: destellos que identifican el umbral.",ex:"Un mínimo 'RVR 300 m' solo tiene sentido si la pista reporta RVR."}
+  ]},
+ {b:2,t:"quiz",q:"'HIRL, CL, TDZL' en la carta de una pista significa:",o:["Que solo sirve para VFR","Bordes de alta intensidad, luces de eje y de zona de toma: pista equipada para CAT II/III","Que tiene PAPI y REIL","Que las marcas de eje están recién pintadas"],a:1,
+  fb:"HIRL = bordes de alta intensidad; CL = luces de eje; TDZL = luces de zona de toma. Son ayudas típicas de una pista de precisión de baja visibilidad, pero la categoría utilizable se confirma con la certificación/publicación del aeródromo y su estado."},
+ {b:2,t:"quiz",q:"Luces de eje de pista alternando blanco y rojo. ¿Qué te dicen?",o:["Que la pista está mojada","Que quedan entre 900 y 300 m de pista","Que hay LVP en vigor","Que el umbral está desplazado"],a:1,
+  fb:"Los últimos 900 m el eje alterna blanco y rojo; los últimos 300 m son todo rojos. Es el aviso visual de que la pista se acaba, pensado para el rollout con poca visibilidad."},
+ {b:2,t:"quiz",q:"¿De qué color son las luces de umbral?",o:["Rojas","Amarillas","Azules","Verdes"],a:3,
+  fb:"Verde para entrar (umbral), rojo para el final. Las azules son bordes de calle de rodaje; las amarillas, los últimos 600 m de borde de pista."},
+
+ /* ---------- 3 · RVR ---------- */
+ {b:3,t:"lesson",k:"Bloque 3 · Ver en la niebla",h:"RVR: la medida que manda",
+  lead:"RVR significa Runway Visual Range, alcance visual en la pista: la distancia a la que un piloto en el eje ve las luces. No la mide una persona: la miden instrumentos junto a la pista.",
+  items:[
+   {t:"Puntos de reporte",d:"El RVR puede reportarse para zona de toma (TDZ), punto medio (MID) y extremo de parada (STOP-END), mediante equipos de medición aprobados. No todos los aeródromos usan exactamente la misma tecnología."},
+   {t:"Cuál controla",d:"En EASA para la continuación de aproximación, el RVR de TDZ es el controlante; si TDZ no se reporta, puede usarse MID. MID y STOP-END adicionales son informativos y el operador puede imponer límites propios, pero no son automáticamente mínimos universales de 125/75 m para aterrizar."},
+   {t:"Si no hay RVR",d:"La CMV puede sustituir RVR en ciertas aproximaciones cuando RVR no está disponible, pero no para mínimos de despegue ni para continuar una aproximación LVO. Para planificación EASA usa factor 1,0; fuera de planificación los factores dependen de iluminación y día/noche."}
+  ]},
+ {b:3,t:"widget",id:"fog",k:"Escena · Desde la cabina a 100 ft",h:"Baja el RVR y mira cuántas luces siguen visibles"},
+ {b:3,t:"quiz",q:"RVR reportado 350/300/250 en una CAT II (mínimo 300 m). ¿Se puede iniciar?",o:["No: STOP-END 250 es menor que 300","Sí: TDZ 350 cumple, MID ≥ 125 y STOP-END ≥ 75","No: hace falta 550 m","Solo con CAT III"],a:1,
+  fb:"Bajo la regla EASA de continuación de aproximación, TDZ es el RVR controlante; si no se reporta, puede usarse MID. Los valores adicionales ayudan a valorar rollout/taxi y el operador puede imponer límites propios."},
+ {b:3,t:"quiz",q:"Noche, luces de alta intensidad, sin RVR, visibilidad 300 m. ¿CAT I posible (550 m)?",o:["No: 300 < 550","Sí: CMV = 300 × 2 = 600 m","Solo de día","Sí: CMV = 300 × 1,5 = 450 m"],a:1,
+  fb:"Con luces de aproximación y pista de alta intensidad, fuera de planificación el factor nocturno EASA es 2,0: 300 m de VIS darían CMV 600 m. Pero CMV no puede usarse para mínimos de despegue ni para continuar una aproximación LVO."},
+
+ /* ---------- 4 · CATEGORÍAS ---------- */
+ {b:4,t:"lesson",k:"Bloque 4 · Categorías y la decisión",h:"La tabla, explicada",
+  lead:"Cada categoría es una combinación de altura de decisión y RVR mínimo. Cuanto más bajo se decide, más equipo, más entrenamiento y más protección del aeropuerto hacen falta. Marco: Reg. (UE) 2021/2237, vigente desde octubre de 2022.",
+  items:[
+   {t:"CAT I",d:"Definición EASA: DH no inferior a 200 ft y VIS no inferior a 800 m o RVR no inferior a 550 m. El mínimo real puede ser superior según procedimiento, luces, obstáculos, aeronave y operador."},
+   {t:"CAT II",d:"Definición EASA: DH inferior a 200 ft pero no inferior a 100 ft, con RVR no inferior a 300 m. Requiere aprobación LVO y sistema certificado. En DH se requieren al menos tres luces consecutivas y una referencia lateral, salvo créditos aprobados."},
+   {t:"CAT III",d:"Definición EASA: DH inferior a 100 ft o sin DH, con RVR inferior a 300 m o sin limitación de RVR. Los mínimos concretos dependen del sistema certificado, AFM, pista, tripulación y aprobación; no existe un único RVR CAT III válido para todos los aviones."}
+  ]},
+ {b:4,t:"widget",id:"profile",k:"Escena · La aproximación hasta la decisión",h:"Elige categoría y RVR, reproduce el descenso y decide en DH"},
+ {b:4,t:"quiz",q:"En el escenario didáctico de esta clase se asigna CAT III fail-passive con DH 50 ft y mínimo RVR 175 m. Con RVR 200 m:",o:["No se puede: siempre se requieren 300 m","Cumple el mínimo asignado al escenario","Solo se puede si la visibilidad es 800 m","El RVR deja de importar"],a:1,
+  fb:"En este ejercicio, 200 m supera el mínimo asignado de 175 m. En operación real, el mínimo CAT III se obtiene de la combinación pista + sistema certificado + AFM + tripulación + aprobación del operador; no memorices 175 m como universal."},
+ {b:4,t:"quiz",q:"Fail-operational significa que tras una falla por debajo de la altura de alerta:",o:["El piloto debe asumir de inmediato","El sistema continúa el aterrizaje automático","El avión frustra solo","Se apagan los dos AP"],a:1,
+  fb:"Fail-operational significa que, tras una falla prevista, el sistema conserva capacidad suficiente para completar la operación según su certificación. Si se autoriza una operación sin DH, el mínimo RVR depende del nivel de equipo y de la aprobación; no hay una cifra universal."},
+
+ /* ---------- 5 · LVP y LVTO ---------- */
+ {b:5,t:"lesson",k:"Bloque 5 · LVP y despegue",h:"Qué hace el aeropuerto cuando baja la niebla",
+  lead:"LVP son los Low Visibility Procedures, procedimientos de baja visibilidad: lo que el aeródromo activa para proteger la señal del ILS y el movimiento en tierra. Sin LVP en vigor no hay CAT II ni III, aunque el avión y la tripulación puedan.",
+  items:[
+   {t:"Cuándo",d:"Cada aeródromo publica criterios de preparación, inicio y finalización basados en RVR y techo. EASA exige que existan LVP cuando se pretenden LVTO, aproximaciones/aterrizajes con RVR menor de 550 m o DH menor de 200 ft, u operaciones con créditos con RVR menor de 550 m. No existe un único umbral universal de activación para todos los aeropuertos."},
+   {t:"Qué protegen",d:"Las áreas críticas y sensibles del ILS/MLS/GLS y el movimiento en superficie. El aeródromo y ATC restringen vehículos y aeronaves para proteger la señal y evitar incursiones."},
+   {t:"En tierra",d:"Stop bars, rutas de rodaje de baja visibilidad, luces de eje, vigilancia de superficie y ayudas como follow-me pueden formar parte del sistema según el aeropuerto. La capacidad suele reducirse, pero no necesariamente a la mitad."}
+  ]},
+ {b:5,t:"widget",id:"lvp",k:"Escena · El aeropuerto en LVP",h:"Activa las LVP y mira qué cambia en el campo"},
+ {b:5,t:"lesson",k:"Bloque 5 · LVP y despegue",h:"Despegar con 150 metros (LVTO)",
+  items:[
+   {t:"Definición",d:"LVTO es un despegue con RVR inferior a 550 m. En EASA, solo los LVTO con RVR inferior a 400 m requieren la aprobación específica de SPA.LVO.100; el operador sigue necesitando procedimientos y mínimos establecidos para cualquier operación."},
+   {t:"Escalones EASA",d:"Como referencia AMC: 150 m requiere marcas de eje, luces de fin, borde y eje de pista; 125 m añade espaciamientos más exigentes (borde ≤ 60 m y eje ≤ 15 m). Por debajo de 125 m hace falta un sistema certificado para esa operación; el mínimo concreto depende de la certificación y aprobación, no de HUD = 75 m como regla universal."},
+   {t:"Alterno de despegue",d:"Si la aeronave no puede regresar y aterrizar en salida, el despacho debe contar con un alterno de despegue conforme al marco aplicable. En un bimotor EASA, la referencia ordinaria es una hora a velocidad OEI, salvo una aprobación/regla específica diferente. El briefing de RTO debe seguir el procedimiento del operador."}
+  ]},
+ {b:5,t:"quiz",q:"¿Quién define los criterios concretos para preparar, iniciar y terminar las LVP?",o:["El fabricante del avión","El aeródromo, coordinado con ATS y aprobado por la autoridad competente","Cada comandante de forma individual","El sistema ILS automáticamente"],a:1,
+  fb:"EASA exige que el aeródromo establezca esos criterios basados en RVR y techo, coordinados con ATS. El AIP publica las condiciones locales; 550 m es una referencia de definición/alcance LVO, no un botón universal de activación."},
+ {b:5,t:"quiz",q:"Según el AMC EASA, para un LVTO de 125 m una diferencia clave respecto a 150 m es:",o:["No hacen falta luces de eje","Las luces de eje deben estar espaciadas 15 m o menos y las de borde 60 m o menos","Se requiere autoland","Solo se permite de día"],a:1,
+  fb:"El AMC EASA añade requisitos de espaciamiento para 125 m. Para RVR inferior a 125 m se necesita un sistema certificado para esa operación y el mínimo depende de la aprobación."},
+
+ /* ---------- 6 · EN FINAL ---------- */
+ {b:6,t:"lesson",k:"Bloque 6 · En final",h:"La regla de los 1.000 pies y las degradaciones",
+  items:[
+   {t:"Approach ban",d:"En EASA, si el VIS o RVR controlante está por debajo del mínimo, la aproximación no se continúa más allá de 1.000 ft sobre la elevación del aeródromo (o dentro del FAS si la DH/MDH es mayor). Si el deterioro se reporta después de ese punto, no existe obligación automática de discontinuar; en DA/H siguen mandando las referencias visuales requeridas."},
+   {t:"FMA",d:"El Flight Mode Annunciator muestra modos y, en algunos aviones, el nivel de capacidad de aproximación/autoland. Etiquetas como CAT 3 DUAL/SINGLE son propias de ciertas arquitecturas Airbus y deben interpretarse según FCOM/AFM y SOP; si cambia la capacidad, hay que reevaluar los mínimos aplicables."},
+   {t:"AUTOLAND",d:"Las indicaciones y alertas de autoland son específicas de la aeronave. En el escenario A320 de esta clase, una degradación por encima o por debajo de la altura relevante se usa para practicar la decisión; la acción real se toma según FCOM/QRH/OM, no por una regla genérica de esta pantalla."}
+  ]},
+ {b:6,t:"widget",id:"final",k:"Escena · Corta final con sorpresa",h:"Reproduce la aproximación; cuando algo cambie, decide"},
+ {b:6,t:"quiz",q:"Escenario de entrenamiento: la aprobación asigna CAT III fail-passive con DH 50 ft y RVR 175 m. Con RVR 200 m, el FMA se degrada a esa capacidad a 600 ft. ¿Qué haces?",o:["Frustrar por cualquier degradación","Reevaluar: el nuevo mínimo del escenario todavía se cumple y se aplica la DH/criterio visual correspondiente","Continuar sin cambiar briefing ni mínimos","Esperar una autorización especial de ATC"],a:1,
+  fb:"La lección es reevaluar la capacidad degradada contra los mínimos autorizados. Los valores 50 ft/175 m son supuestos de este ejercicio; en línea se usan FCOM/AFM, carta y OM."},
+ {b:6,t:"quiz",q:"Misión didáctica: el aeródromo del ejercicio solo está habilitado CAT II; la aeronave y tripulación tienen capacidad superior. RVR TDZ 350 m. ¿Qué operación puede usarse?",o:["CAT III sin DH, porque el avión puede","CAT I, por seguridad","Ninguna, porque MID y STOP-END deben ser ≥ 300 m","CAT II, si se cumplen el resto de condiciones y mínimos de la operación"],a:3,
+  fb:"El eslabón más limitante manda: procedimiento/pista, aeronave, tripulación y operador deben ser compatibles. Para la continuación EASA el TDZ es el RVR controlante; los RVR adicionales son informativos salvo límites propios del operador."},
+
+ {b:7,t:"results"}
+];
+
+const GLOSSARY=[["ILS","Instrument Landing System. Localizador (lateral) + senda de planeo (vertical) + distancia."],["LOC","Localizador: haz que indica desviación izquierda/derecha del eje."],["GS","Glide slope, senda de planeo: haz a 3° que indica alto/bajo."],["PFD","Primary Flight Display: pantalla principal con actitud, velocidad, altitud y desviaciones ILS."],["FMA","Flight Mode Annunciator: franja superior del PFD donde se anuncian los modos y la capacidad (CAT 3 DUAL…)."],["DA","Decision Altitude: altitud barométrica de decisión (CAT I)."],["DH","Decision Height: altura de decisión por radioaltímetro (CAT II/III)."],["AH","Alert Height: altura usada en algunas operaciones fail-operational; su valor es específico de aeronave/configuración y procedimiento."],["RA","Radioaltímetro: mide la altura real hasta el suelo."],["RVR","Runway Visual Range: alcance visual en pista medido por transmisómetros (TDZ, MID, STOP-END)."],["CMV","Converted Meteorological Visibility. Puede sustituir RVR en casos permitidos; no se usa para mínimos de despegue ni para continuar una aproximación LVO."],["LVP","Low Visibility Procedures: medidas del aeródromo para proteger el ILS y el movimiento en tierra."],["LVTO","Low Visibility Take-Off: despegue con RVR < 550 m; en EASA, RVR < 400 m requiere aprobación específica."],["Fail-passive","Tras una falla, el sistema no desvía la trayectoria pero no completa el aterrizaje: exige DH ≥ 50 ft."],["Fail-operational","Tras una falla prevista, el sistema conserva capacidad suficiente para completar la operación según su certificación; puede soportar operaciones sin DH cuando estén específicamente aprobadas."],["Autoland","Aterrizaje automático: LAND, FLARE, ROLL OUT."],["Approach ban","Restricción EASA a continuar más allá de 1.000 ft sobre la elevación del aeródromo (o el FAS, según el caso) cuando el VIS/RVR controlante está por debajo del mínimo."],["Área sensible","Zona junto a las antenas ILS donde un avión o vehículo deforma la señal; se protege en LVP."],["Stop bar","Barra de luces rojas en la calle de rodaje; encendida, nunca se cruza."],["TDZ","Touchdown zone: zona de toma, primeros 900 m, con barras de luces blancas."],["HUD","Head-Up Display: guía proyectada en el parabrisas; permite LVTO a 75 m."],["ALS","Approach Lighting System: luces de aproximación (Calvert, ALSF-1, ALSF-2, MALSR)."],["ALSF-2","ALS de 2.400 ft con barras rojas laterales; sistema CAT II/III en EE. UU."],["ALSF-1","ALS de 2.400 ft para CAT I de alta intensidad."],["MALSR","ALS de intensidad media de 1.400 ft con RAIL; CAT I."],["SFL / RAIL","Destellos secuenciales que corren hacia la pista."],["HIRL / MIRL / LIRL","Luces de borde de pista (RL) de alta, media o baja intensidad."],["CL / RCLL","Luces de eje de pista cada 15 m; rojo y blanco en los últimos 900 m."],["RCLM","Marcas pintadas de eje de pista; no sirven en niebla."],["TDZL","Luces de zona de toma, primeros 900 m."],["PAPI","Indicador visual de senda: 2 blancas + 2 rojas = en senda."],["REIL","Destellos de identificación del umbral."],["SPA.LVO","Aprobación específica EASA para operaciones de baja visibilidad."]];
+
+/* ===================== ESTADO ===================== */
+let idx=0; const answers={}; let autoT=null;
+const quizIdx=STEPS.map((s,i)=>s.t==="quiz"?i:-1).filter(i=>i>=0);
+try{ const saved=JSON.parse(localStorage.getItem("veyra-lvo2")||"null"); if(saved){ idx=saved.idx||0; Object.assign(answers,saved.answers||{}); } }catch(e){}
+function persist(){ try{ localStorage.setItem("veyra-lvo2",JSON.stringify({idx,answers})); }catch(e){} }
+function cancelAuto(){ if(autoT){ clearInterval(autoT); autoT=null; } }
+function autoNext(btn,secs){ cancelAuto(); if(!btn) return; const base=btn.textContent.replace(/ · \d+$/,""); let n=secs; btn.textContent=base+" · "+n;
+  autoT=setInterval(()=>{ if(!document.contains(btn)||btn.disabled){ cancelAuto(); return; } n--; if(n<=0){ cancelAuto(); btn.textContent=base; btn.click(); } else btn.textContent=base+" · "+n; },1000); }
+let rafs=[]; function stopAnims(){ rafs.forEach(cancelAnimationFrame); rafs=[]; }
+
+/* ===================== RENDER ===================== */
+const stepEl=document.getElementById("step"), bar=document.getElementById("bar"), counter=document.getElementById("counter");
+const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), blocksEl=document.getElementById("blocks"), railScore=document.getElementById("railScore");
+function renderRail(){ const cur=STEPS[idx].b; const maxB=STEPS.slice(0,idx+1).reduce((m,s)=>Math.max(m,s.b),0);
+  blocksEl.innerHTML=BLOCKS.map((n,i)=>`<li class="${i===cur?"active":""} ${i<maxB?"done":""}" data-b="${i}"><span class="dot"></span><span>${n}</span></li>`).join("");
+  blocksEl.querySelectorAll("li.done").forEach(li=>li.onclick=()=>{ idx=STEPS.findIndex(s=>s.b===+li.dataset.b); go(); });
+  const done=Object.keys(answers).length, ok=Object.values(answers).filter(a=>a.ok).length;
+  railScore.innerHTML=`Preguntas respondidas: <b>${done}/${quizIdx.length}</b><br>Aciertos: <b>${ok}</b>`; }
+function go(){ cancelAuto(); stopAnims(); const s=STEPS[idx]; stepEl.classList.remove("in");
+  setTimeout(()=>{ stepEl.innerHTML=""; stepEl.appendChild(render(s)); requestAnimationFrame(()=>stepEl.classList.add("in"));
+    bar.style.width=(idx/(STEPS.length-1)*100)+"%"; counter.textContent=`${idx+1} / ${STEPS.length}`; prevB.disabled=idx===0; updateNext(); renderRail(); persist(); window.scrollTo({top:0,behavior:"smooth"}); },180); }
+function updateNext(){ const s=STEPS[idx]; nextB.disabled=false;
+  if(s.t==="quiz"){ nextB.textContent="Siguiente"; nextB.disabled=!answers[idx]; }
+  else if(s.t==="results") nextB.textContent="Volver a empezar";
+  else nextB.textContent= s.t==="intro" ? "Empezar la clase" : "Siguiente"; }
+function render(s){ const w=document.createElement("div");
+  if(s.t==="intro"){ w.innerHTML=`<div class="cover"><div><p class="kicker">Clase interactiva</p><h1 class="big">Operaciones de baja visibilidad</h1>
+    <p class="lead">Cómo se aterriza y se despega cuando la pista casi no se ve. Seis bloques de contenido, seis escenas interactivas y trece comprobaciones. Unos 45 minutos.</p>
+    <div class="mission"><h4>La misión</h4><p>Escenario didáctico: 05:30 en Bogotá, RVR 400 m y techo 100 ft; destino Rionegro con niebla temporal. La clase te obliga a identificar qué limita cada fase: pista, RVR, aeronave, tripulación o aprobación.</p></div><div class="source-note"><b>Revisión Veyra · 06/10/2026.</b> Contrastada con EASA Easy Access Rules for Air Operations Rev. 24 y Aerodromes Rev. March 2026. Las cifras CAT III/A320 y las capacidades de aeropuertos mostradas son supuestos de entrenamiento salvo que AIP/AFM/OM aplicables las confirmen.</div></div><div id="coverart"></div></div>`;
+    w.querySelector("#coverart").appendChild(coverArt()); }
+  else if(s.t==="lesson"){ w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1>${s.lead?`<p class="lead">${s.lead}</p>`:""}<ol class="reveals"></ol>`;
+    const ol=w.querySelector(".reveals"); s.items.forEach((it,i)=>{ const li=document.createElement("li"); li.innerHTML=`<span class="n">${i+1}</span><div><b>${it.t}</b><span>${it.d}</span>${it.ex?`<div class="def"><b>Ejemplo · </b>${it.ex}</div>`:""}</div>`; ol.appendChild(li); setTimeout(()=>li.classList.add("show"),150+i*230); }); }
+  else if(s.t==="quiz"){ const prev=answers[idx]; w.innerHTML=`<p class="kicker">Comprobación</p><div class="q"><p class="prompt">${s.q}</p><div class="opts">${s.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div></div>`;
+    w.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(w,+b.dataset.i)); if(prev) setTimeout(()=>answer(w,prev.a,true),0); }
+  else if(s.t==="widget"){ w.innerHTML=`<p class="kicker">${s.k}</p><h1>${s.h}</h1><div class="widget" id="wg"></div>`; WIDGETS[s.id](w.querySelector("#wg")); }
+  else if(s.t==="results") w.appendChild(results());
+  return w; }
+function answer(w,i,replay){ const s=STEPS[idx]; if(answers[idx]&&!replay) return; const ok=i===s.a; answers[idx]={a:i,ok};
+  w.querySelectorAll(".opt").forEach((b,j)=>{ b.classList.add("locked"); if(j===s.a) b.classList.add("right"); else if(j===i) b.classList.add("wrong"); b.disabled=true; });
+  const fb=w.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${s.fb}`; updateNext(); renderRail(); persist(); if(!replay) autoNext(nextB,5); }
+function results(){ const w=document.createElement("div"); const perBlock={};
+  quizIdx.forEach(i=>{ const b=STEPS[i].b; perBlock[b]=perBlock[b]||{n:0,ok:0}; perBlock[b].n++; if(answers[i]&&answers[i].ok) perBlock[b].ok++; });
+  const total=quizIdx.length, ok=Object.values(answers).filter(a=>a.ok).length, pct=Math.round(ok/total*100);
+  const weak=Object.entries(perBlock).filter(([b,v])=>v.ok/v.n<0.67).map(([b])=>BLOCKS[b]);
+  w.innerHTML=`<p class="kicker">Resultado</p><h1>${pct>=80?"Listo para el briefing CAT III":"Vale la pena repasar"}</h1><div class="grade">${pct}%</div><p class="lead">${ok} de ${total} comprobaciones correctas. Aprobación de referencia: 80 %.</p>
+    <div class="results">${Object.entries(perBlock).map(([b,v])=>`<div class="res"><small>${BLOCKS[b]}</small><strong>${v.ok}/${v.n}</strong><div class="bar"><i style="width:${v.ok/v.n*100}%"></i></div></div>`).join("")}</div>
+    ${weak.length?`<div class="note"><b>Para repasar:</b> ${weak.join(", ")}.</div>`:`<div class="note"><b>Sin bloques débiles.</b> En la misión didáctica identificaste qué limita cada fase: infraestructura y LVP, mínimos de despegue, capacidad de aeronave/tripulación y categoría publicada del aeródromo. En operación real, valida AIP/NOTAM + AFM/FCOM + OM antes de aplicar cualquier cifra.</div>`}
+    <p class="kicker" style="margin-top:28px">Glosario</p><div class="glos">${GLOSSARY.map(g=>`<div><b>${g[0]}</b> · ${g[1]}</div>`).join("")}</div>`; return w; }
+
+/* ===================== DIBUJO ===================== */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function svgBox(w,h){ const s=el("svg",{viewBox:`0 0 ${w} ${h}`}); return s; }
+function lbl(svg,x,y,text,o={}){ const t=el("text",{x,y,fill:o.fill||"#9AA3AD","font-size":o.size||11,"font-family":"Poppins,Arial","text-anchor":o.anchor||"start"},svg); t.textContent=text; return t; }
+function plane(svg,x,y,ang,color){ const g=el("g",{transform:`translate(${x} ${y}) rotate(${ang||0})`},svg); el("path",{d:"M-16 0 L12 0 L18 -2 L12 -4 L-4 -4 L-9 -11 L-13 -11 L-9 -4 L-14 -4 L-18 -7 L-21 -7 L-17 0 L-21 7 L-18 7 L-14 4 L-9 4 L-13 11 L-9 11 L-4 4 L12 4 L18 2 Z",fill:color||"#D8B25E"},g); return g; }
+
+/* pista en planta: devuelve svg y grupos por sistema */
+function runwayTop(opts={}){
+  const W=960,H=300, s=svgBox(W,H), G={};
+  const x0=330, x1=930, yc=150, hw=42; // umbral, fin, eje, media anchura
+  el("rect",{x:x0,y:yc-hw,width:x1-x0,height:hw*2,fill:"#15181E",stroke:"#2E343D"},s);
+  lbl(s,x0+6,yc+hw+16,"umbral",{size:10}); lbl(s,x1-6,yc+hw+16,"fin de pista",{size:10,anchor:"end"}); lbl(s,160,yc+hw+34,"← aproximación · sistema ALS",{size:10});
+  // marcas pintadas: eje (RCLM), umbral (teclas de piano), punto de contacto
+  G.rclm=el("g",{},s); el("line",{x1:x0+40,y1:yc,x2:x1-30,y2:yc,stroke:"#6B6F76","stroke-width":2,"stroke-dasharray":"12 8"},G.rclm);
+  for(let y=yc-hw+6;y<=yc+hw-6;y+=9) el("rect",{x:x0+6,y:y-2.5,width:22,height:5,fill:"#6B6F76"},G.rclm);
+  el("rect",{x:x0+60,y:yc-hw+8,width:28,height:8,fill:"#6B6F76"},G.rclm); el("rect",{x:x0+60,y:yc+hw-16,width:28,height:8,fill:"#6B6F76"},G.rclm);
+  // aproximación (ALS): tipo variable
+  G.app=el("g",{},s); G.strobe=el("g",{},s);
+  const drawALS=(type)=>{ G.app.innerHTML=""; G.strobe.innerHTML="";
+    if(type==="calvert"){ for(let m=30;m<=900;m+=30){ const x=x0-m*0.2; el("circle",{cx:x,cy:yc,r:2.6,fill:"#F3EEDC"},G.app); }
+      [150,300,450,600,750].forEach((m,i)=>{ const x=x0-m*0.2, half=18+i*8; el("line",{x1:x,y1:yc-half,x2:x,y2:yc+half,stroke:"#F3EEDC","stroke-width":3},G.app); });
+      for(let i=0;i<20;i++){ const m=900-i*30; const c=el("circle",{cx:x0-m*0.2,cy:yc-9,r:3.4,fill:"#FFFFFF",class:"strobe"},G.strobe); c.style.animationDelay=(i*0.07)+"s"; } }
+    else if(type==="alsf2"){ for(let f=100;f<=2400;f+=100){ const x=x0-f*0.3048*0.2; for(let k=-2;k<=2;k++) el("circle",{cx:x+k*2.2,cy:yc,r:1.9,fill:"#F3EEDC"},G.app); if(f<=1000){ for(let k=0;k<3;k++){ el("circle",{cx:x,cy:yc-18-k*3,r:1.7,fill:"#E0514A"},G.app); el("circle",{cx:x,cy:yc+18+k*3,r:1.7,fill:"#E0514A"},G.app); } } }
+      [[1000,34],[500,24]].forEach(([f,h])=>{ const x=x0-f*0.3048*0.2; el("line",{x1:x,y1:yc-h,x2:x,y2:yc+h,stroke:"#F3EEDC","stroke-width":3},G.app); });
+      el("line",{x1:x0-8,y1:yc-hw,x2:x0-8,y2:yc+hw,stroke:"#4CD28A","stroke-width":2.5},G.app);
+      let i=0; for(let f=2400;f>1000;f-=100,i++){ const c=el("circle",{cx:x0-f*0.3048*0.2,cy:yc-9,r:3.4,fill:"#FFFFFF",class:"strobe"},G.strobe); c.style.animationDelay=(i*0.09)+"s"; } }
+    else if(type==="alsf1"){ for(let f=100;f<=2400;f+=100){ const x=x0-f*0.3048*0.2; for(let k=-2;k<=2;k++) el("circle",{cx:x+k*2.2,cy:yc,r:1.9,fill:"#F3EEDC"},G.app); }
+      const x1k=x0-1000*0.3048*0.2; el("line",{x1:x1k,y1:yc-34,x2:x1k,y2:yc+34,stroke:"#F3EEDC","stroke-width":3},G.app);
+      const xpt=x0-100*0.3048*0.2; el("line",{x1:xpt-6,y1:yc-14,x2:xpt-6,y2:yc+14,stroke:"#E0514A","stroke-width":3},G.app);
+      let i=0; for(let f=2400;f>1000;f-=100,i++){ const c=el("circle",{cx:x0-f*0.3048*0.2,cy:yc-9,r:3.4,fill:"#FFFFFF",class:"strobe"},G.strobe); c.style.animationDelay=(i*0.09)+"s"; } }
+    else if(type==="malsr"){ for(let f=200;f<=1400;f+=200){ const x=x0-f*0.3048*0.2; for(let k=-2;k<=2;k++) el("circle",{cx:x+k*2.2,cy:yc,r:1.9,fill:"#F3EEDC"},G.app); }
+      const x1k=x0-1000*0.3048*0.2; el("line",{x1:x1k,y1:yc-22,x2:x1k,y2:yc+22,stroke:"#F3EEDC","stroke-width":3},G.app);
+      let i=0; for(let f=2400;f>1400;f-=200,i++){ const c=el("circle",{cx:x0-f*0.3048*0.2,cy:yc-9,r:3.4,fill:"#FFFFFF",class:"strobe"},G.strobe); c.style.animationDelay=(i*0.12)+"s"; } } };
+  drawALS(opts.als||"calvert"); G._drawALS=drawALS;
+  // PAPI y REIL
+  G.papi=el("g",{},s); [0,1,2,3].forEach(k=>el("circle",{cx:x0+60+k*8,cy:yc-hw-24,r:3,fill:k<2?"#F3EEDC":"#E0514A"},G.papi)); lbl(s,x0+96,yc-hw-21,"PAPI",{size:9});
+  G.reil=el("g",{},s); [[x0,yc-hw-14],[x0,yc+hw+14]].forEach(([x,y])=>{ const c=el("circle",{cx:x,cy:y,r:3.4,fill:"#FFFFFF",class:"strobe"},G.reil); c.style.animationDelay="0.4s"; });
+  // umbral verde / fin rojo
+  G.thr=el("g",{},s); for(let y=yc-hw+3;y<=yc+hw-3;y+=6) el("circle",{cx:x0,cy:y,r:2.6,fill:"#4CD28A"},G.thr);
+  G.end=el("g",{},s); for(let y=yc-hw+3;y<=yc+hw-3;y+=6) el("circle",{cx:x1,cy:y,r:2.6,fill:"#E0514A"},G.end);
+  // bordes (blanco, amarillo últimos 600 m)
+  G.edge=el("g",{},s); for(let x=x0;x<=x1;x+=12){ const left=(x1-x)/0.2; const col=left<=600?"#F2C94C":"#F3EEDC"; el("circle",{cx:x,cy:yc-hw-3,r:2.4,fill:col},G.edge); el("circle",{cx:x,cy:yc+hw+3,r:2.4,fill:col},G.edge); }
+  // eje (blanco; alterna rojo/blanco 900-300; rojo últimos 300)
+  G.cl=el("g",{},s); let k=0; for(let x=x0+6;x<=x1-4;x+=6,k++){ const left=(x1-x)/0.2; const col= left<=300?"#E0514A":(left<=900?(k%2?"#E0514A":"#F3EEDC"):"#F3EEDC"); el("circle",{cx:x,cy:yc,r:2.2,fill:col},G.cl); }
+  // TDZ (barras a ambos lados, primeros 900 m)
+  G.tdz=el("g",{},s); for(let m=60;m<=900;m+=60){ const x=x0+m*0.2; el("line",{x1:x,y1:yc-12,x2:x,y2:yc-24,stroke:"#F3EEDC","stroke-width":3},G.tdz); el("line",{x1:x,y1:yc+12,x2:x,y2:yc+24,stroke:"#F3EEDC","stroke-width":3},G.tdz); }
+  // calle de rodaje con bordes azules, eje verde, stop bar y puntos de espera
+  G.twy=el("g",{},s); const tx=640; el("rect",{x:tx-14,y:40,width:28,height:yc-hw-40,fill:"#121419",stroke:"#2E343D"},G.twy);
+  for(let y=46;y<yc-hw;y+=12){ el("circle",{cx:tx-16,cy:y,r:1.8,fill:"#5DA9FF"},G.twy); el("circle",{cx:tx+16,cy:y,r:1.8,fill:"#5DA9FF"},G.twy); }
+  for(let y=46;y<yc-hw;y+=7) el("circle",{cx:tx,cy:y,r:1.5,fill:"#4CD28A"},G.twy);
+  G.stop=el("g",{},s); for(let x=tx-12;x<=tx+12;x+=6) el("circle",{cx:x,cy:yc-hw-24,r:2.2,fill:"#E0514A"},G.stop);
+  lbl(s,tx+22,yc-hw-21,"punto de espera CAT I · stop bar",{size:9});
+  el("line",{x1:tx-14,y1:62,x2:tx+14,y2:62,stroke:"#F2C94C","stroke-width":2,"stroke-dasharray":"3 3"},G.twy); lbl(s,tx+22,66,"punto de espera CAT II/III",{size:9});
+  // transmisómetros
+  if(opts.rvr){ G.rvr=el("g",{},s); [[x0+60,"TDZ"],[(x0+x1)/2,"MID"],[x1-60,"STOP-END"]].forEach(([x,n])=>{ el("rect",{x:x-4,y:yc+hw+6,width:8,height:10,fill:"#D8B25E"},G.rvr); lbl(s,x,yc+hw+30,n,{size:9,anchor:"middle",fill:"#D8B25E"}); }); }
+  // antenas ILS
+  if(opts.ils){ G.ils=el("g",{},s); el("rect",{x:x1+10,y:yc-12,width:6,height:24,fill:"#D8B25E"},G.ils); lbl(s,x1+10,yc-18,"LOC",{size:9,fill:"#D8B25E"}); el("rect",{x:x0+70,y:yc+hw+12,width:5,height:14,fill:"#D8B25E"},G.ils); lbl(s,x0+80,yc+hw+24,"GS",{size:9,fill:"#D8B25E"}); }
+  return {svg:s,G,x0,x1,yc,hw};
+}
+function coverArt(){ const d=document.createElement("div"); d.className="runway-cover"; const s=svgBox(300,300);
+  const vx=150, vy=90, bl=30, br=270, tl=vx-18, tr=vx+18, by=290;
+  el("polygon",{points:`${bl},${by} ${br},${by} ${tr},${vy} ${tl},${vy}`,fill:"#0F1217",stroke:"#232830"},s);
+  const N=16; for(let i=0;i<N;i++){ const t=i/(N-1); const y=by-(by-vy)*t; const xl=bl+(tl-bl)*t, xr=br+(tr-br)*t; const far=t>0.72; const col=far?"#F2C94C":"#F3EEDC"; const r=2.4-t*1.6;
+    el("circle",{cx:xl,cy:y,r,fill:col},s); el("circle",{cx:xr,cy:y,r,fill:col},s); }
+  for(let i=0;i<10;i++){ const t=i/10; const y=by-2-(by-2-vy)*t; const c=el("circle",{cx:vx,cy:y,r:2-t*1.2,fill:"#FFFFFF",class:"strobe"},s); c.style.animationDelay=((9-i)*0.1)+"s"; }
+  for(let i=1;i<=6;i++){ const t=i/16; const y=by-(by-vy)*t; const off=(1-t)*14+3; el("rect",{x:vx-off-5,y:y-1,width:5,height:1.6,fill:"#F3EEDC"},s); el("rect",{x:vx+off,y:y-1,width:5,height:1.6,fill:"#F3EEDC"},s); }
+  for(let x=tl;x<=tr;x+=4.5) el("circle",{cx:x,cy:vy+1,r:1.2,fill:"#4CD28A"},s);
+  const defs=el("defs",{},s); const g=el("linearGradient",{id:"fg",x1:0,y1:0,x2:0,y2:1},defs); el("stop",{offset:"0","stop-color":"#0B1014","stop-opacity":"0.95"},g); el("stop",{offset:"0.45","stop-color":"#0B1014","stop-opacity":"0.7"},g); el("stop",{offset:"1","stop-color":"#0B1014","stop-opacity":"0"},g);
+  el("rect",{x:0,y:0,width:300,height:300,fill:"url(#fg)"},s); d.appendChild(s); return d; }
+/* ===================== ESCENAS ===================== */
+const WIDGETS={
+  /* --- ILS --- */
+  ils(elm){
+    elm.innerHTML=`<div class="two"><div><div class="field"><label>Desviación lateral (puntos)</label><input type="range" id="lat" min="-2.5" max="2.5" step="0.1" value="0.8"><output id="latv"></output></div><div class="field"><label>Desviación vertical (puntos)</label><input type="range" id="ver" min="-2.5" max="2.5" step="0.1" value="-0.6"><output id="verv"></output></div><div class="exp" id="x"></div></div><div class="scene" id="sc"></div></div>`;
+    const s=svgBox(560,420); elm.querySelector("#sc").appendChild(s);
+    // planta: localizador
+    lbl(s,16,22,"PLANTA · LOCALIZADOR",{size:9,fill:"#D8B25E"});
+    el("rect",{x:470,y:70,width:70,height:16,fill:"#15181E",stroke:"#2E343D"},s); el("rect",{x:544,y:74,width:4,height:8,fill:"#D8B25E"},s);
+    el("polygon",{points:"544,78 40,30 40,126",fill:"rgba(216,178,94,0.08)",stroke:"#8F7640","stroke-dasharray":"4 4"},s); el("line",{x1:544,y1:78,x2:40,y2:78,stroke:"#D8B25E","stroke-width":1},s);
+    const pl1=plane(s,200,78,0);
+    // perfil: senda
+    lbl(s,16,172,"PERFIL · SENDA DE PLANEO 3°",{size:9,fill:"#D8B25E"});
+    el("line",{x1:40,y1:270,x2:540,y2:270,stroke:"#3A414B"},s); el("rect",{x:470,y:266,width:70,height:5,fill:"#15181E",stroke:"#2E343D"},s); el("rect",{x:486,y:258,width:3,height:10,fill:"#D8B25E"},s);
+    el("polygon",{points:"487,268 40,190 40,236",fill:"rgba(216,178,94,0.08)",stroke:"#8F7640","stroke-dasharray":"4 4"},s); el("line",{x1:487,y1:268,x2:40,y2:213,stroke:"#D8B25E","stroke-width":1},s);
+    const pl2=plane(s,200,233,-8);
+    // PFD mini
+    lbl(s,16,318,"LO QUE VE EL PILOTO EN EL PFD",{size:9,fill:"#D8B25E"});
+    el("rect",{x:40,y:330,width:200,height:80,fill:"#0B1014",stroke:"#3A414B"},s);
+    [ -2,-1,1,2].forEach(k=>{ el("circle",{cx:140+k*30,cy:395,r:3,fill:"none",stroke:"#9AA3AD"},s); el("circle",{cx:222,cy:370+k*12,r:3,fill:"none",stroke:"#9AA3AD"},s); });
+    el("line",{x1:140,y1:388,x2:140,y2:402,stroke:"#F2C94C"},s); el("line",{x1:215,y1:370,x2:229,y2:370,stroke:"#F2C94C"},s);
+    const dLoc=el("polygon",{points:"0,-6 6,0 0,6 -6,0",fill:"#D96AD1",transform:"translate(140 395)"},s); const dGs=el("polygon",{points:"0,-6 6,0 0,6 -6,0",fill:"#D96AD1",transform:"translate(222 370)"},s);
+    lbl(s,260,350,"Rombo abajo = eje a la izquierda",{size:10}); lbl(s,260,366,"→ el piloto vira hacia el rombo",{size:10}); lbl(s,260,390,"Rombo arriba = senda arriba",{size:10}); lbl(s,260,406,"→ el avión está bajo: reducir descenso",{size:10});
+    const f=()=>{ const lat=+elm.querySelector("#lat").value, ver=+elm.querySelector("#ver").value; elm.querySelector("#latv").textContent=(lat>0?"+":"")+lat.toFixed(1); elm.querySelector("#verv").textContent=(ver>0?"+":"")+ver.toFixed(1);
+      pl1.setAttribute("transform",`translate(200 ${78-lat*18}) rotate(0)`); pl2.setAttribute("transform",`translate(200 ${233-ver*16}) rotate(-8)`);
+      dLoc.setAttribute("transform",`translate(${140-lat*30} 395)`); dGs.setAttribute("transform",`translate(222 ${370-ver*12})`);
+      const L=Math.abs(lat)<0.3?"en el eje":(lat>0?"a la derecha del eje":"a la izquierda del eje"), V=Math.abs(ver)<0.3?"en la senda":(ver>0?"por encima de la senda":"por debajo de la senda");
+      elm.querySelector("#x").innerHTML=`<b>Avión ${L}, ${V}.</b> ${Math.abs(lat)>=1||Math.abs(ver)>=1?"<i>Más de un punto de desviación en corta final es criterio de frustrada en CAT II/III.</i> ":"Dentro del pasillo. "}El rombo del PFD señala dónde está el haz: el piloto vuela <i>hacia</i> el rombo. Un punto lateral son unos 0,5° de haz; un punto vertical, 0,35°.`; };
+    elm.querySelectorAll("input").forEach(i=>i.oninput=f); f();
+  },
+  /* --- LUCES --- */
+  lights(elm){
+    const info={all:["Toda la pista","Todo encendido, como se ve de noche con buena visibilidad. Toca cada sistema para aislarlo; arriba puedes cambiar el tipo de sistema de aproximación (ALS)."],
+      app:["ALS · Approach Lighting System","Las luces de aproximación. Según el aeropuerto: <i>Calvert</i> (eje + cinco barras transversales, 900 m; OACI, Europa y Latinoamérica), <i>ALSF-2</i> (2.400 ft con barras rojas laterales en los últimos 1.000 ft: el estándar CAT II/III en EE. UU.), <i>ALSF-1</i> (2.400 ft con cruceta a 1.000 ft y barra roja antes del umbral: CAT I de alta intensidad) y <i>MALSR</i> (1.400 ft de intensidad media con destellos: CAT I). Dan la referencia lateral y de alabeo antes de ver la pista."],
+      strobe:["SFL / RAIL · estroboscópicas","Sequenced Flashing Lights: destellos blancos que corren hacia la pista a dos por segundo. En el MALSR se llaman RAIL (Runway Alignment Indicator Lights). Se ven desde lejos y <i>señalan la dirección</i>; se apagan si deslumbran en corta final."],
+      thr:["Umbral","Fila verde que marca dónde empieza la pista utilizable. <i>Nunca se toca antes del verde</i>."],
+      end:["Fin de pista","Fila roja: aquí se acaba. Al aproximar, se ve rojo del lado lejano."],
+      edge:["HIRL / MIRL / LIRL · bordes","Runway Edge Lights (RL): blancas a lo largo de la pista, <i>amarillas en los últimos 600 m</i>. HIRL es alta intensidad (obligatorio para CAT II/III y LVTO), MIRL media, LIRL baja. En la carta: 'HIRL RWY 13L/31R'."],
+      cl:["CL / RCLL · eje de pista","Runway Centerline Lights: luces blancas cada 15 m. Entre 900 y 300 m del final alternan rojo y blanco; los últimos 300 m son rojas. Son <i>luces</i>, no pintura: guían el rollout en CAT III y son requisito para LVTO 125 m."],
+      rclm:["RCLM · marcas de eje (pintura)","Runway Centerline Markings: la línea blanca discontinua pintada, más las 'teclas de piano' del umbral y las barras del punto de contacto. De día con buena visibilidad bastan; en niebla <i>no se ven</i>: por eso en CAT II/III mandan las luces, no las marcas."],
+      tdz:["TDZL · zona de toma","Touchdown Zone Lights: barras blancas a ambos lados del eje los primeros 900 m. Marcan <i>dónde debe tocar el avión</i>; sin TDZL no hay CAT II/III estándar."],
+      papi:["PAPI","Precision Approach Path Indicator: cuatro luces a la izquierda de la zona de toma. Dos blancas y dos rojas = en la senda; más blancas = alto; más rojas = bajo. Referencia visual de senda cuando ya se ve la pista."],
+      reil:["REIL","Runway End Identifier Lights: dos destellos blancos sincronizados a los lados del umbral. Ayudan a encontrar el umbral entre otras luces (ciudad, calles). No es un sistema de precisión."],
+      twy:["Calle de rodaje","Bordes azules y eje verde. En LVP se siguen las verdes; en algunos aeropuertos se encienden tramo a tramo para guiarte (follow-the-greens)."],
+      stop:["Stop bar","Barra roja transversal en el punto de espera. <i>Encendida, no se cruza aunque ATC lo autorice de palabra</i>: primero se apaga. En LVP se usa el punto de espera CAT II/III, más lejos, para no entrar en el área sensible del ILS."]};
+    const alsTxt={calvert:"Calvert: ejemplo de sistema de aproximación con eje y barras transversales. La configuración real y su longitud se verifican en el AIP/carta de cada pista.",alsf2:"ALSF-2: sistema de aproximación de alta intensidad utilizado en pistas de precisión. El dibujo es didáctico; la elegibilidad CAT II/III depende de la certificación y estado de la pista, no solo del nombre del ALS.",alsf1:"ALSF-1: configuración de alta intensidad mostrada aquí como referencia visual. La categoría utilizable siempre se confirma en la documentación del aeródromo.",malsr:"MALSR: sistema de intensidad media con luces de alineación. El gráfico es educativo y no sustituye la carta/AIP de una pista real."};
+    elm.innerHTML=`<div class="row" style="margin-bottom:10px"><div class="field"><label>Sistema de aproximación (ALS)</label><div class="toggle" id="als"><button class="tg on" data-v="calvert">Calvert · 900 m</button><button class="tg" data-v="alsf2">ALSF-2 · CAT II/III</button><button class="tg" data-v="alsf1">ALSF-1 · CAT I</button><button class="tg" data-v="malsr">MALSR · CAT I</button></div></div></div><div class="scene" id="sc"></div><div class="lgd" id="lg"></div><div class="exp" id="x"></div>`;
+    const R=runwayTop(); elm.querySelector("#sc").appendChild(R.svg);
+    elm.querySelectorAll("#als .tg").forEach(b=>b.onclick=()=>{ elm.querySelectorAll("#als .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); R.G._drawALS(b.dataset.v); elm.querySelector("#x").innerHTML=`<b>${b.textContent}</b>${alsTxt[b.dataset.v]}`; });
+    const lg=elm.querySelector("#lg"); const colors={all:"#D8B25E",app:"#F3EEDC",strobe:"#FFFFFF",thr:"#4CD28A",end:"#E0514A",edge:"#F2C94C",cl:"#F3EEDC",rclm:"#6B6F76",tdz:"#F3EEDC",papi:"#E0514A",reil:"#FFFFFF",twy:"#5DA9FF",stop:"#E0514A"};
+    Object.keys(info).forEach(k=>{ const b=document.createElement("button"); b.className="tg"+(k==="all"?" on":""); b.innerHTML=`<span class="sw" style="background:${colors[k]}"></span>${info[k][0].split(" · ")[0]}`; b.onclick=()=>{ lg.querySelectorAll(".tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); Object.keys(R.G).forEach(g=>{ if(g[0]==="_") return; R.G[g].style.opacity=(k==="all"||g===k||(k==="app"&&g==="strobe"))?1:0.12; }); elm.querySelector("#x").innerHTML=`<b>${info[k][0]}</b>${info[k][1]}`; }; lg.appendChild(b); });
+    elm.querySelector("#x").innerHTML=`<b>${info.all[0]}</b>${info.all[1]}`;
+  },
+  /* --- NIEBLA DESDE CABINA --- */
+  fog(elm){
+    elm.innerHTML=`<div class="two"><div><div class="field"><label>RVR en zona de toma (m)</label><input type="range" id="rvr" min="50" max="1500" step="25" value="300"><output id="rvrv"></output></div><div class="field"><label>Categoría que estás volando</label><div class="toggle" id="cat"><button class="tg" data-v="1">CAT I</button><button class="tg on" data-v="2">CAT II</button><button class="tg" data-v="3">CAT III con DH</button></div></div><div class="exp" id="x"></div></div><div class="scene" id="sc"></div></div>`;
+    const W=560,H=360,s=svgBox(W,H); elm.querySelector("#sc").appendChild(s); const vx=280, vy=150, gy=350;
+    el("rect",{x:0,y:0,width:W,height:vy,fill:"#070A0D"},s); el("rect",{x:0,y:vy,width:W,height:H-vy,fill:"#0B0E12"},s); el("polygon",{points:`${vx-95*1.0},${gy} ${vx+95},${gy} ${vx+6},${vy+28} ${vx-6},${vy+28}`,fill:"#0E1116",stroke:"#1A1E25"},s);
+    // perspectiva: distancia d (m) → y = vy + (gy-vy)*k/(k+d)
+    const K=120; const py=d=>vy+(gy-vy)*K/(K+d), sx=(d,off)=>vx+off*(gy-py(d))/(gy-vy)*1.0;
+    const lights=[]; // {d, x, y, r, col, type}
+    const add=(d,off,col,type,r)=>{ const y=py(d), x=sx(d,off); const c=el("circle",{cx:x,cy:y,r:r||Math.max(1.2,5-d/220),fill:col},s); lights.push({d,c,type}); };
+    // aproximación: eje cada 30 m de 900 a 30 (distancia desde avión = d+150 m hasta umbral... avión a 300 m antes del umbral en DH 100 ft)
+    const D0=300; // avión 300 m antes del umbral (aprox DH 100 ft)
+    for(let m=900;m>=30;m-=30){ const d=m-D0; if(d>5) add(d,0,"#F3EEDC","app"); }
+    [150,300,450,600,750].forEach((m,i)=>{ const d=m-D0; if(d>5){ for(let k=-3-i;k<=3+i;k++) if(k) add(d,k*18,"#F3EEDC","bar"); } });
+    for(let k=-6;k<=6;k++) add(D0,k*16,"#4CD28A","thr");
+    for(let m=60;m<=900;m+=60){ const d=D0+m; [-30,-24,24,30].forEach(o=>add(d,o,"#F3EEDC","tdz")); }
+    for(let m=0;m<=2400;m+=60){ const d=D0+m; add(d,-95,m>=1800?"#F2C94C":"#F3EEDC","edge"); add(d,95,m>=1800?"#F2C94C":"#F3EEDC","edge"); }
+    for(let m=15;m<=2400;m+=15){ const d=D0+m; add(d,0,"#F3EEDC","cl",Math.max(0.9,3.4-d/500)); }
+    // niebla: capa con gradiente desde el horizonte
+    const defs=el("defs",{},s); const g=el("linearGradient",{id:"fog",x1:0,y1:0,x2:0,y2:1},defs); const st1=el("stop",{offset:"0","stop-color":"#3A414B","stop-opacity":"1"},g); const st2=el("stop",{offset:"1","stop-color":"#3A414B","stop-opacity":"0"},g);
+    const fog=el("rect",{x:0,y:0,width:W,height:H,fill:"url(#fog)"},s);
+    lbl(s,16,22,"VISTA DESDE LA CABINA A 100 FT",{size:9,fill:"#D8B25E"}); const cnt=lbl(s,W-16,22,"",{size:10,anchor:"end",fill:"#FFFFFF"});
+    let cat=2; elm.querySelectorAll("#cat .tg").forEach(b=>b.onclick=()=>{ elm.querySelectorAll("#cat .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); cat=+b.dataset.v; f(); });
+    const f=()=>{ const rvr=+elm.querySelector("#rvr").value; elm.querySelector("#rvrv").textContent=rvr+" m";
+      let app=0,bars=0,thr=0,cl=0; lights.forEach(L=>{ const vis=L.d<=rvr; const fade=vis?Math.max(0.15,1-L.d/(rvr*1.15)):0; L.c.setAttribute("opacity",fade); if(vis){ if(L.type==="app") app++; if(L.type==="bar") bars++; if(L.type==="thr") thr++; if(L.type==="cl") cl++; } });
+      const horizonY=py(rvr); st2.setAttribute("offset", Math.min(1,Math.max(0.05,(horizonY-vy)/(H-vy)+0.08)).toFixed(2)); st1.setAttribute("stop-opacity",rvr<1200?"1":"0.6");
+      cnt.textContent=`${app} luces de eje de aproximación · ${bars>0?"barras laterales sí":"sin barras"} · umbral ${thr?"sí":"no"}`;
+      const need={1:[550,"una referencia visual CAT I válida"],2:[300,"tres luces consecutivas más un elemento lateral"],3:[175,"las referencias exigidas por la operación CAT III del ejercicio"]}[cat];
+      const refOk = cat===1 ? (app>=1||thr>0) : cat===2 ? (app>=3&&bars>0) : (app>=1||cl>=1||thr>0);
+      const legal=rvr>=need[0];
+      elm.querySelector("#x").innerHTML=`<b>${legal?(refOk?"El escenario cumple RVR y referencia visual":"RVR del escenario cumple, pero falta la referencia visual exigida"):"RVR "+rvr+" m por debajo del mínimo asignado de "+need[0]+" m"}</b>Para CAT ${["I","II","III"][cat-1]} este ejercicio usa ${need[1]}. <i>Los mínimos CAT III son específicos de sistema/pista/aprobación; 175 m no es un valor universal.</i> Lo que ves es una simulación didáctica de alcance visual.`; };
+    elm.querySelector("#rvr").oninput=f; f();
+  },
+  /* --- PERFIL DE APROXIMACIÓN --- */
+  profile(elm){
+    elm.innerHTML=`<div class="source-note"><b>Matriz de entrenamiento.</b> CAT I 550/200 y CAT II 300/100 representan límites inferiores usados en este ejemplo. Las dos opciones CAT III usan supuestos 175/50 y 75/sin DH para practicar decisiones; no son universales.</div><div class="row"><div class="field"><label>Categoría / supuesto</label><div class="toggle" id="cat"><button class="tg" data-v="1">CAT I · 200 ft</button><button class="tg on" data-v="2">CAT II · 100 ft</button><button class="tg" data-v="3s">CAT III · ejercicio 50 ft</button><button class="tg" data-v="3d">CAT III · ejercicio sin DH</button></div></div><div class="field"><label>RVR TDZ (m)</label><input type="range" id="rvr" min="50" max="800" step="25" value="300"><output id="rvrv"></output></div></div>
+      <div class="scene" id="sc"></div><div class="row" style="margin-top:12px;align-items:center"><button class="btn primary" id="play">Reproducir aproximación</button><span class="ra" id="ra">RA 1.000</span><span class="fma" id="fma">CAT 2</span></div><div class="exp" id="x"></div>`;
+    const W=960,H=330,s=svgBox(W,H); elm.querySelector("#sc").appendChild(s); const gy=280, xt=700; const hy=h=>gy-h*0.2, hx=h=>120+(1000-h)/1000*(xt-120);
+    el("line",{x1:40,y1:gy,x2:940,y2:gy,stroke:"#3A414B"},s); el("rect",{x:xt,y:gy-4,width:240,height:5,fill:"#15181E",stroke:"#2E343D"},s);
+    for(let x=xt-180;x<xt;x+=12) el("circle",{cx:x,cy:gy-1,r:1.5,fill:"#F3EEDC"},s); for(let y=gy-8;y<=gy+4;y+=4) el("circle",{cx:xt,cy:y,r:1.4,fill:"#4CD28A"},s);
+    el("line",{x1:hx(1000),y1:hy(1000),x2:xt,y2:gy-4,stroke:"#D8B25E","stroke-width":1,"stroke-dasharray":"5 4"},s);
+    // niebla
+    const fog=el("rect",{x:40,y:gy-60,width:900,height:60,fill:"rgba(70,78,90,0.45)"},s);
+    // líneas de referencia
+    const mk=(h,txt,col)=>{ el("line",{x1:40,y1:hy(h),x2:940,y2:hy(h),stroke:col||"#2E343D","stroke-dasharray":"3 5"},s); lbl(s,44,hy(h)-4,txt,{size:9,fill:col||"#9AA3AD"}); };
+    mk(1000,"1.000 ft · approach ban: último RVR válido"); const dhLine=el("line",{x1:40,y1:hy(100),x2:940,y2:hy(100),stroke:"#D8B25E"},s); const dhTxt=lbl(s,44,hy(100)-4,"DH 100 ft",{size:9,fill:"#D8B25E"});
+    const ahLine=el("line",{x1:40,y1:hy(100),x2:940,y2:hy(100),stroke:"#7FBF8E","stroke-dasharray":"2 4",opacity:0},s); const ahTxt=lbl(s,860,hy(100)-4,"AH 100 ft",{size:9,fill:"#7FBF8E"}); ahTxt.setAttribute("opacity",0);
+    const pl=plane(s,hx(1000),hy(1000),8); const msg=lbl(s,480,40,"",{size:13,anchor:"middle",fill:"#FFFFFF"});
+    let cat="2", raf=null;
+    const P={ "1":{dh:200,rvr:550,n:"CAT 1",ref:"luces de aproximación o pista"},"2":{dh:100,rvr:300,n:"CAT 2",ref:"tres luces seguidas más una lateral"},"3s":{dh:50,rvr:175,n:"CAT 3 SINGLE",ref:"una luz de eje"},"3d":{dh:0,rvr:75,n:"CAT 3 DUAL",ref:"ninguna: el avión aterriza solo"} };
+    elm.querySelectorAll("#cat .tg").forEach(b=>b.onclick=()=>{ elm.querySelectorAll("#cat .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); cat=b.dataset.v; setup(); });
+    const setup=()=>{ const p=P[cat]; const rvr=+elm.querySelector("#rvr").value; elm.querySelector("#rvrv").textContent=rvr+" m"; elm.querySelector("#fma").textContent=p.n; elm.querySelector("#fma").className="fma";
+      if(p.dh){ dhLine.setAttribute("y1",hy(p.dh)); dhLine.setAttribute("y2",hy(p.dh)); dhTxt.setAttribute("y",hy(p.dh)-4); dhTxt.textContent="DH "+p.dh+" ft"; dhLine.setAttribute("opacity",1); dhTxt.setAttribute("opacity",1); ahLine.setAttribute("opacity",0); ahTxt.setAttribute("opacity",0); }
+      else { dhLine.setAttribute("opacity",0); dhTxt.setAttribute("opacity",0); ahLine.setAttribute("opacity",1); ahTxt.setAttribute("opacity",1); }
+      const top=Math.min(900,Math.max(60,900-rvr)); fog.setAttribute("y",hy(top*0.25)); fog.setAttribute("height",gy-hy(top*0.25)); // niebla más alta cuanto menor RVR (ilustrativo)
+      pl.setAttribute("transform",`translate(${hx(1000)} ${hy(1000)}) rotate(8)`); elm.querySelector("#ra").textContent="RA 1.000"; msg.textContent="";
+      elm.querySelector("#x").innerHTML=`<b>${p.n}: supuesto del ejercicio RVR ${p.rvr} m, ${p.dh?"DH "+p.dh+" ft":"sin DH; AH según configuración"}.</b> Referencia en la decisión: ${p.ref}. RVR actual ${rvr} m: ${rvr>=p.rvr?"<i>cumple el valor asignado al ejercicio</i>":"<i>queda por debajo del valor asignado: aplica approach ban</i>"}. Para una operación real usa el mínimo aprobado de la combinación pista/aeronave/tripulación/operador.`; };
+    elm.querySelector("#rvr").oninput=setup; setup();
+    elm.querySelector("#play").onclick=()=>{ if(raf) cancelAnimationFrame(raf); const p=P[cat], rvr=+elm.querySelector("#rvr").value; const legal=rvr>=p.rvr; const t0=performance.now(); const dur=7000; let decided=false;
+      const tick=t=>{ const u=Math.min(1,(t-t0)/dur); let h=1000-u*1000; if(!legal&&h<1000){ h=1000; msg.textContent="RVR bajo el mínimo: no se desciende por debajo de 1.000 ft"; elm.querySelector("#ra").textContent="RA 1.000"; return; }
+        const dec=p.dh||0; if(h<=dec&&!decided){ decided=true; const see=rvr>=p.rvr; msg.textContent= p.dh? (see?"DH: referencias visuales → CONTINUAR":"DH: sin referencias → GO AROUND") : "Sin DH: el avión aterriza solo (fail-operational)"; }
+        if(decided&&p.dh&&rvr<p.rvr){ const hh=dec+(u-(1-dec/1000))*2500; pl.setAttribute("transform",`translate(${hx(Math.max(0,h))} ${hy(Math.min(900,hh))}) rotate(-10)`); elm.querySelector("#ra").textContent="RA "+Math.round(Math.min(900,hh)); }
+        else { pl.setAttribute("transform",`translate(${hx(h)} ${hy(h)}) rotate(${h<5?0:8})`); elm.querySelector("#ra").textContent="RA "+Math.round(h); }
+        if(h>1000-1&&u>0){} if(u<1) { raf=requestAnimationFrame(tick); rafs.push(raf); } else if(!decided||p.dh===0||rvr>=p.rvr) msg.textContent=(p.dh?"Aterrizado":"Autoland: LAND · FLARE · ROLL OUT"); };
+      raf=requestAnimationFrame(tick); rafs.push(raf); };
+  },
+  /* --- LVP --- */
+  lvp(elm){
+    elm.innerHTML=`<div class="row" style="align-items:center"><div class="field" style="flex:0 0 auto"><label>Procedimientos de baja visibilidad</label><div class="toggle" id="t"><button class="tg on" data-v="0">LVP no</button><button class="tg" data-v="1">LVP en vigor</button></div></div><div class="field"><label>RVR (m)</label><input type="range" id="rvr" min="100" max="1500" step="25" value="800"><output id="rvrv"></output></div></div><div class="scene" id="sc"></div><div class="exp" id="x"></div>`;
+    const R=runwayTop({ils:true,rvr:true}); elm.querySelector("#sc").appendChild(R.svg); const s=R.svg;
+    // áreas críticas/sensibles
+    const crit=el("g",{opacity:0},s); el("rect",{x:R.x1-60,y:R.yc-70,width:150,height:140,fill:"rgba(224,81,74,0.14)",stroke:"#E0514A","stroke-dasharray":"4 4"},crit); lbl(s,R.x1-56,R.yc-76,"área sensible LOC",{size:9,fill:"#E0514A"}).setAttribute("class","critlbl");
+    el("rect",{x:R.x0+20,y:R.yc+R.hw+4,width:150,height:60,fill:"rgba(224,81,74,0.14)",stroke:"#E0514A","stroke-dasharray":"4 4"},crit); lbl(s,R.x0+24,R.yc+R.hw+78,"área sensible GS",{size:9,fill:"#E0514A"}).setAttribute("class","critlbl");
+    const hold=el("g",{opacity:0},s); el("rect",{x:626,y:44,width:28,height:16,fill:"rgba(242,201,76,0.25)"},hold); const car=el("g",{opacity:0},s); el("rect",{x:596,y:46,width:14,height:8,fill:"#F2C94C"},car); lbl(s,560,52,"follow-me",{size:9,fill:"#F2C94C"}).setAttribute("class","carlbl");
+    const banner=lbl(s,480,22,"",{size:12,anchor:"middle",fill:"#D8B25E"}); const rvrTxt=[lbl(s,R.x0+60,R.yc+R.hw+44,"",{size:9,anchor:"middle"}),lbl(s,(R.x0+R.x1)/2,R.yc+R.hw+44,"",{size:9,anchor:"middle"}),lbl(s,R.x1-60,R.yc+R.hw+44,"",{size:9,anchor:"middle"})];
+    const pl2=plane(s,120,R.yc,0); let lvp=0;
+    elm.querySelectorAll("#t .tg").forEach(b=>b.onclick=()=>{ elm.querySelectorAll("#t .tg").forEach(x=>x.classList.remove("on")); b.classList.add("on"); lvp=+b.dataset.v; f(); });
+    const f=()=>{ const rvr=+elm.querySelector("#rvr").value; elm.querySelector("#rvrv").textContent=rvr+" m"; const should=rvr<550; crit.setAttribute("opacity",lvp?1:0); hold.setAttribute("opacity",lvp?1:0); car.setAttribute("opacity",lvp?1:0); s.querySelectorAll(".critlbl,.carlbl").forEach(t=>t.setAttribute("opacity",lvp?1:0)); R.G.stop.style.opacity=lvp?1:0.35; R.G.strobe.style.opacity=lvp?1:0.5;
+      rvrTxt.forEach((t,i)=>t.textContent=[rvr,Math.max(75,rvr-50),Math.max(75,rvr-100)][i]+" m"); banner.textContent=lvp?"LVP IN FORCE · áreas sensibles protegidas · rutas según AIP":(should?"Condición LVO del ejercicio sin LVP: operación limitada":"Operación normal");
+      elm.querySelector("#x").innerHTML= lvp? `<b>Con LVP en vigor</b> se protegen las <i>áreas críticas/sensibles</i> y se aplican rutas/restricciones publicadas para reducir incursiones e interferencias. Stop bars y ayudas de superficie se usan según el aeródromo. La capacidad suele disminuir por las separaciones adicionales.` : (should? `<b>RVR ${rvr} m en condición LVO del ejercicio y LVP no activadas.</b> Si la operación pretendida requiere LVP, no debe realizarse hasta que estén en vigor. Consulta AIP/ATIS y estado de ayudas; no asumas una categoría por el avión.` : `<b>Operación normal.</b> Cada aeródromo define sus criterios de preparación, inicio y terminación de LVP. Baja el RVR y actívalas para ver las protecciones conceptuales.`); };
+    elm.querySelector("#rvr").oninput=f; f();
+    // avión rodando en bucle
+    let t0=performance.now(); const tick=t=>{ const u=((t-t0)/9000)%1; pl2.setAttribute("transform",`translate(${120+u*180} ${R.yc}) rotate(0)`); const r=requestAnimationFrame(tick); rafs.push(r); }; rafs.push(requestAnimationFrame(tick));
+  },
+  /* --- CORTA FINAL CON SORPRESA --- */
+  final(elm){
+    const note=`<div class="source-note"><b>Escenario Airbus didáctico.</b> Las etiquetas CAT 3 DUAL/SINGLE y AUTOLAND imitan una lógica de entrenamiento. Los mínimos 175/50 y las acciones exactas deben confirmarse en AFM/FCOM/QRH/OM de la aeronave real.</div>`;
+    const EV=[{at:800,fma:"CAT 3 SINGLE",cls:"deg",rvr:200,q:"A 800 ft el FMA pasa de CAT 3 DUAL a CAT 3 SINGLE. RVR 200 m.",o:["GO AROUND","CONTINUE, ajustando a DH 50 ft"],a:1,why:"En la matriz didáctica asignada, CAT 3 SINGLE usa DH 50 ft / RVR 175 m y el RVR 200 m lo cubre. En línea se usa el mínimo aprobado de esa aeronave y operador."},
+      {at:600,fma:"CAT 2",cls:"deg",rvr:200,q:"A 600 ft el FMA cae a CAT 2. RVR 200 m.",o:["CONTINUE","GO AROUND"],a:1,why:"CAT II no puede operar por debajo de su mínimo aplicable; en este ejercicio se usa 300 m y hay 200 m. La degradación deja de cubrir las condiciones y exige aplicar el procedimiento de discontinuación/go-around."},
+      {at:150,fma:"AUTOLAND",cls:"bad",rvr:200,q:"A 150 ft se enciende la luz roja AUTOLAND, sin referencias visuales.",o:["GO AROUND","CONTINUE"],a:0,why:"En este escenario la falla ocurre por encima de la altura de alerta asumida y el procedimiento del ejercicio exige go-around. La altura y acción real son específicas de la configuración/FCOM."},
+      {at:80,fma:"AUTOLAND",cls:"bad",rvr:200,q:"A 80 ft se enciende AUTOLAND. Se ven las luces de eje.",o:["CONTINUE con referencias visuales","GO AROUND"],a:0,why:"En este escenario, por debajo de la AH asumida y con referencias visuales suficientes, la acción del ejercicio es continuar. La transición/autoland real depende de la certificación y SOP."}];
+    elm.innerHTML=note+`<div class="scene" id="sc"></div><div class="row" style="margin-top:12px;align-items:center"><button class="btn primary" id="play">Reproducir</button><span class="ra" id="ra">RA 1.000</span><span class="fma" id="fma">CAT 3 DUAL</span><span id="score" style="font-size:12px;color:var(--muted)"></span></div><div id="qa"></div>`;
+    const W=960,H=240,s=svgBox(W,H); elm.querySelector("#sc").appendChild(s); const gy=200, xt=760; const hy=h=>gy-h*0.16, hx=h=>100+(1000-h)/1000*(xt-100);
+    el("line",{x1:40,y1:gy,x2:940,y2:gy,stroke:"#3A414B"},s); el("rect",{x:xt,y:gy-4,width:180,height:5,fill:"#15181E",stroke:"#2E343D"},s); el("line",{x1:hx(1000),y1:hy(1000),x2:xt,y2:gy-4,stroke:"#D8B25E","stroke-dasharray":"5 4"},s);
+    [[1000,"1.000 ft"],[100,"AH 100 ft"],[50,"DH 50 ft"]].forEach(([h,t])=>{ el("line",{x1:40,y1:hy(h),x2:940,y2:hy(h),stroke:"#2E343D","stroke-dasharray":"3 5"},s); lbl(s,44,hy(h)-4,t,{size:9}); });
+    const pl=plane(s,hx(1000),hy(1000),8); let i=0, score=0, raf=null;
+    const run=()=>{ if(i>=EV.length){ elm.querySelector("#qa").innerHTML=`<div class="exp"><b>Cuatro decisiones, ${score} correctas.</b> La regla transferible: ante una degradación, identifica la nueva capacidad y compárala con el mínimo aprobado antes de decidir. Bajo/encima de AH o DH no se aplica una receta universal: sigue AFM/FCOM/QRH/OM de la configuración.</div>`; return; }
+      const ev=EV[i]; elm.querySelector("#fma").textContent="CAT 3 DUAL"; elm.querySelector("#fma").className="fma"; elm.querySelector("#qa").innerHTML=""; const t0=performance.now();
+      const tick=t=>{ const u=Math.min(1,(t-t0)/4000); const h=1000-u*(1000-ev.at); pl.setAttribute("transform",`translate(${hx(h)} ${hy(h)}) rotate(8)`); elm.querySelector("#ra").textContent="RA "+Math.round(h);
+        if(u<1){ raf=requestAnimationFrame(tick); rafs.push(raf); } else { const f=elm.querySelector("#fma"); f.textContent=ev.fma; f.className="fma "+ev.cls; ask(ev); } };
+      raf=requestAnimationFrame(tick); rafs.push(raf); };
+    const ask=ev=>{ const qa=elm.querySelector("#qa"); qa.innerHTML=`<p class="prompt" style="font-size:17px;margin:14px 0 10px">${ev.q}</p><div class="opts" id="o">${ev.o.map((o,j)=>`<button class="opt" data-i="${j}"><span class="k">${"AB"[j]}</span><span>${o}</span></button>`).join("")}</div><div class="fb" id="fb"></div><div class="row" style="margin-top:12px"><button class="btn" id="nx" disabled>Siguiente evento</button></div>`;
+      qa.querySelectorAll("#o .opt").forEach(b=>b.onclick=()=>{ const j=+b.dataset.i; qa.querySelectorAll("#o .opt").forEach((x,k)=>{ x.disabled=true; x.classList.add("locked"); if(k===ev.a) x.classList.add("right"); else if(k===j) x.classList.add("wrong"); }); const ok=j===ev.a; if(ok) score++; elm.querySelector("#score").textContent=`${score} correctas`; const fb=qa.querySelector("#fb"); fb.className="fb show "+(ok?"ok":"ko"); fb.innerHTML=`<b>${ok?"Correcto.":"No es esa."}</b> ${ev.why}`; qa.querySelector("#nx").disabled=false; autoNext(qa.querySelector("#nx"),5); });
+      qa.querySelector("#nx").onclick=()=>{ i++; run(); }; };
+    elm.querySelector("#play").onclick=()=>{ i=0; score=0; run(); elm.querySelector("#play").textContent="Reiniciar"; };
+  }
+};
+
+/* ===================== NAV ===================== */
+nextB.onclick=()=>{ cancelAuto(); const s=STEPS[idx]; if(s.t==="results"){ idx=0; for(const k in answers) delete answers[k]; go(); return; } if(idx<STEPS.length-1){ idx++; go(); } };
+prevB.onclick=()=>{ cancelAuto(); if(idx>0){ idx--; go(); } };
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT") return; if(e.key==="ArrowRight"&&!nextB.disabled) nextB.click(); if(e.key==="ArrowLeft") prevB.click(); });
+go();
+</script>
+<footer style="padding:18px 24px;border-top:1px solid #232830;color:#5F6873;font:11px Poppins,Arial,sans-serif">Veyra Pilot Intelligence · Low Visibility Operations (LVO) · Material formativo; no sustituye AIP/NOTAM, AFM/FCOM/QRH, MEL ni Manual de Operaciones.</footer>
+</body>
+</html>
