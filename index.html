@@ -172,6 +172,8 @@ main{max-width:1180px;}
 .heroPrimary,.heroSecondary{border-radius:0;text-transform:uppercase;letter-spacing:.12em;font-size:12px;padding:18px 34px;border:1px solid var(--champagne);}
 .heroPrimary{background:linear-gradient(135deg,#e7c47c,#b88a3d);color:#08090b;box-shadow:0 16px 34px rgba(200,164,93,.18);}
 .heroSecondary{background:rgba(0,0,0,.35);color:#fff;}
+.appStoreDownload{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:800;max-width:100%;line-height:1.5;gap:12px;}
+.appStoreDownload:focus-visible{outline:2px solid #f0d58e;outline-offset:4px;}
 .heroPrimary span,.heroSecondary span{margin-left:18px;font-size:18px;}
 .microTagline{text-transform:uppercase;letter-spacing:.38em;color:#f4f0e8;font-size:12px;margin-top:20px;}
 .featureStrip{max-width:1180px;margin:28px auto 34px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
@@ -1655,11 +1657,12 @@ linear-gradient(145deg,#07111f,#0d2233)}
         <div class="heroGoldLine"></div>
         <p class="heroLead">Una plataforma modular para pilotos, escuelas, aerolíneas y Training Centers. Formación, evaluación, asistentes y analítica conectados a un mismo historial de desarrollo.</p>
         <div class="heroActions">
+          <a class="heroSecondary appStoreDownload" href="https://apps.apple.com/co/app/veyra-pilot-intelligence/id6816330976?l=en-GB">Descargar en el App Store <span aria-hidden="true">↗</span></a>
           <button class="heroPrimary" onclick="document.getElementById('homeCapabilities').scrollIntoView({behavior:'smooth',block:'start'})">Explorar plataforma <span>→</span></button>
           <button class="heroSecondary" onclick="showScreen('contact')">Solicitar demo <span>→</span></button>
         </div>
         <div class="microTagline">PRECISION. READINESS. PILOT INTELLIGENCE.</div>
-        <div class="heroAvailability">Web platform · iPhone &amp; iPad app in preparation</div>
+        <div class="heroAvailability">Disponible en App Store para iPhone y iPad · Descarga gratuita</div>
       </div>
     </div>
   </div>
