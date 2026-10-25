@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://ogdncxrhdnnpphvuhvpf.supabase.co; base-uri 'none'; form-action 'none'">
+  <meta name="theme-color" content="#090e12">
+  <title>Confirma tu cuenta | Veyra</title>
+  <link rel="stylesheet" href="confirmar-cuenta.css">
+  <script src="confirmar-cuenta.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><span class="brand">Veyra</span><span class="tagline">PILOT INTELLIGENCE</span></header>
+    <section class="card" aria-labelledby="title">
+      <div id="symbol" class="symbol" aria-hidden="true">✉</div>
+      <div aria-live="polite" aria-atomic="true">
+        <p class="eyebrow">TU CUENTA VEYRA</p>
+        <h1 id="title">Confirma tu correo</h1>
+        <p id="message">Estamos preparando la verificación de tu cuenta.</p>
+      </div>
+      <button id="verify" type="button" hidden>Confirmar mi correo</button>
+      <a id="open-app" class="primary" href="veyra://auth/confirmed" hidden>Iniciar sesión en Veyra</a>
+      <p id="help" class="help">Abre esta página desde el enlace que recibiste por correo.</p>
+      <noscript><p>Activa JavaScript en tu navegador y vuelve a abrir el enlace del correo para verificar tu cuenta.</p></noscript>
+    </section>
+    <p class="footer">Tu preparación continúa en Veyra.</p>
+  </main>
+</body>
+</html>
