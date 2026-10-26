@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="simulator-history-20260831-11">
+  <meta name="veyra-build" content="simulator-history-20261026-drive-1">
   <!-- Hero photograph: NASA/James Blair, public domain. Cropped and optimized for Veyra. -->
   <title>Veyra | Historial de simulador</title>
   <script>
@@ -536,6 +536,15 @@
     </nav>
 
     <main>
+
+      <section class="panel" id="drivePanel" aria-labelledby="driveTitle" style="margin-bottom:24px">
+        <div class="panel-head"><div class="eyebrow">VOA · Aeronova · consulta directa</div><h2 id="driveTitle">Misiones y horas desde Drive</h2><p>Consulta actual de RRO SIM, SIM REPORT, FC ESTIMATE y EST VUELO. Esta vista no modifica las hojas ni reemplaza el historial guardado.</p>
+        <button class="sync-button" id="driveRefresh" type="button">Consultar Drive</button>
+        <p id="driveStatus" role="status" aria-live="polite">Pendiente de consultar.</p></div>
+        <div class="student-tools"><label for="driveSearch">Buscar estudiante en Drive</label><input class="search" id="driveSearch" type="search" placeholder="Nombre del estudiante" autocomplete="off"></div>
+        <div class="table-wrap"><table class="history-table"><thead><tr><th>Estudiante</th><th>Horas de vuelo</th><th>Última misión RRO</th><th>SIM REPORT</th><th>Verificación</th></tr></thead><tbody id="driveRows"><tr><td colspan="5" class="empty-row">Pulsa Consultar Drive para cargar las misiones y horas actuales.</td></tr></tbody></table></div>
+      </section>
+
       <section class="hero">
         <div><div class="eyebrow">Veyra · archivo académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico preservado al cierre de la etapa piloto. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente histórica de Aeronova.</p></div>
         <aside class="sync-card"><strong>Archivo cerrado · build 7</strong><span id="lastSyncText">Consultando última actualización registrada…</span><span>La sincronización automática finalizó el 1 de septiembre de 2026</span><span><strong>Cobertura histórica:</strong> enero a septiembre de 2026</span><button class="sync-button" id="syncButton" type="button" disabled>Sincronización cerrada</button></aside>
@@ -778,12 +787,41 @@
     $("themeButton").addEventListener("click",toggleTheme);
     $("logoutButton").addEventListener("click",async()=>{if(db)await db.auth.signOut();location.href="./control-voa.html";});
 
+
+    const driveState={rows:[],busy:false,loadedAt:null};
+    function renderDriveStudents(){
+      const query=normalize($("driveSearch").value);
+      const rows=driveState.rows.filter(item=>normalize(item.student_name).includes(query));
+      const labels={corroborated:"Coinciden",mismatch:"Diferencia: revisar",missing_rro:"Falta RRO",missing_sim_report:"Falta SIM REPORT",no_history:"Sin misión registrada"};
+      const mission=entry=>entry?'<strong>'+escapeHtml(entry.mission)+'</strong><small>'+escapeHtml(entry.date||"Fecha sin identificar")+' · fila '+escapeHtml(entry.source_row)+'</small>':"Sin registro";
+      $("driveRows").innerHTML=rows.map(item=>'<tr><td><strong>'+escapeHtml(item.student_name)+'</strong><small>'+escapeHtml(item.group||"")+'</small></td><td><strong>'+escapeHtml(item.total_time??"Sin dato")+'</strong><small>'+escapeHtml(item.total_time_source||"Sin fuente")+(item.hours_verification?.needs_review?' · Revisar horas':'')+'</small></td><td>'+mission(item.latest_rro)+'</td><td>'+mission(item.latest_sim_report)+'</td><td>'+escapeHtml(labels[item.verification?.status]||"Revisar")+'</td></tr>').join("")||'<tr><td colspan="5" class="empty-row">No hay estudiantes para esta búsqueda.</td></tr>';
+    }
+    async function loadDriveStudents(){
+      if(driveState.busy||!db)return;
+      driveState.busy=true;$("driveRefresh").disabled=true;
+      $("driveStatus").textContent="Consultando las fuentes de Aeronova…";
+      try{
+        const {data,error}=await db.functions.invoke("veyra-google-sheets-reader",{body:{action:"student_consolidation"}});
+        if(error||!data?.ok||!Array.isArray(data.students))throw new Error("DRIVE_UNAVAILABLE");
+        driveState.rows=data.students;driveState.loadedAt=data.generated_at||new Date().toISOString();
+        renderDriveStudents();
+        $("driveStatus").textContent="Consultado "+formatDateTime(driveState.loadedAt)+" · "+data.students.length+" estudiantes. Las misiones reportadas requieren revisión académica antes de avanzar la secuencia.";
+      }catch{
+        $("driveStatus").textContent="No fue posible consultar Drive. Revisa la sesión y los permisos de la conexión con Aeronova."+(driveState.loadedAt?" Se conserva en pantalla la consulta del "+formatDateTime(driveState.loadedAt)+".":" El historial anterior sigue disponible abajo.");
+      }finally{
+        driveState.busy=false;$("driveRefresh").disabled=false;$("driveRefresh").textContent="Actualizar desde Drive";
+      }
+    }
+    $("driveRefresh").addEventListener("click",loadDriveStudents);
+    $("driveSearch").addEventListener("input",renderDriveStudents);
+
     async function init(){
       if(!db){$("gateMessage").textContent="No fue posible iniciar el acceso seguro.";return;}
       const result=await db.auth.getUser();const user=result.data?.user;
       if(result.error||!user){location.replace("./control-voa.html");return;}
       if(String(user.email||"").toLowerCase()!==ADMIN_EMAIL){location.replace("./internal-access.html");return;}
       $("sessionEmail").textContent=user.email||"";
+      void loadDriveStudents();
       try{
         await loadLatestSync();
         await loadStudents(null,{allowRecovery:false});
