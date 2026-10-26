@@ -1,0 +1,29 @@
+--- a/VeyraPlayground.swiftpm/RootView.swift
++++ b/VeyraPlayground.swiftpm/RootView.swift
+@@ -219,7 +219,25 @@
+     let onSignOut: () -> Void
+ 
+     var body: some View {
+-        VeyraPlatformShell(student: student, onSignOut: onSignOut)
++        if let userID = UUID(uuidString: student.id) {
++            VeyraInvestmentAccess(
++                userID: userID,
++                client: VeyraAccountSyncClient(
++                    baseURL: ProductionConfiguration.supabaseURL,
++                    publishableKey: ProductionConfiguration.publishableKey),
++                sessionProvider: {
++                    guard let current = VeyraSessionStore.load(),
++                          let currentID = UUID(uuidString: current.id),
++                          currentID == userID else { return nil }
++                    return VeyraAccountSyncClient.Session(
++                        userID: currentID, accessToken: current.accessToken)
++                }
++            ) {
++                VeyraPlatformShell(student: student, onSignOut: onSignOut)
++            }
++            .id(student.id)
++        } else {
++            VeyraPlatformShell(student: student, onSignOut: onSignOut)
++        }
+     }
+ }
