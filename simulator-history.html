@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="veyra-build" content="simulator-history-20261026-drive-1">
+  <meta name="veyra-build" content="simulator-history-20261026-drive-sync-2">
   <!-- Hero photograph: NASA/James Blair, public domain. Cropped and optimized for Veyra. -->
   <title>Veyra | Historial de simulador</title>
   <script>
@@ -546,8 +546,8 @@
       </section>
 
       <section class="hero">
-        <div><div class="eyebrow">Veyra · archivo académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico preservado al cierre de la etapa piloto. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente histórica de Aeronova.</p></div>
-        <aside class="sync-card"><strong>Archivo cerrado · build 7</strong><span id="lastSyncText">Consultando última actualización registrada…</span><span>La sincronización automática finalizó el 1 de septiembre de 2026</span><span><strong>Cobertura histórica:</strong> enero a septiembre de 2026</span><button class="sync-button" id="syncButton" type="button" disabled>Sincronización cerrada</button></aside>
+        <div><div class="eyebrow">Veyra · archivo académico operativo</div><h1>Historial de simulador</h1><p>Registro cronológico actualizado desde RRO SIM y SIM REPORT. Conserva sesiones completadas, refuerzos, cancelaciones, no-shows y repeticiones sin alterar la fuente de Aeronova.</p></div>
+        <aside class="sync-card"><strong>Drive conectado · build 9</strong><span id="lastSyncText">Consultando última actualización…</span><span>Cada hora, al minuto 17 · lectura de Drive</span><span><strong>Cobertura:</strong> enero de 2026 en adelante</span><button class="sync-button" id="syncButton" type="button">Sincronizar ahora</button></aside>
       </section>
 
       <div class="notice"><span class="notice-mark">!</span><div><strong>Regla de seguridad académica.</strong> Solo una misión con duración positiva y corroborada entre RRO SIM y SIM REPORT avanza la secuencia. Una cancelación, un `NO SHOW` o una duración cero permanece en el histórico y exige repetir; si la fuente es ambigua, Veyra no decide y la deja para revisión humana. Cuando RRO no identifica la actividad, se consulta la observación operativa de SIM REPORT. La cobertura conectada inicia en enero de 2026 y no representa años anteriores. No se guardan motivos privados de inasistencia.</div></div>
@@ -580,7 +580,7 @@
   <script>
     "use strict";
     const SUPABASE_URL="https://japjyiccjwnhbfpwqtti.supabase.co";
-    const VOA_OPERATION_CLOSED=true;
+    const VOA_OPERATION_CLOSED=false;
     const SUPABASE_PUBLISHABLE_KEY="sb_publishable_d0I6KVZFmyxg4EiyRExVNw_HoeDHPOs";
     const ADMIN_EMAIL="veyrapilotintelligence@gmail.com";
     const db=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
@@ -724,18 +724,20 @@
           await loadLatestSync();
           return loadHistory(studentId,{allowRecovery:false});
         }catch{
-          setHistoryError("RRO registra actividad para este estudiante, pero el detalle no quedó importado antes del cierre operativo.");
+          setHistoryError("RRO registra actividad para este estudiante; pulsa Sincronizar ahora para actualizar el detalle.");
         }
       }
       if(state.history.length)clearHistoryError();
-      renderDetail(!state.history.length&&expectsHistory?"La ficha registra intentos, pero el detalle no quedó recibido antes del cierre de la etapa piloto.":"");
+      renderDetail(!state.history.length&&expectsHistory?"La ficha registra intentos, pero falta importar el detalle. Pulsa Sincronizar ahora.":"");
       return state.history.length>0;
     }
 
     async function loadLatestSync(){
-      const result=await db.from("voa_simulator_sync_runs").select("status,completed_at,attempts_upserted,error_code").order("started_at",{ascending:false}).limit(1).maybeSingle();
+      const result=await db.from("voa_simulator_sync_runs").select("status,completed_at,attempts_upserted,error_code,metadata").order("started_at",{ascending:false}).limit(1).maybeSingle();
       if(result.error||!result.data){$("lastSyncText").textContent="Sin actualización confirmada";return;}
       $("lastSyncText").textContent=result.data.status==="succeeded"?"Actualizado "+formatDateTime(result.data.completed_at)+" · "+number(result.data.attempts_upserted)+" intentos":"Última sincronización requiere revisión";
+      const conflicts=result.data.metadata?.identity_conflict_rows||[];
+      if(conflicts.length)setHistoryError("Sincronización completada. "+conflicts.length+" filas de RRO SIM tienen diferencias de identificación y se conservaron sin sobrescribir: "+conflicts.join(", ")+". Revisa esas filas en Drive.");
     }
 
     async function loadStudents(preferredId=null,{allowRecovery=true}={}){
@@ -750,7 +752,7 @@
           await loadLatestSync();
           return loadStudents(preferredId,{allowRecovery:false});
         }catch{
-          setHistoryError("El histórico no recibió registros locales antes del cierre operativo.");
+          setHistoryError("No se pudo importar el historial. Pulsa Sincronizar ahora para reintentar.");
         }
       }
       state.students=rows;state.filtered=[...state.students];renderMetrics();renderStudentList();
@@ -759,7 +761,7 @@
       else{
         state.history=[];
         renderDetail();
-        if(!state.students.length)setHistoryError("No quedaron expedientes importados antes del cierre de la etapa piloto.");
+        if(!state.students.length)setHistoryError("No hay expedientes importados. Pulsa Sincronizar ahora.");
       }
       return state.students.length;
     }
@@ -771,8 +773,8 @@
       try{
         clearHistoryError();
         await requestHistorySync("manual");
-        await loadLatestSync();
         await loadStudents(selected,{allowRecovery:false});
+        await loadLatestSync();
       }catch(error){
         setHistoryError("La sincronización se detuvo de forma segura. La fuente oficial no fue modificada; intenta nuevamente o revisa la conexión con RRO SIM y SIM REPORT.");
         renderDetail("No fue posible completar la sincronización. Los registros existentes permanecen sin cambios.");
@@ -823,14 +825,14 @@
       $("sessionEmail").textContent=user.email||"";
       void loadDriveStudents();
       try{
+        await loadStudents(null,{allowRecovery:true});
         await loadLatestSync();
-        await loadStudents(null,{allowRecovery:false});
         $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
       }catch{
         state.students=[];state.filtered=[];state.history=[];
         renderMetrics();renderStudentList();renderDetail();
         $("secureGate").classList.add("hidden");$("app").classList.remove("hidden");
-        setHistoryError("No fue posible cargar el archivo histórico protegido. Ninguna fuente fue modificada.");
+        setHistoryError("No fue posible consultar el historial. Ninguna fuente fue modificada.");
       }
     }
     updateThemeButton();init();
