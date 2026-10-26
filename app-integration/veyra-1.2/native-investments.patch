@@ -1,6 +1,6 @@
 --- a/VeyraPlayground.swiftpm/RootView.swift
 +++ b/VeyraPlayground.swiftpm/RootView.swift
-@@ -219,7 +219,26 @@
+@@ -219,6 +219,25 @@
      let onSignOut: () -> Void
  
      var body: some View {
