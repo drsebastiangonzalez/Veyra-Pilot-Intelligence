@@ -1335,6 +1335,10 @@ linear-gradient(145deg,#07111f,#0d2233)}
 #training .pbnPathCard .trainingCardImg img{object-position:64% 48%!important}
 #training .abbrToolCard{grid-column:1/-1;grid-template-columns:minmax(330px,.78fr) minmax(0,1.22fr)!important}
 #training .abbrToolCard:before{content:"HERRAMIENTA"}
+/* Cirrus SR20 en video (25 nov 2026): con dos columnas (iPad) ocupa el espacio que quedaba junto a PBN Path; con tres
+   columnas (pantallas anchas) va a todo lo ancho, como las herramientas, para no dejar huecos */
+#training .cirrusVideoCard .trainingCardImg img{object-position:center 45%!important}
+@media(min-width:1251px){#training .cirrusVideoCard{grid-column:1/-1;grid-template-columns:minmax(330px,.95fr) minmax(0,1.05fr)!important}#training .cirrusVideoCard .trainingCardImg{height:auto!important;min-height:300px!important}}
 #training .abbrToolVisual{height:auto!important;min-height:330px!important;background:radial-gradient(circle at 76% 22%,rgba(214,173,85,.16),transparent 25%),linear-gradient(145deg,#07101b,#03070d);display:flex;align-items:center;justify-content:center;padding:35px;overflow:hidden}
 #training .abbrToolVisual:after{background:linear-gradient(180deg,transparent 35%,rgba(3,7,13,.65))}
 .abbrVisualPanel{position:relative;z-index:1;width:min(100%,520px);border:1px solid rgba(214,173,85,.38);border-radius:20px;background:rgba(255,255,255,.035);padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
@@ -2366,6 +2370,16 @@ linear-gradient(145deg,#07111f,#0d2233)}
           <p class="trainingMeta">Ruta conceptual de 10 módulos para comprender RNAV, RNP, especificaciones de navegación y su aplicación operacional.</p>
           <span class="trainingBadge">10 módulos</span><span class="trainingBadge">RNAV + RNP</span><span class="trainingBadge">Ruta especializada</span>
           <div style="margin-top:20px"><button class="trainingBtnGold" onclick="showPBNCourseIntro()">Conocer la ruta</button></div>
+        </div>
+      </article>
+
+      <article class="trainingCard ifrTrainingCard cirrusVideoCard">
+        <div class="trainingCardImg"><img src="cirrus-sr20-cabina.jpg" alt="Cabina del Cirrus SR20 con las pantallas del Perspective+, dibujo de Veyra" loading="lazy"></div>
+        <div class="trainingCardBody">
+          <h3>Cirrus SR20 <span>En video</span></h3>
+          <p class="trainingMeta">La cabina, las pantallas del Perspective+ y las maniobras, explicadas con voz en tres videos.</p>
+          <span class="trainingBadge">3 videos</span><span class="trainingBadge">Perspective+</span><span class="trainingBadge">Voz en español</span>
+          <div style="margin-top:20px"><button class="trainingBtnGold" onclick="location.href='cirrus-sr20.html'">Ver los videos</button></div>
         </div>
       </article>
 
